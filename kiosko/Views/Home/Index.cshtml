@@ -1,0 +1,75 @@
+﻿@model Modulo;
+@{
+    ViewData["Title"] = "Home Page";
+}
+@section scripts {
+    <script type="text/javascript">
+        $(function () {
+           $("#sortable").sortable();
+        });
+
+        function addComponent(type) {
+            let component = generateComponent(type);
+            $("#sortable").append(component);
+        }
+
+        function removeComponent(idComponent) {
+            $("#"+idComponent).remove();
+        }
+
+        function generateComponent(type) {
+            let idComponent = Math.random().toString(36).substring(2,7);
+            let stringId = "'"+idComponent+"'";
+            let component = "";
+            switch(type) {
+              case 'texto':
+                component = 
+                  '<div class="col-lg-12 texto component" id="'+idComponent+'">'+
+                          '<p class="tituloCmp">'+type+
+                            '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
+                          '<p>'+
+                          '<input class="inputTexto" type="text">'+
+                  '</div>';
+                break;
+              case 'subtitulo':
+                component = 
+                  '<div class="col-lg-12 texto component" id="'+idComponent+'">'+
+                          '<p class="tituloCmp">'+type+
+                            '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
+                          '<p>'+
+                          '<input class="inputTexto" type="text">'+
+                  '</div>';
+                break;
+              default:
+                component = "";
+            }
+            return component;
+        }
+    </script>
+}
+<div class="content-wrapper">
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-lg-8">
+            <div class="row" id="sortable">
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">Menu components</h5>
+                <br/>
+                <ul id="sortable">
+                  <li class="option-menu" onclick="addComponent('texto')">Texto</li>
+                  <li class="option-menu" onclick="addComponent('subtitulo')">Subtitulo</li>
+                  <li class="option-menu" onclick="addComponent('imagen')">Imagen</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>

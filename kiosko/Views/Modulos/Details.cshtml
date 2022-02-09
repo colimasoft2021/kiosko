@@ -1,0 +1,180 @@
+﻿@model kiosko.Models.Modulo;
+@{
+    ViewData["Title"] = "Details";
+}
+<div class="content-wrapper">
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+        <h2>@Html.DisplayFor(model => model.Titulo)</h2>
+        <div class="row">
+          <div class="col-lg-8">
+            <input type="hidden" value="@Html.DisplayFor(model => model.Id)" id="idModulo" />
+            <div class="row" id="sortable">
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">Menu components</h5>
+                <br/>
+                <ul id="sortable">
+                  <li class="option-menu" onclick="addComponent('texto',0)">Texto</li>
+                  <li class="option-menu" onclick="addComponent('subtitulo',0)">Subtitulo</li>
+                  <li class="option-menu" onclick="addComponent('imagen',0)">Imagen</li>
+                </ul>
+                <button class="btn btn-block btn-warning" onclick="saveChanges()">Guardar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+            <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+            <a asp-action="Index">Back to List</a>
+        </div>
+      </div>
+    </section>
+  </div>
+  @section scripts {
+    <script type="text/javascript">
+        var idModulo = $("#idModulo").val();
+        var padre = "modulo"+idModulo;
+        $(function () {
+           $("#sortable").sortable();
+           $.ajax({
+                    type: "POST",
+                    url: "/Componentes/GetAllComponentsForModulo",
+                    data: { "padre": "modulo1"},
+                    success: function (response) {
+                        console.log(response);
+                        response.map(item => {
+                            addComponent(item.tipoComponente, item.id, item);
+                        });
+                    }
+                });
+        });
+
+        function addComponent(type, pkId, item) {
+            let component = generateComponent(type, pkId, item);
+            $("#sortable").append(component);
+        }
+
+        function removeComponent(idComponent) {
+            $("#"+idComponent).remove();
+        }
+
+        function generateComponent(type, pkId, item) {
+            let idComponent = Math.random().toString(36).substring(2,7);
+            let stringId = "'"+idComponent+"'";
+            let component = "";
+            let value = "";
+            switch(type) {
+              case 'texto':
+                value = (item) ? item.descripcion : "";
+                component = 
+                  '<div class="col-lg-12 texto component" id="'+idComponent+'" db-id="'+pkId+'" type-component="texto">'+
+                          '<p class="tituloCmp">'+type+
+                            '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
+                          '<p>'+
+                          '<input class="inputTexto" type="text" value="'+value+'">'+
+                  '</div>';
+                break;
+              case 'subtitulo':
+                value = (item) ? item.subtitulo : "";
+                component = 
+                  '<div class="col-lg-12 texto component" id="'+idComponent+'" db-id="'+pkId+'" type-component="subtitulo">'+
+                          '<p class="tituloCmp">'+type+
+                            '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
+                          '<p>'+
+                          '<input class="inputTexto" type="text" value="'+value+'">'+
+                  '</div>';
+                break;
+              default:
+                component = "";
+            }
+            return component;
+        }
+
+        function saveChanges() {
+            let toInsert = [];
+            let toUpdate = [];
+            $(".component").each(function(index){
+                let currentComponent = $(this);
+                let idElement = currentComponent.attr('id');
+                let idComponent = currentComponent.attr('db-id');
+                let typeElement = currentComponent.attr('type-component');
+                console.log(idElement+'-'+idComponent+'-'+typeElement);
+                let item = formJsonComponent(idElement, typeElement);
+                item.Id = idComponent;
+                item.Padre = padre;
+                item.TipoComponente = typeElement;
+                item.Orden = index+1;
+                if(idComponent != 0) {
+                    toUpdate.push(item);
+                }else{
+                    toInsert.push(item);
+                }
+                console.log(toInsert);
+                console.log(toUpdate);
+                saveComponents(toInsert);
+                updateComponents(toUpdate);
+            });
+        }
+        function formJsonComponent(idElement, typeElement) {
+            let jsonItem =
+            {
+                "Id": null,
+                "Padre": null,
+                "TipoComponente": null,
+                "Url": null,
+                "Descripcion": null,
+                "BackgroundColor": null,
+                "AgregarFondo": null,
+                "Titulo": null,
+                "Subtitulo": null,
+                "Orden": null
+            }
+            switch(typeElement) {
+              case 'texto':
+                $("#"+idElement).find("input").each(function() {
+                    let value = $(this).val();
+                    jsonItem.Descripcion = value;
+                });
+                break;
+              case 'subtitulo':
+                $("#"+idElement).find("input").each(function() {
+                    let value = $(this).val();
+                    jsonItem.Subtitulo = value;
+                });
+                break;
+              default:
+                jsonItem = "";
+            }
+            return jsonItem;
+        }
+        function saveComponents(components) {
+            components.map(function(item){
+                $.ajax({
+                    type: "POST",
+                    url: "/Componentes/saveComponentForModulo",
+                    data: item,
+                    success: function (response) {
+                        console.log('saved');
+                    }
+                });
+            })
+        }
+        function updateComponents(components) {
+            components.map(function(item){
+                $.ajax({
+                    type: "POST",
+                    url: "/Componentes/updateComponentForModulo",
+                    data: item,
+                    success: function (response) {
+                        console.log('saved');
+                    }
+                });
+            })
+        }
+    </script>
+}
