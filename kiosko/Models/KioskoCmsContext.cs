@@ -106,6 +106,8 @@ namespace kiosko.Models
                     .IsUnicode(false)
                     .HasColumnName("id_submodulo");
 
+                entity.Property(e => e.Nivel).HasColumnName("nivel");
+
                 entity.Property(e => e.Padre)
                     .HasMaxLength(50)
                     .IsUnicode(false)

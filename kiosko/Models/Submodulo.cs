@@ -11,5 +11,6 @@ namespace kiosko.Models
         public string? Titulo { get; set; }
         public string? Padre { get; set; }
         public int? AccesoDirecto { get; set; }
+        public int? Nivel { get; set; }
     }
 }
