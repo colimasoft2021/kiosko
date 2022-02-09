@@ -20,7 +20,6 @@ namespace kiosko.Controllers
             _context = context;
         }
 
-        // POST: Componentes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
