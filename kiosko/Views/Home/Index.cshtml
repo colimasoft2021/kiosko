@@ -40,13 +40,61 @@
                           '<input class="inputTexto" type="text">'+
                   '</div>';
                 break;
+                case 'imagen':
+                component = 
+                  '<div class="col-lg-12 texto component" id="'+idComponent+'">'+
+                          '<p class="tituloCmp">'+type+
+                            '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
+                          '<p>'+
+                          '<form action="/file-upload"'+
+                                'class="dropzone mt-1"'+
+                                'id="DropImagen">'+
+                          '</form>'+
+                          '<input class="w-100 mt-1 inputs" type="text" placeholder="Pie de Foto" />'+
+                  '</div>';
+                break;
+                case 'video':
+                component = 
+                  '<div class="col-lg-12 texto component" id="'+idComponent+'">'+
+                          '<p class="tituloCmp">'+type+
+                            '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
+                          '<p>'+
+                          '<form action="/file-upload"'+
+                                'class="dropzone mt-1"'+
+                                'id="DropVideo">'+
+                          '</form>'+
+                  '</div>';
+                break;
+                case 'enlace':
+                component = 
+                  '<div class="col-lg-12 texto component" id="'+idComponent+'">'+
+                          '<p class="tituloCmp">'+type+
+                            '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
+                          '<p>'+
+                          '<div>'+
+                            '<input class="inputTitulo" type="text"  placeholder="Titulo"/>'+
+                            '<input class="inputLink" type="text" placeholder="Link"/>'+
+                            '<p>Elige un color para asignarle.</p>'+
+                            'Color'+
+                            '<input class="Color-Selector" type="color">'+
+                        '</div>'+
+                  '</div>';
+                break;
               default:
                 component = "";
             }
             return component;
         }
+        Dropzone.autoDiscover = false;
+        var $Dropzone = new Dropzone('#DropImagen', {
+            paramName: "file", // The name that will be used to transfer the file
+            maxFilesize: 2, // MB
+            acceptedFiles: ".png",
+            //all your settings here.*
+            });
     </script>
 }
+
 <div class="content-wrapper">
     <!-- Main content -->
     <section class="content">
@@ -55,6 +103,10 @@
           <div class="col-lg-8">
             <div class="row" id="sortable">
             </div>
+            <form action="/file-upload"
+                  class="dropzone mt-1"
+                  id="DropVideo">
+            </form>
           </div>
           <div class="col-lg-4">
             <div class="card">
@@ -65,6 +117,8 @@
                   <li class="option-menu" onclick="addComponent('texto')">Texto</li>
                   <li class="option-menu" onclick="addComponent('subtitulo')">Subtitulo</li>
                   <li class="option-menu" onclick="addComponent('imagen')">Imagen</li>
+                  <li class="option-menu" onclick="addComponent('video')">Video</li>
+                  <li class="option-menu" onclick="addComponent('enlace')">Enlace</li>
                 </ul>
               </div>
             </div>
@@ -73,3 +127,4 @@
       </div>
     </section>
   </div>
+  
