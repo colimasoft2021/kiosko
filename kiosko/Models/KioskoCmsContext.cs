@@ -25,7 +25,7 @@ namespace kiosko.Models
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Server=LAPTOP-KEIOQ6D6\\SQLEXPRESS;Database=KioskoCms;Trusted_Connection=true;user=sa;password=colimasoft;");
+                optionsBuilder.UseSqlServer("Server=LAPTOP-N1U5HNVN\\SQLEXPRESS;Database=KioskoCms;Trusted_Connection=true;");
             }
         }
 
@@ -83,7 +83,19 @@ namespace kiosko.Models
 
                 entity.Property(e => e.AccesoDirecto).HasColumnName("acceso_directo");
 
+                entity.Property(e => e.Desplegable).HasColumnName("desplegable");
+
+                entity.Property(e => e.IdModulo)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("id_modulo");
+
                 entity.Property(e => e.Orden).HasColumnName("orden");
+
+                entity.Property(e => e.Padre)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("padre");
 
                 entity.Property(e => e.Titulo)
                     .HasMaxLength(50)
@@ -98,6 +110,8 @@ namespace kiosko.Models
                 entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.AccesoDirecto).HasColumnName("acceso_directo");
+
+                entity.Property(e => e.Desplegable).HasColumnName("desplegable");
 
                 entity.Property(e => e.IdModulo).HasColumnName("id_modulo");
 
