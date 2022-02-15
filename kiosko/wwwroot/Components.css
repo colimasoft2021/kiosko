@@ -20,11 +20,7 @@
     border: none;
     float:right;
 }
-.lblTitulo {
-    font-family: Poppins;
-    font-size: 20px;
-    float: left
-}
+
 .inputs {
     font-size:20px;
     border: 1px dashed #9B9B9B;
@@ -41,6 +37,7 @@
     left: 85px;
     top: 174px;
     background: conic-gradient(from 180deg at 50% 50%, #FF0000 0deg, #FFA800 70.81deg, #FAFF00 149.56deg, #80FF00 215.19deg, #00FF19 275.19deg, #00F0FF 360deg);
+    margin:2px;
 }
 
 .inputTitulo {
