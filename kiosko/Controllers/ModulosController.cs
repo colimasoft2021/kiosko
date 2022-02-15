@@ -55,5 +55,16 @@ namespace kiosko.Controllers
             var submodulos = _context.Submodulos.Where(c => c.IdModulo == idModulo);
             return Json(submodulos);
         }
+
+        [HttpPost]
+        public IActionResult SaveMenuModulo(Modulo modulo)
+        {
+            IActionResult ret = null;
+            _context.Add(modulo);
+            _context.SaveChanges();
+
+            ret = StatusCode(StatusCodes.Status201Created, modulo);
+            return ret;
+        }
     }
 }
