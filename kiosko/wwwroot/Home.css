@@ -173,3 +173,19 @@ body {
     height:500px;
     overflow-y: scroll;
 }
+
+.texto-imagen {
+    height: 300px;
+}
+
+.padre{
+    
+}
+
+.sidebar {
+    background-color: #455A64;
+}
+
+.posicion-logo {
+    background-color: #455A64;
+}    
