@@ -23,6 +23,7 @@
 }
 
 .component {
+    font-family: 'Poppins', sans-serif;
     padding: 16px;
     margin-top: 20px;
     background-color: white;

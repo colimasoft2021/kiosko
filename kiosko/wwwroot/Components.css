@@ -41,8 +41,9 @@
 }
 
 .inputTitulo {
+    font-family: 'Poppins', sans-serif;
     width: 100%;
-    font-size: 25px;
+    font-size: 14px;
     text-align: center;
     border: 1px dashed #9B9B9B;
     box-sizing: border-box;
@@ -50,7 +51,7 @@
 }
 .inputLink {
     width: 100%;
-    font-size: 25px;
+    font-size: 14px;
     font-style: italic;
     border-bottom-width: 2px;
     border-left: none;

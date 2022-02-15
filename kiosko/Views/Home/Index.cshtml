@@ -23,7 +23,13 @@
             let component = generateComponent(type);
             $("#sortable").append(component);
              if(type == "imagen"){
-                console.log("entro if drop");
+                console.log("entro if dropImagen");
+                Dropzone.discover();
+                $(".dropzone").destroy();
+                Dropzone.options.dropzone;
+            }
+            else if(type == "video"){
+                console.log("entro if dropVideo");
                 Dropzone.discover();
                 $(".dropzone").destroy();
                 Dropzone.options.dropzone;
