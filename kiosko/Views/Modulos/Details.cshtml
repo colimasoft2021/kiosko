@@ -39,12 +39,22 @@
     <script type="text/javascript">
         var idModulo = $("#idModulo").val();
         var padre = "modulo"+idModulo;
+        var dropzone;
+        $( document ).ready(function() {
+            dropzone = new Dropzone('.dropzone', {
+                  parallelUploads: 2,
+                  thumbnailHeight: 120,
+                  thumbnailWidth: 120,
+                  maxFilesize: 3,
+                  filesizeBase: 1000,
+                });
+        });
         $(function () {
            $("#sortable").sortable();
            $.ajax({
                     type: "POST",
                     url: "/Componentes/GetAllComponentsForModulo",
-                    data: { "padre": "modulo1"},
+                    data: { "padre": padre},
                     success: function (response) {
                         console.log(response);
                         response.map(item => {
@@ -66,6 +76,8 @@
         function generateComponent(type, pkId, item) {
             let idComponent = Math.random().toString(36).substring(2,7);
             let stringId = "'"+idComponent+"'";
+            let idDropzone = Math.random().toString(36).substring(2,7);
+            let stringIdDropzone = "'"+idDropzone+"'";
             let component = "";
             let value = "";
             switch(type) {
@@ -91,6 +103,7 @@
                 break;
               default:
                 component = "";
+              break;
             }
             return component;
         }

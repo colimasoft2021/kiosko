@@ -83,7 +83,19 @@ namespace kiosko.Models
 
                 entity.Property(e => e.AccesoDirecto).HasColumnName("acceso_directo");
 
+                entity.Property(e => e.Desplegable).HasColumnName("desplegable");
+
+                entity.Property(e => e.IdModulo)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("id_modulo");
+
                 entity.Property(e => e.Orden).HasColumnName("orden");
+
+                entity.Property(e => e.Padre)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("padre");
 
                 entity.Property(e => e.Titulo)
                     .HasMaxLength(50)
@@ -98,6 +110,8 @@ namespace kiosko.Models
                 entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.AccesoDirecto).HasColumnName("acceso_directo");
+
+                entity.Property(e => e.Desplegable).HasColumnName("desplegable");
 
                 entity.Property(e => e.IdModulo).HasColumnName("id_modulo");
 
