@@ -4,6 +4,17 @@
 }
 @section scripts {
     <script type="text/javascript">
+        var dropzone;
+        $( document ).ready(function() {
+            dropzone = new Dropzone('.DropImagen', {
+                  parallelUploads: 2,
+                  thumbnailHeight: 120,
+                  thumbnailWidth: 120,
+                  acceptedFiles: ".jpg",
+                  maxFilesize: 3,
+                  filesizeBase: 1000,
+                });
+        });
         $(function () {
            $("#sortable").sortable();
         });
@@ -11,12 +22,29 @@
         function addComponent(type) {
             let component = generateComponent(type);
             $("#sortable").append(component);
+             if(type == "imagen"){
+                console.log("entro if drop");
+                Dropzone.discover();
+                $(".dropzone").destroy();
+                Dropzone.options.dropzone;
+            }
+            let colorPicker = document.getElementById('colorPicker');
+            colorPicker.addEventListener('input', e => {
+                let background = document.getElementById('background');
+                console.log(colorPicker);
+                background.style.background = e.target.value;
+            });
+            colorPicker.addEventListener('input', e => {
+                let background = document.getElementById('backgroundBanner');
+                console.log(colorPicker);
+                background.style.background = e.target.value;
+            });
         }
 
         function removeComponent(idComponent) {
             $("#"+idComponent).remove();
         }
-
+        
         function generateComponent(type) {
             let idComponent = Math.random().toString(36).substring(2,7);
             let stringId = "'"+idComponent+"'";
@@ -40,13 +68,67 @@
                           '<input class="inputTexto" type="text">'+
                   '</div>';
                 break;
-              default:
-                component = "";
+                case 'imagen':
+                  component =
+                  '<div class="col-lg-12 texto component" id="'+idComponent+'">'+
+                          '<p class="tituloCmp">'+type+
+                            '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
+                          '<p>'+
+                          '<DIV id="dropzone">'+
+                            '<FORM class="dropzone needsclick" id="DropImagen" action="/upload">'+
+                            '</FORM>'+
+                          '</DIV>'+
+                  '</div>';
+              break;
+                case 'video':
+                  component =
+                  '<div class="col-lg-12 texto component" id="'+idComponent+'">'+
+                          '<p class="tituloCmp">'+type+
+                            '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
+                          '<p>'+
+                          '<DIV id="dropzone">'+
+                            '<FORM class="dropzone needsclick" id="DropVideo" action="/upload">'+
+                            '</FORM>'+
+                          '</DIV>'+
+                  '</div>';
+              break;
+                case 'enlace':
+                component = 
+                  '<div class="col-lg-12 texto component CompoEnlace" id="'+idComponent+'">'+
+                        '<div id="background">'+
+                          '<p class="tituloCmp">'+type+
+                            '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
+                          '<p>'+
+                          '<div>'+
+                            '<input class="inputTitulo" type="text" placeholder="Titulo"/>'+
+                            '<input class="inputLink" type="text" placeholder="Link"/>'+
+                            '<p>Elige un color para asignarle.</p>'+
+                            'Color'+
+                            '<input class="Color-Selector" id="colorPicker" type="color">'+
+                          '</div>'+
+                        '</div>'+
+                  '</div>';
+                break;
+                case 'banner informativo':
+                component = 
+                  '<div class="col-lg-12 texto component CompEnlace" id="'+idComponent+'">'+
+                        '<div id="backgroundBanner">'+
+                          '<p class="tituloCmp">'+type+
+                            '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
+                          '<p>'+
+                          '<input class="inputTexto" type="text">'+
+                          '<p>Elige un color para asignarle.</p>'+
+                            'Color '+
+                            '<input class="Color-Selector" id="colorPicker" type="color">'
+                        '</div>'+
+                  '</div>';
+                break;
             }
             return component;
         }
     </script>
 }
+
 <div class="content-wrapper">
     <!-- Main content -->
     <section class="content">
@@ -65,6 +147,9 @@
                   <li class="option-menu" onclick="addComponent('texto')">Texto</li>
                   <li class="option-menu" onclick="addComponent('subtitulo')">Subtitulo</li>
                   <li class="option-menu" onclick="addComponent('imagen')">Imagen</li>
+                  <li class="option-menu" onclick="addComponent('video')">Video</li>
+                  <li class="option-menu" onclick="addComponent('enlace')">Enlace</li>
+                  <li class="option-menu" onclick="addComponent('banner informativo')">Banner Informativo</li>
                 </ul>
               </div>
             </div>
