@@ -3,7 +3,7 @@
     background-image: url(../img/img.png);
     background-repeat: no-repeat;
     background-position: center;
-    background-size: 15%;
+    background-size: 5%;
     background-color: #C4C4C4;
 }
 #DropVideo {
@@ -11,7 +11,7 @@
     background-image: url(../img/video.svg);
     background-repeat: no-repeat;
     background-position: center;
-    background-size: 20%;
+    background-size: 5%;
     background-color: #C4C4C4;
 }
 .boton-perfil {

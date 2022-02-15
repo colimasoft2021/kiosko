@@ -4,6 +4,17 @@
 }
 @section scripts {
     <script type="text/javascript">
+        var dropzone;
+        $( document ).ready(function() {
+            dropzone = new Dropzone('.DropImagen', {
+                  parallelUploads: 2,
+                  thumbnailHeight: 120,
+                  thumbnailWidth: 120,
+                  acceptedFiles: ".jpg",
+                  maxFilesize: 3,
+                  filesizeBase: 1000,
+                });
+        });
         $(function () {
            $("#sortable").sortable();
         });
@@ -11,12 +22,29 @@
         function addComponent(type) {
             let component = generateComponent(type);
             $("#sortable").append(component);
+             if(type == "imagen"){
+                console.log("entro if drop");
+                Dropzone.discover();
+                $(".dropzone").destroy();
+                Dropzone.options.dropzone;
+            }
+            let colorPicker = document.getElementById('colorPicker');
+            colorPicker.addEventListener('input', e => {
+                let background = document.getElementById('background');
+                console.log(colorPicker);
+                background.style.background = e.target.value;
+            });
+            colorPicker.addEventListener('input', e => {
+                let background = document.getElementById('backgroundBanner');
+                console.log(colorPicker);
+                background.style.background = e.target.value;
+            });
         }
 
         function removeComponent(idComponent) {
             $("#"+idComponent).remove();
         }
-
+        
         function generateComponent(type) {
             let idComponent = Math.random().toString(36).substring(2,7);
             let stringId = "'"+idComponent+"'";
@@ -41,57 +69,63 @@
                   '</div>';
                 break;
                 case 'imagen':
-                component = 
+                  component =
                   '<div class="col-lg-12 texto component" id="'+idComponent+'">'+
                           '<p class="tituloCmp">'+type+
                             '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
                           '<p>'+
-                          '<form action="/file-upload"'+
-                                'class="dropzone mt-1"'+
-                                'id="DropImagen">'+
-                          '</form>'+
-                          '<input class="w-100 mt-1 inputs" type="text" placeholder="Pie de Foto" />'+
+                          '<DIV id="dropzone">'+
+                            '<FORM class="dropzone needsclick" id="DropImagen" action="/upload">'+
+                            '</FORM>'+
+                          '</DIV>'+
                   '</div>';
-                break;
+              break;
                 case 'video':
-                component = 
+                  component =
                   '<div class="col-lg-12 texto component" id="'+idComponent+'">'+
                           '<p class="tituloCmp">'+type+
                             '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
                           '<p>'+
-                          '<form action="/file-upload"'+
-                                'class="dropzone mt-1"'+
-                                'id="DropVideo">'+
-                          '</form>'+
+                          '<DIV id="dropzone">'+
+                            '<FORM class="dropzone needsclick" id="DropVideo" action="/upload">'+
+                            '</FORM>'+
+                          '</DIV>'+
                   '</div>';
-                break;
+              break;
                 case 'enlace':
                 component = 
-                  '<div class="col-lg-12 texto component" id="'+idComponent+'">'+
+                  '<div class="col-lg-12 texto component CompoEnlace" id="'+idComponent+'">'+
+                        '<div id="background">'+
                           '<p class="tituloCmp">'+type+
                             '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
                           '<p>'+
                           '<div>'+
-                            '<input class="inputTitulo" type="text"  placeholder="Titulo"/>'+
+                            '<input class="inputTitulo" type="text" placeholder="Titulo"/>'+
                             '<input class="inputLink" type="text" placeholder="Link"/>'+
                             '<p>Elige un color para asignarle.</p>'+
                             'Color'+
-                            '<input class="Color-Selector" type="color">'+
+                            '<input id="colorPicker" type="color">'+
+                          '</div>'+
                         '</div>'+
                   '</div>';
                 break;
-              default:
-                component = "";
+                case 'banner informativo':
+                component = 
+                  '<div class="col-lg-12 texto component CompEnlace" id="'+idComponent+'">'+
+                        '<div id="backgroundBanner">'+
+                          '<p class="tituloCmp">'+type+
+                            '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
+                          '<p>'+
+                          '<input class="inputTexto" type="text">'+
+                          '<p>Elige un color para asignarle.</p>'+
+                            'Color '+
+                            '<input class="Color-Selector" id="colorPicker" type="color">'
+                        '</div>'+
+                  '</div>';
+                break;
             }
             return component;
         }
-        Dropzone.autoDiscover = false;
-        var $Dropzone = new Dropzone('#DropImagen', {
-            paramName: "file", // The name that will be used to transfer the file
-            maxFilesize: 2, // MB
-            acceptedFiles: ".png",
-            //all your settings here.*
-            });
     </script>
 }
 
@@ -103,10 +137,6 @@
           <div class="col-lg-8">
             <div class="row" id="sortable">
             </div>
-            <form action="/file-upload"
-                  class="dropzone mt-1"
-                  id="DropVideo">
-            </form>
           </div>
           <div class="col-lg-4">
             <div class="card">
@@ -119,6 +149,7 @@
                   <li class="option-menu" onclick="addComponent('imagen')">Imagen</li>
                   <li class="option-menu" onclick="addComponent('video')">Video</li>
                   <li class="option-menu" onclick="addComponent('enlace')">Enlace</li>
+                  <li class="option-menu" onclick="addComponent('banner informativo')">Banner Informativo</li>
                 </ul>
               </div>
             </div>
@@ -127,4 +158,3 @@
       </div>
     </section>
   </div>
-  
