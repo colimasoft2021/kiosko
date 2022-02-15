@@ -1,9 +1,8 @@
-﻿<aside class="main-sidebar sidebar-dark-primary elevation-4">
+﻿<aside class="main-sidebar sidebar-dark-primary elevation-4 posicion-logo">
     <!-- Brand Logo -->
-    <a href="index3.html" class="brand-link">
-      <img src="~/Assets/dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-      <span class="brand-text font-weight-light">Menu</span>
-    </a>
+    <div class="logo-kiosko">
+        <img class="kiosko" src="~/img/logo.png" />
+    </div>
 
     <!-- Sidebar -->
     <div class="sidebar">
@@ -16,39 +15,3 @@
     </div>
     <!-- /.sidebar -->
   </aside>
-
-  <div class="modal fade" id="modalNewModulo">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h4 class="modal-title" id="modalTitle">Agregar nuevo Modulo</h4>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-              <div class="form-group">
-                <label for="exampleInputEmail1">Título</label>
-                <input type="text" class="form-control" id="titleNewModulo" placeholder="Ingresa el título">
-              </div>
-              <div class="form-group clearfix">
-                  <label for="exampleInputEmail1">Es menú desplegable</label><br/>
-                  <div class="icheck-primary d-inline">
-                    <input type="radio" id="radioPrimary1" value="1" name="radioDesplegable">
-                    <label for="radioPrimary1">Si</label>
-                </div>
-                <div class="icheck-primary d-inline">
-                    <input type="radio" id="radioPrimary2" value="0" name="radioDesplegable" checked="">
-                    <label for="radioPrimary2">No</label>
-                </div>
-              </div>
-            </div>
-            <div class="modal-footer justify-content-between">
-              <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-              <button type="button" class="btn btn-primary" onclick="saveNewModulo()">Agregar</button>
-            </div>
-          </div>
-          <!-- /.modal-content -->
-        </div>
-        <!-- /.modal-dialog -->
-      </div>

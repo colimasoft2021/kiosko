@@ -10,7 +10,7 @@
         <div class="row">
           <div class="col-lg-8">
             <input type="hidden" value="@Html.DisplayFor(model => model.Id)" id="idModulo" />
-            <div class="row" id="sortable">
+            <div class="row scroll" id="sortable">
             </div>
           </div>
           <div class="col-lg-4">
@@ -39,22 +39,12 @@
     <script type="text/javascript">
         var idModulo = $("#idModulo").val();
         var padre = "modulo"+idModulo;
-        var dropzone;
-        $( document ).ready(function() {
-            dropzone = new Dropzone('.dropzone', {
-                  parallelUploads: 2,
-                  thumbnailHeight: 120,
-                  thumbnailWidth: 120,
-                  maxFilesize: 3,
-                  filesizeBase: 1000,
-                });
-        });
         $(function () {
            $("#sortable").sortable();
            $.ajax({
                     type: "POST",
                     url: "/Componentes/GetAllComponentsForModulo",
-                    data: { "padre": padre},
+                    data: { "padre": "modulo1"},
                     success: function (response) {
                         console.log(response);
                         response.map(item => {
@@ -76,8 +66,6 @@
         function generateComponent(type, pkId, item) {
             let idComponent = Math.random().toString(36).substring(2,7);
             let stringId = "'"+idComponent+"'";
-            let idDropzone = Math.random().toString(36).substring(2,7);
-            let stringIdDropzone = "'"+idDropzone+"'";
             let component = "";
             let value = "";
             switch(type) {
@@ -103,7 +91,6 @@
                 break;
               default:
                 component = "";
-              break;
             }
             return component;
         }
