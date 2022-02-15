@@ -44,6 +44,8 @@
         function removeComponent(idComponent) {
             $("#"+idComponent).remove();
         }
+
+
         
         function generateComponent(type) {
             let idComponent = Math.random().toString(36).substring(2,7);
@@ -68,6 +70,19 @@
                           '<input class="inputTexto" type="text">'+
                   '</div>';
                 break;
+                case 'texto-imagen':
+              default:
+                component = 
+                '<div class="col-lg-12 texto component texto-imagen" id="'+idComponent+'">'+
+                          '<p class="tituloCmp">'+type+
+                            '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
+                          '<p>'+
+                        '<div class="padre">'+
+                            '<div class="boton"> <input type="file"> </div>'+
+                            '<div class="titulo"> <input class="titulo-input" type="text" placeholder="Titulo"> </div>'+ 
+                            '<div class="subtitulo"> <input type="text" placeholder="Texto"> </div>'+
+                    '</div>';
+              break;
                 case 'imagen':
                   component =
                   '<div class="col-lg-12 texto component" id="'+idComponent+'">'+
@@ -125,6 +140,7 @@
                 break;
             }
             return component;
+
         }
     </script>
 }
@@ -147,6 +163,7 @@
                   <li class="option-menu" onclick="addComponent('texto')">Texto</li>
                   <li class="option-menu" onclick="addComponent('subtitulo')">Subtitulo</li>
                   <li class="option-menu" onclick="addComponent('imagen')">Imagen</li>
+                  <li class="option-menu" onclick="addComponent('texto-imagen')">Desplazante Texto-Imagen</li>
                   <li class="option-menu" onclick="addComponent('video')">Video</li>
                   <li class="option-menu" onclick="addComponent('enlace')">Enlace</li>
                   <li class="option-menu" onclick="addComponent('banner informativo')">Banner Informativo</li>
