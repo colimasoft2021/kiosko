@@ -1,0 +1,59 @@
+﻿#DropImagen {
+    margin-inline: 4rem;
+    background-image: url(../img/img.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 5%;
+    background-color: #C4C4C4;
+}
+#DropVideo {
+    margin-inline: 4rem;
+    background-image: url(../img/video.svg);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 5%;
+    background-color: #C4C4C4;
+}
+.boton-perfil {
+    background-color: transparent;
+    width:19.64px;
+    border: none;
+    float:right;
+}
+
+.inputs {
+    font-size:20px;
+    border: 1px dashed #9B9B9B;
+    box-sizing: border-box;
+}
+
+.perfil img{
+    width: 19.64px;
+}
+.Color-Selector {
+    border-radius:20rem;
+    width: 20px;
+    height: 20px;
+    left: 85px;
+    top: 174px;
+    background: conic-gradient(from 180deg at 50% 50%, #FF0000 0deg, #FFA800 70.81deg, #FAFF00 149.56deg, #80FF00 215.19deg, #00FF19 275.19deg, #00F0FF 360deg);
+    margin:2px;
+}
+
+.inputTitulo {
+    width: 100%;
+    font-size: 25px;
+    text-align: center;
+    border: 1px dashed #9B9B9B;
+    box-sizing: border-box;
+    margin-bottom: 5px;
+}
+.inputLink {
+    width: 100%;
+    font-size: 25px;
+    font-style: italic;
+    border-bottom-width: 2px;
+    border-left: none;
+    border-right: none;
+    border-top: none;
+}
