@@ -1,6 +1,7 @@
 Dropzone.options.DropImagen = {
     paramName: "file", // The name that will be used to transfer the file
     maxFilesize: 2, // MB
+    maxFiles: 1,
     acceptedFiles: ".png",
 
     //accept: function (file, done) {
