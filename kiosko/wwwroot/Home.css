@@ -23,6 +23,7 @@ body {
 
 .texto {
     height: 120px;
+    
 }
 
 .inputTexto {
@@ -179,9 +180,7 @@ body {
     height: 300px;
 }
 
-.padre{
-    
-}
+
 
 .sidebar {
     background-color: #455A64;
@@ -202,4 +201,41 @@ body {
 
 .TESTCLASS {
     color: red;
+}
+
+.padre {
+    display: flex;
+    margin-left: 20px;
+}
+
+.texto-imagen-1 {
+    display: flex;
+}
+
+.texto-imagen-1 ul li{
+    list-style:none;
+}
+
+.botonincremento{
+    width:100px;
+    height:100px;
+}
+
+.video-guia{
+    height:200px;
+}
+
+.video-guia-padre {
+    
+    margin-top: 40px;
+    text-align: center;
+    
+}
+
+    .video-guia-padre ul li{
+        list-style:none;
+    }
+
+.input-archivo{
+    margin-bottom:30px;
 }
