@@ -5,6 +5,7 @@
 @section scripts {
     <script type="text/javascript">
         var dropzone;
+        var DropzoneVideo
         $( document ).ready(function() {
             dropzone = new Dropzone('.DropImagen', {
                   parallelUploads: 2,
@@ -13,7 +14,9 @@
                   acceptedFiles: ".jpg",
                   maxFilesize: 3,
                   filesizeBase: 1000,
-                });
+            });
+            DropzoneVideo = new dropzone('.DropVideo', {
+            })
         });
         $(function () {
            $("#sortable").sortable();
@@ -99,6 +102,9 @@
                             '<FORM class="dropzone needsclick" id="DropImagen" action="/upload">'+
                             '</FORM>'+
                           '</DIV>'+
+                          '<div>'+
+                          '<input class="w-100 mt-1 inputs" type="text" placeholder="Pie de Foto" />'+
+                          '<div>'+
                   '</div>';
               break;
                 case 'video':
@@ -123,7 +129,7 @@
                           '<div>'+
                             '<input class="inputTitulo" type="text" placeholder="Titulo"/>'+
                             '<input class="inputLink" type="text" placeholder="Link"/>'+
-                            '<p>Elige un color para asignarle.</p>'+
+                            '<p class="selColor">Elige un color para asignarle.</p>'+
                             'Color'+
                             '<input class="Color-Selector" id="colorPicker" type="color">'+
                           '</div>'+
@@ -138,7 +144,7 @@
                             '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
                           '<p>'+
                           '<input class="inputTexto" type="text">'+
-                          '<p>Elige un color para asignarle.</p>'+
+                          '<p class="selColor">Elige un color para asignarle.</p>'+
                             'Color '+
                             '<input class="Color-Selector" id="colorPicker" type="color">'
                         '</div>'+

@@ -1,13 +1,11 @@
-﻿*{
-    padding:0;
-    margin:0;
-    box-sizing:border-box;
-
+﻿* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
 }
 body {
     background-image:url('img/fondo.png');
-    
-
 }
 .principal {
     margin-top:30px;
@@ -32,11 +30,11 @@ body {
 }
 
 .component {
-    font-family: 'Poppins', sans-serif;
     padding: 16px;
     margin-top: 20px;
     background-color: white;
     position: relative;
+    border-radius: 8px;
     height: auto;
 }
 
@@ -168,7 +166,7 @@ body {
     background-image: url('img/fondo.png');
     background-repeat: no-repeat;
     background-size: 100%;
-    
+    background-attachment: fixed;
 }
 
 .scroll {
