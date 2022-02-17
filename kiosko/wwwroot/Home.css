@@ -1,13 +1,11 @@
-﻿*{
-    padding:0;
-    margin:0;
-    box-sizing:border-box;
-
+﻿* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
 }
 body {
     background-image:url('img/fondo.png');
-    
-
 }
 .principal {
     margin-top:30px;
@@ -37,6 +35,7 @@ body {
     margin-top: 20px;
     background-color: white;
     position: relative;
+    border-radius: 8px;
     height: auto;
 }
 
@@ -168,7 +167,7 @@ body {
     background-image: url('img/fondo.png');
     background-repeat: no-repeat;
     background-size: 100%;
-    
+    background-attachment: fixed;
 }
 
 .scroll {
@@ -189,7 +188,7 @@ body {
 .posicion-logo {
     background-color: #455A64;
 }    
-.dropzone {
+/*.dropzone {
     background: white;
     border-radius: 5px;
     border: 2px dashed rgb(0, 135, 247);
@@ -197,7 +196,7 @@ body {
     max-width: 500px;
     margin-left: auto;
     margin-right: auto;
-}
+}*/
 
 .TESTCLASS {
     color: red;

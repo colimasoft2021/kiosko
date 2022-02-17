@@ -4,16 +4,29 @@
 }
 @section scripts {
     <script type="text/javascript">
-        var dropzone;
         $( document ).ready(function() {
-            dropzone = new Dropzone('.DropImagen', {
-                  parallelUploads: 2,
-                  thumbnailHeight: 120,
-                  thumbnailWidth: 120,
-                  acceptedFiles: ".jpg",
-                  maxFilesize: 3,
-                  filesizeBase: 1000,
-                });
+            Dropzone.autoDiscover = false;
+
+            var myDropzoneTheFirst = new Dropzone(
+        //id of drop zone element 1
+        '#DropImagen', { 
+            url : "/upload"
+        }
+    );
+           
+            Dropzone.options.DropVideo = {
+                url: "/file/post",
+                paramName: "file", // The name that will be used to transfer the file
+                maxFilesize: 100, // MB
+                maxFiles: 1,
+                addRemoveLinks: true,
+                acceptedFiles: ".mp4",
+                init: function() {
+                    this.on("addedfile", file => {
+                        console.log("A file has been added");
+                    });
+                }
+            };
         });
         $(function () {
            $("#sortable").sortable();
@@ -22,23 +35,26 @@
         function addComponent(type) {
             let component = generateComponent(type);
             $("#sortable").append(component);
-             if(type == "imagen"){
-                console.log("entro if drop");
+
+            if(type == 'imagen'){
                 Dropzone.discover();
-                $(".dropzone").destroy();
-                Dropzone.options.dropzone;
             }
-            let colorPicker = document.getElementById('colorPicker');
-            colorPicker.addEventListener('input', e => {
-                let background = document.getElementById('background');
-                console.log(colorPicker);
-                background.style.background = e.target.value;
-            });
-            colorPicker.addEventListener('input', e => {
-                let background = document.getElementById('backgroundBanner');
-                console.log(colorPicker);
-                background.style.background = e.target.value;
-            });
+            if(type == 'video'){
+                Dropzone.discover();
+            }
+            // if(type == "imagen"){
+            //    console.log("entro if dropImagen");
+            //    Dropzone.discover();
+            //    $(".dropzone").destroy();
+            //    Dropzone.options.dropzone;
+            //}
+
+            // if(type == "video"){
+            //    console.log("entro if dropVideo");
+            //    Dropzone.discover();
+            //    $(".dropzone").destroy();
+            //    Dropzone.options.dropzone;
+            //}
         }
 
         function removeComponent(idComponent) {
@@ -112,9 +128,12 @@
                             '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
                           '<p>'+
                           '<DIV id="dropzone">'+
-                            '<FORM class="dropzone needsclick" id="DropImagen" action="/upload">'+
+                            '<FORM class="dropzone" id="DropImagen" action="/upload">'+
                             '</FORM>'+
                           '</DIV>'+
+                          '<div>'+
+                          '<input class="w-100 mt-1 inputs" type="text" placeholder="Pie de Foto" />'+
+                          '<div>'+
                   '</div>';
               break;
                 case 'video':
@@ -139,9 +158,9 @@
                           '<div>'+
                             '<input class="inputTitulo" type="text" placeholder="Titulo"/>'+
                             '<input class="inputLink" type="text" placeholder="Link"/>'+
-                            '<p>Elige un color para asignarle.</p>'+
+                            '<p class="selColor">Elige un color para asignarle.</p>'+
                             'Color'+
-                            '<input class="Color-Selector" id="colorPicker" type="color">'+
+                            '<input class="Color-Selector"  type="color">'+
                           '</div>'+
                         '</div>'+
                   '</div>';
@@ -154,9 +173,20 @@
                             '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
                           '<p>'+
                           '<input class="inputTexto" type="text">'+
-                          '<p>Elige un color para asignarle.</p>'+
+                          '<p class="selColor">Elige un color para asignarle.</p>'+
                             'Color '+
-                            '<input class="Color-Selector" id="colorPicker" type="color">'
+                            '<input class="Color-Selector" type="color">'
+                        '</div>'+
+                  '</div>';
+                break;
+                case 'PopUpVideo':
+                component = 
+                  '<div class="col-lg-12 texto component CompEnlace" id="'+idComponent+'">'+
+                        '<div id="backgroundBanner">'+
+                          '<p class="tituloCmp">'+type+
+                            '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
+                          '<p>'+
+                          '<input class="inputTexto" type="text" placeholder="Texto...">'+
                         '</div>'+
                   '</div>';
                 break;
@@ -204,6 +234,7 @@
                   <li class="option-menu" onclick="addComponent('video')">Video</li>
                   <li class="option-menu" onclick="addComponent('enlace')">Enlace</li>
                   <li class="option-menu" onclick="addComponent('banner informativo')">Banner Informativo</li>
+                  <li class="option-menu" onclick="addComponent('PopUpVideo')">Pop-Up Video</li>
                   <li class="option-menu" onclick="addComponent('video-guia')">video-guia</li>
                 </ul>
               </div>
