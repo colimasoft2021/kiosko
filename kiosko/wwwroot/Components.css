@@ -1,4 +1,5 @@
 ﻿#DropImagen {
+    width:30px;
     margin-inline: 4rem;
     background-image: url(../img/img.png);
     background-repeat: no-repeat;
@@ -31,12 +32,12 @@
     width: 19.64px;
 }
 .Color-Selector {
-    border-radius:20rem;
-    width: 20px;
-    height: 20px;
+    border-radius:5px;
+    width: 60px;
+    height: 40px;
     left: 85px;
     top: 174px;
-    background: conic-gradient(from 180deg at 50% 50%, #FF0000 0deg, #FFA800 70.81deg, #FAFF00 149.56deg, #80FF00 215.19deg, #00FF19 275.19deg, #00F0FF 360deg);
+    
     margin:2px;
 }
 

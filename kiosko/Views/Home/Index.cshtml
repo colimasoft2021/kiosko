@@ -55,17 +55,6 @@
             //    $(".dropzone").destroy();
             //    Dropzone.options.dropzone;
             //}
-            let colorPicker = document.getElementById('colorPicker');
-            colorPicker.addEventListener('input', e => {
-                let background = document.getElementById('background');
-                console.log(colorPicker);
-                background.style.background = e.target.value;
-            });
-            colorPicker.addEventListener('input', e => {
-                let background = document.getElementById('backgroundBanner');
-                console.log(colorPicker);
-                background.style.background = e.target.value;
-            });
         }
 
         function removeComponent(idComponent) {
@@ -117,7 +106,7 @@
                             '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
                           '<p>'+
                           '<DIV id="dropzone">'+
-                            '<FORM class="dropzone needsclick" id="DropImagen" action="/upload">'+
+                            '<FORM class="dropzone" id="DropImagen" action="/upload">'+
                             '</FORM>'+
                           '</DIV>'+
                           '<div>'+
@@ -149,7 +138,7 @@
                             '<input class="inputLink" type="text" placeholder="Link"/>'+
                             '<p class="selColor">Elige un color para asignarle.</p>'+
                             'Color'+
-                            '<input class="Color-Selector" id="colorPicker" type="color">'+
+                            '<input class="Color-Selector"  type="color">'+
                           '</div>'+
                         '</div>'+
                   '</div>';
@@ -164,7 +153,18 @@
                           '<input class="inputTexto" type="text">'+
                           '<p class="selColor">Elige un color para asignarle.</p>'+
                             'Color '+
-                            '<input class="Color-Selector" id="colorPicker" type="color">'
+                            '<input class="Color-Selector" type="color">'
+                        '</div>'+
+                  '</div>';
+                break;
+                case 'PopUpVideo':
+                component = 
+                  '<div class="col-lg-12 texto component CompEnlace" id="'+idComponent+'">'+
+                        '<div id="backgroundBanner">'+
+                          '<p class="tituloCmp">'+type+
+                            '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
+                          '<p>'+
+                          '<input class="inputTexto" type="text" placeholder="Texto...">'+
                         '</div>'+
                   '</div>';
                 break;
@@ -197,6 +197,7 @@
                   <li class="option-menu" onclick="addComponent('video')">Video</li>
                   <li class="option-menu" onclick="addComponent('enlace')">Enlace</li>
                   <li class="option-menu" onclick="addComponent('banner informativo')">Banner Informativo</li>
+                  <li class="option-menu" onclick="addComponent('PopUpVideo')">Pop-Up Video</li>
                 </ul>
               </div>
             </div>
