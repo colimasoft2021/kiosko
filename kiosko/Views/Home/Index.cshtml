@@ -4,19 +4,29 @@
 }
 @section scripts {
     <script type="text/javascript">
-        var dropzone;
-        var DropzoneVideo
         $( document ).ready(function() {
-            dropzone = new Dropzone('.DropImagen', {
-                  parallelUploads: 2,
-                  thumbnailHeight: 120,
-                  thumbnailWidth: 120,
-                  acceptedFiles: ".jpg",
-                  maxFilesize: 3,
-                  filesizeBase: 1000,
-            });
-            DropzoneVideo = new dropzone('.DropVideo', {
-            })
+            Dropzone.autoDiscover = false;
+
+            var myDropzoneTheFirst = new Dropzone(
+        //id of drop zone element 1
+        '#DropImagen', { 
+            url : "/upload"
+        }
+    );
+           
+            Dropzone.options.DropVideo = {
+                url: "/file/post",
+                paramName: "file", // The name that will be used to transfer the file
+                maxFilesize: 100, // MB
+                maxFiles: 1,
+                addRemoveLinks: true,
+                acceptedFiles: ".mp4",
+                init: function() {
+                    this.on("addedfile", file => {
+                        console.log("A file has been added");
+                    });
+                }
+            };
         });
         $(function () {
            $("#sortable").sortable();
@@ -25,18 +35,26 @@
         function addComponent(type) {
             let component = generateComponent(type);
             $("#sortable").append(component);
-             if(type == "imagen"){
-                console.log("entro if dropImagen");
+
+            if(type == 'imagen'){
                 Dropzone.discover();
-                $(".dropzone").destroy();
-                Dropzone.options.dropzone;
             }
-            else if(type == "video"){
-                console.log("entro if dropVideo");
+            if(type == 'video'){
                 Dropzone.discover();
-                $(".dropzone").destroy();
-                Dropzone.options.dropzone;
             }
+            // if(type == "imagen"){
+            //    console.log("entro if dropImagen");
+            //    Dropzone.discover();
+            //    $(".dropzone").destroy();
+            //    Dropzone.options.dropzone;
+            //}
+
+            // if(type == "video"){
+            //    console.log("entro if dropVideo");
+            //    Dropzone.discover();
+            //    $(".dropzone").destroy();
+            //    Dropzone.options.dropzone;
+            //}
             let colorPicker = document.getElementById('colorPicker');
             colorPicker.addEventListener('input', e => {
                 let background = document.getElementById('background');
