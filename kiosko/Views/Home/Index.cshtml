@@ -4,30 +4,27 @@
 }
 @section scripts {
     <script type="text/javascript">
-        $( document ).ready(function() {
-            Dropzone.autoDiscover = false;
-
-            var myDropzoneTheFirst = new Dropzone(
-        //id of drop zone element 1
-        '#DropImagen', { 
-            url : "/upload"
-        }
-    );
-           
-            Dropzone.options.DropVideo = {
-                url: "/file/post",
-                paramName: "file", // The name that will be used to transfer the file
-                maxFilesize: 100, // MB
-                maxFiles: 1,
-                addRemoveLinks: true,
-                acceptedFiles: ".mp4",
-                init: function() {
-                    this.on("addedfile", file => {
-                        console.log("A file has been added");
-                    });
-                }
-            };
+        Dropzone.autoDiscover = false;
+        var DropzoneVideo
+        $(document).ready(function () {
+           var dropzone = new Dropzone('#DropImagen', {
+                  parallelUploads: 2,
+                  thumbnailHeight: 120,
+                  thumbnailWidth: 120,
+                  acceptedFiles: ".jpg",
+                  maxFilesize: 3,
+                  filesizeBase: 1000,
+            });
+            dropzoneVideo = new dropzone('#DropVideo', {
+                parallelUploads: 2,
+                  thumbnailHeight: 120,
+                  thumbnailWidth: 120,
+                  acceptedFiles: ".mp4",
+                  maxFilesize: 1,
+                  filesizeBase: 1000,
+            });
         });
+
         $(function () {
            $("#sortable").sortable();
         });
@@ -35,28 +32,17 @@
         function addComponent(type) {
             let component = generateComponent(type);
             $("#sortable").append(component);
-
-            if(type == 'imagen'){
+             if(type == "imagen"){
+                console.log("entro if dropImagen");
                 Dropzone.discover();
+                $(".dropzone").destroy();
             }
-            if(type == 'video'){
+            if(type == "video"){
+                console.log("entro if dropVideo");
                 Dropzone.discover();
+                $(".dropzoneVideo").destroy();
             }
-            // if(type == "imagen"){
-            //    console.log("entro if dropImagen");
-            //    Dropzone.discover();
-            //    $(".dropzone").destroy();
-            //    Dropzone.options.dropzone;
-            //}
-
-            // if(type == "video"){
-            //    console.log("entro if dropVideo");
-            //    Dropzone.discover();
-            //    $(".dropzone").destroy();
-            //    Dropzone.options.dropzone;
-            //}
         }
-
         function removeComponent(idComponent) {
             $("#"+idComponent).remove();
         }
@@ -187,6 +173,11 @@
                             '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
                           '<p>'+
                           '<input class="inputTexto" type="text" placeholder="Texto...">'+
+                          '<div class="video-guia-padre">'+
+                                '<ul>'+
+                                    '<li class="input-archivo"><input type="file"></li>'+
+                                '</ul>'+
+                           '</div>'+
                         '</div>'+
                   '</div>';
                 break;
@@ -202,7 +193,7 @@
                                     '<li class="input-archivo"><input type="file"></li>'+
                                     '<li><input type="text" placeholder="Descripcion"></li>'+
                                 '</ul>'+
-                           '</div>'
+                           '</div>'+
                   '</div>';
             break;
             }
