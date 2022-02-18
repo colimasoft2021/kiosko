@@ -1,10 +1,14 @@
+using kiosko.Data;
 using kiosko.Models;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<KioskoCmsContext>();
+builder.Services.AddDbContext<LoginContext>(opt => opt.UseSqlServer(builder.Configuration.GetConnectionString("ConexionTest")));
+builder.Services.AddDbContext<KColSoftContext>(opt => opt.UseSqlServer(builder.Configuration.GetConnectionString("ConexionTest1")));
 
 
 var app = builder.Build();

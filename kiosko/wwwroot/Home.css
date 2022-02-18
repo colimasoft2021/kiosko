@@ -1,13 +1,11 @@
-﻿*{
-    padding:0;
-    margin:0;
-    box-sizing:border-box;
-
+﻿* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
 }
 body {
     background-image:url('img/fondo.png');
-    
-
 }
 .principal {
     margin-top:30px;
@@ -23,6 +21,7 @@ body {
 
 .texto {
     height: 120px;
+    
 }
 
 .inputTexto {
@@ -36,6 +35,7 @@ body {
     margin-top: 20px;
     background-color: white;
     position: relative;
+    border-radius: 8px;
     height: auto;
 }
 
@@ -167,7 +167,7 @@ body {
     background-image: url('img/fondo.png');
     background-repeat: no-repeat;
     background-size: 100%;
-    
+    background-attachment: fixed;
 }
 
 .scroll {
@@ -179,9 +179,7 @@ body {
     height: 300px;
 }
 
-.padre{
-    
-}
+
 
 .sidebar {
     background-color: #455A64;
@@ -195,7 +193,6 @@ body {
     border-radius: 5px;
     border: 2px dashed rgb(0, 135, 247);
     border-image: none;
-    max-width: 500px;
     margin-left: auto;
     margin-right: auto;
 }
@@ -203,3 +200,46 @@ body {
 .TESTCLASS {
     color: red;
 }
+
+.padre {
+    display: flex;
+    margin-left: 20px;
+}
+
+.texto-imagen-1 {
+    display: flex;
+}
+
+.texto-imagen-1 ul li{
+    list-style:none;
+}
+
+.botonincremento{
+    width:100px;
+    height:100px;
+}
+
+.video-guia{
+    height:200px;
+}
+
+.video-guia-padre {
+    
+    margin-top: 40px;
+    text-align: center;
+    
+}
+
+    .video-guia-padre ul li{
+        list-style:none;
+    }
+
+.input-archivo{
+    margin-bottom:30px;
+}
+
+.desplegable-texto-imagen {
+    height: 300px;
+}
+
+
