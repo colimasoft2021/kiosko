@@ -238,3 +238,25 @@ body {
 .input-archivo{
     margin-bottom:30px;
 }
+
+.desplegable-texto-imagen {
+    height: 300px;
+}
+.cabecera .input{
+    display:none;
+}
+
+.cabecera label{
+    margin-right:25px;
+}
+
+.footer .input2{
+    display:none;
+}
+
+.footer label {
+    margin: 0 13%;
+}
+.footer .input3 {
+    display: none;
+}
