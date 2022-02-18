@@ -207,27 +207,30 @@
             break;
                 case 'Desplegable texto-imagen':
                 component = 
-                  '<div class="col-lg-12  component CompEnlace desplegable-texto-imagen" id="'+idComponent+'">'+
-                        '<div id="backgroundBanner">'+
+                  '<div class="col-lg-12  component desplegable-texto-imagen" id="'+idComponent+'">'+
                           '<p class="tituloCmp">'+type+
                             '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
                           '<p>'+
-                            '<div'+
-                                '<div class="cabecera">'+
-                                '<label for="archivo">subir archivo</label>'+
-                                    '<input class="input" type="file" id="archivo">'+
-                                    '<input type="text" placeholder="subtitulo">'+
-                                '</div>'+
+                      '<div class="contenedor-padre">'+
+                            '<div>'+
+                                 '<input type="file"  accept=".jpg, .png, .jpeg">'+
+                                 '<input type="text" placeholder="subtitulo">'+
+                            '<div>'+
 
-                                '<div> <textarea name="" id="" cols="30" rows="3" placeholder="texto"></textarea> </div>'+
+                            '<div class="footer">'+
 
-                                '<div class="footer">'+
-                                '<label for="input2">subir archivo</label>'+
-                                    '<input class="input2" type="file">'+
-                                    '<label for="input3">subir archivo</label>'+
-                                    '<input class="input3" type="file">'+
+                                '<div class="comentario">'+
+                                   '<textarea name="" id="" cols="30" rows="3" placeholder="texto"></textarea>'+
                                 '</div>'+
-                           '</div>'+
+                                
+                                '<div>'+
+                                    '<input type="file" accept=".jpg, .png, .jpeg">'+
+                                    '<input type="file" accept=".jpg, .png, .jpeg">'+
+                                '</div>'+
+                            '</div>'+
+
+                      '</div>'+
+                                    
                   '</div>';
             break;
             }
