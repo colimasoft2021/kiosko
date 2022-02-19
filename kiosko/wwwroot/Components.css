@@ -51,13 +51,26 @@
     margin-bottom: 5px;
 }
 .inputLink {
-    width: 100%;
+    position: relative;
+    width: 50%;
     font-size: 14px;
     font-style: italic;
     border-bottom-width: 2px;
     border-left: none;
+    text-align: center;
     border-right: none;
     border-top: none;
+}
+.previewPage {
+    height: 100px;
+    width:50%;
+
+}
+.inputLinkContainer {
+    text-align:center;
+    display:inline;
+    width:100%;
+    height:auto;
 }
 
 .selColor {

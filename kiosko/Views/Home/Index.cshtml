@@ -11,20 +11,21 @@
                   parallelUploads: 2,
                   thumbnailHeight: 120,
                   thumbnailWidth: 120,
+                  addRemoveLinks: true,
                   acceptedFiles: ".jpg",
                   maxFilesize: 3,
                   filesizeBase: 1000,
             });
-            dropzoneVideo = new dropzone('#DropVideo', {
+           var dropzoneVideo = new Dropzone('#DropVideo', {
                 parallelUploads: 2,
                   thumbnailHeight: 120,
                   thumbnailWidth: 120,
+                  addRemoveLinks: true,
                   acceptedFiles: ".mp4",
                   maxFilesize: 1,
                   filesizeBase: 1000,
             });
         });
-
         $(function () {
            $("#sortable").sortable();
         });
@@ -42,6 +43,24 @@
                 Dropzone.discover();
                 $(".dropzoneVideo").destroy();
             }
+
+            function archivo(evt) {
+            var files = evt.target.files;
+            for (var i = 0, f; f = files[i]; i++) {
+                if (!f.type.match('image.*')) {
+                    continue;
+                }
+                var reader = new FileReader();
+                reader.onload = (function(theFile){
+                    return function(e){
+                        document.getElementById("list").innerHTML = ['<img class="thumb" src="', e.target.result,'" width="400" height="200" title="', escape(theFile.name), '"/>'].join('');
+                    };
+                })(f);
+                reader.readAsDataURL(f);
+            }
+        }
+        document.getElementById('files').addEventListener('change', archivo, false);
+
         }
         function removeComponent(idComponent) {
             $("#"+idComponent).remove();
@@ -143,9 +162,12 @@
                           '<p>'+
                           '<div>'+
                             '<input class="inputTitulo" type="text" placeholder="Titulo"/>'+
-                            '<input class="inputLink" type="text" placeholder="Link"/>'+
+                            '<div class="inputLinkContainer">'+
+                            '<input  class="inputLink" type="text" placeholder="Link"/>'+
+                            '</div>'+
+                            '<iframe class="previewPage" width="200" height="200" src="https://www.youtube.com/embed/YP3utM03Vdk"></iframe>'+
                             '<p class="selColor">Elige un color para asignarle.</p>'+
-                            'Color'+
+                            'Color '+
                             '<input class="Color-Selector"  type="color">'+
                           '</div>'+
                         '</div>'+
@@ -175,7 +197,8 @@
                           '<input class="inputTexto" type="text" placeholder="Texto...">'+
                           '<div class="video-guia-padre">'+
                                 '<ul>'+
-                                    '<li class="input-archivo"><input type="file"></li>'+
+                                    '<li class="input-archivo"><input type="file" id="files" name="files[]"></li>'+
+                                    '<output id="list"></output>'+
                                 '</ul>'+
                            '</div>'+
                         '</div>'+
