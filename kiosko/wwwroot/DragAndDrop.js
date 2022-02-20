@@ -1,6 +1,6 @@
 Dropzone.options.DropImagen = {
     paramName: "file", // The name that will be used to transfer the file
-    maxFilesize: 2, // MB
+    maxFilesize: 10, // MB
     addRemoveLinks: true,
     maxFiles: 1,
     acceptedFiles: ".png",
@@ -17,7 +17,8 @@ Dropzone.options.DropVideo = {
     paramName: "file", // The name that will be used to transfer the file
     maxFilesize: 400, // MB
     addRemoveLinks: true,
-    acceptedFiles: ".mp4",
+    maxThumbnailFilesize:5000,
+    acceptedFiles: ".avi",
     
 
     //accept: function (file, done) {
@@ -26,29 +27,4 @@ Dropzone.options.DropVideo = {
     //    }
     //    else { done(); }
     //}
-//};
-
-    function archivo(evt) {
-    var files = evt.target.files; // FileList object
-
-    //Obtenemos la imagen del campo "file". 
-    for (var i = 0, f; f = files[i]; i++) {
-        //Solo admitimos imágenes.
-        if (!f.type.match('image.*')) {
-            continue;
-        }
-
-        var reader = new FileReader();
-
-        reader.onload = (function (theFile) {
-            return function (e) {
-                // Creamos la imagen.
-                document.getElementById("list").innerHTML = ['<img class="thumb" src="', e.target.result, '" title="', escape(theFile.name), '"/>'].join('');
-            };
-        })(f);
-
-        reader.readAsDataURL(f);
-    }
-}
-
-document.getElementById('files').addEventListener('change', archivo, false);
+};

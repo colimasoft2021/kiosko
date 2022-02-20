@@ -50,9 +50,9 @@
     box-sizing: border-box;
     margin-bottom: 5px;
 }
-.inputLink {
+#inputLink {
     position: relative;
-    width: 50%;
+    width: 100%;
     font-size: 14px;
     font-style: italic;
     border-bottom-width: 2px;

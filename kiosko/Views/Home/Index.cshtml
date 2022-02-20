@@ -7,15 +7,6 @@
         Dropzone.autoDiscover = false;
         var DropzoneVideo
         $(document).ready(function () {
-           var dropzone = new Dropzone('#DropImagen', {
-                  parallelUploads: 2,
-                  thumbnailHeight: 120,
-                  thumbnailWidth: 120,
-                  addRemoveLinks: true,
-                  acceptedFiles: ".jpg",
-                  maxFilesize: 3,
-                  filesizeBase: 1000,
-            });
            var dropzoneVideo = new Dropzone('#DropVideo', {
                 parallelUploads: 2,
                   thumbnailHeight: 120,
@@ -33,6 +24,7 @@
         function addComponent(type) {
             let component = generateComponent(type);
             $("#sortable").append(component);
+
              if(type == "imagen"){
                 console.log("entro if dropImagen");
                 Dropzone.discover();
@@ -44,23 +36,36 @@
                 $(".dropzoneVideo").destroy();
             }
 
-            function archivo(evt) {
-            var files = evt.target.files;
-            for (var i = 0, f; f = files[i]; i++) {
-                if (!f.type.match('image.*')) {
-                    continue;
-                }
-                var reader = new FileReader();
-                reader.onload = (function(theFile){
-                    return function(e){
-                        document.getElementById("list").innerHTML = ['<img class="thumb" src="', e.target.result,'" width="400" height="200" title="', escape(theFile.name), '"/>'].join('');
-                    };
-                })(f);
-                reader.readAsDataURL(f);
+            document.getElementById("file").onchange = function(e) {
+            let reader = new FileReader();
+            reader.readAsDataURL(e.target.files[0]);
+            reader.onload = function() {
+                let preview = document.getElementById("preview");
+                video=document.createElement('video');
+                video.src = reader.result;
+                video.style.width = "200px";
+                preview.innerHTML = "";
+                preview.append(video);
             }
-        }
-        document.getElementById('files').addEventListener('change', archivo, false);
 
+}
+
+        //    function videoPreview(evt) {
+        //    var files = evt.target.files;
+        //    for (var i = 0, f; f = files[i]; i++) {
+        //        if (!f.type.match('video.*')) {
+        //            continue;
+        //        }
+        //        var reader = new FileReader();
+        //        reader.onload = (function(theFile){
+        //            return function(e){
+        //                document.getElementById("list").innerHTML = ['<video class="thumb" src="', e.target.result,'" width="400" height="200" title="', escape(theFile.name), '"/>'].join('');
+        //            };
+        //        })(f);
+        //        reader.readAsDataURL(f);
+        //    }
+        //}
+        //    document.getElementById('files'+stringId).addEventListener('change', videoPreview, false);
         }
         function removeComponent(idComponent) {
             $("#"+idComponent).remove();
@@ -72,11 +77,21 @@
             $("#text"+stringId).append(
                         '<div class="padre">'+
                             '<ul>'+
-                                '<li><input type="file"></li> '+
+                                '<li class="input-archivo"><input type="file" id="files" name="files[]"></li>'+
+                                    '<output id="list"></output>'+
                                 '<li><input class="titulo-input" type="text" placeholder="Titulo"></li>'+ 
                                 '<li><input type="text" placeholder="Texto"></li>'+
                            '<ul>'+
                        '</div>');
+        }
+        
+        function AddPreviewLink(stringId){
+            let enlace = document.getElementById('inputLink'+stringId).value;
+            console.log("Entre");
+            console.log(enlace);
+            console.log(stringId);
+            console.log('inputLink'+stringId);
+            document.getElementById("previewLink"+stringId).innerHTML = ['<iframe class="previewPage" width="200" height="200" src="'+enlace+'"></iframe>'];
         }
         
         function generateComponent(type) {
@@ -163,9 +178,9 @@
                           '<div>'+
                             '<input class="inputTitulo" type="text" placeholder="Titulo"/>'+
                             '<div class="inputLinkContainer">'+
-                            '<input  class="inputLink" type="text" placeholder="Link"/>'+
+                            '<input  id="inputLink'+idComponent+'" type="text" placeholder="Link"/>'+
                             '</div>'+
-                            '<iframe class="previewPage" width="200" height="200" src="https://www.youtube.com/embed/YP3utM03Vdk"></iframe>'+
+                            '<button onclick="AddPreviewLink('+stringId+')" id="previewLink'+idComponent+'"> <img src="/img/icono.png" /> </button>' +
                             '<p class="selColor">Elige un color para asignarle.</p>'+
                             'Color '+
                             '<input class="Color-Selector"  type="color">'+
@@ -197,8 +212,9 @@
                           '<input class="inputTexto" type="text" placeholder="Texto...">'+
                           '<div class="video-guia-padre">'+
                                 '<ul>'+
-                                    '<li class="input-archivo"><input type="file" id="files" name="files[]"></li>'+
-                                    '<output id="list"></output>'+
+                                    '<input type="file" name="file" id="file" accept=".mp4">'+
+                                     '<!--previsualizar-->'+
+                                    '<div id="preview" class="estilo-imagen"> </div>'+
                                 '</ul>'+
                            '</div>'+
                         '</div>'+
@@ -213,7 +229,8 @@
                           '<p>'+
                             '<div class="video-guia-padre">'+
                                 '<ul>'+
-                                    '<li class="input-archivo"><input type="file"></li>'+
+                                    '<li class="input-archivo"><input type="file" id="files" name="files[]"></li>'+
+                                    '<output id="list"></output>'+
                                     '<li><input type="text" placeholder="Descripcion"></li>'+
                                 '</ul>'+
                            '</div>'+
