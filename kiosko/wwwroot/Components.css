@@ -1,5 +1,5 @@
-﻿#DropImagen {
-
+﻿#dropzoneImagen {
+    background-color:black;
     margin-inline: 4rem;
     background-image: url(../img/img.png);
     background-repeat: no-repeat;
@@ -7,7 +7,7 @@
     background-size: 5%;
     background-color: #C4C4C4;
 }
-#DropVideo {
+#dropzoneVideo {
     margin-inline: 4rem;
     background-image: url(../img/video.svg);
     background-repeat: no-repeat;
@@ -20,6 +20,10 @@
     width:19.64px;
     border: none;
     float:right;
+}
+
+.dz-button {
+    background-image: url(../img/img.png) !important;
 }
 
 .inputs {
@@ -62,8 +66,8 @@
     border-top: none;
 }
 .previewPage {
-    height: 100px;
-    width:50%;
+    height: 300px;
+    width:100%;
 
 }
 .inputLinkContainer {
