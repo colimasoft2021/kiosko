@@ -7,13 +7,14 @@
         $(document).ready(function () {
          
         });
+
         $(function () {
            $("#sortable").sortable();
         });
-
         function addComponent(type) {
             let component = generateComponent(type);
             $("#sortable").append(component);
+
             // pueden quetar los comentarios mios si gustan, 
             // if(type == "imagen"){
             //    console.log("entro if dropImagen");
@@ -64,8 +65,8 @@
         //    addRemoveLinks: true,
         //    acceptedFiles: ".mp4",
         //}
-
-   
+             
+        }
         function removeComponent(idComponent) {
             $("#"+idComponent).remove();
         }
