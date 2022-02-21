@@ -202,14 +202,7 @@ body {
     color: red;
 }
 
-.padre {
-    display: flex;
-    margin-left: 20px;
-}
 
-.texto-imagen-1 {
-    display: flex;
-}
 
 .texto-imagen-1 ul li{
     list-style:none;
@@ -241,6 +234,17 @@ body {
 
 .desplegable-texto-imagen {
     height: 300px;
+}
+.imagen-general {
+    display: flex;
+}
+
+#preview3 {
+    display:flex;
+}
+
+.preview2{
+    display:flex;
 }
 
 

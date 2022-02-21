@@ -73,6 +73,106 @@
                            '<ul>'+
                        '</div>');
         }
+
+        function preview(stringId)
+        {
+  console.log($("#imagen"+stringId).val());
+  
+
+           var imagenFile= $('#imagen'+stringId).prop('files');
+           console.log(imagenFile);
+           imagenFile=imagenFile[0];
+           console.log(imagenFile);
+           let reader = new FileReader();
+            reader.readAsDataURL(imagenFile);
+       reader.onload = function() {
+            let preview = $('#preview'+stringId);
+            $('#preview'+stringId).empty();
+            imagen=document.createElement('img');
+            imagen.src = reader.result;
+            imagen.style.width = "200px";
+            preview.innerHTML = "";
+            preview.append(imagen);
+        }
+  
+
+        }
+
+
+function preview2(stringId)
+        {
+  console.log($("#imagen2"+stringId).val());
+  
+
+           var imagenFile2= $('#imagen2'+stringId).prop('files');
+           console.log(imagenFile2);
+           imagenFile2=imagenFile2[0];
+           console.log(imagenFile2);
+           let reader2 = new FileReader();
+            reader2.readAsDataURL(imagenFile2);
+       reader2.onload = function() {
+            let preview2 = $('#preview2'+stringId);
+            $('#preview2'+stringId).empty();
+            imagen2=document.createElement('img');
+            imagen2.src = reader2.result;
+            imagen2.style.width = "200px";
+            preview2.innerHTML = "";
+            preview2.append(imagen2);
+        }
+  
+
+        }
+
+
+function preview3(stringId)
+        {
+  console.log($("#imagen3"+stringId).val());
+  
+
+           var imagenFile3= $('#imagen3'+stringId).prop('files');
+           console.log(imagenFile3);
+           imagenFile3=imagenFile3[0];
+           console.log(imagenFile3);
+           let reader3 = new FileReader();
+            reader3.readAsDataURL(imagenFile3);
+       reader3.onload = function() {
+            let preview3 = $('#preview3'+stringId);
+            $('#preview3'+stringId).empty();
+            imagen3=document.createElement('img');
+            imagen3.src = reader3.result;
+            imagen3.style.width = "200px";
+            preview3.innerHTML = "";
+            preview3.append(imagen3);
+        }
+  
+
+        }
+
+
+        function preview4(stringId)
+        {
+  console.log($("#imagen4"+stringId).val());
+  
+
+           var imagenFile4= $('#imagen4'+stringId).prop('files');
+           console.log(imagenFile4);
+           imagenFile4=imagenFile4[0];
+           console.log(imagenFile4);
+           let reader4 = new FileReader();
+            reader4.readAsDataURL(imagenFile4);
+       reader4.onload = function() {
+            let preview4 = $('#preview4'+stringId);
+            $('#preview4'+stringId).empty();
+            imagen4=document.createElement('img');
+            imagen4.src = reader4.result;
+            imagen4.style.width = "200px";
+            preview4.innerHTML = "";
+            preview4.append(imagen4);
+        }
+  
+
+        }
+
         
         function generateComponent(type) {
             let idComponent = Math.random().toString(36).substring(2,7);
@@ -106,8 +206,14 @@
                           '<p>'+
                       '<div class="padre">'+
                                 '<div class="texto-imagen-1" id="text'+idComponent+'">'+
-                                    '<ul>'+
-                                        '<li><input type="file"> </li>'+
+                                    
+                                        '<input type="file" id="imagen4'+idComponent+'"  accept=".jpg, .png, .jpeg" onchange="preview4('+stringId+')">'+
+                                        
+                                        '<div id="preview4'+idComponent+'" class="estilo-imagen">'+ 
+            
+                                        '</div>'+
+                                        '<ul>'+
+
                                         '<li><input class="titulo-input" type="text" placeholder="Titulo"></li>'+ 
                                         '<li><input type="text" placeholder="Texto"></li>'+
                                     '</ul>'+
@@ -213,9 +319,14 @@
                           '<p>'+
                       '<div class="contenedor-padre">'+
                             '<div>'+
-                                 '<input type="file"  accept=".jpg, .png, .jpeg">'+
+                                 '<input type="file" id="imagen'+idComponent+'"  accept=".jpg, .png, .jpeg" onchange="preview('+stringId+')">'+
+                                  
                                  '<input type="text" placeholder="subtitulo">'+
-                            '<div>'+
+                            
+                                    '<div id="preview'+idComponent+'" class="estilo-imagen">'+ 
+            
+                                    '</div>'+     
+                            '</div>'+
 
                             '<div class="footer">'+
 
@@ -224,9 +335,21 @@
                                 '</div>'+
                                 
                                 '<div>'+
-                                    '<input type="file" accept=".jpg, .png, .jpeg">'+
-                                    '<input type="file" accept=".jpg, .png, .jpeg">'+
+                                    '<input type="file" id="imagen2'+idComponent+'"  accept=".jpg, .png, .jpeg" onchange="preview2('+stringId+')">'+
+                                    
+                                    '<input type="file" id="imagen3'+idComponent+'"  accept=".jpg, .png, .jpeg" onchange="preview3('+stringId+')">'+
                                 '</div>'+
+                                   '<div class="imagen-general">'+
+                                        '<div id="preview2'+idComponent+'" class="estilo-imagen">'+ 
+            
+                                        '</div>'+
+
+                                        '<div id="preview3'+idComponent+'" class="estilo-imagen">'+ 
+            
+                                        '</div>'+
+
+                                    '</div>'+
+                                
                             '</div>'+
 
                       '</div>'+
