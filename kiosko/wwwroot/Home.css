@@ -175,9 +175,6 @@ body {
     overflow-y: scroll;
 }
 
-.texto-imagen {
-    height: 300px;
-}
 
 
 
@@ -202,16 +199,35 @@ body {
     color: red;
 }
 
+.texto-imagen {
+    width: 150px;
+    overflow-x: scroll;
+}
+.padre{
+    display:flex;
+}
 
+.botonincremento {
+    margin-left:15px ;
+    margin-right:15px;
+}
+.botonincremento {
+    padding-top:5%;
+}
+
+.texto-imagen-1 {
+    display: flex;
+}
 
 .texto-imagen-1 ul li{
     list-style:none;
+    margin-top:10px;
+}
+.estilo-imagen-texto-imagen {
+    margin-top: 10px;
 }
 
-.botonincremento{
-    width:100px;
-    height:100px;
-}
+
 
 .video-guia{
     height:200px;

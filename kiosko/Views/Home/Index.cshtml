@@ -13,6 +13,7 @@
             url : "/upload"
         }
     );
+   
            
             Dropzone.options.DropVideo = {
                 url: "/file/post",
@@ -31,6 +32,8 @@
         $(function () {
            $("#sortable").sortable();
         });
+
+        
 
         function addComponent(type) {
             let component = generateComponent(type);
@@ -148,7 +151,6 @@ function preview3(stringId)
 
         }
 
-
         function preview4(stringId)
         {
   console.log($("#imagen4"+stringId).val());
@@ -172,6 +174,33 @@ function preview3(stringId)
   
 
         }
+
+         function preview6(stringId)
+        {
+  console.log($("#imagen6"+stringId).val());
+  
+
+           var imagenFile6= $('#imagen6'+stringId).prop('files');
+           console.log(imagenFile6);
+           imagenFile6=imagenFile6[0];
+           console.log(imagenFile6);
+           let reader6 = new FileReader();
+            reader6.readAsDataURL(imagenFile6);
+       reader6.onload = function() {
+            let preview6 = $('#preview6'+stringId);
+            $('#preview6'+stringId).empty();
+            imagen6=document.createElement('video');
+            imagen6.src = reader6.result;
+            imagen6.controls = true;
+            imagen6.style.width = "600px";
+            preview6.innerHTML = "";
+            preview6.append(imagen6);
+        }
+  
+
+        }
+
+        
 
         
         function generateComponent(type) {
@@ -206,14 +235,11 @@ function preview3(stringId)
                           '<p>'+
                       '<div class="padre">'+
                                 '<div class="texto-imagen-1" id="text'+idComponent+'">'+
-                                    
-                                        '<input type="file" id="imagen4'+idComponent+'"  accept=".jpg, .png, .jpeg" onchange="preview4('+stringId+')">'+
-                                        
-                                        '<div id="preview4'+idComponent+'" class="estilo-imagen">'+ 
+                                    '<ul>'+
+                                        '<li><input type="file" id="imagen4'+idComponent+'" onchange="preview4('+stringId+')"></li>'+
+                                        '<div id="preview4'+idComponent+'" class="estilo-imagen-texto-imagen">'+ 
             
                                         '</div>'+
-                                        '<ul>'+
-
                                         '<li><input class="titulo-input" type="text" placeholder="Titulo"></li>'+ 
                                         '<li><input type="text" placeholder="Texto"></li>'+
                                     '</ul>'+
@@ -221,7 +247,7 @@ function preview3(stringId)
                          
 
                             '<div class=botonincremento>'+ 
-                                '<button onclick="AddTextoImagen('+stringId+')"> <img src="/img/icono.png" /> </button>' +
+                                '<button onclick="AddTextoImagen('+stringId+')">Agregar Nuevo Campo </button>' +
                              '</div>'+
 
                       '</div>'+    
@@ -298,15 +324,19 @@ function preview3(stringId)
                 break;
                 case 'video-guia':
                 component = 
-                  '<div class="col-lg-12  component CompEnlace video-guia" id="'+idComponent+'">'+
+                  '<div class="col-lg-12  texto component CompEnlace " id="'+idComponent+'">'+
                         '<div id="backgroundBanner">'+
                           '<p class="tituloCmp">'+type+
                             '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
                           '<p>'+
                             '<div class="video-guia-padre">'+
                                 '<ul>'+
-                                    '<li class="input-archivo"><input type="file"></li>'+
-                                    '<li><input type="text" placeholder="Descripcion"></li>'+
+                                    '<li class="input-archivo"><input type="file" id="imagen6'+idComponent+'" onchange="preview6('+stringId+')"></li>'+
+                                    '<div id="preview6'+idComponent+'" class="estilo-imagen">'+ 
+            
+                                        '</div>'+
+                                    
+                                    '<li><textarea name="" id="ckeditor" class="ckeditor" cols="30" rows="3" placeholder="texto"></textarea></li>'+
                                 '</ul>'+
                            '</div>'
                   '</div>';
@@ -331,7 +361,7 @@ function preview3(stringId)
                             '<div class="footer">'+
 
                                 '<div class="comentario">'+
-                                   '<textarea name="" id="" cols="30" rows="3" placeholder="texto"></textarea>'+
+                                   '<textarea name="" id="" cols="50" rows="3" placeholder="texto"></textarea>'+
                                 '</div>'+
                                 
                                 '<div>'+
