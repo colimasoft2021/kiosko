@@ -4,25 +4,9 @@
 }
 @section scripts {
     <script type="text/javascript">
-        Dropzone.autoDiscover = false;
-        var DropzoneVideo
+
         $(document).ready(function () {
-           var dropzone = new Dropzone('#DropImagen', {
-                  parallelUploads: 2,
-                  thumbnailHeight: 120,
-                  thumbnailWidth: 120,
-                  acceptedFiles: ".jpg",
-                  maxFilesize: 3,
-                  filesizeBase: 1000,
-            });
-            dropzoneVideo = new dropzone('#DropVideo', {
-                parallelUploads: 2,
-                  thumbnailHeight: 120,
-                  thumbnailWidth: 120,
-                  acceptedFiles: ".mp4",
-                  maxFilesize: 1,
-                  filesizeBase: 1000,
-            });
+
         });
 
         $(function () {
@@ -41,7 +25,6 @@
         function addComponent(type) {
             let component = generateComponent(type);
             $("#sortable").append(component);
-
 
             // pueden quetar los comentarios mios si gustan, 
             // if(type == "imagen"){
@@ -94,7 +77,6 @@
         //    acceptedFiles: ".mp4",
         //}
              
-       
         
         function removeComponent(idComponent) {
             $("#"+idComponent).remove();
@@ -106,13 +88,13 @@
             $("#text"+stringId).append(
                         '<div class="padre">'+
                             '<ul>'+
-                                '<li><input type="file"></li> '+
+                                '<li class="input-archivo"><input type="file" id="files" name="files[]"></li>'+
+                                    '<output id="list"></output>'+
                                 '<li><input class="titulo-input" type="text" placeholder="Titulo"></li>'+ 
                                 '<li><input type="text" placeholder="Texto"></li>'+
                            '<ul>'+
                        '</div>');
         }
-
 
          function AddInput(stringId){
             console.log("Entre")
@@ -366,7 +348,10 @@ function preview3(stringId)
                       '<div class="padre">'+
                                 '<div class="texto-imagen-1" id="text'+idComponent+'">'+
                                     '<ul>'+
-                                        '<li><input type="file"> </li>'+
+                                        '<li><input type="file" id="imagen4'+idComponent+'" onchange="preview4('+stringId+')"></li>'+
+                                        '<div id="preview4'+idComponent+'" class="estilo-imagen-texto-imagen">'+ 
+            
+                                        '</div>'+
                                         '<li><input class="titulo-input" type="text" placeholder="Titulo"></li>'+ 
                                         '<li><input type="text" placeholder="Texto"></li>'+
                                     '</ul>'+
@@ -374,7 +359,7 @@ function preview3(stringId)
                          
 
                             '<div class=botonincremento>'+ 
-                                '<button onclick="AddTextoImagen('+stringId+')"> <img src="/img/icono.png" /> </button>' +
+                                '<button onclick="AddTextoImagen('+stringId+')">Agregar Nuevo Campo </button>' +
                              '</div>'+
 
                       '</div>'+    
@@ -386,12 +371,12 @@ function preview3(stringId)
                           '<p class="tituloCmp">'+type+
                             '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
                           '<p>'+
-                          '<DIV id="dropzone">'+
-                            '<FORM class="dropzone" id="DropImagen" action="/upload">'+
+                          '<DIV id="dropzoneImagen">'+
+                            '<FORM class="dropzone" id="DropImagen'+idComponent+'" action="/upload" onclick="genereDropImagen('+stringId+')">'+
                             '</FORM>'+
                           '</DIV>'+
                           '<div>'+
-                          '<input class="w-100 mt-1 inputs" type="text" placeholder="Pie de Foto" />'+
+                          '<input class="w-100 mt-1 inputs" type="text" placeholder="Pie de Foto"/>'+
                           '<div>'+
                   '</div>';
               break;
@@ -401,10 +386,13 @@ function preview3(stringId)
                           '<p class="tituloCmp">'+type+
                             '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
                           '<p>'+
-                          '<DIV id="dropzone">'+
-                            '<FORM class="dropzone needsclick" id="DropVideo" action="/upload">'+
+                          '<DIV id="dropzoneVideo">'+
+                            '<FORM class="dropzone" id="DropVideo'+idComponent+'" action="/upload" onclick="genereDropVideo('+stringId+')">'+
                             '</FORM>'+
                           '</DIV>'+
+                          '<div>'+
+                          '<input class="w-100 mt-1 inputs" type="text" placeholder="Pie de Foto"/>'+
+                          '<div>'+
                   '</div>';
               break;
                 case 'enlace':
@@ -416,9 +404,12 @@ function preview3(stringId)
                           '<p>'+
                           '<div>'+
                             '<input class="inputTitulo" type="text" placeholder="Titulo"/>'+
-                            '<input class="inputLink" type="text" placeholder="Link"/>'+
+                            '<div class="inputLinkContainer row">'+
+                            '<input id="inputLink'+idComponent+'" type="text" placeholder="Link"/>'+
+                            '</div>'+
+                            '<button onclick="AddPreviewLink('+stringId+')" id="previewLink'+idComponent+'"> <img src="/img/check.png" width="100px"/> </button>' +
                             '<p class="selColor">Elige un color para asignarle.</p>'+
-                            'Color'+
+                            'Color '+
                             '<input class="Color-Selector"  type="color">'+
                           '</div>'+
                         '</div>'+
@@ -440,15 +431,16 @@ function preview3(stringId)
                 break;
                 case 'PopUpVideo':
                 component = 
-                  '<div class="col-lg-12 texto component CompEnlace" id="'+idComponent+'">'+
-                        '<div id="backgroundBanner">'+
+                  '<div class="col-lg-12 texto component" id="'+idComponent+'">'+
                           '<p class="tituloCmp">'+type+
                             '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
                           '<p>'+
                           '<input class="inputTexto" type="text" placeholder="Texto...">'+
                           '<div class="video-guia-padre">'+
                                 '<ul>'+
-                                    '<li class="input-archivo"><input type="file"></li>'+
+                                    '<input type="file" name="file" id="file'+idComponent+'" accept=".mp4" onchange="previewVideo('+stringId+')" >'+
+                                     '<!--previsualizar-->'+
+                                    '<div id="previewVideo'+idComponent+'" class="estilo-imagen"> </div>'+
                                 '</ul>'+
                            '</div>'+
                         '</div>'+
@@ -456,15 +448,20 @@ function preview3(stringId)
                 break;
                 case 'video-guia':
                 component = 
-                  '<div class="col-lg-12  component CompEnlace video-guia" id="'+idComponent+'">'+
+                  '<div class="col-lg-12  texto component CompEnlace " id="'+idComponent+'">'+
                         '<div id="backgroundBanner">'+
                           '<p class="tituloCmp">'+type+
                             '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
                           '<p>'+
                             '<div class="video-guia-padre">'+
                                 '<ul>'+
-                                    '<li class="input-archivo"><input type="file"></li>'+
-                                    '<li><input type="text" placeholder="Descripcion"></li>'+
+
+                                    '<li class="input-archivo"><input type="file" id="imagen6'+idComponent+'" onchange="preview6('+stringId+')"></li>'+
+                                    '<div id="preview6'+idComponent+'" class="estilo-imagen">'+ 
+            
+                                        '</div>'+
+                                    
+                                    '<li><textarea name="" id="ckeditor" class="ckeditor" cols="30" rows="3" placeholder="texto"></textarea></li>'+
                                 '</ul>'+
                            '</div>'+
                   '</div>';
@@ -477,20 +474,37 @@ function preview3(stringId)
                           '<p>'+
                       '<div class="contenedor-padre">'+
                             '<div>'+
-                                 '<input type="file"  accept=".jpg, .png, .jpeg">'+
+                                 '<input type="file" id="imagen'+idComponent+'"  accept=".jpg, .png, .jpeg" onchange="preview('+stringId+')">'+
+                                  
                                  '<input type="text" placeholder="subtitulo">'+
-                            '<div>'+
+                            
+                                    '<div id="preview'+idComponent+'" class="estilo-imagen">'+ 
+            
+                                    '</div>'+     
+                            '</div>'+
 
                             '<div class="footer">'+
 
                                 '<div class="comentario">'+
-                                   '<textarea name="" id="" cols="30" rows="3" placeholder="texto"></textarea>'+
+                                   '<textarea name="" id="" cols="50" rows="3" placeholder="texto"></textarea>'+
                                 '</div>'+
                                 
                                 '<div>'+
-                                    '<input type="file" accept=".jpg, .png, .jpeg">'+
-                                    '<input type="file" accept=".jpg, .png, .jpeg">'+
+                                    '<input type="file" id="imagen2'+idComponent+'"  accept=".jpg, .png, .jpeg" onchange="preview2('+stringId+')">'+
+                                    
+                                    '<input type="file" id="imagen3'+idComponent+'"  accept=".jpg, .png, .jpeg" onchange="preview3('+stringId+')">'+
                                 '</div>'+
+                                   '<div class="imagen-general">'+
+                                        '<div id="preview2'+idComponent+'" class="estilo-imagen">'+ 
+            
+                                        '</div>'+
+
+                                        '<div id="preview3'+idComponent+'" class="estilo-imagen">'+ 
+            
+                                        '</div>'+
+
+                                    '</div>'+
+                                
                             '</div>'+
 
                       '</div>'+

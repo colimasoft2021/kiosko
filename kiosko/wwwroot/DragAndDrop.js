@@ -1,6 +1,7 @@
 ////Dropzone.options.DropImagen = {
 ////    paramName: "file", // The name that will be used to transfer the file
-////    maxFilesize: 2, // MB
+////    maxFilesize: 10, // MB
+////    addRemoveLinks: true,
 ////    maxFiles: 1,
 ////    acceptedFiles: ".png",
 
@@ -15,6 +16,8 @@
 ////Dropzone.options.DropVideo = {
 ////    paramName: "file", // The name that will be used to transfer the file
 ////    maxFilesize: 400, // MB
+////    addRemoveLinks: true,
+////    maxThumbnailFilesize:5000,
 ////    acceptedFiles: ".mp4",
     
 
