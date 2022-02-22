@@ -21,6 +21,9 @@
     font-size: 100px;
 }
 
+.botonEnlace{
+    background-color:black;
+}
 .boton-perfil {
     background-color: transparent;
     width: 19.64px;

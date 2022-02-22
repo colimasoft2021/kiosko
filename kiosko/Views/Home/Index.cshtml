@@ -11,6 +11,11 @@
            $("#sortable").sortable();
         });
 
+        //$(document).on('input', '.inputLink', function(){
+        //    alert('Input changed');
+        //    $('.botonEnlace').show("swing");
+        //});
+
         function addComponent(type) {
             let component = generateComponent(type);
             $("#sortable").append(component);
@@ -373,9 +378,9 @@ function preview3(stringId)
                           '<div>'+
                             '<input class="inputTitulo" type="text" placeholder="Titulo"/>'+
                             '<div class="inputLinkContainer row">'+
-                            '<input id="inputLink'+idComponent+'" type="text" placeholder="Link"/>'+
+                            '<input class="inputLink" id="inputLink'+idComponent+'" type="text" placeholder="Link"/>'+
+                            '<button class="botonEnlace" onclick="AddPreviewLink('+stringId+')" id="previewLink'+idComponent+'"> <img src="/img/check.png" width="100px"/> </button>' +
                             '</div>'+
-                            '<button onclick="AddPreviewLink('+stringId+')" id="previewLink'+idComponent+'"> <img src="/img/check.png" width="100px"/> </button>' +
                             '<p class="selColor">Elige un color para asignarle.</p>'+
                             'Color '+
                             '<input class="Color-Selector"  type="color">'+
