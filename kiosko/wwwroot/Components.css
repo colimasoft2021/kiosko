@@ -1,7 +1,8 @@
-﻿#dropzoneImagen {
+﻿#DropImagen {
     background-color:black;
+    width:50%;
     margin-inline: 4rem;
-    background-image: url(../img/img.png);
+    /*background-image: url('img/img.png');*/
     background-repeat: no-repeat;
     background-position: center;
     background-size: 5%;
@@ -15,15 +16,20 @@
     background-size: 5%;
     background-color: #C4C4C4;
 }
+
+#dropVideo input[type="file"] {
+    font-size: 100px;
+}
+
 .boton-perfil {
     background-color: transparent;
-    width:19.64px;
+    width: 19.64px;
     border: none;
-    float:right;
+    float: right;
 }
 
 .dz-button {
-    background-image: url(../img/img.png) !important;
+    background-color: black;
 }
 
 .inputs {
