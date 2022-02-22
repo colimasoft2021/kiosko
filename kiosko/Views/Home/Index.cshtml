@@ -329,7 +329,7 @@ function preview3(stringId)
             console.log("Entre");
             console.log(enlace);
             console.log(stringId);
-            console.log('inputLink'+stringId);
+            console.log('inputLink'+stringId); 
             document.getElementById("previewLink"+stringId).innerHTML = ['<iframe  width="300px" height="200px" src="'+enlace+'"></iframe>'];
         }
         
@@ -380,18 +380,19 @@ function preview3(stringId)
                       '</div>'+    
                 '</div>';
               break;
-                case 'imagen':
+               case 'imagen':
                   component =
                   '<div class="col-lg-12 texto component" id="'+idComponent+'">'+
                           '<p class="tituloCmp">'+type+
                             '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
                           '<p>'+
-                          '<DIV id="dropzone">'+
-                            '<FORM class="dropzone" id="DropImagen" action="/upload">'+
+                          '<button id="DropImagen">'+
+                            '<FORM class="dropzone needsclick" id="DropImagen'+idComponent+'" action="/upload" onclick="genereDropImagen('+stringId+')">'+
+                            '<img class="perfil" src="/img/img.png" width="100px" alt="perfil">'+
                             '</FORM>'+
+                            '</button>'+
                           '</DIV>'+
-                          '<div>'+
-                          '<input class="w-100 mt-1 inputs" type="text" placeholder="Pie de Foto" />'+
+                          '<input class="w-100 mt-1 inputs" type="text" placeholder="Pie de Foto"/>'+
                           '<div>'+
                   '</div>';
               break;
@@ -401,12 +402,20 @@ function preview3(stringId)
                           '<p class="tituloCmp">'+type+
                             '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
                           '<p>'+
-                          '<DIV id="dropzone">'+
-                            '<FORM class="dropzone needsclick" id="DropVideo" action="/upload">'+
-                            '</FORM>'+
+                          '<DIV id="dropzoneVideo">'+
+                            '<ul>'+
+                                    '<input class="dropVideo" type="file" name="file" id="file'+idComponent+'" accept=".mp4" onchange="previewVideo('+stringId+')" >'+
+                                     '<!--previsualizar-->'+
+                                    '<div id="previewVideo'+idComponent+'" class="estilo-imagen"> </div>'+
+                                '</ul>'+
                           '</DIV>'+
+                          '<div>'+
+                          '<input class="w-100 mt-1 inputs" type="text" placeholder="Pie de Foto"/>'+
+                          '<div>'+
                   '</div>';
               break;
+
+
                 case 'enlace':
                 component = 
                   '<div class="col-lg-12 texto component CompoEnlace" id="'+idComponent+'">'+
