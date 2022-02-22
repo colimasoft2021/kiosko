@@ -68,7 +68,7 @@
         //    acceptedFiles: ".mp4",
         //}
              
-        }
+        
         function removeComponent(idComponent) {
             $("#"+idComponent).remove();
         }
@@ -79,8 +79,11 @@
             $("#text"+stringId).append(
                         '<div class="padre">'+
                             '<ul>'+
-                                '<li class="input-archivo"><input type="file" id="files" name="files[]"></li>'+
-                                    '<output id="list"></output>'+
+                                '<li><input type="file" id="imagen4'+stringId+'" onchange="preview4('+stringId+')"></li>'+
+                                        '<div id="preview4'+stringId+'" class="estilo-imagen-texto-imagen">'+ 
+            
+                                        '</div>'+
+                                        
                                 '<li><input class="titulo-input" type="text" placeholder="Titulo"></li>'+ 
                                 '<li><input type="text" placeholder="Texto"></li>'+
                            '<ul>'+
@@ -165,7 +168,7 @@ function preview3(stringId)
         {
   console.log($("#imagen4"+stringId).val());
   
-
+  console.log(stringId);
            var imagenFile4= $('#imagen4'+stringId).prop('files');
            console.log(imagenFile4);
            imagenFile4=imagenFile4[0];
@@ -324,7 +327,7 @@ function preview3(stringId)
                          
 
                             '<div class=botonincremento>'+ 
-                                '<button onclick="AddTextoImagen('+stringId+')">Agregar Nuevo Campo </button>' +
+                                '<button onclick="AddTextoImagen('+stringId+')">Agregar Nuevo Archivo </button>' +
                              '</div>'+
 
                       '</div>'+    
@@ -433,7 +436,7 @@ function preview3(stringId)
             break;
                 case 'Desplegable texto-imagen':
                 component = 
-                  '<div class="col-lg-12  component desplegable-texto-imagen" id="'+idComponent+'">'+
+                  '<div class="col-lg-12 texto component " id="'+idComponent+'">'+
                           '<p class="tituloCmp">'+type+
                             '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
                           '<p>'+
@@ -459,12 +462,13 @@ function preview3(stringId)
                                     
                                     '<input type="file" id="imagen3'+idComponent+'"  accept=".jpg, .png, .jpeg" onchange="preview3('+stringId+')">'+
                                 '</div>'+
+
                                    '<div class="imagen-general">'+
-                                        '<div id="preview2'+idComponent+'" class="estilo-imagen">'+ 
+                                        '<div id="preview2'+idComponent+'" class="estilo-imagen-desplegable-1">'+ 
             
                                         '</div>'+
 
-                                        '<div id="preview3'+idComponent+'" class="estilo-imagen">'+ 
+                                        '<div id="preview3'+idComponent+'" class="estilo-imagen-desplegable-2">'+ 
             
                                         '</div>'+
 
