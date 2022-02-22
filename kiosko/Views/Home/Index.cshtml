@@ -28,7 +28,10 @@
         $(function () {
            $("#sortable").sortable();
         });
-
+        //$(document).on('input', '.inputLink', function(){
+        //    alert('Input changed');
+        //    $('.botonEnlace').show("swing");
+        //});
         function AddPreviewLink(stringId){
             let enlace = document.getElementById('inputLink'+stringId).value;
             console.log("Entre");
@@ -37,7 +40,6 @@
             console.log('inputLink'+stringId);
             document.getElementById("previewLink"+stringId).innerHTML = ['<iframe  width="300px" height="200px" src="'+enlace+'"></iframe>'];
         }
-
         function addComponent(type) {
             let component = generateComponent(type);
             $("#sortable").append(component);
@@ -416,9 +418,12 @@ function preview3(stringId)
                           '<p>'+
                           '<div>'+
                             '<input class="inputTitulo" type="text" placeholder="Titulo"/>'+
-                            '<input class="inputLink" type="text" placeholder="Link"/>'+
+                            '<div class="inputLinkContainer row">'+
+                            '<input class="inputLink" id="inputLink'+idComponent+'" type="text" placeholder="Link"/>'+
+                            '<button class="botonEnlace" onclick="AddPreviewLink('+stringId+')" id="previewLink'+idComponent+'"> <img src="/img/check.png" width="100px"/> </button>' +
+                            '</div>'+
                             '<p class="selColor">Elige un color para asignarle.</p>'+
-                            'Color'+
+                            'Color '+
                             '<input class="Color-Selector"  type="color">'+
                           '</div>'+
                         '</div>'+
