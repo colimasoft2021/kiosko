@@ -5,9 +5,7 @@
 @section scripts {
     <script type="text/javascript">
 
-        $(document).ready(function () {
-
-        });
+        $(document).ready(function () {});
 
         $(function () {
            $("#sortable").sortable();
@@ -23,12 +21,12 @@
             //    Dropzone.discover();
             //    $(".dropzone").destroy();
             //}
-            //if(type == "video"){
-            //    genereDropImagen("asfdsdf")
-            //    console.log("entro if dropVideo");
-            //    Dropzone.discover();
-            //    $(".dropzoneVideo").destroy();
-            //}
+            if(type == "video"){
+                genereDropImagen("asfdsdf")
+                console.log("entro if dropVideo");
+                Dropzone.discover();
+                $(".dropzoneVideo").destroy();
+            }
 
             //document.getElementById("file").onchange = function(e) {
             //let reader = new FileReader();
@@ -66,9 +64,8 @@
         //    disablePreviews: false,
         //    addRemoveLinks: true,
         //    acceptedFiles: ".mp4",
-        //}
-             
-        }
+        //}            
+
         function removeComponent(idComponent) {
             $("#"+idComponent).remove();
         }
@@ -212,12 +209,10 @@ function preview3(stringId)
 
         
         function genereDropImagen(stringId){
-            Dropzone.autoDiscover = false;
             console.log("entro a GenereDropImagen"+stringId)
             let DropImagen = {
                 maxFilesize: 5,
                 acceptedFiles: ".png",
-                maxFiles: 1,
                 addRemoveLinks: true,
                 clickable: true,
                 thumbnailWidth: 140,
@@ -229,6 +224,7 @@ function preview3(stringId)
                     });
                 }
             }
+            Dropzone.autoDiscover = false;
             $("form#DropImagen"+stringId).dropzone(DropImagen);
         }
 
@@ -336,11 +332,12 @@ function preview3(stringId)
                           '<p class="tituloCmp">'+type+
                             '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
                           '<p>'+
-                          '<DIV id="dropzoneImagen">'+
-                            '<FORM class="dropzone" id="DropImagen'+idComponent+'" action="/upload" onclick="genereDropImagen('+stringId+')">'+
+                          '<button id="DropImagen">'+
+                            '<FORM class="dropzone needsclick" id="DropImagen'+idComponent+'" action="/upload" onclick="genereDropImagen('+stringId+')">'+
+                            '<img class="perfil" src="/img/img.png" width="100px" alt="perfil">'+
                             '</FORM>'+
+                            '</button>'+
                           '</DIV>'+
-                          '<div>'+
                           '<input class="w-100 mt-1 inputs" type="text" placeholder="Pie de Foto"/>'+
                           '<div>'+
                   '</div>';
@@ -352,8 +349,11 @@ function preview3(stringId)
                             '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
                           '<p>'+
                           '<DIV id="dropzoneVideo">'+
-                            '<FORM class="dropzone" id="DropVideo'+idComponent+'" action="/upload" onclick="genereDropVideo('+stringId+')">'+
-                            '</FORM>'+
+                            '<ul>'+
+                                    '<input class="dropVideo" type="file" name="file" id="file'+idComponent+'" accept=".mp4" onchange="previewVideo('+stringId+')" >'+
+                                     '<!--previsualizar-->'+
+                                    '<div id="previewVideo'+idComponent+'" class="estilo-imagen"> </div>'+
+                                '</ul>'+
                           '</DIV>'+
                           '<div>'+
                           '<input class="w-100 mt-1 inputs" type="text" placeholder="Pie de Foto"/>'+
