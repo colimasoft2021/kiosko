@@ -42,7 +42,7 @@ namespace kiosko.Controllers
                 else
                 {
                     //xd
-                    var res = _KColSoft.KColSoftsItem.FromSqlRaw<KColSoftModel>("exec dbo.RegistroDB @vchKUsuario", param).ToList();
+                    //var res = _KColSoft.KColSoftsItem.FromSqlRaw<KColSoftModel>("exec dbo.RegistroDB @vchKUsuario", param).ToList();
                     return View("~/Views/Home/Index.cshtml");
                     TempData["msg"] = "Bienvenido";
                 }
