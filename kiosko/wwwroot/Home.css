@@ -194,9 +194,14 @@ body {
     display:flex;
 }
 
+.estilo-imagen-desplegable-1 {
+    margin:10px 0 ;
+    padding-right:15%;
+}
+
 .botonincremento {
-    margin-left:15px ;
-    margin-right:15px;
+    margin-left: 15px;
+    margin-right: 15px;
 }
 
 
