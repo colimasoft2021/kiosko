@@ -4,6 +4,7 @@
 }
 @section scripts {
     <script type="text/javascript">
+        var indexImagen = 1;
         Dropzone.autoDiscover = false;
         var DropzoneVideo
         $(document).ready(function () {
@@ -43,61 +44,14 @@
         function addComponent(type) {
             let component = generateComponent(type);
             $("#sortable").append(component);
+            if(type == "video"){
+                genereDropImagen("asfdsdf")
+                console.log("entro if dropVideo");
+                Dropzone.discover();
+                $(".dropzoneVideo").destroy();
+            }
+        }          
 
-
-            // pueden quetar los comentarios mios si gustan, 
-            // if(type == "imagen"){
-            //    console.log("entro if dropImagen");
-            //    Dropzone.discover();
-            //    $(".dropzone").destroy();
-            //}
-            //if(type == "video"){
-            //    genereDropImagen("asfdsdf")
-            //    console.log("entro if dropVideo");
-            //    Dropzone.discover();
-            //    $(".dropzoneVideo").destroy();
-            //}
-
-            //document.getElementById("file").onchange = function(e) {
-            //let reader = new FileReader();
-            //reader.readAsDataURL(e.target.files[0]);
-            //reader.onload = function() {
-            //    let preview = document.getElementById("preview");
-            //    video=document.createElement('video');
-            //    video.src = reader.result;
-            //    video.controlsp = true;
-            //    video.style.width = "400px";
-            //    preview.innerHTML = "";
-            //    preview.append(video);
-            //}
-        }
-        //    function videoPreview(evt) {
-        //    var files = evt.target.files;
-        //    for (var i = 0, f; f = files[i]; i++) {
-        //        if (!f.type.match('video.*')) {
-        //            continue;
-        //        }
-        //        var reader = new FileReader();
-        //        reader.onload = (function(theFile){
-        //            return function(e){
-        //                document.getElementById("list").innerHTML = ['<video class="thumb" src="', e.target.result,'" width="400" height="200" title="', escape(theFile.name), '"/>'].join('');
-        //            };
-        //        })(f);
-        //        reader.readAsDataURL(f);
-        //    }
-        //}
-        //    document.getElementById('files'+stringId).addEventListener('change', videoPreview, false);
-
-        //Dropzone.options.DropVideo = {
-        //    paramName: "file", // The name that will be used to transfer the file
-        //    maxFilesize: 400, // MB
-        //    disablePreviews: false,
-        //    addRemoveLinks: true,
-        //    acceptedFiles: ".mp4",
-        //}
-             
-       
-        
         function removeComponent(idComponent) {
             $("#"+idComponent).remove();
         }
@@ -105,17 +59,41 @@
         function AddTextoImagen(stringId){
             console.log("Entre")
             console.log(stringId)
+            let idImg = "imagen"+stringId+"-"+indexImagen;
+            let idPreview = "imgPreview"+stringId+"-"+indexImagen;
+            let newStringId = "'"+stringId+"'";
             $("#text"+stringId).append(
                         '<div class="padre">'+
                             '<ul>'+
-                                '<li><input type="file"></li> '+
+                                '<li><input type="file" id="'+idImg+'" onchange="generatePreview('+newStringId+','+indexImagen+')"></li>'+
+                                '<div id="'+idPreview+'" class="estilo-imagen-texto-imagen">'+ 
                                 '<li><input class="titulo-input" type="text" placeholder="Titulo"></li>'+ 
                                 '<li><input type="text" placeholder="Texto"></li>'+
                            '<ul>'+
                        '</div>');
+            indexImagen = indexImagen + 1;
         }
 
-
+        function generatePreview(stringId,indexImagen) {
+            console.log('entro generate preview');
+            console.log(stringId);
+            let idImg = "imagen"+stringId+"-"+indexImagen;
+            let idPreview = "imgPreview"+stringId+"-"+indexImagen;
+            let imgFile = $("#"+idImg).prop("files");
+            imgFile = imgFile[0];
+            let reader = new FileReader();
+            reader.readAsDataURL(imgFile);
+            reader.onload = function() {
+                let preview = $("#"+idPreview);
+                $("#"+idPreview).empty();
+                imagen = document.createElement('img');
+                imagen.src = reader.result;
+                imagen.style.width = "200px";
+                preview.innerHTML = "";
+                preview.append(imagen);
+            }
+        }
+        
          function AddInput(stringId){
             console.log("Entre")
             console.log(stringId)
@@ -125,130 +103,6 @@
                             );
         }
 
-        function preview(stringId)
-        {
-  console.log($("#imagen"+stringId).val());
-  
-
-           var imagenFile= $('#imagen'+stringId).prop('files');
-           console.log(imagenFile);
-           imagenFile=imagenFile[0];
-           console.log(imagenFile);
-           let reader = new FileReader();
-            reader.readAsDataURL(imagenFile);
-       reader.onload = function() {
-            let preview = $('#preview'+stringId);
-            $('#preview'+stringId).empty();
-            imagen=document.createElement('img');
-            imagen.src = reader.result;
-            imagen.style.width = "200px";
-            preview.innerHTML = "";
-            preview.append(imagen);
-        }
-  
-
-        }
-
-
-function preview2(stringId)
-        {
-  console.log($("#imagen2"+stringId).val());
-  
-
-           var imagenFile2= $('#imagen2'+stringId).prop('files');
-           console.log(imagenFile2);
-           imagenFile2=imagenFile2[0];
-           console.log(imagenFile2);
-           let reader2 = new FileReader();
-            reader2.readAsDataURL(imagenFile2);
-       reader2.onload = function() {
-            let preview2 = $('#preview2'+stringId);
-            $('#preview2'+stringId).empty();
-            imagen2=document.createElement('img');
-            imagen2.src = reader2.result;
-            imagen2.style.width = "200px";
-            preview2.innerHTML = "";
-            preview2.append(imagen2);
-        }
-  
-
-        }
-
-
-function preview3(stringId)
-        {
-  console.log($("#imagen3"+stringId).val());
-  
-
-           var imagenFile3= $('#imagen3'+stringId).prop('files');
-           console.log(imagenFile3);
-           imagenFile3=imagenFile3[0];
-           console.log(imagenFile3);
-           let reader3 = new FileReader();
-            reader3.readAsDataURL(imagenFile3);
-       reader3.onload = function() {
-            let preview3 = $('#preview3'+stringId);
-            $('#preview3'+stringId).empty();
-            imagen3=document.createElement('img');
-            imagen3.src = reader3.result;
-            imagen3.style.width = "200px";
-            preview3.innerHTML = "";
-            preview3.append(imagen3);
-        }
-  
-
-        }
-
-        function preview4(stringId)
-        {
-  console.log($("#imagen4"+stringId).val());
-  
-
-           var imagenFile4= $('#imagen4'+stringId).prop('files');
-           console.log(imagenFile4);
-           imagenFile4=imagenFile4[0];
-           console.log(imagenFile4);
-           let reader4 = new FileReader();
-            reader4.readAsDataURL(imagenFile4);
-       reader4.onload = function() {
-            let preview4 = $('#preview4'+stringId);
-            $('#preview4'+stringId).empty();
-            imagen4=document.createElement('img');
-            imagen4.src = reader4.result;
-            imagen4.style.width = "200px";
-            preview4.innerHTML = "";
-            preview4.append(imagen4);
-        }
-  
-
-        }
-
-         function preview6(stringId)
-        {
-  console.log($("#imagen6"+stringId).val());
-  
-
-           var imagenFile6= $('#imagen6'+stringId).prop('files');
-           console.log(imagenFile6);
-           imagenFile6=imagenFile6[0];
-           console.log(imagenFile6);
-           let reader6 = new FileReader();
-            reader6.readAsDataURL(imagenFile6);
-       reader6.onload = function() {
-            let preview6 = $('#preview6'+stringId);
-            $('#preview6'+stringId).empty();
-            imagen6=document.createElement('video');
-            imagen6.src = reader6.result;
-            imagen6.controls = true;
-            imagen6.style.width = "600px";
-            preview6.innerHTML = "";
-            preview6.append(imagen6);
-        }
-  
-
-        }
-
-        
         function genereDropImagen(stringId){
             Dropzone.autoDiscover = false;
             console.log("entro a GenereDropImagen"+stringId)
@@ -308,24 +162,6 @@ function preview3(stringId)
             }
         }
 
-        function previewImagen(stringId){
-            console.log(stringId)
-            var file = $('#file'+stringId).prop('files');
-            file = file[0];
-            console.log(file);
-            let readerimg = new FileReader();
-            readerimg.readAsDataURL(file);
-            readerimg.onload = function(){
-                let preImagen = $('#previewImagen'+stringId);
-                $('#previewImagen'+stringId).empty();
-                img=document.createElement('img');
-                img.src = readerimg.result;
-                img.style.width = "400px";
-                preImagen.innerHTML = "";
-                preImagen.append(img);
-            }
-        }
-
         function AddPreviewLink(stringId){
             let enlace = document.getElementById('inputLink'+stringId).value;
             console.log("Entre");
@@ -359,7 +195,6 @@ function preview3(stringId)
                   '</div>';
                 break;
                 case 'texto-imagen':
-              default:
                 component = 
                 '<div class="col-lg-12 texto component texto-imagen" id="'+idComponent+'">'+
                           '<p class="tituloCmp">'+type+
@@ -368,7 +203,10 @@ function preview3(stringId)
                       '<div class="padre">'+
                                 '<div class="texto-imagen-1" id="text'+idComponent+'">'+
                                     '<ul>'+
-                                        '<li><input type="file"> </li>'+
+                                        '<li><input type="file" id="imagen'+idComponent+'-'+indexImagen+'" onchange="generatePreview('+stringId+','+indexImagen+')"></li>'+
+                                        '<div id="imgPreview'+idComponent+'-'+indexImagen+'" class="estilo-imagen-texto-imagen">'+ 
+            
+                                        '</div>'+
                                         '<li><input class="titulo-input" type="text" placeholder="Titulo"></li>'+ 
                                         '<li><input type="text" placeholder="Texto"></li>'+
                                     '</ul>'+
@@ -381,6 +219,7 @@ function preview3(stringId)
 
                       '</div>'+    
                 '</div>';
+                indexImagen = indexImagen + 1;
               break;
                 case 'imagen':
                   component =
@@ -489,9 +328,14 @@ function preview3(stringId)
                           '<p>'+
                       '<div class="contenedor-padre">'+
                             '<div>'+
-                                 '<input type="file"  accept=".jpg, .png, .jpeg">'+
+                                 '<input type="file" id="imagen'+idComponent+'-'+indexImagen+'"  accept=".jpg, .png, .jpeg" onchange="generatePreview('+stringId+','+indexImagen+')">'+
+                                  
                                  '<input type="text" placeholder="subtitulo">'+
-                            '<div>'+
+                            
+                                    '<div id="imgPreview'+idComponent+'-'+indexImagen+'" class="estilo-imagen">'+ 
+            
+                                    '</div>'+     
+                            '</div>'+
 
                             '<div class="footer">'+
 
@@ -500,14 +344,28 @@ function preview3(stringId)
                                 '</div>'+
                                 
                                 '<div>'+
-                                    '<input type="file" accept=".jpg, .png, .jpeg">'+
-                                    '<input type="file" accept=".jpg, .png, .jpeg">'+
+                                    '<input type="file" id="imagen'+idComponent+'-'+(indexImagen + 1)+'"  accept=".jpg, .png, .jpeg" onchange="generatePreview('+stringId+','+(indexImagen + 1)+')">'+
+                                    
+                                    '<input type="file" id="imagen'+idComponent+'-'+(indexImagen + 2)+'"  accept=".jpg, .png, .jpeg" onchange="generatePreview('+stringId+','+(indexImagen + 2)+')">'+
                                 '</div>'+
+
+                                   '<div class="imagen-general">'+
+                                        '<div id="imgPreview'+idComponent+'-'+(indexImagen + 1)+'" class="estilo-imagen-desplegable-1">'+ 
+            
+                                        '</div>'+
+
+                                        '<div id="imgPreview'+idComponent+'-'+(indexImagen + 2)+'" class="estilo-imagen-desplegable-2">'+ 
+            
+                                        '</div>'+
+
+                                    '</div>'+
+                                
                             '</div>'+
 
                       '</div>'+
                                     
                   '</div>';
+                  indexImagen = indexImagen + 2;
             break;
              case 'Acceso-Cursos':
                 component = 
@@ -517,9 +375,8 @@ function preview3(stringId)
                             '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
                           '<p>'+
                           '<div>'+
-                          '<input type="file" name="file" id="file'+idComponent+'" accept=".png" onchange="previewImagen('+stringId+')" >'+
-                                     '<!--previsualizar-->'+
-                                    '<div id="previewImagen'+idComponent+'" class="estilo-imagen"> </div>'+
+                          '<input type="file" name="file" id="imagen'+idComponent+'-'+indexImagen+'" accept=".png" onchange="generatePreview('+stringId+','+indexImagen+')">'+
+                          '<div id="imgPreview'+idComponent+'-'+indexImagen+'" class="estilo-imagen"></div>'+ 
                            '<div id="preview'+idComponent+'" class="estilo-imagen">'+ 
                             '<input class="inputTitulo" type="text" placeholder="Titulo"/>'+
                             '<div class="inputLinkContainer row">'+
@@ -532,6 +389,7 @@ function preview3(stringId)
                           '</div>'+
                         '</div>'+
                   '</div>';
+                  indexImagen = indexImagen + 1;
                 break;
                  case 'Pop-up':
                 component =
@@ -542,9 +400,8 @@ function preview3(stringId)
                           '<input class="inputTexto" type="text" placeholder="Texto...">'+
                           '<div class="video-guia-padre">'+
                                 '<ul>'+
-                                    '<input type="file" name="file" id="file'+idComponent+'" accept=".png" onchange="previewImagen('+stringId+')" >'+
-                                     '<!--previsualizar-->'+
-                                    '<div id="previewImagen'+idComponent+'" class="estilo-imagen"> </div>'+
+                                    '<input type="file" id="imagen'+idComponent+'-'+indexImagen+'" accept=".png" onchange="generatePreview('+stringId+','+indexImagen+')">'+
+                                    '<div id="imgPreview'+idComponent+'-'+indexImagen+'" class="estilo-imagen">'+ 
                                 '</ul>'+
                            '</div>'+
                         '</div>'+

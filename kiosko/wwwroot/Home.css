@@ -208,6 +208,7 @@ body {
 
 .texto-imagen-1 {
     display: flex;
+    overflow-y: scroll;
 }
 
 .texto-imagen-1 ul li{
@@ -239,7 +240,7 @@ body {
 }
 
 .desplegable-texto-imagen {
-    height: 300px;
+    height: auto;
 }
 
 
