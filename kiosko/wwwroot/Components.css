@@ -1,14 +1,13 @@
 ﻿#DropImagen {
-    background-color:black;
-    width:50%;
+
     margin-inline: 4rem;
-    /*background-image: url('img/img.png');*/
+    background-image: url(../img/img.png);
     background-repeat: no-repeat;
     background-position: center;
     background-size: 5%;
     background-color: #C4C4C4;
 }
-#dropzoneVideo {
+#DropVideo {
     margin-inline: 4rem;
     background-image: url(../img/video.svg);
     background-repeat: no-repeat;
@@ -21,15 +20,15 @@
     font-size: 100px;
 }
 
-.boton-perfil {
-    background-color: transparent;
-    width: 19.64px;
-    border: none;
-    float: right;
+.botonEnlace{
+    background-color:black;
 }
 
-.dz-button {
-    background-color: black;
+.boton-perfil {
+    background-color: transparent;
+    width:19.64px;
+    border: none;
+    float:right;
 }
 
 .inputs {
@@ -60,27 +59,14 @@
     box-sizing: border-box;
     margin-bottom: 5px;
 }
-#inputLink {
-    position: relative;
+.inputLink {
     width: 100%;
     font-size: 14px;
     font-style: italic;
     border-bottom-width: 2px;
     border-left: none;
-    text-align: center;
     border-right: none;
     border-top: none;
-}
-.previewPage {
-    height: 300px;
-    width:100%;
-
-}
-.inputLinkContainer {
-    text-align:center;
-    display:inline;
-    width:100%;
-    height:auto;
 }
 
 .selColor {
