@@ -1,31 +1,45 @@
-﻿#DropImagen {
-
-    margin-inline: 4rem;
+﻿.file-Imagen {
+    width: 70%;
+    position: relative;
+    display: inline-block;
     background-image: url(../img/img.png);
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: 5%;
+    background-size: 80px;
     background-color: #C4C4C4;
-}
-#DropVideo {
-    margin-inline: 4rem;
-    background-image: url(../img/video.svg);
-    background-repeat: no-repeat;
+    background-repeat:no-repeat;
     background-position: center;
-    background-size: 5%;
-    background-color: #C4C4C4;
 }
 
-#dropVideo input[type="file"] {
-    font-size: 100px;
+.file-Imagen input[type="file"] {
+    opacity: 0;
+    width: 100%;
+    height: 100px;
+    display: inline-block;
 }
 
-.botonEnlace{
-    visibility:hidden;
-    width:7%;
-    background-color:transparent;
-    border-radius:100%;
-    border:none;
+.file-Video {
+    width: 70%;
+    position: relative;
+    display: inline-block;
+    background-image: url(../img/video.png);
+    background-size: 80px;
+    background-color: #C4C4C4;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.file-Video input[type="file"] {
+    opacity: 0;
+    width: 100%;
+    height: 100px;
+    display: inline-block;
+}
+
+.botonEnlace {
+    visibility: hidden;
+    width: 7%;
+    background-color: transparent;
+    border-radius: 100%;
+    border: none;
 }
 
 .boton-perfil {
@@ -36,7 +50,9 @@
 }
 
 .inputs {
-    font-size:20px;
+    width: 70%;
+    margin-left:15%;
+    font-size: 20px;
     border: 1px dashed #9B9B9B;
     box-sizing: border-box;
 }
@@ -57,7 +73,7 @@
 .inputTitulo {
     font-family: 'Poppins', sans-serif;
     width: 100%;
-    font-size: 22px;
+    font-size: 30px;
     text-align: center;
     border: 1px dashed #9B9B9B;
     box-sizing: border-box;
@@ -72,6 +88,10 @@
     border-left: none;
     border-right: none;
     border-top: none;
+}
+
+.margenContainer{
+    margin:30px;
 }
 
 .selColor {
