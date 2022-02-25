@@ -5,53 +5,30 @@
 @section scripts {
     <script type="text/javascript">
         var indexImagen = 1;
-        Dropzone.autoDiscover = false;
-        var DropzoneVideo
         $(document).ready(function () {
-           var dropzone = new Dropzone('#DropImagen', {
-                  parallelUploads: 2,
-                  thumbnailHeight: 120,
-                  thumbnailWidth: 120,
-                  acceptedFiles: ".jpg",
-                  maxFilesize: 3,
-                  filesizeBase: 1000,
-            });
-            dropzoneVideo = new dropzone('#DropVideo', {
-                parallelUploads: 2,
-                  thumbnailHeight: 120,
-                  thumbnailWidth: 120,
-                  acceptedFiles: ".mp4",
-                  maxFilesize: 1,
-                  filesizeBase: 1000,
-            });
+        
         });
 
         $(function () {
            $("#sortable").sortable();
         });
-        //$(document).on('input', '.inputLink', function(){
-        //    alert('Input changed');
-        //    $('.botonEnlace').show("swing");
-        //});
-        function AddPreviewLink(stringId){
-            let enlace = document.getElementById('inputLink'+stringId).value;
-            console.log("Entre");
-            console.log(enlace);
-            console.log(stringId);
-            console.log('inputLink'+stringId);
-            document.getElementById("previewLink"+stringId).innerHTML = ['<iframe  width="300px" height="200px" src="'+enlace+'"></iframe>'];
-        }
         function addComponent(type) {
             let component = generateComponent(type);
             $("#sortable").append(component);
-            if(type == "video"){
-                genereDropImagen("asfdsdf")
-                console.log("entro if dropVideo");
-                Dropzone.discover();
-                $(".dropzoneVideo").destroy();
+          }          
+        }
+             
+       function toggleButton(stringId){
+            var link = $('#inputLink'+stringId).val();
+            console.log(link);
+            if(link){
+                $('#previewLink'+stringId).css('visibility', 'visible');
             }
-        }          
-
+            else{
+               $('#previewLink'+stringId).css('visibility', 'hidden');
+            }
+        }
+        
         function removeComponent(idComponent) {
             $("#"+idComponent).remove();
         }
@@ -120,44 +97,126 @@
                             );
         }
 
-        function genereDropImagen(stringId){
-            Dropzone.autoDiscover = false;
-            console.log("entro a GenereDropImagen"+stringId)
-            let DropImagen = {
-                maxFilesize: 5,
-                acceptedFiles: ".png",
-                addRemoveLinks: true,
-                clickable: true,
-                thumbnailWidth: 140,
-                thumbnailHeight: 140,
-                init: function() {
-                    this.on("maxfilesexceeded", function(file) {
-                    this.removeAllFiles();
-                    this.addFile(file);
-                    });
-                }
-            }
-            $("form#DropImagen"+stringId).dropzone(DropImagen);
+
+        function preview(stringId)
+        {
+  console.log($("#imagen"+stringId).val());
+  
+
+           var imagenFile= $('#imagen'+stringId).prop('files');
+           console.log(imagenFile);
+           imagenFile=imagenFile[0];
+           console.log(imagenFile);
+           let reader = new FileReader();
+            reader.readAsDataURL(imagenFile);
+       reader.onload = function() {
+            let preview = $('#preview'+stringId);
+            $('#preview'+stringId).empty();
+            imagen=document.createElement('img');
+            imagen.src = reader.result;
+            imagen.style.width = "200px";
+            preview.innerHTML = "";
+            preview.append(imagen);
+        }
+  
+
         }
 
-        function genereDropVideo(stringId){
-            console.log("entro a GenereDropVideo"+stringId)
-            let DropVideo = {
-                maxFilesize: 10,
-                acceptedFiles: ".mp4",
-                maxFiles: 1,
-                addRemoveLinks: true,
-                clickable: true,
-                thumbnailWidth: 140,
-                thumbnailHeight: 140,
-                init: function() {
-                    this.on("maxfilesexceeded", function(file) {
-                    this.removeAllFiles();
-                    this.addFile(file);
-                    });
-                }
-            }
-            $("form#DropVideo"+stringId).dropzone(DropVideo);
+
+function preview2(stringId)
+        {
+  console.log($("#imagen2"+stringId).val());
+  
+
+           var imagenFile2= $('#imagen2'+stringId).prop('files');
+           console.log(imagenFile2);
+           imagenFile2=imagenFile2[0];
+           console.log(imagenFile2);
+           let reader2 = new FileReader();
+            reader2.readAsDataURL(imagenFile2);
+       reader2.onload = function() {
+            let preview2 = $('#preview2'+stringId);
+            $('#preview2'+stringId).empty();
+            imagen2=document.createElement('img');
+            imagen2.src = reader2.result;
+            imagen2.style.width = "200px";
+            preview2.innerHTML = "";
+            preview2.append(imagen2);
+        }
+  
+
+        }
+
+
+function preview3(stringId)
+        {
+  console.log($("#imagen3"+stringId).val());
+  
+
+           var imagenFile3= $('#imagen3'+stringId).prop('files');
+           console.log(imagenFile3);
+           imagenFile3=imagenFile3[0];
+           console.log(imagenFile3);
+           let reader3 = new FileReader();
+            reader3.readAsDataURL(imagenFile3);
+       reader3.onload = function() {
+            let preview3 = $('#preview3'+stringId);
+            $('#preview3'+stringId).empty();
+            imagen3=document.createElement('img');
+            imagen3.src = reader3.result;
+            imagen3.style.width = "200px";
+            preview3.innerHTML = "";
+            preview3.append(imagen3);
+        }
+  
+
+        }
+
+        function preview4(stringId)
+        {
+  console.log($("#imagen4"+stringId).val());
+  
+
+           var imagenFile4= $('#imagen4'+stringId).prop('files');
+           console.log(imagenFile4);
+           imagenFile4=imagenFile4[0];
+           console.log(imagenFile4);
+           let reader4 = new FileReader();
+            reader4.readAsDataURL(imagenFile4);
+       reader4.onload = function() {
+            let preview4 = $('#preview4'+stringId);
+            $('#preview4'+stringId).empty();
+            imagen4=document.createElement('img');
+            imagen4.src = reader4.result;
+            imagen4.style.width = "200px";
+            preview4.innerHTML = "";
+            preview4.append(imagen4);
+        }
+  
+
+        }
+
+         function preview6(stringId)
+        {
+  console.log($("#imagen6"+stringId).val());
+  
+
+           var imagenFile6= $('#imagen6'+stringId).prop('files');
+           console.log(imagenFile6);
+           imagenFile6=imagenFile6[0];
+           console.log(imagenFile6);
+           let reader6 = new FileReader();
+            reader6.readAsDataURL(imagenFile6);
+       reader6.onload = function() {
+            let preview6 = $('#preview6'+stringId);
+            $('#preview6'+stringId).empty();
+            imagen6=document.createElement('video');
+            imagen6.src = reader6.result;
+            imagen6.controls = true;
+            imagen6.style.width = "600px";
+            preview6.innerHTML = "";
+            preview6.append(imagen6);
+        }
         }
         
         function previewVideo(stringId){
@@ -177,19 +236,50 @@
                 $('#previewVideo'+stringId).empty();
                 video=document.createElement('video');
                 video.src = readerVideo.result;
-                video.style.width = "400px";
+                video.style.width = "50%";
                 video.controls = true;
                 preVideo.innerHTML = "";
                 preVideo.append(video);
+                $('#file'+stringId).remove();
             }
         }
 
+        function previewImagen(stringId){
+            console.log(stringId)
+            var file = $('#file'+stringId).prop('files');
+            file = file[0];
+            console.log(file);
+            let readerimg = new FileReader();
+            readerimg.readAsDataURL(file);
+            readerimg.onload = function(){
+                let preImagen = $('#previewImagen'+stringId);
+                $('#previewImagen'+stringId).empty();
+                img=document.createElement('img');
+                img.src = readerimg.result;
+                img.style.width = "40%";
+                preImagen.innerHTML = "";
+                preImagen.append(img);
+                $('#file'+stringId).remove();
+            }
+        }
+
+        function toggleButton(stringId){
+            var link = $('#inputLink'+stringId).val();
+            console.log(link);
+            if(link){
+                $('#previewLink'+stringId).css('visibility', 'visible');
+            } 
+            else{
+               $('#previewLink'+stringId).css('visibility', 'hidden');
+            }
+        }
+      
         function AddPreviewLink(stringId){
             let enlace = document.getElementById('inputLink'+stringId).value;
             console.log("Entre");
             console.log(enlace);
             console.log(stringId);
-            console.log('inputLink'+stringId);
+            console.log('inputLink'+stringId); 
             document.getElementById("previewLink"+stringId).innerHTML = ['<iframe  width="300px" height="200px" src="'+enlace+'"></iframe>'];
         }
         
@@ -234,29 +324,29 @@
                                         '<li><input type="text" placeholder="Texto"></li>'+
                                     '</ul>'+
                                 '</div>'+
-                         
-
                             '<div class=botonincremento>'+ 
                                 '<button onclick="AddTextoImagen('+stringId+')"> Agregar Nuevo Archivo </button>'+
                              '</div>'+
-
-                      '</div>'+    
+                      '</div>'+
                 '</div>';
                 indexImagen = indexImagen + 1;
               break;
-                case 'imagen':
+               case 'imagen':
                   component =
                   '<div class="col-lg-12 texto component" id="'+idComponent+'">'+
                           '<p class="tituloCmp">'+type+
                             '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
                           '<p>'+
-                          '<button id="DropImagen">'+
-                            '<FORM class="dropzone needsclick" id="DropImagen'+idComponent+'" action="/upload" onclick="genereDropImagen('+stringId+')">'+
-                            '<img class="perfil" src="/img/img.png" width="100px" alt="perfil">'+
-                            '</FORM>'+
-                            '</button>'+
-                          '<DIV>'+
-                          '<input class="w-100 mt-1 inputs" type="text" placeholder="Pie de Foto"/>'+
+                          '<div class="video-guia-padre">'+
+                                '<ul>'+
+                                '<div class="file-Imagen">'+
+                                    '<input type="file" class="inputImagen" name="file" id="file'+idComponent+'" accept=".png" onchange="previewImagen('+stringId+')" >'+
+                                     '<!--previsualizar-->'+
+                                    '<div id="previewImagen'+idComponent+'" class="estilo-imagen"> </div>'+
+                                '</div>'+
+                                '</ul>'+
+                           '</div>'+
+                          '<input class="inputs" type="text" placeholder="Pie de Foto"/>'+
                           '</div>'+
                   '</div>';
                   break;
@@ -266,35 +356,36 @@
                           '<p class="tituloCmp">'+type+
                             '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
                           '<p>'+
-                          '<DIV id="dropzoneVideo">'+
-                            '<ul>'+
-                                    '<input class="dropVideo" type="file" name="file" id="file'+idComponent+'" accept=".mp4" onchange="previewVideo('+stringId+')" >'+
+                          '<div class="video-guia-padre">'+
+                                '<ul>'+
+                                '<div class="file-Video">'+
+                                    '<input type="file" name="file" id="file'+idComponent+'" accept=".mp4" onchange="previewVideo('+stringId+')" >'+
                                      '<!--previsualizar-->'+
                                     '<div id="previewVideo'+idComponent+'" class="estilo-imagen"> </div>'+
-                            '</ul>'+
-                          '</DIV>'+
-                          '<input class="w-100 mt-1 inputs" type="text" placeholder="Pie de Foto"/>'+
+                                '</div>'+
+                                '</ul>'+
+                           '</div>'+
                           '</div>'+
                   '</div>';
               break;
+
+
                 case 'enlace':
                 component = 
                   '<div class="col-lg-12 texto component CompoEnlace" id="'+idComponent+'">'+
-                        '<div id="background">'+
                           '<p class="tituloCmp">'+type+
                             '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
                           '<p>'+
-                          '<div>'+
-                            '<input class="inputTitulo" type="text" placeholder="Titulo"/>'+
-                            '<div class="inputLinkContainer row">'+
-                            '<input class="inputLink" id="inputLink'+idComponent+'" type="text" placeholder="Link"/>'+
-                            '<button class="botonEnlace" onclick="AddPreviewLink('+stringId+')" id="previewLink'+idComponent+'"> <img src="/img/check.png" width="100px"/> </button>' +
-                            '</div>'+
+                          '<div class="margenContainer">'+
+                                '<input class="inputTitulo" type="text" placeholder="Titulo""/>'+
+                                '<div class="inputLinkContainer">'+
+                                    '<input class="inputLink" id="inputLink'+idComponent+'" name="link" type="text" placeholder="Link" onkeyup="toggleButton('+stringId+')"/>'+
+                                    '<button class="botonEnlace" onclick="AddPreviewLink('+stringId+')" id="previewLink'+idComponent+'"> <img src="/img/check.png" width="50px"/> </button>'+
+                                '</div>'+
                             '<p class="selColor">Elige un color para asignarle.</p>'+
                             'Color '+
                             '<input class="Color-Selector"  type="color">'+
                           '</div>'+
-                        '</div>'+
                   '</div>';
                 break;
                 case 'banner informativo':
@@ -314,23 +405,26 @@
                 case 'PopUpVideo':
                 component = 
                   '<div class="col-lg-12 texto component" id="'+idComponent+'">'+
-                          '<p class="tituloCmp">'+type+
+                        '<p class="tituloCmp">'+type+
                             '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
-                          '<p>'+
-                          '<input class="inputTexto" type="text" placeholder="Texto...">'+
-                          '<div class="video-guia-padre">'+
-                                '<ul>'+
-                                    '<input type="file" name="file" id="file'+idComponent+'" accept=".mp4" onchange="previewVideo('+stringId+')" >'+
-                                     '<!--previsualizar-->'+
-                                    '<div id="previewVideo'+idComponent+'" class="estilo-imagen"> </div>'+
-                                '</ul>'+
-                           '</div>'+
+                        '<p>'+
+                        '<div class="margenContainer">'+
+                            '<textarea class="inputTexto" type="text" placeholder="Texto..."></textarea>'+
+                                '<div class="video-guia-padre">'+
+                                    '<ul>'+
+                                        '<div class="file-Video2">'+
+                                            '<input type="file" name="file" id="file'+idComponent+'" accept=".mp4" onchange="previewVideo('+stringId+')" >'+
+                                            '<!--previsualizar-->'+
+                                            '<div id="previewVideo'+idComponent+'" class="estilo-imagen"> </div>'+
+                                        '</div>'+
+                                    '</ul>'+
+                                '</div>'+
                         '</div>'+
                   '</div>';
                 break;
                 case 'video-guia':
-                component = 
-                  '<div class="col-lg-12  component CompEnlace video-guia" id="'+idComponent+'">'+
+                component =
+                  '<div class="col-lg-12  texto component CompEnlace " id="'+idComponent+'">'+
                         '<div id="backgroundBanner">'+
                           '<p class="tituloCmp">'+type+
                             '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
@@ -347,8 +441,8 @@
                   '</div>';
             break;
                 case 'Desplegable texto-imagen':
-                component = 
-                  '<div class="col-lg-12  component desplegable-texto-imagen" id="'+idComponent+'">'+
+                component =
+                  '<div class="col-lg-12 texto component " id="'+idComponent+'">'+
                           '<p class="tituloCmp">'+type+
                             '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
                           '<p>'+
@@ -364,9 +458,8 @@
                             '</div>'+
 
                             '<div class="footer">'+
-
                                 '<div class="comentario">'+
-                                   '<textarea name="" id="" cols="30" rows="3" placeholder="texto"></textarea>'+
+                                   '<textarea name="" id="" cols="50" rows="3" placeholder="texto"></textarea>'+
                                 '</div>'+
                                 
                                 '<div class="imagen-general">'+
@@ -392,9 +485,7 @@
                                     '</div>'+
                                 
                             '</div>'+
-
                       '</div>'+
-                                    
                   '</div>';
                   indexImagen = indexImagen + 2;
             break;
@@ -411,7 +502,7 @@
                            '<div id="preview'+idComponent+'" class="estilo-imagen">'+ 
                             '<input class="inputTitulo" type="text" placeholder="Titulo"/>'+
                             '<div class="inputLinkContainer row">'+
-                            '<input id="inputLink'+idComponent+'" type="text" placeholder="Link"/>'+
+                            '<input class="inputLink" id="inputLink'+idComponent+'" name="link" type="text" placeholder="Link" onchange="toggleButton('+stringId+')"/>'+
                             '</div>'+
                             '<button onclick="AddPreviewLink('+stringId+')" id="previewLink'+idComponent+'"> <img src="/img/check.png" width="100px"/> </button>' +
                             '<p class="selColor">Elige un color para asignarle.</p>'+
@@ -454,7 +545,7 @@
                   '</div>';
                 break;
             }
-            return component;
+            return (component);
 
         }
     </script>
