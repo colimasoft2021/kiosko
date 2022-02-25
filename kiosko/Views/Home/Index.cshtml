@@ -96,7 +96,16 @@
         //    acceptedFiles: ".mp4",
         //}
              
-       
+       function toggleButton(stringId){
+            var link = $('#inputLink'+stringId).val();
+            console.log(link);
+            if(link){
+                $('#previewLink'+stringId).css('visibility', 'visible');
+            }
+            else{
+               $('#previewLink'+stringId).css('visibility', 'hidden');
+            }
+        }
         
         function removeComponent(idComponent) {
             $("#"+idComponent).remove();
@@ -496,7 +505,6 @@ function preview3(stringId)
                             '<div>'+
 
                             '<div class="footer">'+
-
                                 '<div class="comentario">'+
                                    '<textarea name="" id="" cols="30" rows="3" placeholder="texto"></textarea>'+
                                 '</div>'+
@@ -525,7 +533,7 @@ function preview3(stringId)
                            '<div id="preview'+idComponent+'" class="estilo-imagen">'+ 
                             '<input class="inputTitulo" type="text" placeholder="Titulo"/>'+
                             '<div class="inputLinkContainer row">'+
-                            '<input id="inputLink'+idComponent+'" type="text" placeholder="Link"/>'+
+                            '<input class="inputLink" id="inputLink'+idComponent+'" name="link" type="text" placeholder="Link" onchange="toggleButton('+stringId+')"/>'+
                             '</div>'+
                             '<button onclick="AddPreviewLink('+stringId+')" id="previewLink'+idComponent+'"> <img src="/img/check.png" width="100px"/> </button>' +
                             '<p class="selColor">Elige un color para asignarle.</p>'+
