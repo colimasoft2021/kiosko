@@ -175,9 +175,7 @@ body {
     overflow-y: scroll;
 }
 
-.texto-imagen {
-    height: 300px;
-}
+
 
 
 
@@ -203,26 +201,42 @@ body {
 
 .padre {
     display: flex;
-    margin-left: 20px;
 }
+
 
 .texto-imagen-1 {
     display: flex;
+    margin:20px;
+    width:80%;
     overflow-y: scroll;
+    text-align:center;
+       
+}
+.texto-imagen ul{
+    border:solid;
+    width:300px;
+    height:300px;
+    margin:15px;
 }
 
-.texto-imagen-1 ul li{
-    list-style:none;
+.texto-imagen-1 ul li {
+    list-style: none;
+    margin:15px 0;
+
 }
 
-.botonincremento{
-    width:100px;
-    height:100px;
+.titulo-input {
+    border: #9B9B9B 1px dashed;
+    width:130px;
+    height:31px;
 }
 
-.video-guia{
-    height:200px;
+.botonincremento {
+    width: 120px;
+    
+    
 }
+
 
 .video-guia-padre {
     
@@ -239,10 +253,17 @@ body {
     margin-bottom:30px;
 }
 
-.desplegable-texto-imagen {
-    height: auto;
+.texto-imagen-display{
+    display:flex;
 }
 
+.button-close {
+    display: block;
+    width: 50px;
+    height: 50px;
+    float: left;
+    margin-left: 150px;
+    position: absolute;
 .padre {
     display: flex;
 }
@@ -301,3 +322,23 @@ body {
     display: flex;
 }
 
+.subtitle-input::placeholder {
+    text-align: center;
+    
+}
+.subtitle-input {
+    border: #9B9B9B 1px dashed;
+    width: 292px;
+    height: 42px;
+}
+
+    .imagen-general{
+        display:flex;
+    }
+
+    .imagen-1{
+        margin:20px;
+    }
+    .imagen-2{
+        margin:20px;
+    }
