@@ -52,6 +52,71 @@
             }
         }          
 
+
+
+            // pueden quetar los comentarios mios si gustan, 
+            // if(type == "imagen"){
+            //    console.log("entro if dropImagen");
+            //    Dropzone.discover();
+            //    $(".dropzone").destroy();
+            //}
+            //if(type == "video"){
+            //    genereDropImagen("asfdsdf")
+            //    console.log("entro if dropVideo");
+            //    Dropzone.discover();
+            //    $(".dropzoneVideo").destroy();
+            //}
+
+            //document.getElementById("file").onchange = function(e) {
+            //let reader = new FileReader();
+            //reader.readAsDataURL(e.target.files[0]);
+            //reader.onload = function() {
+            //    let preview = document.getElementById("preview");
+            //    video=document.createElement('video');
+            //    video.src = reader.result;
+            //    video.controlsp = true;
+            //    video.style.width = "400px";
+            //    preview.innerHTML = "";
+            //    preview.append(video);
+            //}
+        }
+        //    function videoPreview(evt) {
+        //    var files = evt.target.files;
+        //    for (var i = 0, f; f = files[i]; i++) {
+        //        if (!f.type.match('video.*')) {
+        //            continue;
+        //        }
+        //        var reader = new FileReader();
+        //        reader.onload = (function(theFile){
+        //            return function(e){
+        //                document.getElementById("list").innerHTML = ['<video class="thumb" src="', e.target.result,'" width="400" height="200" title="', escape(theFile.name), '"/>'].join('');
+        //            };
+        //        })(f);
+        //        reader.readAsDataURL(f);
+        //    }
+        //}
+        //    document.getElementById('files'+stringId).addEventListener('change', videoPreview, false);
+
+        //Dropzone.options.DropVideo = {
+        //    paramName: "file", // The name that will be used to transfer the file
+        //    maxFilesize: 400, // MB
+        //    disablePreviews: false,
+        //    addRemoveLinks: true,
+        //    acceptedFiles: ".mp4",
+        //}
+             
+       function toggleButton(stringId){
+            var link = $('#inputLink'+stringId).val();
+            console.log(link);
+            if(link){
+                $('#previewLink'+stringId).css('visibility', 'visible');
+            }
+            else{
+               $('#previewLink'+stringId).css('visibility', 'hidden');
+            }
+        }
+        
+ 
         function removeComponent(idComponent) {
             $("#"+idComponent).remove();
         }
@@ -167,7 +232,7 @@
             console.log("Entre");
             console.log(enlace);
             console.log(stringId);
-            console.log('inputLink'+stringId);
+            console.log('inputLink'+stringId); 
             document.getElementById("previewLink"+stringId).innerHTML = ['<iframe  width="300px" height="200px" src="'+enlace+'"></iframe>'];
         }
         
@@ -221,7 +286,7 @@
                 '</div>';
                 indexImagen = indexImagen + 1;
               break;
-                case 'imagen':
+               case 'imagen':
                   component =
                   '<div class="col-lg-12 texto component" id="'+idComponent+'">'+
                           '<p class="tituloCmp">'+type+
@@ -254,6 +319,8 @@
                           '</div>'+
                   '</div>';
               break;
+
+
                 case 'enlace':
                 component = 
                   '<div class="col-lg-12 texto component CompoEnlace" id="'+idComponent+'">'+
@@ -338,7 +405,6 @@
                             '</div>'+
 
                             '<div class="footer">'+
-
                                 '<div class="comentario">'+
                                    '<textarea name="" id="" cols="30" rows="3" placeholder="texto"></textarea>'+
                                 '</div>'+
@@ -380,7 +446,7 @@
                            '<div id="preview'+idComponent+'" class="estilo-imagen">'+ 
                             '<input class="inputTitulo" type="text" placeholder="Titulo"/>'+
                             '<div class="inputLinkContainer row">'+
-                            '<input id="inputLink'+idComponent+'" type="text" placeholder="Link"/>'+
+                            '<input class="inputLink" id="inputLink'+idComponent+'" name="link" type="text" placeholder="Link" onchange="toggleButton('+stringId+')"/>'+
                             '</div>'+
                             '<button onclick="AddPreviewLink('+stringId+')" id="previewLink'+idComponent+'"> <img src="/img/check.png" width="100px"/> </button>' +
                             '<p class="selColor">Elige un color para asignarle.</p>'+
