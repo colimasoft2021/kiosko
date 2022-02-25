@@ -15,7 +15,7 @@ body {
     text-transform: capitalize;
     font-family: 'Poppins', sans-serif;
     font-style: normal;
-    font-size: 14px;
+    font-size: 20px;
     color: black;
 }
 
@@ -243,4 +243,61 @@ body {
     height: auto;
 }
 
+.padre {
+    display: flex;
+}
+
+.estilo-imagen-desplegable-1 {
+    margin: 10px 0;
+    padding-right: 15%;
+}
+
+.botonincremento {
+    margin-left: 15px;
+    margin-right: 15px;
+}
+
+.texto-imagen-1 {
+    display: flex;
+    width: 80%;
+    overflow-y: scroll;
+}
+
+    .texto-imagen-1 ul li {
+        list-style: none;
+        margin-top: 10px;
+    }
+
+.estilo-imagen-texto-imagen {
+    margin-top: 10px;
+}
+
+.video-guia {
+    height: 200px;
+}
+
+.video-guia-padre {
+    margin-top: 40px;
+    text-align: center;
+}
+
+    .video-guia-padre ul li {
+        list-style: none;
+    }
+
+.input-archivo {
+    margin-bottom: 30px;
+}
+
+.imagen-general {
+    display: flex;
+}
+
+#preview3 {
+    display: flex;
+}
+
+.preview2 {
+    display: flex;
+}
 
