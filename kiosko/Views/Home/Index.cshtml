@@ -4,6 +4,7 @@
 }
 @section scripts {
     <script type="text/javascript">
+        var indexImagen = 1;
         $(document).ready(function () {
         
         });
@@ -13,10 +14,21 @@
         });
         function addComponent(type) {
             let component = generateComponent(type);
-            console.log(component);
-            $("#sortable").append(component);           
+            $("#sortable").append(component);
+          }          
         }
-                
+             
+       function toggleButton(stringId){
+            var link = $('#inputLink'+stringId).val();
+            console.log(link);
+            if(link){
+                $('#previewLink'+stringId).css('visibility', 'visible');
+            }
+            else{
+               $('#previewLink'+stringId).css('visibility', 'hidden');
+            }
+        }
+        
         function removeComponent(idComponent) {
             $("#"+idComponent).remove();
         }
@@ -24,17 +36,41 @@
         function AddTextoImagen(stringId){
             console.log("Entre")
             console.log(stringId)
+            let idImg = "imagen"+stringId+"-"+indexImagen;
+            let idPreview = "imgPreview"+stringId+"-"+indexImagen;
+            let newStringId = "'"+stringId+"'";
             $("#text"+stringId).append(
                         '<div class="padre">'+
                             '<ul>'+
-                                '<li><input type="file"></li> '+
+                                '<li><input type="file" id="'+idImg+'" onchange="generatePreview('+newStringId+','+indexImagen+')"></li>'+
+                                '<div id="'+idPreview+'" class="estilo-imagen-texto-imagen"></div>'+ 
                                 '<li><input class="titulo-input" type="text" placeholder="Titulo"></li>'+ 
                                 '<li><input type="text" placeholder="Texto"></li>'+
                            '<ul>'+
                        '</div>');
+            indexImagen = indexImagen + 1;
         }
 
-
+        function generatePreview(stringId,indexImagen) {
+            console.log('entro generate preview');
+            console.log(stringId);
+            let idImg = "imagen"+stringId+"-"+indexImagen;
+            let idPreview = "imgPreview"+stringId+"-"+indexImagen;
+            let imgFile = $("#"+idImg).prop("files");
+            imgFile = imgFile[0];
+            let reader = new FileReader();
+            reader.readAsDataURL(imgFile);
+            reader.onload = function() {
+                let preview = $("#"+idPreview);
+                $("#"+idPreview).empty();
+                imagen = document.createElement('img');
+                imagen.src = reader.result;
+                imagen.style.width = "200px";
+                preview.innerHTML = "";
+                preview.append(imagen);
+            }
+        }
+        
          function AddInput(stringId){
             console.log("Entre")
             console.log(stringId)
@@ -43,6 +79,7 @@
                         
                             );
         }
+
 
         function preview(stringId)
         {
@@ -163,7 +200,6 @@ function preview3(stringId)
             preview6.innerHTML = "";
             preview6.append(imagen6);
         }
-
         }
         
         function previewVideo(stringId){
@@ -215,14 +251,14 @@ function preview3(stringId)
                $('#previewLink'+stringId).css('visibility', 'hidden');
             }
         }
-
+      
         function AddPreviewLink(stringId){
             let enlace = document.getElementById('inputLink'+stringId).value;
             console.log("Entre");
             console.log(enlace);
             console.log(stringId);
-            console.log('inputLink'+stringId);
-            document.getElementById("previewLink"+stringId).innerHTML = ['<iframe  width="660%" height="200px" src="'+enlace+'"></iframe>'];
+            console.log('inputLink'+stringId); 
+            document.getElementById("previewLink"+stringId).innerHTML = ['<iframe  width="300px" height="200px" src="'+enlace+'"></iframe>'];
         }
         
         function generateComponent(type) {
@@ -249,8 +285,7 @@ function preview3(stringId)
                   '</div>';
                 break;
                 case 'texto-imagen':
-              default:
-                component =
+                component = 
                 '<div class="col-lg-12 texto component texto-imagen" id="'+idComponent+'">'+
                           '<p class="tituloCmp">'+type+
                             '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
@@ -258,10 +293,11 @@ function preview3(stringId)
                       '<div class="padre">'+
                                 '<div class="texto-imagen-1" id="text'+idComponent+'">'+
                                     '<ul>'+
-                                        '<li><input type="file" id="imagen4'+idComponent+'" onchange="preview4('+stringId+')"></li>'+
-                                        '<div id="preview4'+idComponent+'" class="estilo-imagen-texto-imagen">'+
+                                        '<li><input type="file" id="imagen'+idComponent+'-'+indexImagen+'" onchange="generatePreview('+stringId+','+indexImagen+')"></li>'+
+                                        '<div id="imgPreview'+idComponent+'-'+indexImagen+'" class="estilo-imagen-texto-imagen">'+ 
+            
                                         '</div>'+
-                                        '<li><input class="titulo-input" type="text" placeholder="Titulo"></li>'+
+                                        '<li><input class="titulo-input" type="text" placeholder="Titulo"></li>'+ 
                                         '<li><input type="text" placeholder="Texto"></li>'+
                                     '</ul>'+
                                 '</div>'+
@@ -270,8 +306,9 @@ function preview3(stringId)
                              '</div>'+
                       '</div>'+
                 '</div>';
+                indexImagen = indexImagen + 1;
               break;
-                case 'imagen':
+               case 'imagen':
                   component =
                   '<div class="col-lg-12 texto component" id="'+idComponent+'">'+
                           '<p class="tituloCmp">'+type+
@@ -308,6 +345,8 @@ function preview3(stringId)
                           '</div>'+
                   '</div>';
               break;
+
+
                 case 'enlace':
                 component = 
                   '<div class="col-lg-12 texto component CompoEnlace" id="'+idComponent+'">'+
@@ -385,28 +424,41 @@ function preview3(stringId)
                           '<p>'+
                       '<div class="contenedor-padre">'+
                             '<div>'+
-                                 '<input type="file" id="imagen'+idComponent+'"  accept=".jpg, .png, .jpeg" onchange="preview('+stringId+')">'+
+
+                                 '<input type="file" id="imagen'+idComponent+'-'+indexImagen+'"  accept=".jpg, .png, .jpeg" onchange="generatePreview('+stringId+','+indexImagen+')">'+
+                                  
                                  '<input type="text" placeholder="subtitulo">'+
-                                    '<div id="preview'+idComponent+'" class="estilo-imagen">'+
-                                    '</div>'+
+                            
+                                    '<div id="imgPreview'+idComponent+'-'+indexImagen+'" class="estilo-imagen">'+ 
+            
+                                    '</div>'+     
                             '</div>'+
+
                             '<div class="footer">'+
                                 '<div class="comentario">'+
                                    '<textarea name="" id="" cols="50" rows="3" placeholder="texto"></textarea>'+
                                 '</div>'+
                                 '<div>'+
-                                    '<input type="file" id="imagen2'+idComponent+'"  accept=".jpg, .png, .jpeg" onchange="preview2('+stringId+')">'+
-                                    '<input type="file" id="imagen3'+idComponent+'"  accept=".jpg, .png, .jpeg" onchange="preview3('+stringId+')">'+
+                                    '<input type="file" id="imagen'+idComponent+'-'+(indexImagen + 1)+'"  accept=".jpg, .png, .jpeg" onchange="generatePreview('+stringId+','+(indexImagen + 1)+')">'+
+                                    
+                                    '<input type="file" id="imagen'+idComponent+'-'+(indexImagen + 2)+'"  accept=".jpg, .png, .jpeg" onchange="generatePreview('+stringId+','+(indexImagen + 2)+')">'+
                                 '</div>'+
+
                                    '<div class="imagen-general">'+
-                                        '<div id="preview2'+idComponent+'" class="estilo-imagen-desplegable-1">'+
+                                        '<div id="imgPreview'+idComponent+'-'+(indexImagen + 1)+'" class="estilo-imagen-desplegable-1">'+ 
+            
                                         '</div>'+
-                                        '<div id="preview3'+idComponent+'" class="estilo-imagen-desplegable-2">'+
+
+                                        '<div id="imgPreview'+idComponent+'-'+(indexImagen + 2)+'" class="estilo-imagen-desplegable-2">'+ 
+            
                                         '</div>'+
+
                                     '</div>'+
+                                
                             '</div>'+
                       '</div>'+
                   '</div>';
+                  indexImagen = indexImagen + 2;
             break;
              case 'Acceso-Cursos':
                 component = 
@@ -416,15 +468,12 @@ function preview3(stringId)
                             '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
                           '<p>'+
                           '<div>'+
-                            '<div class="file-Amagen">'+
-                                '<input type="file" name="file" id="file'+idComponent+'" accept=".png" onchange="previewImagen('+stringId+')" >'+
-                                    '<!--previsualizar-->'+
-                                    '<div id="previewImagen'+idComponent+'" class="estilo-imagen"> </div>'+
-                             '</div>'+
+                          '<input type="file" name="file" id="imagen'+idComponent+'-'+indexImagen+'" accept=".png" onchange="generatePreview('+stringId+','+indexImagen+')">'+
+                          '<div id="imgPreview'+idComponent+'-'+indexImagen+'" class="estilo-imagen"></div>'+ 
                            '<div id="preview'+idComponent+'" class="estilo-imagen">'+ 
                             '<input class="inputTitulo" type="text" placeholder="Titulo"/>'+
                             '<div class="inputLinkContainer row">'+
-                            '<input id="inputLink'+idComponent+'" type="text" placeholder="Link"/>'+
+                            '<input class="inputLink" id="inputLink'+idComponent+'" name="link" type="text" placeholder="Link" onchange="toggleButton('+stringId+')"/>'+
                             '</div>'+
                             '<button onclick="AddPreviewLink('+stringId+')" id="previewLink'+idComponent+'"> <img src="/img/check.png" width="100px"/> </button>' +
                             '<p class="selColor">Elige un color para asignarle.</p>'+
@@ -433,6 +482,7 @@ function preview3(stringId)
                           '</div>'+
                         '</div>'+
                   '</div>';
+                  indexImagen = indexImagen + 1;
                 break;
                  case 'Pop-up':
                 component =
@@ -443,9 +493,8 @@ function preview3(stringId)
                           '<input class="inputTexto" type="text" placeholder="Texto...">'+
                           '<div class="video-guia-padre">'+
                                 '<ul>'+
-                                    '<input type="file" name="file" id="file'+idComponent+'" accept=".png" onchange="previewImagen('+stringId+')" >'+
-                                     '<!--previsualizar-->'+
-                                    '<div id="previewImagen'+idComponent+'" class="estilo-imagen"> </div>'+
+                                    '<input type="file" id="imagen'+idComponent+'-'+indexImagen+'" accept=".png" onchange="generatePreview('+stringId+','+indexImagen+')">'+
+                                    '<div id="imgPreview'+idComponent+'-'+indexImagen+'" class="estilo-imagen">'+ 
                                 '</ul>'+
                            '</div>'+
                         '</div>'+
