@@ -40,6 +40,22 @@
             indexImagen = indexImagen + 1;
         }
 
+         function AddCarrucel(stringId){
+            console.log("Entre")
+            console.log(stringId)
+            let idImg = "imagen"+stringId+"-"+indexImagen;
+            let idPreview = "imgPreview"+stringId+"-"+indexImagen;
+            let newStringId = "'"+stringId+"'";
+            $("#text"+stringId).append(
+                        '<div class="padre">'+
+                            '<ul>'+
+                                '<li><input type="file" id="'+idImg+'" onchange="generatePreview('+newStringId+','+indexImagen+')"></li>'+
+                                '<div id="'+idPreview+'" class="estilo-imagen-texto-imagen"></div>'+ 
+                           '<ul>'+
+                       '</div>');
+            indexImagen = indexImagen + 1;
+        }
+
         function generatePreview(stringId,indexImagen) {
             console.log('entro generate preview');
             console.log(stringId);
@@ -190,8 +206,9 @@
                           '<input class="inputTexto" type="text">'+
                   '</div>';
                 break;
-                case 'texto-imagen':
-                component = 
+               case 'texto-imagen':
+              default:
+                component =
                 '<div class="col-lg-12 texto component texto-imagen" id="'+idComponent+'">'+
                           '<p class="tituloCmp">'+type+
                             '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
@@ -213,7 +230,6 @@
                              '</div>'+
                       '</div>'+
                 '</div>';
-                indexImagen = indexImagen + 1;
               break;
                case 'imagen':
                   component =
@@ -381,18 +397,20 @@
                             '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
                           '<p>'+
                           '<div>'+
-                          '<input type="file" name="file" id="imagen'+idComponent+'-'+indexImagen+'" accept=".png" onchange="generatePreview('+stringId+','+indexImagen+')">'+
-                          '<div id="imgPreview'+idComponent+'-'+indexImagen+'" class="estilo-imagen"></div>'+ 
-                           '<div id="preview'+idComponent+'" class="estilo-imagen">'+ 
-                            '<input class="inputTitulo" type="text" placeholder="Titulo"/>'+
-                            '<div class="inputLinkContainer row">'+
-                            '<input class="inputLink" id="inputLink'+idComponent+'" name="link" type="text" placeholder="Link" onchange="toggleButton('+stringId+')"/>'+
-                            '</div>'+
-                            '<button onclick="AddPreviewLink('+stringId+')" id="previewLink'+idComponent+'"> <img src="/img/check.png" width="100px"/> </button>' +
-                            '<p class="selColor">Elige un color para asignarle.</p>'+
-                            'Color'+
-                            '<input class="Color-Selector"  type="color">'+
-                          '</div>'+
+                                '<div class="file-Amagen">'+
+                                    '<input type="file" name="file" id="imagen'+idComponent+'-'+indexImagen+'" accept=".png" onchange="generatePreview('+stringId+','+indexImagen+')">'+
+                                '</div>'+
+                                '<div id="imgPreview'+idComponent+'-'+indexImagen+'" class="estilo-imagen"></div>'+ 
+                                     '<div id="preview'+idComponent+'" class="estilo-imagen">'+ 
+                                     '<input class="inputTitulo" type="text" placeholder="Titulo"/>'+
+                                     '<div class="inputLinkContainer row">'+
+                                     '<input class="inputLink" id="inputLink'+idComponent+'" name="link" type="text" placeholder="Link" onchange="toggleButton('+stringId+')"/>'+
+                                '</div>'+
+                                '<button onclick="AddPreviewLink('+stringId+')" id="previewLink'+idComponent+'"> <img src="/img/check.png" width="100px"/> </button>' +
+                                '<p class="selColor">Elige un color para asignarle.</p>'+
+                                'Color'+
+                                '<input class="Color-Selector"  type="color">'+
+                         '</div>'+
                         '</div>'+
                   '</div>';
                   indexImagen = indexImagen + 1;
@@ -415,19 +433,25 @@
                 break;
 
                 case 'Carrucel':
-                component = 
-                  '<div class="col-lg-12 texto component" id="'+idComponent+'">'+
+                component =
+                '<div class="col-lg-12 texto component texto-imagen" id="'+idComponent+'">'+
                           '<p class="tituloCmp">'+type+
                             '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
                           '<p>'+
-                          '<DIV id="dropzoneImagen">'+
-                            '<FORM class="dropzone" id="DropImagen'+idComponent+'" action="/upload" onclick="genereDropImagen('+stringId+')">'+
-                            '</FORM>'+
-                          '</DIV>'+
-                          '<div>'+
-                          '<div>'+
-                  '</div>';
-                break;
+                      '<div class="padre">'+
+                                '<div class="texto-imagen-1" id="text'+idComponent+'">'+
+                                    '<ul>'+
+                                        '<li><input type="file" id="imagen4'+idComponent+'" onchange="preview4('+stringId+')"></li>'+
+                                        '<div id="preview4'+idComponent+'" class="estilo-imagen-texto-imagen">'+
+                                        '</div>'+
+                                    '</ul>'+
+                                '</div>'+
+                            '<div class=botonincremento>'+
+                                '<button onclick="AddCarrucel('+stringId+')">Agregar Nuevo Archivo </button>' +
+                             '</div>'+
+                      '</div>'+
+                '</div>';
+              break;
             }
             return (component);
 
