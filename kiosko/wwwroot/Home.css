@@ -175,9 +175,7 @@ body {
     overflow-y: scroll;
 }
 
-.texto-imagen {
-    height: 300px;
-}
+
 
 
 
@@ -203,77 +201,36 @@ body {
 
 .padre {
     display: flex;
-    margin-left: 20px;
 }
 
 .texto-imagen-1 {
     display: flex;
+    margin: 20px;
+    width: 80%;
     overflow-y: scroll;
-}
-
-.texto-imagen-1 ul li{
-    list-style:none;
-}
-
-.botonincremento{
-    width:100px;
-    height:100px;
-}
-
-.video-guia{
-    height:200px;
-}
-
-.video-guia-padre {
-    
-    margin-top: 40px;
     text-align: center;
-    
 }
 
-    .video-guia-padre ul li{
-        list-style:none;
-    }
-
-.input-archivo{
-    margin-bottom:30px;
+.texto-imagen ul {
+    border: solid;
+    width: 300px;
+    height: 300px;
+    margin: 15px;
 }
 
-.desplegable-texto-imagen {
-    height: auto;
+.texto-imagen-1 ul li {
+    list-style: none;
+    margin: 15px 0;
 }
 
-.padre {
-    display: flex;
-}
-
-.estilo-imagen-desplegable-1 {
-    margin: 10px 0;
-    padding-right: 15%;
+.titulo-input {
+    border: #9B9B9B 1px dashed;
+    width: 130px;
+    height: 31px;
 }
 
 .botonincremento {
-    margin-left: 15px;
-    margin-right: 15px;
-}
-
-.texto-imagen-1 {
-    display: flex;
-    width: 80%;
-    overflow-y: scroll;
-}
-
-    .texto-imagen-1 ul li {
-        list-style: none;
-        margin-top: 10px;
-    }
-
-.estilo-imagen-texto-imagen {
-    margin-top: 10px;
-}
-
-.video-guia {
-    height: 200px;
+    width: 120px;
 }
 
 .video-guia-padre {
@@ -289,15 +246,37 @@ body {
     margin-bottom: 30px;
 }
 
+.texto-imagen-display {
+    display: flex;
+}
+
+.button-close {
+    display: block;
+    width: 50px;
+    height: 50px;
+    float: left;
+    margin-left: 150px;
+    position: absolute;
+}
+
+.subtitle-input::placeholder {
+    text-align: center;
+}
+
+.subtitle-input {
+    border: #9B9B9B 1px dashed;
+    width: 292px;
+    height: 42px;
+}
+
 .imagen-general {
     display: flex;
 }
 
-#preview3 {
-    display: flex;
+.imagen-1 {
+    margin: 20px;
 }
 
-.preview2 {
-    display: flex;
+.imagen-2 {
+    margin: 20px;
 }
-
