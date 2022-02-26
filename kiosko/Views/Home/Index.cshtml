@@ -207,7 +207,6 @@
                   '</div>';
                 break;
                case 'texto-imagen':
-              default:
                 component =
                 '<div class="col-lg-12 texto component texto-imagen" id="'+idComponent+'">'+
                           '<p class="tituloCmp">'+type+
@@ -217,19 +216,18 @@
                                 '<div class="texto-imagen-1" id="text'+idComponent+'">'+
                                     '<ul>'+
                                         '<li><input type="file" id="imagen'+idComponent+'-'+indexImagen+'" onchange="generatePreview('+stringId+','+indexImagen+')"></li>'+
-                                        '<div id="imgPreview'+idComponent+'-'+indexImagen+'" class="estilo-imagen-texto-imagen">'+    
-
+                                        '<div id="imgPreview'+idComponent+'-'+indexImagen+'" class="estilo-imagen-texto-imagen">'+
                                         '</div>'+
-
-                                        '<li><input class="titulo-input" type="text" placeholder="Titulo"></li>'+ 
+                                        '<li><input class="titulo-input" type="text" placeholder="Titulo"></li>'+
                                         '<li><input type="text" placeholder="Texto"></li>'+
                                     '</ul>'+
                                 '</div>'+
-                            '<div class=botonincremento>'+ 
+                            '<div class=botonincremento>'+
                                 '<button onclick="AddTextoImagen('+stringId+')"> Agregar Nuevo Archivo </button>'+
                              '</div>'+
                       '</div>'+
                 '</div>';
+                indexImagen = indexImagen + 1;
               break;
                case 'imagen':
                   component =
@@ -295,7 +293,7 @@
                           '<p class="tituloCmp">'+type+
                             '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
                           '<p>'+
-                          '<input class="inputTexto" type="text">'+
+                          '<textarea class="inputTexto" type="text"></textarea>'+
                           '<p class="selColor">Elige un color para asignarle.</p>'+
                             'Color '+
                             '<input class="Color-Selector" type="color">'
