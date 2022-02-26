@@ -16,18 +16,6 @@
             let component = generateComponent(type);
             $("#sortable").append(component);
           }          
-        }
-             
-       function toggleButton(stringId){
-            var link = $('#inputLink'+stringId).val();
-            console.log(link);
-            if(link){
-                $('#previewLink'+stringId).css('visibility', 'visible');
-            }
-            else{
-               $('#previewLink'+stringId).css('visibility', 'hidden');
-            }
-        }
         
         function removeComponent(idComponent) {
             $("#"+idComponent).remove();
@@ -79,6 +67,30 @@
             }
         }
 
+        function previewVideo(stringId){
+            console.log(stringId)
+            $(this).css("display","none")
+            console.log($(this))
+            let idVideo = "file"+stringId;
+            let idPreview = "previewVideo"+stringId;
+            var file = $('#file'+stringId).prop('files');
+            file = file[0];
+            console.log(file);
+            let readerVideo = new FileReader();
+            readerVideo.readAsDataURL(file);
+            $("#"+idVideo).css("display","none")
+            readerVideo.onload = function(){
+                let preVideo = $('#previewVideo'+stringId);
+                $('#previewVideo'+stringId).empty();
+                video=document.createElement('video');
+                video.src = readerVideo.result;
+                video.style.width = "400px";
+                video.controls = true;
+                preVideo.innerHTML = "";
+                preVideo.append(video);
+            }
+        }
+
         function deletePreview(stringId,indexImagen){
             let idImg = "imagen"+stringId+"-"+indexImagen;
             let idPreview = "imgPreview"+stringId+"-"+indexImagen;
@@ -96,141 +108,13 @@
                         
                             );
         }
-
-
-        function preview(stringId)
-        {
-  console.log($("#imagen"+stringId).val());
-  
-
-           var imagenFile= $('#imagen'+stringId).prop('files');
-           console.log(imagenFile);
-           imagenFile=imagenFile[0];
-           console.log(imagenFile);
-           let reader = new FileReader();
-            reader.readAsDataURL(imagenFile);
-       reader.onload = function() {
-            let preview = $('#preview'+stringId);
-            $('#preview'+stringId).empty();
-            imagen=document.createElement('img');
-            imagen.src = reader.result;
-            imagen.style.width = "200px";
-            preview.innerHTML = "";
-            preview.append(imagen);
-        }
-  
-
-        }
-
-
-function preview2(stringId)
-        {
-  console.log($("#imagen2"+stringId).val());
-  
-
-           var imagenFile2= $('#imagen2'+stringId).prop('files');
-           console.log(imagenFile2);
-           imagenFile2=imagenFile2[0];
-           console.log(imagenFile2);
-           let reader2 = new FileReader();
-            reader2.readAsDataURL(imagenFile2);
-       reader2.onload = function() {
-            let preview2 = $('#preview2'+stringId);
-            $('#preview2'+stringId).empty();
-            imagen2=document.createElement('img');
-            imagen2.src = reader2.result;
-            imagen2.style.width = "200px";
-            preview2.innerHTML = "";
-            preview2.append(imagen2);
-        }
-  
-
-        }
-
-
-function preview3(stringId)
-        {
-  console.log($("#imagen3"+stringId).val());
-  
-
-           var imagenFile3= $('#imagen3'+stringId).prop('files');
-           console.log(imagenFile3);
-           imagenFile3=imagenFile3[0];
-           console.log(imagenFile3);
-           let reader3 = new FileReader();
-            reader3.readAsDataURL(imagenFile3);
-       reader3.onload = function() {
-            let preview3 = $('#preview3'+stringId);
-            $('#preview3'+stringId).empty();
-            imagen3=document.createElement('img');
-            imagen3.src = reader3.result;
-            imagen3.style.width = "200px";
-            preview3.innerHTML = "";
-            preview3.append(imagen3);
-        }
-  
-
-        }
-
-        function preview4(stringId)
-        {
-  console.log($("#imagen4"+stringId).val());
-  
-
-           var imagenFile4= $('#imagen4'+stringId).prop('files');
-           console.log(imagenFile4);
-           imagenFile4=imagenFile4[0];
-           console.log(imagenFile4);
-           let reader4 = new FileReader();
-            reader4.readAsDataURL(imagenFile4);
-       reader4.onload = function() {
-            let preview4 = $('#preview4'+stringId);
-            $('#preview4'+stringId).empty();
-            imagen4=document.createElement('img');
-            imagen4.src = reader4.result;
-            imagen4.style.width = "200px";
-            preview4.innerHTML = "";
-            preview4.append(imagen4);
-        }
-  
-
-        }
-
-         function preview6(stringId)
-        {
-  console.log($("#imagen6"+stringId).val());
-  
-
-           var imagenFile6= $('#imagen6'+stringId).prop('files');
-           console.log(imagenFile6);
-           imagenFile6=imagenFile6[0];
-           console.log(imagenFile6);
-           let reader6 = new FileReader();
-            reader6.readAsDataURL(imagenFile6);
-       reader6.onload = function() {
-            let preview6 = $('#preview6'+stringId);
-            $('#preview6'+stringId).empty();
-            imagen6=document.createElement('video');
-            imagen6.src = reader6.result;
-            imagen6.controls = true;
-            imagen6.style.width = "600px";
-            preview6.innerHTML = "";
-            preview6.append(imagen6);
-        }
-        }
         
-        function previewVideo(stringId){
-            console.log(stringId)
-            $(this).css("display","none")
-            console.log($(this))
-            let idVideo = "file"+stringId;
-            let idPreview = "previewVideo"+stringId;
+        function previewVideoE(stringId){
             var file = $('#file'+stringId).prop('files');
             file = file[0];
             console.log(file);
             let readerVideo = new FileReader();
             readerVideo.readAsDataURL(file);
-            $("#"+idVideo).css("display","none")
             readerVideo.onload = function(){
                 let preVideo = $('#previewVideo'+stringId);
                 $('#previewVideo'+stringId).empty();
@@ -359,7 +243,7 @@ function preview3(stringId)
                           '<div class="video-guia-padre">'+
                                 '<ul>'+
                                 '<div class="file-Video">'+
-                                    '<input type="file" name="file" id="file'+idComponent+'" accept=".mp4" onchange="previewVideo('+stringId+')" >'+
+                                    '<input type="file" name="file" id="file'+idComponent+'" accept=".mp4" onchange="previewVideoE('+stringId+')" >'+
                                      '<!--previsualizar-->'+
                                     '<div id="previewVideo'+idComponent+'" class="estilo-imagen"> </div>'+
                                 '</div>'+
@@ -413,7 +297,7 @@ function preview3(stringId)
                                 '<div class="video-guia-padre">'+
                                     '<ul>'+
                                         '<div class="file-Video2">'+
-                                            '<input type="file" name="file" id="file'+idComponent+'" accept=".mp4" onchange="previewVideo('+stringId+')" >'+
+                                            '<input type="file" name="file" id="file'+idComponent+'" accept=".mp4" onchange="previewVideoE('+stringId+')" >'+
                                             '<!--previsualizar-->'+
                                             '<div id="previewVideo'+idComponent+'" class="estilo-imagen"> </div>'+
                                         '</div>'+
