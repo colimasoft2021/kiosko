@@ -90,9 +90,11 @@
             $("#text"+stringId).append(
                         '<div class="padre">'+
                             '<ul>'+
+                            '<div class="file-Amagen-Carrucel">'+
                                 '<li><input type="file" id="'+idImg+'" onchange="generatePreview('+newStringId+','+indexImagen+')"></li>'+
+                                '</div>'+
                                 '<div id="'+idPreview+'" class="estilo-imagen-texto-imagen"></div>'+ 
-                           '<ul>'+
+                           '</ul>'+
                        '</div>');
             indexImagen = indexImagen + 1;
         }
@@ -395,12 +397,17 @@
                             '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
                           '<p>'+
                           '<div>'+
+                          '<div class="junto">'+
                                 '<div class="file-Amagen">'+
                                     '<input type="file" name="file" id="imagen'+idComponent+'-'+indexImagen+'" accept=".png" onchange="generatePreview('+stringId+','+indexImagen+')">'+
                                 '</div>'+
+                                '<div class="titulomax">'+
+                                     '<input class="inputTitulo" type="text" placeholder="Titulo"/>'+
+                                '</div>'+
+                                '</div>'+
                                 '<div id="imgPreview'+idComponent+'-'+indexImagen+'" class="estilo-imagen"></div>'+ 
                                      '<div id="preview'+idComponent+'" class="estilo-imagen">'+ 
-                                     '<input class="inputTitulo" type="text" placeholder="Titulo"/>'+
+                                     //'<input class="inputTitulo" type="text" placeholder="Titulo"/>'+
                                      '<div class="inputLinkContainer row">'+
                                      '<input class="inputLink" id="inputLink'+idComponent+'" name="link" type="text" placeholder="Link" onchange="toggleButton('+stringId+')"/>'+
                                 '</div>'+
@@ -422,7 +429,9 @@
                           '<input class="inputTexto" type="text" placeholder="Texto...">'+
                           '<div class="video-guia-padre">'+
                                 '<ul>'+
+                                 '<div class="file-Amagen-pop-up">'+
                                     '<input type="file" id="imagen'+idComponent+'-'+indexImagen+'" accept=".png" onchange="generatePreview('+stringId+','+indexImagen+')">'+
+                                    '</div>'+
                                     '<div id="imgPreview'+idComponent+'-'+indexImagen+'" class="estilo-imagen">'+ 
                                 '</ul>'+
                            '</div>'+
@@ -439,13 +448,15 @@
                       '<div class="padre">'+
                                 '<div class="texto-imagen-1" id="text'+idComponent+'">'+
                                     '<ul>'+
-                                        '<li><input type="file" id="imagen4'+idComponent+'" onchange="preview4('+stringId+')"></li>'+
-                                        '<div id="preview4'+idComponent+'" class="estilo-imagen-texto-imagen">'+
+                                    '<div class="file-Amagen-Carrucel">'+
+                                        '<li><input type="file" id="imagen'+idComponent+'-'+indexImagen+'" onchange="generatePreview('+stringId+','+indexImagen+')"></li>'+
+                                        '</div>'+
+                                        '<div id="imgPreview'+idComponent+'-'+indexImagen+'" class="estilo-imagen-texto-imagen">'+
                                         '</div>'+
                                     '</ul>'+
                                 '</div>'+
                             '<div class=botonincremento>'+
-                                '<button onclick="AddCarrucel('+stringId+')">Agregar Nuevo Archivo </button>' +
+                                '<button onclick="AddCarrucel('+stringId+')">+</button>' +
                              '</div>'+
                       '</div>'+
                 '</div>';
