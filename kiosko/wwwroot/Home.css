@@ -214,7 +214,7 @@ body {
 .texto-imagen ul {
     border: solid;
     width: 300px;
-    height: 300px;
+  
     margin: 15px;
 }
 
@@ -248,15 +248,41 @@ body {
 
 .texto-imagen-display {
     display: flex;
+    width:100%;
+}
+.contenedor-padre{
+    text-align:center;
+}
+.position {
+    margin-right: 30px;
+    margin-left:50px;
+    margin-bottom:10px;
 }
 
+.input-desplegable-texto-imagen {
+    display: none;
+}
+.label-desplegable-texto-imagen {
+    width: 102px;
+    height: 78px;
+    background-color: #C4C4C4;
+}
+
+.estilo-imagen-desplegable {
+    
+    top: 0;
+}
+
+    .estilo-imagen-desplegable img {
+        width: 150px;
+        
+    }
 .button-close {
-    display: block;
-    width: 50px;
-    height: 50px;
-    float: left;
-    margin-left: 150px;
-    position: absolute;
+    position: relative;
+    left:200px;
+    top:-45px;
+    
+    
 }
 
 .subtitle-input::placeholder {
@@ -267,16 +293,46 @@ body {
     border: #9B9B9B 1px dashed;
     width: 292px;
     height: 42px;
+    margin-top:18px;
 }
 
 .imagen-general {
     display: flex;
+    
+}
+.label-imagen-1{
+    margin-top:10px;
+}
+
+.label-footer {
+    margin-top: 22px;
 }
 
 .imagen-1 {
-    margin: 20px;
+    margin-left: 100px;
+    margin-right: 100px;
 }
 
 .imagen-2 {
-    margin: 20px;
+    margin-left: 180px;
+}
+
+.label-desplegable-texto-imagen-2 {
+    background-color: #C4C4C4;
+    width: 154px;
+    height: 129px
+}
+.label-desplegable-texto-imagen-1 {
+    background-color: #C4C4C4;
+    width: 154px;
+    height: 129px
+}
+
+.estilo-imagen-desplegable-1 img{
+    width:200px;
+   
+}
+
+.estilo-imagen-desplegable-2 img {
+    width: 200px;
 }
