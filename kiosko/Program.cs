@@ -10,7 +10,6 @@ builder.Services.AddDbContext<KioskoCmsContext>(opt => opt.UseSqlServer(builder.
 builder.Services.AddDbContext<LoginContext>(opt => opt.UseSqlServer(builder.Configuration.GetConnectionString("ConexionTest")));
 builder.Services.AddDbContext<KColSoftContext>(opt => opt.UseSqlServer(builder.Configuration.GetConnectionString("ConexionTest1")));
 
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -23,13 +22,19 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
-app.UseRouting();
-
 app.UseAuthorization();
-
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Login}/{action=Index}/{id?}");
+app.Use(async (context, next) =>
+{
+    // Do work that doesn't write to the Response.
+    await next.Invoke();
+    // Do logging or other work that doesn't write to the Response.
+});
 
+app.Run(async context =>
+{
+    await context.Response.WriteAsync("Hello from 2nd delegate.");
+});
 app.Run();
