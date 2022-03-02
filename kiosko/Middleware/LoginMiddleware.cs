@@ -19,7 +19,6 @@ namespace kiosko.Middleware
 
         public async Task Invoke(HttpContext httpContext)
         {
-
             await _next(httpContext);
         }
     }
