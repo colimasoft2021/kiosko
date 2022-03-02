@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using kiosko.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace kiosko.Controllers
 {
@@ -20,11 +21,13 @@ namespace kiosko.Controllers
         }
 
         // GET: Modulos
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index()
         {
             return View(await _context.Modulos.ToListAsync());
         }
 
+        [Authorize]
         // GET: Modulos/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -49,11 +52,24 @@ namespace kiosko.Controllers
             return Json(modulos);
         }
 
-        [HttpPost]
-        public JsonResult GetAllSubModulos(int idModulo)
+        public JsonResult GetModulosAndComponentsForApp()
         {
-            var submodulos = _context.Submodulos.Where(c => c.IdModulo == idModulo);
-            return Json(submodulos);
+            var modulos = _context.Modulos.OrderBy(c => c.Orden);
+            foreach (var m in modulos)
+            {
+                _context.Componentes.Where(c => c.IdModulo == m.Id).OrderBy(c => c.Orden).Load();
+            }
+            return Json(modulos);
         }
+        /*
+        public JsonResult GetModulosAndProgressByUser()
+        {
+            var dataUser = _context.Usuarios.Where(u => u.IdUsuario == 1);
+            foreach(var u in dataUser)
+            {
+                var modulos = _context.Modulos.OrderBy(c => c.Orden).Load();
+            }
+        }
+        */
     }
 }

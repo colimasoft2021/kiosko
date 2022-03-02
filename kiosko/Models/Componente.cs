@@ -15,5 +15,8 @@ namespace kiosko.Models
         public string? Titulo { get; set; }
         public string? Subtitulo { get; set; }
         public int? Orden { get; set; }
+        public int IdModulo { get; set; }
+
+        public virtual Modulo IdModuloNavigation { get; set; } = null!;
     }
 }

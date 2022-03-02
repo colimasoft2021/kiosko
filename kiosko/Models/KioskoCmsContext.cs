@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace kiosko.Models
 {
-    public partial class KioskoCmsContext : DbContext
+    public partial class KioskoCmsContext : IdentityDbContext
     {
         public KioskoCmsContext()
         {
@@ -18,19 +19,12 @@ namespace kiosko.Models
 
         public virtual DbSet<Componente> Componentes { get; set; } = null!;
         public virtual DbSet<Modulo> Modulos { get; set; } = null!;
-        public virtual DbSet<Submodulo> Submodulos { get; set; } = null!;
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Server=DESKTOP-ESMK0VC;Database=KioskoCms;Trusted_Connection=true;user=sa;password=123456789;TrustServerCertificate=True");
-            }
-        }
+        public virtual DbSet<Progreso> Progresos { get; set; } = null!;
+        public virtual DbSet<Usuario> Usuarios { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<Componente>(entity =>
             {
                 entity.ToTable("componentes");
@@ -47,6 +41,8 @@ namespace kiosko.Models
                 entity.Property(e => e.Descripcion)
                     .IsUnicode(false)
                     .HasColumnName("descripcion");
+
+                entity.Property(e => e.IdModulo).HasColumnName("id_modulo");
 
                 entity.Property(e => e.Orden).HasColumnName("orden");
 
@@ -73,6 +69,12 @@ namespace kiosko.Models
                 entity.Property(e => e.Url)
                     .IsUnicode(false)
                     .HasColumnName("url");
+
+                entity.HasOne(d => d.IdModuloNavigation)
+                    .WithMany(p => p.Componentes)
+                    .HasForeignKey(d => d.IdModulo)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_componentes_modulos");
             });
 
             modelBuilder.Entity<Modulo>(entity =>
@@ -103,34 +105,55 @@ namespace kiosko.Models
                     .HasColumnName("titulo");
             });
 
-            modelBuilder.Entity<Submodulo>(entity =>
+            modelBuilder.Entity<Progreso>(entity =>
             {
-                entity.ToTable("submodulos");
+                entity.ToTable("progresos");
 
                 entity.Property(e => e.Id).HasColumnName("id");
 
-                entity.Property(e => e.AccesoDirecto).HasColumnName("acceso_directo");
+                entity.Property(e => e.FechaFin)
+                    .HasColumnType("datetime")
+                    .HasColumnName("fecha_fin");
 
-                entity.Property(e => e.Desplegable).HasColumnName("desplegable");
+                entity.Property(e => e.FechaInicio)
+                    .HasColumnType("datetime")
+                    .HasColumnName("fecha_inicio");
+
+                entity.Property(e => e.Finalizado)
+                    .HasColumnName("finalizado")
+                    .HasDefaultValueSql("((0))");
 
                 entity.Property(e => e.IdModulo).HasColumnName("id_modulo");
 
-                entity.Property(e => e.IdSubmodulo)
+                entity.Property(e => e.IdUsuario).HasColumnName("id_usuario");
+            });
+
+            modelBuilder.Entity<Usuario>(entity =>
+            {
+                entity.ToTable("usuarios");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.Clave)
                     .HasMaxLength(50)
                     .IsUnicode(false)
-                    .HasColumnName("id_submodulo");
+                    .HasColumnName("clave");
 
-                entity.Property(e => e.Nivel).HasColumnName("nivel");
+                entity.Property(e => e.Email)
+                    .HasMaxLength(50)
+                    .HasColumnName("email");
 
-                entity.Property(e => e.Padre)
+                entity.Property(e => e.IdUsuario).HasColumnName("id_usuario");
+
+                entity.Property(e => e.Rol)
                     .HasMaxLength(50)
                     .IsUnicode(false)
-                    .HasColumnName("padre");
+                    .HasColumnName("rol");
 
-                entity.Property(e => e.Titulo)
+                entity.Property(e => e.Usuario1)
                     .HasMaxLength(50)
                     .IsUnicode(false)
-                    .HasColumnName("titulo");
+                    .HasColumnName("usuario");
             });
 
             OnModelCreatingPartial(modelBuilder);
