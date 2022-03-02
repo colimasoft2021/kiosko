@@ -1,27 +1,83 @@
-﻿#DropImagen {
-
-    margin-inline: 4rem;
+﻿.file-Imagen {
+    width: 70%;
+    position: relative;
+    display: inline-block;
     background-image: url(../img/img.png);
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: 5%;
+    background-size: 80px;
     background-color: #C4C4C4;
-}
-#DropVideo {
-    margin-inline: 4rem;
-    background-image: url(../img/video.svg);
-    background-repeat: no-repeat;
+    background-repeat:no-repeat;
     background-position: center;
-    background-size: 5%;
-    background-color: #C4C4C4;
 }
 
-#dropVideo input[type="file"] {
-    font-size: 100px;
+.file-Amagen {
+    width: 5%;
+    height:30px;
+    position: relative;
+    display: inline-block;
+    background-image: url(../img/img.png);
+    background-size: 20px;
+    background-color: #C4C4C4;
+    background-repeat: no-repeat;
+    background-position: center;
 }
 
-.botonEnlace{
-    background-color:black;
+.file-Amagen input[type="file"] {
+    opacity: 0;
+    width: 100%;
+    height: 100px;
+    display: inline-block;
+}
+
+.file-Imagen input[type="file"] {
+    opacity: 0;
+    width: 100%;
+    height: 100px;
+    display: inline-block;
+}
+
+.file-Video {
+    width: 70%;
+    position: relative;
+    display: inline-block;
+    background-image: url(../img/video.png);
+    background-size: 80px;
+    background-color: #C4C4C4;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.file-Video2 {
+    width: 40%;
+    height: 30%;
+    position: relative;
+    display: inline-block;
+    background-image: url(../img/video.png);
+    background-size: 20%;
+    background-color: #C4C4C4;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.file-Video2 input[type="file"] {
+    opacity: 0;
+    width: 100%;
+    height: 100px;
+    display: inline-block;
+}
+
+.file-Video input[type="file"] {
+    opacity: 0;
+    width: 100%;
+    height: 100px;
+    display: inline-block;
+}
+
+.botonEnlace {
+    visibility: hidden;
+    width: 7%;
+    background-color: transparent;
+    border-radius: 100%;
+    border: none;
 }
 
 .boton-perfil {
@@ -32,7 +88,9 @@
 }
 
 .inputs {
-    font-size:20px;
+    width: 70%;
+    margin-left:15%;
+    font-size: 20px;
     border: 1px dashed #9B9B9B;
     box-sizing: border-box;
 }
@@ -53,20 +111,25 @@
 .inputTitulo {
     font-family: 'Poppins', sans-serif;
     width: 100%;
-    font-size: 20px;
+    font-size: 30px;
     text-align: center;
     border: 1px dashed #9B9B9B;
     box-sizing: border-box;
     margin-bottom: 5px;
 }
 .inputLink {
-    width: 100%;
-    font-size: 14px;
+    text-align:center;
+    width: 50%;
+    font-size: 18px;
     font-style: italic;
     border-bottom-width: 2px;
     border-left: none;
     border-right: none;
     border-top: none;
+}
+
+.margenContainer{
+    margin:30px;
 }
 
 .selColor {
