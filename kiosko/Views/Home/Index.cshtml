@@ -44,7 +44,7 @@
         function addComponent(type) {
             let component = generateComponent(type);
             $("#sortable").append(component);
-        
+        }
  
         function removeComponent(idComponent) {
             $("#"+idComponent).remove();
@@ -443,7 +443,6 @@
                                 '</div>'+
                                 '<div id="imgPreview'+idComponent+'-'+indexImagen+'" class="estilo-imagen"></div>'+ 
                                      '<div id="preview'+idComponent+'" class="estilo-imagen">'+ 
-                                     //'<input class="inputTitulo" type="text" placeholder="Titulo"/>'+
                                      '<div class="inputLinkContainer row">'+
                                      '<input class="inputLink" id="inputLink'+idComponent+'" name="link" type="text" placeholder="Link" onchange="toggleButton('+stringId+')"/>'+
                                 '</div>'+
