@@ -8,9 +8,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using kiosko.Models;
 using Microsoft.Data.SqlClient;
+using Microsoft.AspNetCore.Authorization;
 
 namespace kiosko.Controllers
 {
+    [Authorize]
     public class ComponentesController : Controller
     {
         private readonly KioskoCmsContext _context;
