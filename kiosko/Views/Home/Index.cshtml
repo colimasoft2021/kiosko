@@ -25,13 +25,15 @@
             console.log("Entre")
             console.log(stringId)
             let idImg = "imagen"+stringId+"-"+indexImagen;
+            let idLabelImg = "imagenlabel"+stringId+"-"+indexImagen;
             let idPreview = "imgPreview"+stringId+"-"+indexImagen;
             let newStringId = "'"+stringId+"'";
             $("#text"+stringId).append(
                         
                             '<ul>'+
-                                '<li><input type="file" id="'+idImg+'" onchange="generatePreview('+newStringId+','+indexImagen+')"></li>'+
-                                '<div id="'+idPreview+'" class="estilo-imagen-texto-imagen"></div>'+ 
+                                '<label for="'+idImg+'" id="'+idLabelImg+'" class="estilos-desplazante"><img src="/img/icono-imagen-pqueño.png" class="desplazante"></label>'+
+                                '<li><input type="file" id="'+idImg+'" class="input-desplegable-texto-imagen" onchange="generatePreview('+newStringId+','+indexImagen+')"></li>'+
+                                '<div id="'+idPreview+'" class="estilo-imagen-incrementable"></div>'+ 
                                 '<li><input class="titulo-input" type="text" placeholder="Titulo"></li>'+ 
                                 '<li><input type="text" placeholder="Texto"></li>'+
                            '</ul>'
@@ -86,27 +88,44 @@
         }
 
         function previewVideo(stringId){
-            console.log(stringId)
-            $(this).css("display","none")
+            console.log(stringId);
+           // $(this).css("display","none")
             console.log($(this))
             let idVideo = "file"+stringId;
+            let idVideoLabel = "file-input"+stringId;
+            let idVideoclose = "viodeclose"+stringId;
             let idPreview = "previewVideo"+stringId;
             var file = $('#file'+stringId).prop('files');
             file = file[0];
             console.log(file);
             let readerVideo = new FileReader();
             readerVideo.readAsDataURL(file);
-            $("#"+idVideo).css("display","none")
+                //$("#"+idVideo).css("display","none")
+                $("#"+idVideoLabel).css("display","none")
+                $("#"+idVideoclose).css("display","block")
                 readerVideo.onload = function(){
                 let preVideo = $('#previewVideo'+stringId);
                 $('#previewVideo'+stringId).empty();
+                stringId = "'"+stringId+"'"
+                $("#"+idPreview).append('<button id="videoclose'+stringId+'"  class="button-close-video"  onclick="deletePreviewVideo('+stringId+')">x</button>');
                 video=document.createElement('video');
                 video.src = readerVideo.result;
-                video.style.width = "400px";
+                video.style.width = "300px";
                 video.controls = true;
                 preVideo.innerHTML = "";
                 preVideo.append(video);
             }
+        }
+
+        function deletePreviewVideo(stringId){
+            //let idVideo = "file"+stringId;
+            let idVideoLabel = "file-input"+stringId;
+            let idPreview = "previewVideo"+stringId;
+            let idVideoclose = "videoclose"+stringId;
+            //$("#"+idVideo).css("display","block")
+            $("#"+idVideoLabel).css("display","block")
+            $("#"+idPreview).empty();
+            $("#"+idVideoclose).css("display","none")
         }
 
         function deletePreview(stringId,indexImagen){
@@ -219,8 +238,9 @@
                       '<div class="padre">'+
                                 '<div class="texto-imagen-1" id="text'+idComponent+'">'+
                                     '<ul>'+
-                                        '<li><input type="file" id="imagen'+idComponent+'-'+indexImagen+'" onchange="generatePreview('+stringId+','+indexImagen+')"></li>'+
-                                        '<div id="imgPreview'+idComponent+'-'+indexImagen+'" class="estilo-imagen-texto-imagen">'+
+                                        '<label for="imagen'+idComponent+'-'+indexImagen+'" id="imagenlabel'+idComponent+'-'+indexImagen+'" class="estilos-desplazante"><img src="/img/icono-imagen-pqueño.png" class="desplazante"></label>'+
+                                        '<li><input type="file" id="imagen'+idComponent+'-'+indexImagen+'" class="input-desplegable-texto-imagen" onchange="generatePreview('+stringId+','+indexImagen+')"></li>'+
+                                        '<div id="imgPreview'+idComponent+'-'+indexImagen+'" class="estilo-imagen-desplazante">'+
                                         '</div>'+
                                         '<li><input class="titulo-input" type="text" placeholder="Titulo"></li>'+
                                         '<li><input type="text" placeholder="Texto"></li>'+
@@ -332,13 +352,17 @@
                             '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
                           '<p>'+
                             '<div class="video-guia-padre">'+
-                                '<ul>'+
-                                    '<li class="input-archivo"><input type="file" id="file'+idComponent+'" onchange="previewVideo('+stringId+')"></li>'+
-                                    '<div id="previewVideo'+idComponent+'"   class="estilo-imagen-texto-imagen">'+    
+                                '<div class="video-guia-padre-input">'+
+                                    '<label for="file'+idComponent+'" id="file-input'+idComponent+'" class="label-video-guia"> <img src="/img/icono-video.png"> </label>'+
+                                    '<input type="file" id="file'+idComponent+'" onchange="previewVideo('+stringId+')" class="input-video-guia">'+
+                                    '<div id="previewVideo'+idComponent+'"  class="video-guia-video">'+    
                                          
-                                        '</div>'+
-                                    '<li><input type="text" placeholder="Descripcion"></li>'+
-                                '</ul>'+
+                                     '</div>'+
+                                '</div>'+
+
+                                    '<div class="descripcion-guia-video">'+
+                                        '<input type="text" placeholder="Descripcion">'+
+                                    '</div>'+
                            '</div>'+
                   '</div>';
             break;

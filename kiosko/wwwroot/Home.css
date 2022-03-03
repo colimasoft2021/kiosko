@@ -235,12 +235,18 @@ body {
 
 .video-guia-padre {
     margin-top: 40px;
-    text-align: center;
+    
+}
+.descripcion-guia-video{
+    text-align:center;
+
+}
+.video-guia-padre-input{
+    margin-left: 29%;
+    
 }
 
-    .video-guia-padre ul li {
-        list-style: none;
-    }
+
 
 .input-archivo {
     margin-bottom: 30px;
@@ -274,15 +280,17 @@ body {
 }
 
     .estilo-imagen-desplegable img {
-        width: 150px;
+        width: 200px;
         
     }
+
+.estilo-imagen-desplazante img{
+    width:200px;
+}
 .button-close {
     position: relative;
-    left:200px;
-    top:-45px;
-    
-    
+    left: 200px;
+    top: -45px;
 }
 
 .subtitle-input::placeholder {
@@ -291,7 +299,7 @@ body {
 
 .subtitle-input {
     border: #9B9B9B 1px dashed;
-    width: 292px;
+    width: 100%;
     height: 42px;
     margin-top:18px;
 }
@@ -309,12 +317,12 @@ body {
 }
 
 .imagen-1 {
-    margin-left: 100px;
+    margin-left: 90px;
     margin-right: 100px;
 }
 
 .imagen-2 {
-    margin-left: 180px;
+    margin-left: 120px;
 }
 
 .label-desplegable-texto-imagen-2 {
@@ -335,4 +343,44 @@ body {
 
 .estilo-imagen-desplegable-2 img {
     width: 200px;
+}
+
+.button-close-video{
+   position:absolute;
+    left:700px;
+}
+
+.video-guia-video {
+
+    margin-bottom:10px;
+}
+.input-video-guia{
+    display:none;
+}
+
+.label-video-guia {
+    background-color: #C4C4C4;
+    width: 300px;
+    height: 100px;
+}
+
+.label-video-guia img{
+    margin-top:25px;
+    margin-left: 42%;
+    text-align:center;
+}
+
+.estilo-imagen-incrementable img{
+    width:200px;
+}
+
+.estilos-desplazante {
+    background-color: #C4C4C4;
+    margin-top:10px;
+    width: 60px;
+    height: 60px;
+}
+
+.desplazante{
+    margin-top:15px;
 }
