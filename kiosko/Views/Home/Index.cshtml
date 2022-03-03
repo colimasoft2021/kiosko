@@ -120,6 +120,8 @@
             $("#"+idImglabel).css("display","block")
             $("#"+idPreview).empty();
             $("#"+idImgclose).css("display","none")
+            $('#previewImagen'+stringId).remove();
+            $('#file'+stringId).show();
         }
         
          function AddInput(stringId){
@@ -146,11 +148,11 @@
                 video.controls = true;
                 preVideo.innerHTML = "";
                 preVideo.append(video);
-                $('#file'+stringId).remove();
+                $('#file'+stringId).hide();
             }
         }
 
-        function previewImagen(stringId){
+        function previewImagen(stringId,indexImagen){
             console.log(stringId)
             var file = $('#file'+stringId).prop('files');
             file = file[0];
@@ -160,6 +162,7 @@
             readerimg.onload = function(){
                 let preImagen = $('#previewImagen'+stringId);
                 $('#previewImagen'+stringId).empty();
+                $('#previewImagen'+stringId).append('<button id="imagenclose'+stringId+'-'+indexImagen+'"  class="button-close"  onclick="deletePreview('+stringId+','+indexImagen+')">x</button>');
                 img=document.createElement('img');
                 img.src = readerimg.result;
                 img.style.width = "40%";
@@ -244,7 +247,7 @@
                           '<div class="video-guia-padre">'+
                                 '<ul>'+
                                 '<div class="file-Imagen">'+
-                                    '<input type="file" class="inputImagen" name="file" id="file'+idComponent+'" accept=".png" onchange="previewImagen('+stringId+')" >'+
+                                    '<input type="file" class="inputImagen" name="file" id="file'+idComponent+'" accept=".png" onchange="previewImagen('+stringId+','+indexImagen+')" >'+
                                      '<!--previsualizar-->'+
                                     '<div id="previewImagen'+idComponent+'" class="estilo-imagen"> </div>'+
                                 '</div>'+
@@ -253,6 +256,7 @@
                           '<input class="inputs" type="text" placeholder="Pie de Foto"/>'+
                           '</div>'+
                   '</div>';
+                  indexImagen = indexImagen + 1;
                   break;
                 case 'video':
                   component =
