@@ -214,8 +214,10 @@ body {
 .texto-imagen ul {
     border: solid;
     width: 300px;
-  
     margin: 15px;
+}
+.contendor-lista{
+    padding:0 40px;
 }
 
 .texto-imagen-1 ul li {
@@ -287,11 +289,11 @@ body {
 .estilo-imagen-desplazante img{
     width:200px;
 }
-.button-close {
+/*.button-close {
     position: relative;
     left: 200px;
     top: -45px;
-}
+}*/
 
 .subtitle-input::placeholder {
     text-align: center;
@@ -322,7 +324,7 @@ body {
 }
 
 .imagen-2 {
-    margin-left: 120px;
+    margin-left: 50px;
 }
 
 .label-desplegable-texto-imagen-2 {
@@ -346,12 +348,17 @@ body {
 }
 
 .button-close-video{
-   position:absolute;
-    left:700px;
+    position:relative;
+    top:30px;
+   left:300px;
+    width:20px;
+    height:30px;
 }
 
 .video-guia-video {
-
+    
+        width:200px;
+        
     margin-bottom:10px;
 }
 .input-video-guia{
@@ -383,4 +390,19 @@ body {
 
 .desplazante{
     margin-top:15px;
+}
+
+.button-close-dti{
+    position:absolute;
+    width:20px;
+    height:30px;
+}
+
+.button-close-ti {
+    position: relative;
+    width: 30px;
+    height: 30px;
+    left:86px;
+    top:30px;
+    
 }

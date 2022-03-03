@@ -1,126 +1,68 @@
-﻿.file-Imagen {
-    width: 70%;
-    position: relative;
-    display: inline-block;
+﻿#DropImagen {
+    margin-inline: 4rem;
     background-image: url(../img/img.png);
-    background-size: 80px;
-    background-color: #C4C4C4;
-    background-repeat:no-repeat;
-    background-position: center;
-}
-
-.file-Amagen {
-    width: 5%;
-    height:30px;
-    position: relative;
-    display: inline-block;
-    background-image: url(../img/img.png);
-    background-size: 20px;
-    background-color: #C4C4C4;
     background-repeat: no-repeat;
     background-position: center;
-}
-
-.file-Amagen input[type="file"] {
-    opacity: 0;
-    width: 100%;
-    height: 100px;
-    display: inline-block;
-}
-
-.file-Imagen input[type="file"] {
-    opacity: 0;
-    width: 100%;
-    height: 100px;
-    display: inline-block;
-}
-
-.file-Video {
-    width: 70%;
-    position: relative;
-    display: inline-block;
-    background-image: url(../img/video.png);
-    background-size: 80px;
+    background-size: 5%;
     background-color: #C4C4C4;
+}
+
+#DropVideo {
+    margin-inline: 4rem;
+    background-image: url(../img/video.svg);
     background-repeat: no-repeat;
     background-position: center;
-}
-
-.file-Video2 {
-    width: 40%;
-    height: 30%;
-    position: relative;
-    display: inline-block;
-    background-image: url(../img/video.png);
-    background-size: 20%;
+    background-size: 5%;
     background-color: #C4C4C4;
-    background-repeat: no-repeat;
-    background-position: center;
 }
 
-.file-Video2 input[type="file"] {
-    opacity: 0;
-    width: 100%;
-    height: 100px;
-    display: inline-block;
-}
-
-.file-Video input[type="file"] {
-    opacity: 0;
-    width: 100%;
-    height: 100px;
-    display: inline-block;
-}
+    #dropVideo input[type="file"] {
+        font-size: 100px;
+    }
 
 .botonEnlace {
-    visibility: hidden;
-    width: 7%;
-    background-color: transparent;
-    border-radius: 100%;
-    border: none;
+    background-color: black;
 }
 
 .boton-perfil {
     background-color: transparent;
-    width:19.64px;
+    width: 19.64px;
     border: none;
-    float:right;
+    float: right;
 }
 
 .inputs {
-    width: 70%;
-    margin-left:15%;
     font-size: 20px;
     border: 1px dashed #9B9B9B;
     box-sizing: border-box;
 }
 
-.perfil img{
+.perfil img {
     width: 19.64px;
 }
+
 .Color-Selector {
-    border-radius:5px;
+    border-radius: 5px;
     width: 60px;
     height: 40px;
     left: 85px;
     top: 174px;
-    
-    margin:2px;
+    margin: 2px;
 }
 
 .inputTitulo {
     font-family: 'Poppins', sans-serif;
     width: 100%;
-    font-size: 30px;
+    font-size: 20px;
     text-align: center;
     border: 1px dashed #9B9B9B;
     box-sizing: border-box;
     margin-bottom: 5px;
 }
+
 .inputLink {
-    text-align:center;
-    width: 50%;
-    font-size: 18px;
+    width: 100%;
+    font-size: 14px;
     font-style: italic;
     border-bottom-width: 2px;
     border-left: none;
@@ -128,16 +70,12 @@
     border-top: none;
 }
 
-.margenContainer{
-    margin:30px;
-}
-
 .selColor {
     font-size: 12px;
 }
 
 .file-Amagen {
-    width: 30%;
+    width: 20%;
     height: 30px;
     position: relative;
     display: inline-block;
@@ -147,9 +85,56 @@
     background-repeat: no-repeat;
     background-position: center;
 }
-.file-Amagen input[type="file"] {
+
+    .file-Amagen input[type="file"] {
         opacity: 0;
         width: 100%;
         height: 100px;
         display: inline-block;
     }
+
+.file-Amagen-pop-up {
+    width: 50%;
+    height: 130px;
+    position: relative;
+    display: inline-block;
+    background-image: url(../img/img.png);
+    background-size: 20px;
+    background-color: #C4C4C4;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+    .file-Amagen-pop-up input[type="file"] {
+        opacity: 0;
+        width: 100%;
+        height: 100px;
+        display: inline-block;
+    }
+
+.file-Amagen-Carrucel {
+    width: 60%;
+    height: 60px;
+    position: relative;
+    display: inline-block;
+    background-image: url(../img/img.png);
+    background-size: 20px;
+    background-color: #C4C4C4;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+    .file-Amagen-Carrucel input[type="file"] {
+        opacity: 0;
+        width: 100%;
+        height: 100px;
+        display: inline-block;
+    }
+
+.junto {
+    display: flex;
+}
+
+.titulomax {
+    width: 80%;
+}

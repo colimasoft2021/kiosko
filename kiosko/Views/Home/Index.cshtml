@@ -5,34 +5,64 @@
 @section scripts {
     <script type="text/javascript">
         var indexImagen = 1;
+        Dropzone.autoDiscover = false;
+        var DropzoneVideo
         $(document).ready(function () {
-        
+           var dropzone = new Dropzone('#DropImagen', {
+                  parallelUploads: 2,
+                  thumbnailHeight: 120,
+                  thumbnailWidth: 120,
+                  acceptedFiles: ".jpg",
+                  maxFilesize: 3,
+                  filesizeBase: 1000,
+            });
+            dropzoneVideo = new dropzone('#DropVideo', {
+                parallelUploads: 2,
+                  thumbnailHeight: 120,
+                  thumbnailWidth: 120,
+                  acceptedFiles: ".mp4",
+                  maxFilesize: 1,
+                  filesizeBase: 1000,
+            });
         });
 
         $(function () {
            $("#sortable").sortable();
         });
+        //$(document).on('input', '.inputLink', function(){
+        //    alert('Input changed');
+        //    $('.botonEnlace').show("swing");
+        //});
+        function AddPreviewLink(stringId){
+            let enlace = document.getElementById('inputLink'+stringId).value;
+            console.log("Entre");
+            console.log(enlace);
+            console.log(stringId);
+            console.log('inputLink'+stringId);
+            document.getElementById("previewLink"+stringId).innerHTML = ['<iframe  width="300px" height="200px" src="'+enlace+'"></iframe>'];
+        }
         function addComponent(type) {
             let component = generateComponent(type);
             $("#sortable").append(component);
-          }          
-        
+        }
+ 
         function removeComponent(idComponent) {
             $("#"+idComponent).remove();
         }
 
-        function AddTextoImagen(stringId){
+        function AddTextoImagen(stringId,type){
             console.log("Entre")
             console.log(stringId)
             let idImg = "imagen"+stringId+"-"+indexImagen;
             let idLabelImg = "imagenlabel"+stringId+"-"+indexImagen;
             let idPreview = "imgPreview"+stringId+"-"+indexImagen;
             let newStringId = "'"+stringId+"'";
+            let stringType = "'"+type+"'";
             $("#text"+stringId).append(
                         
-                            '<ul>'+
+                            '<ul class="contendor-lista">'+
                                 '<label for="'+idImg+'" id="'+idLabelImg+'" class="estilos-desplazante"><img src="/img/icono-imagen-pqueño.png" class="desplazante"></label>'+
-                                '<li><input type="file" id="'+idImg+'" class="input-desplegable-texto-imagen" onchange="generatePreview('+newStringId+','+indexImagen+')"></li>'+
+                                '<li><input type="file" id="'+idImg+'" class="input-desplegable-texto-imagen" onchange="generatePreview('+newStringId+','+indexImagen+', '+stringType+')"></li>'+
                                 '<div id="'+idPreview+'" class="estilo-imagen-incrementable"></div>'+ 
                                 '<li><input class="titulo-input" type="text" placeholder="Titulo"></li>'+ 
                                 '<li><input type="text" placeholder="Texto"></li>'+
@@ -51,16 +81,40 @@
             $("#text"+stringId).append(
                         '<div class="padre">'+
                             '<ul>'+
+                            '<div class="file-Amagen-Carrucel">'+
                                 '<li><input type="file" id="'+idImg+'" onchange="generatePreview('+newStringId+','+indexImagen+')"></li>'+
+                                '</div>'+
                                 '<div id="'+idPreview+'" class="estilo-imagen-texto-imagen"></div>'+ 
-                           '<ul>'+
+                           '</ul>'+
                        '</div>');
             indexImagen = indexImagen + 1;
         }
 
-        function generatePreview(stringId,indexImagen) {
+        function generatePreview(stringId,indexImagen,type) {
             console.log('entro generate preview');
             console.log(stringId);
+            var clase = "button-close";
+            switch(type) {
+              case 'texto-imagen':
+              clase = "button-close-ti";
+              console.log("entro");
+              break; 
+              case 'Desplegable texto-imagen':
+              clase = "button-close-dti";
+              break; 
+              case 'Acceso-Cursos':
+              clase = "button-close-ac";
+              break;   
+              case 'Pop-up':
+              clase = "button-close-pu";
+              break;   
+              case 'Carrucel':
+              clase = "button-close-ca";
+              break;   
+              default:
+              clase = "button-close";
+                    };
+
           //$(this).css("display","none")
             console.log($(this));
             let idImg = "imagen"+stringId+"-"+indexImagen;
@@ -78,7 +132,7 @@
                 let preview = $("#"+idPreview);
                 $("#"+idPreview).empty();
                 stringId = "'"+stringId+"'"
-                $("#"+idPreview).append('<button id="imagenclose'+stringId+'-'+indexImagen+'"  class="button-close"  onclick="deletePreview('+stringId+','+indexImagen+')">x</button>');
+                $("#"+idPreview).append('<button id="imagenclose'+stringId+'-'+indexImagen+'"  class="'+clase+'"  onclick="deletePreview('+stringId+','+indexImagen+')">x</button>');
                 imagen = document.createElement('img');
                 imagen.src = reader.result;
                 //imagen.style.width = "150px";
@@ -147,6 +201,47 @@
                         
                             );
         }
+
+
+        function genereDropImagen(stringId){
+            Dropzone.autoDiscover = false;
+            console.log("entro a GenereDropImagen"+stringId)
+            let DropImagen = {
+                maxFilesize: 5,
+                acceptedFiles: ".png",
+                addRemoveLinks: true,
+                clickable: true,
+                thumbnailWidth: 140,
+                thumbnailHeight: 140,
+                init: function() {
+                    this.on("maxfilesexceeded", function(file) {
+                    this.removeAllFiles();
+                    this.addFile(file);
+                    });
+                }
+            }
+            $("form#DropImagen"+stringId).dropzone(DropImagen);
+        }
+
+        function genereDropVideo(stringId){
+            console.log("entro a GenereDropVideo"+stringId)
+            let DropVideo = {
+                maxFilesize: 10,
+                acceptedFiles: ".mp4",
+                maxFiles: 1,
+                addRemoveLinks: true,
+                clickable: true,
+                thumbnailWidth: 140,
+                thumbnailHeight: 140,
+                init: function() {
+                    this.on("maxfilesexceeded", function(file) {
+                    this.removeAllFiles();
+                    this.addFile(file);
+                    });
+                }
+            }
+            $("form#DropVideo"+stringId).dropzone(DropVideo);
+        }
         
         function previewVideoE(stringId){
             var file = $('#file'+stringId).prop('files');
@@ -159,44 +254,13 @@
                 $('#previewVideo'+stringId).empty();
                 video=document.createElement('video');
                 video.src = readerVideo.result;
-                video.style.width = "50%";
+                video.style.width = "400px";
                 video.controls = true;
                 preVideo.innerHTML = "";
                 preVideo.append(video);
-                $('#file'+stringId).remove();
             }
         }
 
-        function previewImagen(stringId){
-            console.log(stringId)
-            var file = $('#file'+stringId).prop('files');
-            file = file[0];
-            console.log(file);
-            let readerimg = new FileReader();
-            readerimg.readAsDataURL(file);
-            readerimg.onload = function(){
-                let preImagen = $('#previewImagen'+stringId);
-                $('#previewImagen'+stringId).empty();
-                img=document.createElement('img');
-                img.src = readerimg.result;
-                img.style.width = "40%";
-                preImagen.innerHTML = "";
-                preImagen.append(img);
-                $('#file'+stringId).remove();
-            }
-        }
-
-        function toggleButton(stringId){
-            var link = $('#inputLink'+stringId).val();
-            console.log(link);
-            if(link){
-                $('#previewLink'+stringId).css('visibility', 'visible');
-            } 
-            else{
-               $('#previewLink'+stringId).css('visibility', 'hidden');
-            }
-        }
-      
         function AddPreviewLink(stringId){
             let enlace = document.getElementById('inputLink'+stringId).value;
             console.log("Entre");
@@ -209,6 +273,7 @@
         function generateComponent(type) {
             let idComponent = Math.random().toString(36).substring(2,7);
             let stringId = "'"+idComponent+"'";
+            let stringType = "'"+type+"'";
             let component = "";
             switch(type) {
               case 'texto':
@@ -237,9 +302,9 @@
                           '<p>'+
                       '<div class="padre">'+
                                 '<div class="texto-imagen-1" id="text'+idComponent+'">'+
-                                    '<ul>'+
+                                    '<ul class="contendor-lista">'+
                                         '<label for="imagen'+idComponent+'-'+indexImagen+'" id="imagenlabel'+idComponent+'-'+indexImagen+'" class="estilos-desplazante"><img src="/img/icono-imagen-pqueño.png" class="desplazante"></label>'+
-                                        '<li><input type="file" id="imagen'+idComponent+'-'+indexImagen+'" class="input-desplegable-texto-imagen" onchange="generatePreview('+stringId+','+indexImagen+')"></li>'+
+                                        '<li><input type="file" id="imagen'+idComponent+'-'+indexImagen+'" class="input-desplegable-texto-imagen" onchange="generatePreview('+stringId+','+indexImagen+','+stringType+')"></li>'+
                                         '<div id="imgPreview'+idComponent+'-'+indexImagen+'" class="estilo-imagen-desplazante">'+
                                         '</div>'+
                                         '<li><input class="titulo-input" type="text" placeholder="Titulo"></li>'+
@@ -247,7 +312,7 @@
                                     '</ul>'+
                                 '</div>'+
                             '<div class=botonincremento>'+
-                                '<button onclick="AddTextoImagen('+stringId+')"> Agregar Nuevo Archivo </button>'+
+                                '<button onclick="AddTextoImagen('+stringId+', '+stringType+')"> Agregar Nuevo Archivo </button>'+
                              '</div>'+
                       '</div>'+
                 '</div>';
@@ -293,7 +358,7 @@
 
 
                 case 'enlace':
-                component = 
+                component =
                   '<div class="col-lg-12 texto component CompoEnlace" id="'+idComponent+'">'+
                           '<p class="tituloCmp">'+type+
                             '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
@@ -325,7 +390,7 @@
                   '</div>';
                 break;
                 case 'PopUpVideo':
-                component = 
+                component =
                   '<div class="col-lg-12 texto component" id="'+idComponent+'">'+
                         '<p class="tituloCmp">'+type+
                             '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
@@ -376,7 +441,7 @@
                             '<div class="texto-imagen-display">'+
                                 '<div class="position">'+
                                     '<label for="imagen'+idComponent+'-'+indexImagen+'" id="imagenlabel'+idComponent+'-'+indexImagen+'" class="label-desplegable-texto-imagen"><img src="/img/icono-imagen-chico.png" class="label-imagen-1"></label>'+
-                                    '<input type="file" id="imagen'+idComponent+'-'+indexImagen+'" class="input-desplegable-texto-imagen"  accept=".jpg, .png, .jpeg" onchange="generatePreview('+stringId+','+indexImagen+')">'+
+                                    '<input type="file" id="imagen'+idComponent+'-'+indexImagen+'" class="input-desplegable-texto-imagen"  accept=".jpg, .png, .jpeg" onchange="generatePreview('+stringId+','+indexImagen+', '+stringType+')">'+
                                     '<div id="imgPreview'+idComponent+'-'+indexImagen+'" class="estilo-imagen-desplegable">'+ 
                                   
                                     '</div>'+
@@ -392,14 +457,14 @@
                                 '<div class="imagen-general">'+
                                   '<div class="imagen-1">'+
                                     '<label for="imagen'+idComponent+'-'+(indexImagen + 1)+'" id="imagenlabel'+idComponent+'-'+(indexImagen + 1)+'" class="label-desplegable-texto-imagen-1"><img src="/img/icono-imagen-grande.png" class="label-footer"></label>'+
-                                    '<input type="file" id="imagen'+idComponent+'-'+(indexImagen + 1)+'"  class="input-desplegable-texto-imagen"  accept=".jpg, .png, .jpeg" onchange="generatePreview('+stringId+','+(indexImagen + 1)+')">'+
+                                    '<input type="file" id="imagen'+idComponent+'-'+(indexImagen + 1)+'"  class="input-desplegable-texto-imagen"  accept=".jpg, .png, .jpeg" onchange="generatePreview('+stringId+','+(indexImagen + 1)+', '+stringType+')">'+
                                     '<div id="imgPreview'+idComponent+'-'+(indexImagen + 1)+'" class="estilo-imagen-desplegable-1">'+ 
             
                                     '</div>'+
                                   '</div>'+
                                  '<div class="imagen-2">'+
                                     '<label for="imagen'+idComponent+'-'+(indexImagen + 2)+'" id="imagenlabel'+idComponent+'-'+(indexImagen + 2)+'" class="label-desplegable-texto-imagen-2"><img src="/img/icono-imagen-grande.png" class="label-footer"></label>'+
-                                    '<input type="file" id="imagen'+idComponent+'-'+(indexImagen + 2)+'"  accept=".jpg, .png, .jpeg" class="input-desplegable-texto-imagen" onchange="generatePreview('+stringId+','+(indexImagen + 2)+')">'+
+                                    '<input type="file" id="imagen'+idComponent+'-'+(indexImagen + 2)+'"  accept=".jpg, .png, .jpeg" class="input-desplegable-texto-imagen" onchange="generatePreview('+stringId+','+(indexImagen + 2)+', '+stringType+')">'+
                                     '<div id="imgPreview'+idComponent+'-'+(indexImagen + 2)+'" class="estilo-imagen-desplegable-2">'+ 
             
                                     '</div>'+
@@ -419,12 +484,16 @@
                             '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
                           '<p>'+
                           '<div>'+
+                          '<div class="junto">'+
                                 '<div class="file-Amagen">'+
-                                    '<input type="file" name="file" id="imagen'+idComponent+'-'+indexImagen+'" accept=".png" onchange="generatePreview('+stringId+','+indexImagen+')">'+
+                                    '<input type="file" name="file" id="imagen'+idComponent+'-'+indexImagen+'" accept=".png" onchange="generatePreview('+stringId+','+indexImagen+', '+stringType+')">'+
+                                '</div>'+
+                                '<div class="titulomax">'+
+                                     '<input class="inputTitulo" type="text" placeholder="Titulo"/>'+
+                                '</div>'+
                                 '</div>'+
                                 '<div id="imgPreview'+idComponent+'-'+indexImagen+'" class="estilo-imagen"></div>'+ 
                                      '<div id="preview'+idComponent+'" class="estilo-imagen">'+ 
-                                     '<input class="inputTitulo" type="text" placeholder="Titulo"/>'+
                                      '<div class="inputLinkContainer row">'+
                                      '<input class="inputLink" id="inputLink'+idComponent+'" name="link" type="text" placeholder="Link" onchange="toggleButton('+stringId+')"/>'+
                                 '</div>'+
@@ -446,7 +515,9 @@
                           '<input class="inputTexto" type="text" placeholder="Texto...">'+
                           '<div class="video-guia-padre">'+
                                 '<ul>'+
-                                    '<input type="file" id="imagen'+idComponent+'-'+indexImagen+'" accept=".png" onchange="generatePreview('+stringId+','+indexImagen+')">'+
+                                 '<div class="file-Amagen-pop-up">'+
+                                    '<input type="file" id="imagen'+idComponent+'-'+indexImagen+'" accept=".png" onchange="generatePreview('+stringId+','+indexImagen+', '+stringType+')">'+
+                                    '</div>'+
                                     '<div id="imgPreview'+idComponent+'-'+indexImagen+'" class="estilo-imagen">'+ 
                                 '</ul>'+
                            '</div>'+
@@ -463,19 +534,21 @@
                       '<div class="padre">'+
                                 '<div class="texto-imagen-1" id="text'+idComponent+'">'+
                                     '<ul>'+
-                                        '<li><input type="file" id="imagen4'+idComponent+'" onchange="preview4('+stringId+')"></li>'+
-                                        '<div id="preview4'+idComponent+'" class="estilo-imagen-texto-imagen">'+
+                                    '<div class="file-Amagen-Carrucel">'+
+                                        '<li><input type="file" id="imagen'+idComponent+'-'+indexImagen+'" onchange="generatePreview('+stringId+','+indexImagen+', '+stringType+')"></li>'+
+                                        '</div>'+
+                                        '<div id="imgPreview'+idComponent+'-'+indexImagen+'" class="estilo-imagen-texto-imagen">'+
                                         '</div>'+
                                     '</ul>'+
                                 '</div>'+
                             '<div class=botonincremento>'+
-                                '<button onclick="AddCarrucel('+stringId+')">Agregar Nuevo Archivo </button>' +
+                                '<button onclick="AddCarrucel('+stringId+')">+</button>' +
                              '</div>'+
                       '</div>'+
                 '</div>';
               break;
             }
-            return (component);
+            return component;
 
         }
     </script>
