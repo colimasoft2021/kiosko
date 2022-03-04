@@ -21,7 +21,11 @@
     }
 
 .botonEnlace {
-    background-color: black;
+    background-color: transparent;
+    visibility: hidden;
+    width: 7%;
+    border-radius: 100%;
+    border: none;
 }
 
 .boton-perfil {
@@ -52,7 +56,7 @@
 
 .inputTitulo {
     font-family: 'Poppins', sans-serif;
-    width: 100%;
+    width: 70%;
     font-size: 20px;
     text-align: center;
     border: 1px dashed #9B9B9B;
@@ -84,6 +88,14 @@
     background-color: #C4C4C4;
     background-repeat: no-repeat;
     background-position: center;
+}
+
+.estilo-imagen-texto-imagen img {
+    width: 50%;
+}
+
+.estilo-imagen img {
+    width: 100%;
 }
 
     .file-Amagen input[type="file"] {
@@ -137,4 +149,8 @@
 
 .titulomax {
     width: 80%;
+}
+
+.pop-up-input{
+    display: none;
 }
