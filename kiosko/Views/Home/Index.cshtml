@@ -5,34 +5,15 @@
 @section scripts {
     <script type="text/javascript">
         var indexImagen = 1;
-        Dropzone.autoDiscover = false;
-        var DropzoneVideo
+        
         $(document).ready(function () {
-           var dropzone = new Dropzone('#DropImagen', {
-                  parallelUploads: 2,
-                  thumbnailHeight: 120,
-                  thumbnailWidth: 120,
-                  acceptedFiles: ".jpg",
-                  maxFilesize: 3,
-                  filesizeBase: 1000,
-            });
-            dropzoneVideo = new dropzone('#DropVideo', {
-                parallelUploads: 2,
-                  thumbnailHeight: 120,
-                  thumbnailWidth: 120,
-                  acceptedFiles: ".mp4",
-                  maxFilesize: 1,
-                  filesizeBase: 1000,
-            });
+          
         });
 
         $(function () {
            $("#sortable").sortable();
         });
-        //$(document).on('input', '.inputLink', function(){
-        //    alert('Input changed');
-        //    $('.botonEnlace').show("swing");
-        //});
+       
         function AddPreviewLink(stringId){
             let enlace = document.getElementById('inputLink'+stringId).value;
             console.log("Entre");
@@ -41,10 +22,12 @@
             console.log('inputLink'+stringId);
             document.getElementById("previewLink"+stringId).innerHTML = ['<iframe  width="300px" height="200px" src="'+enlace+'"></iframe>'];
         }
+
         function addComponent(type) {
             let component = generateComponent(type);
             $("#sortable").append(component);
-        }
+            }
+        
  
         function removeComponent(idComponent) {
             $("#"+idComponent).remove();
@@ -72,22 +55,35 @@
             indexImagen = indexImagen + 1;
         }
 
-         function AddCarrucel(stringId){
+        function AddCarrucel(stringId,type){
             console.log("Entre")
             console.log(stringId)
             let idImg = "imagen"+stringId+"-"+indexImagen;
+            let idLabelImg = "imagenlabel"+stringId+"-"+indexImagen;
             let idPreview = "imgPreview"+stringId+"-"+indexImagen;
             let newStringId = "'"+stringId+"'";
+            let stringType = "'"+type+"'";
             $("#text"+stringId).append(
-                        '<div class="padre">'+
-                            '<ul>'+
-                            '<div class="file-Amagen-Carrucel">'+
-                                '<li><input type="file" id="'+idImg+'" onchange="generatePreview('+newStringId+','+indexImagen+')"></li>'+
-                                '</div>'+
-                                '<div id="'+idPreview+'" class="estilo-imagen-texto-imagen"></div>'+ 
-                           '</ul>'+
-                       '</div>');
+                        
+                            '<ul class="contendor-lista">'+
+                                '<label for="'+idImg+'" id="'+idLabelImg+'" class="estilos-desplazante"><img src="/img/icono-imagen-pqueño.png" class="desplazante"></label>'+
+                                '<li><input type="file" id="'+idImg+'" class="input-desplegable-texto-imagen" onchange="generatePreview('+newStringId+','+indexImagen+', '+stringType+')"></li>'+
+                                '<div id="'+idPreview+'" class="estilo-imagen-incrementable"></div>'+ 
+                           '</ul>'
+                           
+                       );
             indexImagen = indexImagen + 1;
+        }
+
+        function toggleButton(stringId){
+            var link = $('#inputLink'+stringId).val();
+            console.log(link);
+            if(link){
+                $('#previewLink'+stringId).css('visibility', 'visible');
+            } 
+            else{
+               $('#previewLink'+stringId).css('visibility', 'hidden');
+            }
         }
 
         function generatePreview(stringId,indexImagen,type) {
@@ -118,6 +114,7 @@
           //$(this).css("display","none")
             console.log($(this));
             let idImg = "imagen"+stringId+"-"+indexImagen;
+            let imagenwen ="imagennew"+stringId+"-"+indexImagen;
             let idImglabel = "imagenlabel"+stringId+"-"+indexImagen;
             let idImgclose = "imagenclose"+stringId+"-"+indexImagen;
             let idPreview = "imgPreview"+stringId+"-"+indexImagen;
@@ -125,9 +122,10 @@
             imgFile = imgFile[0];
             let reader = new FileReader();
             reader.readAsDataURL(imgFile);
-            //$("#"+idImg).css("display","none")
+            $("#"+idImg).css("display","none")
             $("#"+idImglabel).css("display","none")
            $("#"+idImgclose).css("display","block")
+            $("#"+imagenwen).css("display","none")
             reader.onload = function() {
                 let preview = $("#"+idPreview);
                 $("#"+idPreview).empty();
@@ -187,10 +185,12 @@
             let idImglabel = "imagenlabel"+stringId+"-"+indexImagen;
             let idPreview = "imgPreview"+stringId+"-"+indexImagen;
             let idImgclose = "imagenclose"+stringId+"-"+indexImagen;
+            let imagenwen ="imagennew"+stringId+"-"+indexImagen;
             //$("#"+idImg).css("display","block")
             $("#"+idImglabel).css("display","block")
             $("#"+idPreview).empty();
             $("#"+idImgclose).css("display","none")
+            $("#"+imagenwen).css("display","block")
         }
         
          function AddInput(stringId){
@@ -485,19 +485,20 @@
                           '<p>'+
                           '<div>'+
                           '<div class="junto">'+
-                                '<div class="file-Amagen">'+
-                                    '<input type="file" name="file" id="imagen'+idComponent+'-'+indexImagen+'" accept=".png" onchange="generatePreview('+stringId+','+indexImagen+', '+stringType+')">'+
-                                '</div>'+
+                                '<label class="file-Amagen" for="imagen'+idComponent+'-'+indexImagen+'" id="imagennew'+idComponent+'-'+indexImagen+'">   </label>'+
+                                '<input class="pop-up-input" type="file" id="imagen'+idComponent+'-'+indexImagen+'" accept=".png" onchange="generatePreview('+stringId+','+indexImagen+')">'+
                                 '<div class="titulomax">'+
                                      '<input class="inputTitulo" type="text" placeholder="Titulo"/>'+
                                 '</div>'+
                                 '</div>'+
+                                '</div>'+
                                 '<div id="imgPreview'+idComponent+'-'+indexImagen+'" class="estilo-imagen"></div>'+ 
                                      '<div id="preview'+idComponent+'" class="estilo-imagen">'+ 
-                                     '<div class="inputLinkContainer row">'+
-                                     '<input class="inputLink" id="inputLink'+idComponent+'" name="link" type="text" placeholder="Link" onchange="toggleButton('+stringId+')"/>'+
+                                     //'<input class="inputTitulo" type="text" placeholder="Titulo"/>'+
+                                     '<div class="inputLinkContainer">'+
+                                    '<input class="inputLink" id="inputLink'+idComponent+'" name="link" type="text" placeholder="Link" onkeyup="toggleButton('+stringId+')"/>'+
+                                    '<button class="botonEnlace" onclick="AddPreviewLink('+stringId+')" id="previewLink'+idComponent+'"> <img src="/img/check.png" width="50px"/> </button>'+
                                 '</div>'+
-                                '<button onclick="AddPreviewLink('+stringId+')" id="previewLink'+idComponent+'"> <img src="/img/check.png" width="100px"/> </button>' +
                                 '<p class="selColor">Elige un color para asignarle.</p>'+
                                 'Color'+
                                 '<input class="Color-Selector"  type="color">'+
@@ -515,12 +516,11 @@
                           '<input class="inputTexto" type="text" placeholder="Texto...">'+
                           '<div class="video-guia-padre">'+
                                 '<ul>'+
-                                 '<div class="file-Amagen-pop-up">'+
-                                    '<input type="file" id="imagen'+idComponent+'-'+indexImagen+'" accept=".png" onchange="generatePreview('+stringId+','+indexImagen+', '+stringType+')">'+
-                                    '</div>'+
+                                 '<label class="file-Amagen-pop-up" for="imagen'+idComponent+'-'+indexImagen+'" id="imagennew'+idComponent+'-'+indexImagen+'">   </label>'+
+                                    '<input class="pop-up-input" type="file" id="imagen'+idComponent+'-'+indexImagen+'" accept=".png" onchange="generatePreview('+stringId+','+indexImagen+')">'+
                                     '<div id="imgPreview'+idComponent+'-'+indexImagen+'" class="estilo-imagen">'+ 
+                                    '</div>'+
                                 '</ul>'+
-                           '</div>'+
                         '</div>'+
                   '</div>';
                 break;
@@ -533,19 +533,19 @@
                           '<p>'+
                       '<div class="padre">'+
                                 '<div class="texto-imagen-1" id="text'+idComponent+'">'+
-                                    '<ul>'+
-                                    '<div class="file-Amagen-Carrucel">'+
-                                        '<li><input type="file" id="imagen'+idComponent+'-'+indexImagen+'" onchange="generatePreview('+stringId+','+indexImagen+', '+stringType+')"></li>'+
-                                        '</div>'+
-                                        '<div id="imgPreview'+idComponent+'-'+indexImagen+'" class="estilo-imagen-texto-imagen">'+
+                                    '<ul class="contendor-lista">'+
+                                        '<label for="imagen'+idComponent+'-'+indexImagen+'" id="imagenlabel'+idComponent+'-'+indexImagen+'" class="estilos-desplazante"><img src="/img/icono-imagen-pqueño.png" class="desplazante"></label>'+
+                                        '<li><input type="file" id="imagen'+idComponent+'-'+indexImagen+'" class="input-desplegable-texto-imagen" onchange="generatePreview('+stringId+','+indexImagen+','+stringType+')"></li>'+
+                                        '<div id="imgPreview'+idComponent+'-'+indexImagen+'" class="estilo-imagen-desplazante">'+
                                         '</div>'+
                                     '</ul>'+
                                 '</div>'+
                             '<div class=botonincremento>'+
-                                '<button onclick="AddCarrucel('+stringId+')">+</button>' +
+                                '<button onclick="AddCarrucel('+stringId+', '+stringType+')"> + </button>'+
                              '</div>'+
                       '</div>'+
                 '</div>';
+                indexImagen = indexImagen + 1;
               break;
             }
             return component;
