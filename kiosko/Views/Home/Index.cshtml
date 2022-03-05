@@ -55,6 +55,26 @@
             indexImagen = indexImagen + 1;
         }
 
+        function AddCarrucel(stringId,type){
+            console.log("Entre")
+            console.log(stringId)
+            let idImg = "imagen"+stringId+"-"+indexImagen;
+            let idLabelImg = "imagenlabel"+stringId+"-"+indexImagen;
+            let idPreview = "imgPreview"+stringId+"-"+indexImagen;
+            let newStringId = "'"+stringId+"'";
+            let stringType = "'"+type+"'";
+            $("#text"+stringId).append(
+                        
+                            '<ul class="contendor-lista">'+
+                                '<label for="'+idImg+'" id="'+idLabelImg+'" class="estilos-desplazante"><img src="/img/icono-imagen-pqueño.png" class="desplazante"></label>'+
+                                '<li><input type="file" id="'+idImg+'" class="input-desplegable-texto-imagen" onchange="generatePreview('+newStringId+','+indexImagen+', '+stringType+')"></li>'+
+                                '<div id="'+idPreview+'" class="estilo-imagen-incrementable"></div>'+ 
+                           '</ul>'
+                           
+                       );
+            indexImagen = indexImagen + 1;
+        }
+
         function toggleButton(stringId){
             var link = $('#inputLink'+stringId).val();
             console.log(link);
@@ -64,24 +84,6 @@
             else{
                $('#previewLink'+stringId).css('visibility', 'hidden');
             }
-        }
-
-         function AddCarrucel(stringId,indexImagen){
-            console.log("Entre")
-            console.log(stringId)
-            //let idImg = "imagen"+stringId+"-"+indexImagen;
-            //let idPreview = "imgPreview"+stringId+"-"+indexImagen;
-            //let newStringId = "'"+stringId+"'";
-            $("#text"+stringId).append(
-                        '<div class="padre">'+
-                            '<ul>'+
-                            '<label class="file-Amagen-pop-up" for="imagen'+stringId+'-'+indexImagen+'" id="imagennew'+stringId+'-'+indexImagen+'">   </label>'+
-                                        '<input class="pop-up-input" type="file" id="imagen'+stringId+'-'+indexImagen+'" accept=".png" onchange="generatePreview('+stringId+','+indexImagen+')">'+
-                                        '<div id="imgPreview'+stringId+'-'+indexImagen+'" class="estilo-imagen">'+ 
-                                             '</div>'+
-                           '</ul>'+
-                       '</div>');
-            indexImagen = indexImagen + 1;
         }
 
         function generatePreview(stringId,indexImagen,type) {
@@ -531,15 +533,15 @@
                           '<p>'+
                       '<div class="padre">'+
                                 '<div class="texto-imagen-1" id="text'+idComponent+'">'+
-                                    '<ul>'+
-                                        '<label class="file-Amagen-pop-up" for="imagen'+idComponent+'-'+indexImagen+'" id="imagennew'+idComponent+'-'+indexImagen+'">   </label>'+
-                                        '<input class="pop-up-input" type="file" id="imagen'+idComponent+'-'+indexImagen+'" accept=".png" onchange="generatePreview('+stringId+','+indexImagen+')">'+
-                                        '<div id="imgPreview'+idComponent+'-'+indexImagen+'" class="estilo-imagen">'+ 
-                                             '</div>'+
+                                    '<ul class="contendor-lista">'+
+                                        '<label for="imagen'+idComponent+'-'+indexImagen+'" id="imagenlabel'+idComponent+'-'+indexImagen+'" class="estilos-desplazante"><img src="/img/icono-imagen-pqueño.png" class="desplazante"></label>'+
+                                        '<li><input type="file" id="imagen'+idComponent+'-'+indexImagen+'" class="input-desplegable-texto-imagen" onchange="generatePreview('+stringId+','+indexImagen+','+stringType+')"></li>'+
+                                        '<div id="imgPreview'+idComponent+'-'+indexImagen+'" class="estilo-imagen-desplazante">'+
+                                        '</div>'+
                                     '</ul>'+
                                 '</div>'+
                             '<div class=botonincremento>'+
-                                '<button onclick="AddCarrucel('+stringId+')">+</button>' +
+                                '<button onclick="AddCarrucel('+stringId+', '+stringType+')"> + </button>'+
                              '</div>'+
                       '</div>'+
                 '</div>';
