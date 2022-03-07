@@ -319,14 +319,21 @@ body {
 }
 
 .imagen-1 {
-    margin-left: 90px;
-    margin-right: 100px;
+    position:relative;
+    left:150px;
+    margin-top:5px;
 }
 
 .imagen-2 {
-    margin-left: 50px;
+    position:relative;
+    margin-top:5px;
+    left:200px;
 }
 
+.checkbox{
+    margin-top:10px;
+margin-left:500px;
+}
 .label-desplegable-texto-imagen-2 {
     background-color: #C4C4C4;
     width: 154px;
