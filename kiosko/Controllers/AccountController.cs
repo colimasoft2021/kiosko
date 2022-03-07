@@ -95,6 +95,11 @@ namespace kiosko.Controllers
 
             return RedirectToAction("Login");
         }
+
+        public IActionResult AccessDenied()
+        {
+            return View();
+        }
     }
 
     internal class Constants

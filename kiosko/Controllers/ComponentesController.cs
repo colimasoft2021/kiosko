@@ -38,14 +38,14 @@ namespace kiosko.Controllers
         }
 
         [HttpPost]
-        public JsonResult GetAllComponentsForModulo(string? padre)
+        public JsonResult GetAllComponentsForModulo(int? idModulo)
         {
-            if (padre == null)
+            if (idModulo == null)
             {
                 return Json(null);
             }
 
-            var componente = _context.Componentes.Where(c => c.Padre == padre).OrderBy(c => c.Orden);
+            var componente = _context.Componentes.Where(c => c.IdModulo == idModulo).OrderBy(c => c.Orden);
             return Json(componente);
         }
 
