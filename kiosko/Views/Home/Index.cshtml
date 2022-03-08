@@ -458,7 +458,7 @@
                                    '<textarea name="" id="" cols="90" rows="3" placeholder="texto"></textarea>'+
                                 '</div>'+
                                 
-                                '<div class="imagen-general">'+
+                               '<div class="imagen-general">'+
                                   '<div class="imagen-1">'+
                                     '<label for="imagen'+idComponent+'-'+(indexImagen + 1)+'" id="imagenlabel'+idComponent+'-'+(indexImagen + 1)+'" class="label-desplegable-texto-imagen-1"><img src="/img/icono-imagen-grande.png" class="label-footer"></label>'+
                                     '<input type="file" id="imagen'+idComponent+'-'+(indexImagen + 1)+'"  class="input-desplegable-texto-imagen"  accept=".jpg, .png, .jpeg" onchange="generatePreview('+stringId+','+(indexImagen + 1)+', '+stringType+')">'+
@@ -473,10 +473,14 @@
             
                                     '</div>'+
                                   '<div>'+
-                                 '</div>'+
-
+                                '</div>'+
+                                
                             '</div>'+
+                              
                       '</div>'+
+                            '<div class="checkbox">'+
+                                '<input type="checkbox"><span>Agregar fondo</span>'+
+                             '</div>'+
                   '</div>';
                   indexImagen = indexImagen + 2;
             break;
