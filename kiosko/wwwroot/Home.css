@@ -393,8 +393,15 @@ body {
     height: 60px;
 }
 
-.desplazante{
-    margin-top:15px;
+.desplazante {
+    height: 129px;
+    left: 204px;
+    top: 59px;
+    background: #C4C4C4;
+}
+
+.desplazante {
+    margin-top: 15px;
 }
 
 .button-close-dti{
