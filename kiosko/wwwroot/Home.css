@@ -218,8 +218,10 @@ body {
 .texto-imagen ul {
     border: solid;
     width: 300px;
-  
     margin: 15px;
+}
+.contendor-lista{
+    padding:0 40px;
 }
 
 .texto-imagen-1 ul li {
@@ -237,18 +239,27 @@ body {
     width: 120px;
 }
 
-.video-guia-padre {
-    margin-top: 40px;
-    text-align: center;
+
+.descripcion-guia-video{
+    text-align:center;
+
 }
 
-    .video-guia-padre ul li {
-        list-style: none;
+.descripcion-guia-video-input {
+    border: 1px dashed #9B9B9B;
+    margin:20px 0;
+    height:3 0px;
+    width: 100%;
+}
+
+    .descripcion-guia-video-input::placeholder{
+        text-align:center;
     }
 
-.input-archivo {
-    margin-bottom: 30px;
-}
+
+    .input-archivo {
+        margin-bottom: 30px;
+    }
 
 .texto-imagen-display {
     display: flex;
@@ -259,7 +270,6 @@ body {
 }
 .position {
     margin-right: 30px;
-    margin-left:50px;
     margin-bottom:10px;
 }
 
@@ -278,9 +288,18 @@ body {
 }
 
     .estilo-imagen-desplegable img {
-        width: 150px;
+        width: 200px;
         
     }
+
+.estilo-imagen-desplazante img{
+    width:200px;
+}
+/*.button-close {
+    position: relative;
+    left: 200px;
+    top: -45px;
+}*/
 
 .subtitle-input::placeholder {
     text-align: center;
@@ -288,13 +307,13 @@ body {
 
 .subtitle-input {
     border: #9B9B9B 1px dashed;
-    width: 292px;
+    width: 100%;
     height: 42px;
     margin-top:18px;
 }
 
 .imagen-general {
-    display: flex;
+    display: inline-flex;
     
 }
 .label-imagen-1{
@@ -306,14 +325,19 @@ body {
 }
 
 .imagen-1 {
-    margin-left: 100px;
-    margin-right: 100px;
+    margin:0 50px;
+    margin-top:5px;
 }
 
 .imagen-2 {
-    margin-left: 180px;
+    margin: 0 50px;
+    margin-top: 5px;
 }
 
+.checkbox{
+    margin-top:20px;
+    text-align:end;
+}
 .label-desplegable-texto-imagen-2 {
     background-color: #C4C4C4;
     width: 154px;
@@ -332,6 +356,153 @@ body {
 
 .estilo-imagen-desplegable-2 img {
     width: 200px;
+}
+
+.button-close-video{
+    position:relative;
+    top:30px;
+   left:300px;
+    width:20px;
+    height:30px;
+}
+
+.input-video-guia{
+    display:none;
+}
+
+.label-video-guia {
+    background-color: #C4C4C4;
+    text-align:center;
+    width: 119px;
+    height: 100px;
+   
+}
+.video-guia-padre-input {
+    text-align: center;
+}
+
+.label-video-guia img {
+    margin-top:25px;
+}
+
+
+.estilo-imagen-incrementable img {
+    width: 200px;
+}
+
+.estilos-desplazante {
+    background-color: #C4C4C4;
+    margin-top:10px;
+    width: 60px;
+    height: 60px;
+}
+
+.desplazante {
+    height: 129px;
+    left: 204px;
+    top: 59px;
+    background: #C4C4C4;
+}
+
+.desplazante {
+    margin-top: 15px;
+}
+
+.button-close-dti{
+    position:absolute;
+    width:20px;
+    height:30px;
+}
+
+.button-close-ti {
+    position: relative;
+    width: 30px;
+    height: 30px;
+    left:86px;
+    top:30px;
+    
+}
+
+.textarea {
+    width: 100%;
+    border: 1px dashed #9B9B9B;
+}
+
+.file-Amagen {
+    width: 20%;
+    height: 30px;
+    position: relative;
+    display: inline-block;
+    background-image: url(../img/img.png);
+    background-size: 20px;
+    background-color: #C4C4C4;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.estilo-imagen-texto-imagen img {
+    width: 50%;
+}
+
+.estilo-imagen img {
+    width: 100%;
+}
+
+.file-Amagen input[type="file"] {
+    opacity: 0;
+    width: 100%;
+    height: 100px;
+    display: inline-block;
+}
+
+.file-Amagen-pop-up {
+    width: 50%;
+    height: 130px;
+    position: relative;
+    display: inline-block;
+    background-image: url(../img/img.png);
+    background-size: 20px;
+    background-color: #C4C4C4;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+    .file-Amagen-pop-up input[type="file"] {
+        opacity: 0;
+        width: 100%;
+        height: 100px;
+        display: inline-block;
+    }
+
+.file-Amagen-Carrucel {
+    width: 60%;
+    height: 60px;
+    position: relative;
+    display: inline-block;
+    background-image: url(../img/img.png);
+    background-size: 20px;
+    background-color: #C4C4C4;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+    .file-Amagen-Carrucel input[type="file"] {
+        opacity: 0;
+        width: 100%;
+        height: 100px;
+        display: inline-block;
+    }
+
+.junto {
+    display: flex;
+}
+
+.titulomax {
+    width: 80%;
+}
+
+.pop-up-input {
+    display: none;
 }
 
 
