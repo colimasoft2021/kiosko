@@ -60,6 +60,7 @@
         console.log(idModulo);
         var padre = "modulo"+idModulo;
         var indexImagen = 1;
+        var indexCardTi = 1;
         Dropzone.autoDiscover = false;
         var DropzoneVideo;
         $.ajax({
@@ -95,7 +96,39 @@
 
         function addComponent(type, pkId, item) {
           let component = generateComponent(type, pkId, item);
-          $("#sortable").append(component);
+          $("#sortable").append(component.component);
+          if(type == "imagen"){
+              //generatePreviewFromDb(component.idComponent, component.indexImagen, item.url, item.typeElement);
+          }
+        }
+
+        function generatePreviewFromDb(stringId,indexImagen, urlImg, type) {
+          let idImg = "imagen"+stringId+"-"+indexImagen;
+          console.log(idImg);
+          let idImglabel = "imagenlabel"+stringId+"-"+indexImagen;
+          console.log(idImglabel);
+          let idImgclose = "imagenclose"+stringId+"-"+indexImagen;
+          console.log(idImgclose);
+          let idPreview = "imgPreview"+stringId+"-"+indexImagen;
+          console.log(idPreview);
+          $("#"+idImglabel).css("display","none");
+          $("#"+idImgclose).css("display","block");
+          let classBtnClose = "";
+          switch(type) {
+              case 'imagen':
+                classBtnClose = "button-close";
+              break;
+              default:
+                classBtnClose = "button-close-small";
+          }
+            let preview = $("#"+idPreview);
+            $("#"+idPreview).empty();
+            stringId = "'"+stringId+"'"
+            $("#"+idPreview).append('<button id="imagenclose'+stringId+'-'+indexImagen+'"  class="'+classBtnClose+'"  onclick="deletePreview('+stringId+','+indexImagen+')">x</button>');
+            imagen = document.createElement('img');
+            imagen.src = urlImg;
+            preview.innerHTML = "";
+            preview.append(imagen);
         }
 
         function removeComponent(idComponent) {
@@ -104,6 +137,7 @@
 
         function generatePreview(stringId,indexImagen,type) {
           let idImg = "imagen"+stringId+"-"+indexImagen;
+          console.log(idImg);
           let idImglabel = "imagenlabel"+stringId+"-"+indexImagen;
           let idImgclose = "imagenclose"+stringId+"-"+indexImagen;
           let idPreview = "imgPreview"+stringId+"-"+indexImagen;
@@ -115,7 +149,7 @@
           $("#"+idImgclose).css("display","block");
           let classBtnClose = "";
           switch(type) {
-              case 'texto-imagen':
+              case 'imagen':
                 classBtnClose = "button-close";
               break;
               default:
@@ -149,8 +183,9 @@
             let newStringId = "'"+stringId+"'";
             let stringType = "'"+type+"'";
             let idImgLabel = "imagenlabel"+stringId+"-"+indexImagen;
+            let idCardTi = "card-ti-"+stringId+"-"+indexCardTi;
             $("#text"+stringId).append(
-                '<div class="card-texto-imagen">'+
+                '<div class="card-texto-imagen" id="'+idCardTi+'">'+
                   '<div class="card-imagen">'+
                       '<p>Imagen</p>'+
                       '<label for="'+idImg+'" id="'+idImgLabel+'" class="btn-img">'+
@@ -165,6 +200,7 @@
                 '</div>'
             );
             indexImagen = indexImagen + 1;
+            indexCardTi = indexCardTi + 1;
         }
 
         function generateDropImagen(stringId){
@@ -241,6 +277,8 @@
                   '</div>';
               break;
               case 'imagen':
+                let valueInpImg = (item) ? item.url : "";
+                let valueInpPie = (item) ? item.descripcion : "";
                 component =
                   '<div class="col-lg-12 component" db-id="'+pkId+'" id="'+idComponent+'" type-component="imagen">'+
                     '<p class="tituloCmp">'+type+
@@ -250,9 +288,9 @@
                         '<label for="imagen'+idComponent+'-'+indexImagen+'" id="imagenlabel'+idComponent+'-'+indexImagen+'" class="btn-img">'+
                             '<img src="/img/icono-imagen-chico.png" class="image-icon"/>'+
                         '</label>'+
-                        '<input type="file" id="imagen'+idComponent+'-'+indexImagen+'" onchange="generatePreview('+stringId+','+indexImagen+','+stringType+')" class="input-img">'+
+                        '<input type="file" id="imagen'+idComponent+'-'+indexImagen+'" onchange="generatePreview('+stringId+','+indexImagen+','+stringType+')" class="input-img" typeInput="img" value="'+valueInpImg+'">'+
                         '<div id="imgPreview'+idComponent+'-'+indexImagen+'" class="preview-img"></div>'+
-                        '<input class="w-100 mt-1 inputTexto" type="text" placeholder="Pie de Foto"/>'+
+                        '<input class="w-100 mt-1 inputTexto" type="text" placeholder="Pie de Foto" typeInput="pie-foto" value="'+valueInpPie+'"/>'+
                     '</div>'+
                     '<div>'+
                   '</div>';
@@ -266,7 +304,7 @@
                     '<p>'+
                     '<div class="row container-dezplazante-texto-imagen">'+
                       '<div class="desplazante-texto-imagen" id="text'+idComponent+'">'+
-                        '<div class="card-texto-imagen">'+
+                        '<div class="card-texto-imagen" id="card-ti-'+idComponent+'-'+indexCardTi+'">'+
                           '<div class="card-imagen">'+
                               '<p>Imagen</p>'+
                               '<label for="imagen'+idComponent+'-'+indexImagen+'" id="imagenlabel'+idComponent+'-'+indexImagen+'" class="btn-img">'+
@@ -286,6 +324,7 @@
                     '</div>'+
                   '</div>';
                   indexImagen = indexImagen + 1;
+                  indexCardTi = indexCardTi + 1;
               break;
               case 'video':
                 component =
@@ -305,7 +344,7 @@
               default:
                 component = "";
             }
-            return component;
+            return {component: component, idComponent: idComponent, indexImagen: indexImagen};
         }
 
         function saveChanges() {
@@ -317,7 +356,7 @@
               let idComponent = currentComponent.attr('db-id');
               let typeElement = currentComponent.attr('type-component');
               console.log(idElement+'-'+idComponent+'-'+typeElement);
-              let item = formJsonComponent(idElement, typeElement);
+              let item = formJsonComponent(idElement, typeElement, idComponent);
               item.Id = idComponent;
               item.Padre = padre;
               item.TipoComponente = typeElement;
@@ -330,11 +369,11 @@
               }
               console.log(toInsert);
               console.log(toUpdate);
-              saveComponents(toInsert);
-              updateComponents(toUpdate);
+              //saveComponents(toInsert);
+              //updateComponents(toUpdate);
             });
         }
-        function formJsonComponent(idElement, typeElement) {
+        function formJsonComponent(idElement, typeElement, idComponent) {
           let jsonItem =
           {
             "Id": null,
@@ -343,11 +382,12 @@
             "Url": null,
             "Descripcion": null,
             "BackgroundColor": null,
-            "AgregarFondo": null,
+            "AgregarFondo": 0,
             "Titulo": null,
             "Subtitulo": null,
             "Orden": null,
-            "IdModulo": null
+            "IdModulo": null,
+            "files": null
           }
           switch(typeElement) {
             case 'texto':
@@ -362,6 +402,34 @@
                 jsonItem.Subtitulo = value;
               });
             break;
+            case 'imagen':
+              $("#"+idElement).find("input").each(function() {
+                let typeInp = $(this).attr("typeInput");
+                if(typeInp == 'img'){
+                    let value = $(this).prop("files");
+                    if(value[0]){
+                        jsonItem.Url = window.location.origin+'/files/'+value[0].name;
+                        jsonItem.files = value[0];
+                    }else{
+                        jsonItem.Url = $(this).attr("value");
+                    }
+                }
+                if(typeInp == 'pie-foto'){
+                    let value = $(this).val();
+                    jsonItem.Descripcion = value;
+                }
+              });
+            break;
+            case 'desplazante-texto-imagen':
+              $("#"+idElement).find(".card-texto-imagen").each(function() {
+                let id = $(this).attr('id');
+                console.log(id);
+                $("#"+id).find("input").each(function() {
+                    let value = $(this);
+                    console.log(value);
+                });
+              });
+            break;
             default:
               jsonItem = "";
           }
@@ -370,13 +438,22 @@
 
         function saveComponents(components) {
           components.map(function(item){
+            const formData = new FormData();
+            for ( var key in item ) {
+                formData.append(key, item[key]);
+            }
+            console.log(formData);
+            
             $.ajax({
               type: "POST",
-              url: "/Componentes/saveComponentForModulo",
+              url: "/Componentes/saveComponentForModulo2",
               headers: { "RequestVerificationToken": "@GetAntiXsrfRequestToken()" },
-              data: item,
+              data: formData,
+              processData : false,
+              contentType : false,
               success: function (response) {
                 console.log('saved');
+                console.log(response);
               }
             });
           })
@@ -395,6 +472,18 @@
               }
             });
           })
+        }
+
+        function buildFormData(formData, data, parentKey) {
+          if (data && typeof data === 'object' && !(data instanceof Date) && !(data instanceof File)) {
+            Object.keys(data).forEach(key => {
+              buildFormData(formData, data[key], parentKey ? `${parentKey}[${key}]` : key);
+            });
+          } else {
+            const value = data == null ? '' : data;
+
+            formData.append(parentKey, value);
+          }
         }
         /*
         component =
