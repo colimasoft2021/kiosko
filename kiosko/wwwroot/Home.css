@@ -212,7 +212,6 @@ body {
 }
 
 .texto-imagen ul {
-    border: solid;
     width: 300px;
     margin: 15px;
 }
@@ -396,8 +395,11 @@ margin-left:500px;
     height: 60px;
 }
 
-.desplazante{
-    margin-top:15px;
+.desplazante {
+    height: 129px;
+    left: 204px;
+    top: 59px;
+    background: #C4C4C4;
 }
 
 .button-close-dti{
