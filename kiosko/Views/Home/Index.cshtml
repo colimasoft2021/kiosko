@@ -33,6 +33,11 @@
             $("#"+idComponent).remove();
         }
 
+         function removeCardImagen(idComponent,indexImagen) {
+             let idImg = "cardImagen"+idComponent+"-"+indexImagen;
+            $("#"+idImg).remove();
+        }
+
         function AddTextoImagen(stringId,type){
             console.log("Entre")
             console.log(stringId)
@@ -42,7 +47,7 @@
             let newStringId = "'"+stringId+"'";
             let stringType = "'"+type+"'";
             $("#text"+stringId).append(
-                        
+                
                             '<ul class="contendor-lista">'+
                                 '<label for="'+idImg+'" id="'+idLabelImg+'" class="estilos-desplazante"><img src="/img/icono-imagen-pqueño.png" class="desplazante"></label>'+
                                 '<li><input type="file" id="'+idImg+'" class="input-desplegable-texto-imagen" onchange="generatePreview('+newStringId+','+indexImagen+', '+stringType+')"></li>'+
@@ -63,14 +68,13 @@
             let idPreview = "imgPreview"+stringId+"-"+indexImagen;
             let newStringId = "'"+stringId+"'";
             let stringType = "'"+type+"'";
-            $("#text"+stringId).append(
-                        
+            $("#containerCarroucel"+stringId).append(
                             '<ul class="contendor-lista">'+
+                            '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
                                 '<label for="'+idImg+'" id="'+idLabelImg+'" class="estilos-desplazante"><img src="/img/icono-imagen-pqueño.png" class="desplazante"></label>'+
                                 '<li><input type="file" id="'+idImg+'" class="input-desplegable-texto-imagen" onchange="generatePreview('+newStringId+','+indexImagen+', '+stringType+')"></li>'+
                                 '<div id="'+idPreview+'" class="estilo-imagen-incrementable"></div>'+ 
                            '</ul>'
-                           
                        );
             indexImagen = indexImagen + 1;
         }
@@ -496,7 +500,7 @@
                                      '<div id="preview'+idComponent+'" class="estilo-imagen">'+ 
                                      //'<input class="inputTitulo" type="text" placeholder="Titulo"/>'+
                                      '<div class="inputLinkContainer">'+
-                                    '<input class="inputLink" id="inputLink'+idComponent+'" name="link" type="text" placeholder="Link" onkeyup="toggleButton('+stringId+')"/>'+
+                                    '<input class="inputLink" id="inputLink'+idComponent+'" name="link" type="text" placeholder="∞" onkeyup="toggleButton('+stringId+')"/>'+
                                     '<button class="botonEnlace" onclick="AddPreviewLink('+stringId+')" id="previewLink'+idComponent+'"> <img src="/img/check.png" width="50px"/> </button>'+
                                 '</div>'+
                                 '<p class="selColor">Elige un color para asignarle.</p>'+
@@ -513,9 +517,9 @@
                           '<p class="tituloCmp">'+type+
                             '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
                           '<p>'+
-                          '<input class="inputTexto" type="text" placeholder="Texto...">'+
+                           '<textarea class="inputTexto" type="text">Texto...</textarea>'+ 
                           '<div class="video-guia-padre">'+
-                                '<ul>'+
+                                '<ul class="ulcenter">'+
                                  '<label class="file-Amagen-pop-up" for="imagen'+idComponent+'-'+indexImagen+'" id="imagennew'+idComponent+'-'+indexImagen+'">   </label>'+
                                     '<input class="pop-up-input" type="file" id="imagen'+idComponent+'-'+indexImagen+'" accept=".png" onchange="generatePreview('+stringId+','+indexImagen+')">'+
                                     '<div id="imgPreview'+idComponent+'-'+indexImagen+'" class="estilo-imagen">'+ 
@@ -532,8 +536,9 @@
                             '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
                           '<p>'+
                       '<div class="padre">'+
-                                '<div class="texto-imagen-1" id="text'+idComponent+'">'+
-                                    '<ul class="contendor-lista">'+
+                                '<div class="texto-imagen-1"  id="containerCarroucel'+idComponent+'">'+
+                                    '<ul class="contendor-lista" id="cardImagen'+idComponent+'-'+indexImagen+'">'+
+                                    '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeCardImagen('+stringId+','+indexImagen+')">'+
                                         '<label for="imagen'+idComponent+'-'+indexImagen+'" id="imagenlabel'+idComponent+'-'+indexImagen+'" class="estilos-desplazante"><img src="/img/icono-imagen-pqueño.png" class="desplazante"></label>'+
                                         '<li><input type="file" id="imagen'+idComponent+'-'+indexImagen+'" class="input-desplegable-texto-imagen" onchange="generatePreview('+stringId+','+indexImagen+','+stringType+')"></li>'+
                                         '<div id="imgPreview'+idComponent+'-'+indexImagen+'" class="estilo-imagen-desplazante">'+

@@ -28,6 +28,11 @@
     border: none;
 }
 
+.ulcenter {
+    display: flex;
+    justify-content: center;
+}
+
 .boton-perfil {
     background-color: transparent;
     width: 19.64px;
@@ -95,7 +100,7 @@
 }
 
 .estilo-imagen img {
-    width: 100%;
+    width: 60%;
 }
 
     .file-Amagen input[type="file"] {
@@ -106,21 +111,21 @@
     }
 
 .file-Amagen-pop-up {
-    width: 50%;
-    height: 130px;
-    position: relative;
-    display: inline-block;
+    width: 20%;
+    height: 100px;
+    text-align: center;
     background-image: url(../img/img.png);
-    background-size: 20px;
+    background-size: 100px;
     background-color: #C4C4C4;
     background-repeat: no-repeat;
     background-position: center;
+
 }
 
     .file-Amagen-pop-up input[type="file"] {
         opacity: 0;
-        width: 100%;
-        height: 100px;
+        width: 70%;
+        height: 70px;
         display: inline-block;
     }
 
