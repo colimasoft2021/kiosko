@@ -49,7 +49,7 @@
             $("#text"+stringId).append(
                 
                             '<ul class="contendor-lista">'+
-                                '<label for="'+idImg+'" id="'+idLabelImg+'" class="estilos-desplazante"><img src="/img/icono-imagen-pqueño.png" class="desplazante"></label>'+
+                                '<label for="'+idImg+'" id="'+idLabelImg+'" class="estilos-desplazante"><img src="/img/icono-imagen-pqueño.png" class="desplazante-texto-imagen"></label>'+
                                 '<li><input type="file" id="'+idImg+'" class="input-desplegable-texto-imagen" onchange="generatePreview('+newStringId+','+indexImagen+', '+stringType+')"></li>'+
                                 '<div id="'+idPreview+'" class="estilo-imagen-incrementable"></div>'+ 
                                 '<li><input class="titulo-input" type="text" placeholder="Titulo"></li>'+ 
@@ -416,13 +416,12 @@
                 case 'video-guia':
                 component =
                   '<div class="col-lg-12  texto component CompEnlace " id="'+idComponent+'">'+
-                        '<div id="backgroundBanner">'+
                           '<p class="tituloCmp">'+type+
-                            '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
+                            '<img src="/img/iconTrash.png"  alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
                           '<p>'+
                             '<div class="video-guia-padre">'+
                                 '<div class="video-guia-padre-input">'+
-                                    '<label for="file'+idComponent+'" id="file-input'+idComponent+'" class="label-video-guia"> <img src="/img/icono-video.png"> </label>'+
+                                    '<label for="file'+idComponent+'" id="file-input'+idComponent+'" class="label-video-guia"><img src="/img/icono-video.png"></label>'+
                                     '<input type="file" id="file'+idComponent+'" onchange="previewVideo('+stringId+')" class="input-video-guia">'+
                                     '<div id="previewVideo'+idComponent+'"  class="video-guia-video">'+    
                                          
@@ -430,9 +429,16 @@
                                 '</div>'+
 
                                     '<div class="descripcion-guia-video">'+
-                                        '<input type="text" placeholder="Descripcion">'+
-                                    '</div>'+
-                           '</div>'+
+                                        '<input type="text" class="descripcion-guia-video-input" placeholder="Descripcion">'+
+                                    '</div>'+ 
+
+                                        '<div>'+
+                                            '<label>Elige color para asignarle </label>'+
+                                        '</div>'+
+                                    '<div>'+
+                                    '<span>Color: </span><input type="color">'+
+                                    '<div>'+
+                            '</div>'+
                   '</div>';
             break;
                 case 'Desplegable texto-imagen':
@@ -455,7 +461,7 @@
 
                             '<div class="footer">'+
                                 '<div class="comentario">'+
-                                   '<textarea name="" id="" cols="90" rows="3" placeholder="texto"></textarea>'+
+                                   '<textarea class="textarea" name="" id="" cols="" rows="3" placeholder="texto"></textarea>'+
                                 '</div>'+
                                 
                                '<div class="imagen-general">'+
