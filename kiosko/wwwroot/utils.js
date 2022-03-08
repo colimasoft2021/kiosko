@@ -33,7 +33,7 @@ function addItemToMenu(item, menuOpen) {
         menuItems += '</li>';
     } else {
         menuItems += '<li class="nav-item" id="' + idModulo + '">';
-        menuItems += '<a href="/Modulos/Details/' + item.id + '" class="nav-link">';
+        menuItems += '<a href="/Modulos/Details?id=' + item.id + '" class="nav-link">';
         menuItems += '<p>' + titulo + '</p>';
         menuItems += '</a>';
         menuItems += '</li>';

@@ -20,7 +20,7 @@ body {
 }
 
 .texto {
-    height: 120px;
+    height: 140px;
     
 }
 
@@ -36,6 +36,10 @@ body {
     background-color: white;
     position: relative;
     border-radius: 8px;
+    height: auto;
+}
+
+.texto-imagen {
     height: auto;
 }
 
@@ -499,4 +503,141 @@ body {
 
 .pop-up-input {
     display: none;
+}
+
+
+.container-texto-imagen {
+    padding-left: 5%;
+    padding-right: 5%;
+}
+.container-texto-imagen > button {
+    margin-inline: 0 !important;
+}
+.input-img {
+    display: none;
+}
+
+.btn-img {
+    display: block;
+    width: 100%;
+    min-height: 65px;
+    background-color: #C4C4C4;
+    text-align: center;
+}
+
+.imagen-icon {
+    width: 56px;
+    height: 52px;
+}
+
+.video-icon {
+    width: 66px;
+    height: 62px;
+}
+
+.preview-img {
+    text-align: center;
+    min-height: 10px;
+    height: auto;
+}
+
+.preview-img-small {
+    text-align: center;
+    min-height: 10px;
+    height: 50px;
+    position: relative;
+    margin-top: -20px;
+}
+
+.preview-img > img {
+    width: 150px;
+    height: 120px;
+    object-fit: cover;
+}
+
+.preview-img-small > img {
+    width: 66px;
+    height: 60px;
+    object-fit: cover;
+}
+
+.button-close {
+    position: relative;
+    left: 150px;
+    top: -46px;
+    background-color: red;
+    width: 30px;
+    color: white;
+    font-weight: bold;
+}
+
+.button-close-video {
+    position: relative;
+    left: 430px;
+    top: -230px;
+    background-color: red;
+    width: 30px;
+    color: white;
+    font-weight: bold;
+}
+
+.button-close-small {
+    position: relative;
+    left: 18px;
+    top: 28px;
+    background-color: red;
+    width: 30px;
+    color: white;
+    font-weight: bold;
+}
+
+.container-dezplazante-texto-imagen {
+    display: flex;
+    align-content: center;
+    align-items: center;
+}
+
+.desplazante-texto-imagen {
+    width: 60%;
+    display: flex;
+    overflow-x: scroll;
+    padding: 10px;
+}
+
+.card-texto-imagen {
+    border: 2px solid gray;
+    border-radius: 5px;
+    width: 300px !important;
+    min-width: 300px;
+    height: 280px;
+    text-align: center;
+    margin-right: 30px;
+}
+
+.card-imagen {
+    width: 100px;
+    height: 140px;
+    padding: 16px;
+    text-align: center;
+    margin-left: 33%;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 5px;
+}
+
+.button-container {
+    width: 40%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-add-more {
+    width: 130px;
+    height: 130px;
+    background: #FFFFFF;
+    box-shadow: 2px 6px 27px 2px #454545;
+    border-radius: 5px;
+    font-size: 72px;
+    font-weight: 600;
+    color: rgba(56, 56, 56, 0.73);
 }

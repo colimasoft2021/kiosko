@@ -1,0 +1,44 @@
+﻿@{
+    ViewData["Title"] = "Acceso denegado";
+}
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Acceso denegado</title>
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <link rel="stylesheet" href="~/Assets/plugins/fontawesome-free/css/all.min.css">
+  <link rel="stylesheet" href="~/Assets/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+  <link rel="stylesheet" href="~/Assets/dist/css/adminlte.min.css">
+</head>
+<body class="hold-transition login-page">
+    <div style="display: flex; align-items: center; min-height: 500px;">
+        <!-- Main content -->
+    <section class="content">
+      <div class="error-page">
+        <h2 class="headline text-warning"> 403</h2>
+
+        <div class="error-content">
+          <h3><i class="fas fa-exclamation-triangle text-warning"></i> Acceso denegado</h3>
+
+          <p>
+            Ups! parece que no tienes los privilegios necesarios para acceder a esta página.
+          </p>
+        </div>
+        <!-- /.error-content -->
+      </div>
+      <!-- /.error-page -->
+    </section>
+    <!-- /.content -->
+    </div>
+<script src="~/Assets/plugins/jquery/jquery.min.js"></script>
+<script src="~/Assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="~/Assets/dist/js/adminlte.min.js"></script>
+</body>
+</html>

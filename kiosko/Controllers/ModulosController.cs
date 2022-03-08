@@ -21,7 +21,7 @@ namespace kiosko.Controllers
         }
 
         // GET: Modulos
-        [Authorize(Roles = "Admin")]
+        [Authorize]
         public async Task<IActionResult> Index()
         {
             return View(await _context.Modulos.ToListAsync());

@@ -16,10 +16,12 @@ namespace kiosko.Controllers
     public class ComponentesController : Controller
     {
         private readonly KioskoCmsContext _context;
+        private readonly IWebHostEnvironment _env;
 
-        public ComponentesController(KioskoCmsContext context)
+        public ComponentesController(KioskoCmsContext context, IWebHostEnvironment env)
         {
             _context = context;
+            _env = env;
         }
 
         [HttpPost, ActionName("Delete")]
@@ -38,14 +40,14 @@ namespace kiosko.Controllers
         }
 
         [HttpPost]
-        public JsonResult GetAllComponentsForModulo(string? padre)
+        public JsonResult GetAllComponentsForModulo(int? idModulo)
         {
-            if (padre == null)
+            if (idModulo == null)
             {
                 return Json(null);
             }
 
-            var componente = _context.Componentes.Where(c => c.Padre == padre).OrderBy(c => c.Orden);
+            var componente = _context.Componentes.Where(c => c.IdModulo == idModulo).OrderBy(c => c.Orden);
             return Json(componente);
         }
 
@@ -67,6 +69,42 @@ namespace kiosko.Controllers
         {
             IActionResult ret = null;
             _context.Update(componente);
+            _context.SaveChanges();
+
+            ret = StatusCode(StatusCodes.Status201Created, componente);
+            return ret;
+        }
+
+        [HttpPost()]
+        [ValidateAntiForgeryToken]
+        public IActionResult saveComponentForModulo2()
+        {
+            Console.WriteLine(Request.Form);
+            var componente = new Componente();
+            componente.Id = Int32.Parse(Request.Form["Id"]);
+            componente.Padre = Request.Form["Padre"];
+            componente.TipoComponente = Request.Form["TipoComponente"];
+            componente.Url = Request.Form["Url"];
+            componente.Descripcion = Request.Form["Descripcion"];
+            componente.BackgroundColor = Request.Form["BackgroundColor"];
+            componente.AgregarFondo = Int32.Parse(Request.Form["AgregarFondo"]);
+            componente.Titulo = Request.Form["Titulo"];
+            componente.Subtitulo = Request.Form["Subtitulo"];
+            componente.Orden = Int32.Parse(Request.Form["Orden"]);
+            componente.IdModulo = Int32.Parse(Request.Form["IdModulo"]);
+
+            foreach (var formFile in Request.Form.Files)
+            {
+                var fulPath = Path.Combine(_env.ContentRootPath, "wwwroot\\files", formFile.FileName);
+                using (FileStream fs = System.IO.File.Create(fulPath))
+                {
+                    formFile.CopyTo(fs);
+                    fs.Flush();
+                }
+            }
+
+            IActionResult ret = null;
+            _context.Add(componente);
             _context.SaveChanges();
 
             ret = StatusCode(StatusCodes.Status201Created, componente);
