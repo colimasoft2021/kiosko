@@ -28,10 +28,7 @@
     border: none;
 }
 
-.ulcenter {
-    display: flex;
-    justify-content: center;
-}
+
 
 .boton-perfil {
     background-color: transparent;
@@ -103,43 +100,78 @@
     width: 60%;
 }
 
-    .file-Amagen input[type="file"] {
+/* .file-Amagen input[type="file"] {
         opacity: 0;
         width: 100%;
         height: 100px;
         display: inline-block;
-    }
+    }*/
+
+.container-pop {
+    text-align: center;
+    width:100%;
+    height: 190px;
+}
+
+.hija-pop {
+    width: 190px;
+    height: 150px;
+    padding: 16px;
+    margin-left:33%;
+}
+
+.button-close-pop {
+    position: relative;
+    left: 60px;
+    top:30px;
+    background-color: red;
+    width: 30px;
+    color: white;
+    font-weight: bold;
+}
 
 .file-Amagen-pop-up {
-    width: 20%;
-    height: 100px;
-    text-align: center;
-    background-image: url(../img/img.png);
-    background-size: 100px;
+    display: block;
+    width: 100%;
+    height: 130px;
     background-color: #C4C4C4;
-    background-repeat: no-repeat;
-    background-position: center;
+    text-align:center;
+}
+.label-imagen-pop{
+    margin-top:20px;
 
 }
 
-    .file-Amagen-pop-up input[type="file"] {
+
+.preview-img-pop {
+    text-align: center;
+    min-height: 10px;
+    height: 120px;
+    position: relative;
+    margin-top: -20px;
+}
+.preview-img-pop > img {
+    width: 150px;
+    height: 120px;
+    object-fit: cover;
+}
+    /*.file-Amagen-pop-up input[type="file"] {
         opacity: 0;
         width: 70%;
         height: 70px;
         display: inline-block;
+    }*/
+    .file-Amagen-Carrucel {
+        width: 60%;
+        height: 60px;
+        position: relative;
+        display: inline-block;
+        background-image: url(../img/img.png);
+        background-size: 20px;
+        background-color: #C4C4C4;
+        background-repeat: no-repeat;
+        background-position: center;
     }
-
-.file-Amagen-Carrucel {
-    width: 60%;
-    height: 60px;
-    position: relative;
-    display: inline-block;
-    background-image: url(../img/img.png);
-    background-size: 20px;
-    background-color: #C4C4C4;
-    background-repeat: no-repeat;
-    background-position: center;
-}
 
     .file-Amagen-Carrucel input[type="file"] {
         opacity: 0;
