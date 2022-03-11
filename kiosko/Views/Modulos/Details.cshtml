@@ -369,6 +369,22 @@
                     '</div>'+
                   '</div>';
               break;
+               case 'banner-informativo':
+                let valueInpText2 = (item) ? item.descripcion : "";
+                let valueInpColor = (item) ? item.backgroundColor : "";
+                component = 
+                  '<div class="col-lg-12 component" db-id="'+pkId+'" id="'+idComponent+'" type-component="banner-informativo">'+
+                        '<div id="backgroundBanner">'+
+                          '<p class="tituloCmp">'+type+
+                            '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
+                          '<p>'+
+                          '<input class="inputTexto" type="text" typeInput="Text2" value="'+valueInpText2+'">'+
+                          '<p class="selColor">Elige un color para asignarle.</p>'+
+                            'Color '+
+                            '<input class="Color-Selector" type="color" typeInput="Color" value="'+valueInpColor+'">'+
+                        '</div>'+
+                  '</div>';
+                break;
               case 'enlace':
               let valueInpTit = (item) ? item.titulo : "";
               let valueInpLink = (item) ? item.url : "";
@@ -437,7 +453,8 @@
               }
               console.log(toInsert);
               console.log(toUpdate);
-              saveComponents(toInsert);
+
+              //saveComponents(toInsert);
               updateComponents(toUpdate);
             });
         }
@@ -498,6 +515,16 @@
                 });
               });
             break;
+
+            case 'banner-informativo':
+              $("#"+idElement).find("input").each(function() {
+                let value = $(this).val();
+                jsonItem.BackgroundColor = value;
+              });
+               $("#"+idElement).find("textarea").each(function() {
+                let value = $(this).val();
+                jsonItem.Descripcion = value;
+
             case 'enlace':
               $("#"+idElement).find("input").each(function() {
                 let typeInp = $(this).attr("typeInput");
