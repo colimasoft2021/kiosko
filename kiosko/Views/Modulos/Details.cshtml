@@ -83,6 +83,7 @@
             filesizeBase: 1000,
           });
 
+
           dropzoneVideo = new dropzone('#DropVideo', {
             parallelUploads: 2,
             thumbnailHeight: 120,
@@ -118,6 +119,9 @@
               case 'imagen':
                 classBtnClose = "button-close";
               break;
+              case 'pop-up':
+                classBtnClose = "button-close-pop";
+              break;
               default:
                 classBtnClose = "button-close-small";
           }
@@ -135,8 +139,29 @@
           $("#"+idComponent).remove();
         }
 
+        function AddPreviewLink(stringId){
+            let enlace = document.getElementById('inputLink'+stringId).value;
+            console.log("Entre");
+            console.log(enlace);
+            console.log(stringId);
+            console.log('inputLink'+stringId);
+            document.getElementById("previewLink"+stringId).innerHTML = ['<iframe  width="300px" height="200px" src="'+enlace+'"></iframe>'];
+        }
+
+        function toggleButton(stringId){
+            var link = $('#inputLink'+stringId).val();
+            console.log(link);
+            if(link){
+                $('#previewLink'+stringId).css('visibility', 'visible');
+            } 
+            else{
+               $('#previewLink'+stringId).css('visibility', 'hidden');
+            }
+        }
+
         function generatePreview(stringId,indexImagen,type) {
           let idImg = "imagen"+stringId+"-"+indexImagen;
+
           console.log(idImg);
           let idImglabel = "imagenlabel"+stringId+"-"+indexImagen;
           let idImgclose = "imagenclose"+stringId+"-"+indexImagen;
@@ -151,6 +176,9 @@
           switch(type) {
               case 'imagen':
                 classBtnClose = "button-close";
+              break;
+              case 'pop-up':
+                classBtnClose = "button-close-pop";
               break;
               default:
                 classBtnClose = "button-close-small";
@@ -341,6 +369,46 @@
                     '</div>'+
                   '</div>';
               break;
+              case 'enlace':
+              let valueInpTit = (item) ? item.titulo : "";
+              let valueInpLink = (item) ? item.url : "";
+              let valueInpcolor = (item) ? item.backgroundColor : "";
+                component =
+                  '<div class="col-lg-12 texto component CompoEnlace" id="'+idComponent+'" db-id="'+pkId+'" type-component="enlace">'+
+                          '<p class="tituloCmp">'+type+
+                            '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
+                          '<p>'+
+                          '<div class="margenContainer">'+
+                                '<input class="inputTitulo" type="text" placeholder="Titulo"  typeInput="titulo" value="'+valueInpTit+'"/>'+
+                              '<div class="inputLinkContainer">'+
+                                    '<input class="inputLink" id="inputLink'+idComponent+'" name="link" type="text" placeholder="Link" onkeyup="toggleButton('+stringId+')"  typeInput="link" value="'+valueInpLink+'"/>'+
+                                    '<button class="botonEnlace" onclick="AddPreviewLink('+stringId+')" id="previewLink'+idComponent+'"> <img src="/img/check.png" width="50px"></button>'+
+                              '</div>'+
+                                '<p class="selColor">Elige un color para asignarle.</p>'+
+                                'Color '+
+                                '<input class="Color-Selector"  type="color" typeInput="color"  value="'+valueInpcolor+'">'+
+                          '</div>'+
+                  '</div>';
+                break;
+                case 'pop-up':
+                let valueInpUpText = (item) ? item.descripcion : "";
+                let valueInpImgPop = (item) ? item.url : "";
+                component =
+                  '<div class="col-lg-12 texto component" id="'+idComponent+'" db-id="'+pkId+'" type-component="pop-up">'+
+                          '<p class="tituloCmp">'+type+
+                            '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
+                          '<p>'+
+                           '<input class="inputTexto" type="text" placeholder="Texto..." typeInput="up-text" value="'+valueInpUpText+'">'+ 
+                          '<div class="container-pop">'+
+                                '<div class="hija-pop">'+
+                                    '<label class="file-Amagen-pop-up" for="imagen'+idComponent+'-'+indexImagen+'" id="imagenlabel'+idComponent+'-'+indexImagen+'"><img src="/img/icono-imagen-grande.png" class="label-imagen-pop"/></label>'+
+                                    '<input class="pop-up-input" type="file" id="imagen'+idComponent+'-'+indexImagen+'" accept=".png" onchange="generatePreview('+stringId+','+indexImagen+','+stringType+')" typeInput="img-pop" value="'+valueInpImgPop+'">'+
+                                    '<div id="imgPreview'+idComponent+'-'+indexImagen+'" class="preview-img-pop">'+ 
+                                    '</div>'+
+                                '</div>'+
+                        '</div>'+
+                  '</div>';
+              break;
               default:
                 component = "";
             }
@@ -369,8 +437,8 @@
               }
               console.log(toInsert);
               console.log(toUpdate);
-              //saveComponents(toInsert);
-              //updateComponents(toUpdate);
+              saveComponents(toInsert);
+              updateComponents(toUpdate);
             });
         }
         function formJsonComponent(idElement, typeElement, idComponent) {
@@ -405,7 +473,7 @@
             case 'imagen':
               $("#"+idElement).find("input").each(function() {
                 let typeInp = $(this).attr("typeInput");
-                if(typeInp == 'img'){
+                if(typeInp == 'img-pop'){
                     let value = $(this).prop("files");
                     if(value[0]){
                         jsonItem.Url = window.location.origin+'/files/'+value[0].name;
@@ -428,6 +496,43 @@
                     let value = $(this);
                     console.log(value);
                 });
+              });
+            break;
+            case 'enlace':
+              $("#"+idElement).find("input").each(function() {
+                let typeInp = $(this).attr("typeInput");
+                if(typeInp == 'link'){
+                        jsonItem.Url = $(this).val();
+                                      
+                }
+                if(typeInp == 'titulo'){
+                    let value = $(this).val();
+                    jsonItem.Titulo = value;
+                }
+
+                if(typeInp == 'color'){
+                    let value = $(this).val();
+                    jsonItem.BackgroundColor = value;
+                }
+              });
+            break;
+            case 'pop-up':
+              $("#"+idElement).find("input").each(function() {
+                let typeInp = $(this).attr("typeInput");
+                if(typeInp == 'up-text'){
+                    let value = $(this).val();
+                    jsonItem.Descripcion = value;
+                }
+                if(typeInp == 'img'){
+                    let value = $(this).prop("files");
+                    if(value[0]){
+                        jsonItem.Url = window.location.origin+'/files/'+value[0].name;
+                        jsonItem.files = value[0];
+                    }else{
+                        jsonItem.Url = $(this).attr("value");
+                    }
+                }
+                
               });
             break;
             default:
