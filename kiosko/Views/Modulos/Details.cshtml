@@ -276,7 +276,6 @@
           $("#videolabel"+stringId).css("display","block");
           $("#previewVideo"+stringId).empty();
           $("#videoclose"+stringId).css("display","none");
-          $("#fileinput"+stringId).css("display","block");
         }
 
         function generateComponent(type, pkId, item) {
@@ -428,8 +427,8 @@
               break;
               case 'video-guia':
               let valueInpVideoGuia = (item) ? item.url : "";
-              let valueInpTextGuia = (item) ? descripcion.url : "";
-              let valueInpColorGuia = (item) ? backgroundColor.url : "";
+              let valueInpTextGuia = (item) ?  item.descripcion : "";
+              let valueInpColorGuia = (item) ? item.backgroundColor : "";
                 component =
                   '<div class="col-lg-12  texto component CompEnlace " id="'+idComponent+'" db-id="'+pkId+'" type-component="video-guia">'+
                           '<p class="tituloCmp">'+type+
