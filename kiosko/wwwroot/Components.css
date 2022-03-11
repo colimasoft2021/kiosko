@@ -69,6 +69,17 @@
     margin-bottom: 5px;
 }
 
+.inputTitulo1 {
+    font-family: 'Poppins', sans-serif;
+    width: 100%;
+    font-size: 20px;
+    height: 100%;
+    border: 1px dashed #9B9B9B;
+    box-sizing: border-box;
+    margin-bottom: 5px;
+    margin-left: 3%;
+}
+
 .inputLink {
     width: 100%;
     font-size: 14px;
@@ -158,4 +169,12 @@
 
 .pop-up-input{
     display: none;
+}
+
+.Boton1 {
+    margin-left: 78%;
+    margin-top: 10px;
+    background-color: transparent;
+    border: none;
+    font-size: 20px;
 }

@@ -562,6 +562,36 @@
                 '</div>';
                 indexImagen = indexImagen + 1;
               break;
+              case 'Texto-Imagen.1':
+                  component = 
+                  '<div class="col-lg-12 texto component CompoEnlace" id="'+idComponent+'">'+
+                        '<div id="background">'+
+                          '<p class="tituloCmp">'+type+
+                            '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
+                          '<p>'+
+                          '<div>'+
+                          '<div class="junto1">'+
+                                '<div class="card-imagen1">'+
+                                    '<p>Imagen</p>'+
+                                    '<label for="imagen'+idComponent+'-'+indexImagen+'" id="imagenlabel'+idComponent+'-'+indexImagen+'" class="btn-img">'+
+                                        '<img src="/img/icono-imagen-chico.png" class="label-imagen-1"/>'+
+                                    '</label>'+
+                                    '<input type="file" id="imagen'+idComponent+'-'+indexImagen+'" onchange="generatePreview('+stringId+','+indexImagen+','+stringType+')" class="input-img">'+
+                                    '<div id="imgPreview'+idComponent+'-'+indexImagen+'" class="preview-img-small"></div>'+
+                                    '</div>'+
+                                    '<div class="titulomax1">'+
+                                        '<textarea class="inputTitulo1"></textarea>'+
+                                    '</div>'+
+                                '</div>'+
+                                '<div id="imgPreview'+idComponent+'-'+indexImagen+'" class="estilo-imagen"></div>'+ 
+                                     '<div id="preview'+idComponent+'" class="estilo-imagen">'+ 
+                                '</div>'+
+                             '</div>'+
+                        '</div>'+
+                        '<button class="Boton1">Agregar Fondo</button>'
+                  '</div>';
+                  indexImagen = indexImagen + 1;
+                break;
             }
             return component;
 
@@ -587,6 +617,7 @@
                   <li class="option-menu" onclick="addComponent('texto')">Texto</li>
                   <li class="option-menu" onclick="addComponent('subtitulo')">Subtitulo</li>
                   <li class="option-menu" onclick="addComponent('imagen')">Imagen</li>
+                  <li class="option-menu" onclick="addComponent('Texto-Imagen.1')">Texto-Imagen.1</li>
                   <li class="option-menu" onclick="addComponent('texto-imagen')">Desplazante Texto-Imagen</li>
                   <li class="option-menu" onclick="addComponent('video')">Video</li>
                   <li class="option-menu" onclick="addComponent('enlace')">Enlace</li>
