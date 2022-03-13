@@ -270,7 +270,6 @@
     }
 
     function generateCardImage(stringId, idComponent, item, pkId, stringType) {
-        console.log(item);
         let preview = "";
         let styleLabel = "";
         let urlImage = "";
@@ -293,6 +292,54 @@
         '<input type="file" id="imagen'+idComponent+'-'+indexImagen+'" onchange="generatePreview('+stringId+','+indexImagen+','+stringType+')" class="input-img" typeInput="img" value="'+urlImage+'">';
         component += preview;
         indexImagen = indexImagen + 1;
+        return component;
+    }
+
+    function generateCardsDesplazante(stringId, idComponent, item, pkId, stringType) {
+        let images = {
+            "id": 0,
+            "url": "",
+            "titulo": null,
+            "texto": null,
+            "files": null,
+            "idComponente": pkId
+        }
+        if(item.length > 0){
+            images = item;
+        }
+        let component = "";
+        images.map((item) => {
+            let preview = "";
+            let styleLabel = "";
+            if(item.Id !== 0){
+                styleLabel = 'style="display: none;"';
+                preview = 
+                '<div id="imgPreview'+idComponent+'-'+indexImagen+'" class="preview-img-small">'+
+                    '<button id="imagenclose'+idComponent+'-'+indexImagen+'"  class="button-close-small"  onclick="deletePreview('+stringId+','+indexImagen+')">x</button>'+
+                    '<img src="'+item.url+'" />'+
+                '</div>';
+            }else{
+                preview = 
+                '<div id="imgPreview'+idComponent+'-'+indexImagen+'" class="preview-img-small"></div>';
+            }
+            component +=
+            '<div class="card-texto-imagen" id="card-ti-'+idComponent+'-'+indexCardTi+'" db-id="0">'+
+                      '<div class="card-imagen">'+
+                          '<p>Imagen</p>'+
+                          '<label for="imagen'+idComponent+'-'+indexImagen+'" id="imagenlabel'+idComponent+'-'+indexImagen+'" '+styleLabel+' class="btn-img">'+
+                            '<img src="/img/icono-imagen-chico.png" class="label-imagen-1"/>'+
+                          '</label>'+
+                          '<input type="file" id="imagen'+idComponent+'-'+indexImagen+'" onchange="generatePreview('+stringId+','+indexImagen+','+stringType+')" typeInput="img" class="input-img">';
+            component += preview;
+            component +=
+                      '</div>'+
+                      '<input class="titulo-input mt-4" type="text" typeInput="titulo" placeholder="Titulo" value="'+item.titulo+'">'+
+                      '<br/>'+
+                      '<input type="text" placeholder="Texto" typeInput="texto" class="mt-4" value="'+item.texto+'">'+
+                    '</div>';
+            indexImagen = indexImagen + 1;
+            indexCardIm = indexCardIm + 1;
+        });
         return component;
     }
 
@@ -349,20 +396,12 @@
                   '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
                 '<p>'+
                 '<div class="row container-dezplazante-texto-imagen">'+
-                  '<div class="desplazante-texto-imagen" id="text'+idComponent+'">'+
-                    '<div class="card-texto-imagen" id="card-ti-'+idComponent+'-'+indexCardTi+'" db-id="0">'+
-                      '<div class="card-imagen">'+
-                          '<p>Imagen</p>'+
-                          '<label for="imagen'+idComponent+'-'+indexImagen+'" id="imagenlabel'+idComponent+'-'+indexImagen+'" class="btn-img">'+
-                            '<img src="/img/icono-imagen-chico.png" class="label-imagen-1"/>'+
-                          '</label>'+
-                          '<input type="file" id="imagen'+idComponent+'-'+indexImagen+'" onchange="generatePreview('+stringId+','+indexImagen+','+stringType+')" typeInput="img" class="input-img">'+
-                          '<div id="imgPreview'+idComponent+'-'+indexImagen+'" class="preview-img-small"></div>'+
-                      '</div>'+
-                      '<input class="titulo-input mt-4" type="text" typeInput="titulo" placeholder="Titulo">'+
-                      '<br/>'+
-                      '<input type="text" placeholder="Texto" typeInput="texto" class="mt-4">'+
-                    '</div>'+
+                  '<div class="desplazante-texto-imagen" id="text'+idComponent+'">';
+
+            let desplazantes = generateCardsDesplazante(stringId, idComponent, item.desplazantes, pkId, stringType);
+            component += desplazantes;
+                    
+            component +=
                   '</div>'+
                   '<div class="button-container">'+
                     '<button onclick="AddTextoImagen('+stringId+','+stringType+')" class="btn-add-more">+</button>'+
