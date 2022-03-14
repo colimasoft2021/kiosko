@@ -41,6 +41,7 @@
                   <li class="option-menu" onclick="addComponent('carrucel', 0)">Carrucel</li>
                   <li class="option-menu" onclick="addComponent('pop-up', 0)">Pop-up</li>
                   <li class="option-menu" onclick="addComponent('desplegable-texto-imagen', 0)">Desplegable texto-imagen</li>
+                  <li class="option-menu" onclick="addComponent('texto-imagen', 0)">Texto Imagen</li>
                 </ul>
                 <button class="btn btn-block btn-warning" onclick="saveChanges()">Guardar</button>
               </div>
@@ -144,7 +145,7 @@
           let imgFile = $("#"+idImg).prop("files");
           imgFile = imgFile[0];
           let reader = new FileReader();
-          reader.readAsDataURL(imgFile);
+          reader.readAsDataURL(imgFile); 
           $("#"+idImglabel).css("display","none");
           $("#"+idImgclose).css("display","block");
           let classBtnClose = "";
@@ -357,6 +358,38 @@
                         '</div>'+
                   '</div>';
                 break;
+                case 'texto-imagen':
+                let valueInpImg2 = (item) ? item.url : "";
+                let valueInpText3 = (item) ? item.descripcion : "";
+                  component = 
+                  '<div class="col-lg-12 component" db-id="'+pkId+'" id="'+idComponent+'" type-component="texto-imagen">'+
+                        '<div id="background">'+
+                          '<p class="tituloCmp">'+type+
+                            '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
+                          '<p>'+
+                          '<div>'+
+                          '<div class="junto1">'+
+                                '<div class="card-imagen1">'+
+                                    '<p>Imagen</p>'+
+                                    '<label for="imagen'+idComponent+'-'+indexImagen+'" id="imagenlabel'+idComponent+'-'+indexImagen+'" class="btn-img">'+
+                                        '<img src="/img/icono-imagen-chico.png" class="label-imagen-1"/>'+
+                                    '</label>'+
+                                    '<input type="file" typeInput="img" id="imagen'+idComponent+'-'+indexImagen+'" onchange="generatePreview('+stringId+','+indexImagen+','+stringType+')" class="input-img">'+
+                                    '<div id="imgPreview'+idComponent+'-'+indexImagen+'" class="preview-img-small"></div>'+
+                                    '</div>'+
+                                    '<div class="titulomax1">'+
+                                        '<textarea class="inputTitulo1" typeInput="textarea" value=""></textarea>'+
+                                    '</div>'+
+                                '</div>'+
+                                '<div id="imgPreview'+idComponent+'-'+indexImagen+'" class="estilo-imagen"></div>'+ 
+                                     '<div id="preview'+idComponent+'" class="estilo-imagen">'+ 
+                                '</div>'+
+                             '</div>'+
+                        '</div>'+
+                        '<input type="checkbox" typeInput="check" class="Boton1" name="AgregarFondo" value="+'+valueInpText3+'"><label for="AgregarFondo"> Agregar Fondo</label><br>'+
+                  '</div>';
+                  indexImagen = indexImagen + 1;
+                break;
               default:
                 component = "";
             }
@@ -386,7 +419,7 @@
               console.log(toInsert);
               console.log(toUpdate);
               //saveComponents(toInsert);
-              updateComponents(toUpdate);
+              //updateComponents(toUpdate);
             });
         }
         function formJsonComponent(idElement, typeElement, idComponent) {
@@ -456,9 +489,34 @@
                 jsonItem.Descripcion = value;
               });
             break;
+            case 'texto-imagen':
+            console.log("EntroCase")
+              $("#"+idElement).find("input").each(function() {
+                let typeInp = $(this).attr("typeInput");
+                console.log(typeInp)
+                if(typeInp == 'img'){
+                    let value = $(this).prop("files");
+                    if(value[0]){
+                        jsonItem.Url = window.location.origin+'/files/'+value[0].name;
+                        jsonItem.files = value[0];
+                    }else{
+                        jsonItem.Url = $(this).attr("value");
+                    }
+                }
+              });
+               $("#"+idElement).find("textarea").each(function() {
+                let typeInp = $(this).attr("typeInput");
+                console.log(typeInp)
+                if(typeInp == 'textarea'){
+                    let value = $(this).val();
+                    jsonItem.Descripcion = value;
+                }
+              });
+              break;
             default:
               jsonItem = "";
           }
+          console.log(jsonItem);
           return jsonItem;
         }
 
