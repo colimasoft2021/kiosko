@@ -373,16 +373,16 @@
                case 'banner-informativo':
                 let valueInpText2 = (item) ? item.descripcion : "";
                 let valueInpColor = (item) ? item.backgroundColor : "";
-                component = 
+                component =
                   '<div class="col-lg-12 component" db-id="'+pkId+'" id="'+idComponent+'" type-component="banner-informativo">'+
                         '<div id="backgroundBanner">'+
                           '<p class="tituloCmp">'+type+
                             '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
                           '<p>'+
-                          '<input class="inputTexto" type="text" typeInput="Text2" value="'+valueInpText2+'">'+
+                          '<input class="inputTexto" type="text" typeInput="text2" value="'+valueInpText2+'">'+
                           '<p class="selColor">Elige un color para asignarle.</p>'+
                             'Color '+
-                            '<input class="Color-Selector" type="color" typeInput="Color" value="'+valueInpColor+'">'+
+                            '<input class="Color-Selector" type="color" typeInput="color-bainfo" value="'+valueInpColor+'">'+
                         '</div>'+
                   '</div>';
                 break;
@@ -456,6 +456,36 @@
                                     '</div>'+
                                 '</div>'+
                         '</div>'+
+                  '</div>';
+              break;
+              case 'video-guia':
+              let valueInpVideoGuia = (item) ? item.url : "";
+              let valueInpTextGuia = (item) ?  item.descripcion : "";
+              let valueInpColorGuia = (item) ? item.backgroundColor : "";
+                component =
+                  '<div class="col-lg-12  texto component CompEnlace " id="'+idComponent+'" db-id="'+pkId+'" type-component="video-guia">'+
+                          '<p class="tituloCmp">'+type+
+                            '<img src="/img/iconTrash.png"  alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
+                          '<p>'+
+                            '<div class="video-guia-padre">'+
+                                    '<div class="video-guia-padre-input">'+
+                                        '<label for="video'+idComponent+'" id="videolabel'+idComponent+'" class="label-video-guia"><img src="/img/icono-video.png"></label>'+
+                                        '<input type="file" id="video'+idComponent+'" onchange="generatePreviewVideo('+stringId+')" class="input-video-guia" typeInput="video-guia" value="'+valueInpVideoGuia+'">'+
+                                        '<div id="previewVideo'+idComponent+'"  class="video-guia-video">'+      
+                                        '</div>'+
+                                    '</div>'+
+
+                                    '<div class="descripcion-guia-video">'+
+                                        '<input type="text" class="descripcion-guia-video-input" placeholder="Descripcion" typeInput="text-guia" value="'+valueInpTextGuia+'">'+
+                                    '</div>'+ 
+
+                                        '<div>'+
+                                            '<label>Elige color para asignarle </label>'+
+                                        '</div>'+
+                                    '<div>'+
+                                        '<span>Color: </span><input type="color" typeInput="color-guia" value="'+valueInpColorGuia+'">'+
+                                    '</div>'+
+                            '</div>'+
                   '</div>';
               break;
               default:
@@ -548,12 +578,20 @@
                 });
               });
             break;
-
             case 'banner-informativo':
-              $("#"+idElement).find("input").each(function() {
-                let value = $(this).val();
-                jsonItem.BackgroundColor = value;
+               $("#"+idElement).find("input").each(function() {
+                let typeInp = $(this).attr("typeInput");
+                if(typeInp == 'text2'){
+                    let value = $(this).val();
+                        jsonItem.Descripcion = value;                 
+                    }
+                
+                if(typeInp == 'color-bainfo'){
+                    let value = $(this).val();
+                    jsonItem.BackgroundColor = value;
+                }
               });
+
                $("#"+idElement).find("textarea").each(function() {
                 let value = $(this).val();
                 jsonItem.Descripcion = value;
@@ -596,12 +634,19 @@
                 
               });
             break;
+
+            case 'video-guia':
+              $("#"+idElement).find("input").each(function() {
+                let typeInp = $(this).attr("typeInput");
+                if(typeInp == 'video-guia'){
+
             case 'texto-imagen':
             console.log("EntroCase")
               $("#"+idElement).find("input").each(function() {
                 let typeInp = $(this).attr("typeInput");
                 console.log(typeInp)
                 if(typeInp == 'img'){
+
                     let value = $(this).prop("files");
                     if(value[0]){
                         jsonItem.Url = window.location.origin+'/files/'+value[0].name;
@@ -609,6 +654,19 @@
                     }else{
                         jsonItem.Url = $(this).attr("value");
                     }
+                  
+                }
+                if(typeInp == 'text-guia'){
+                    let value = $(this).val();
+                    jsonItem.Descripcion = value;
+                }
+
+                if(typeInp == 'color-guia'){
+                    let value = $(this).val();
+                    jsonItem.BackgroundColor = value;
+                }
+              });
+            break;
                 }
               });
                $("#"+idElement).find("textarea").each(function() {
