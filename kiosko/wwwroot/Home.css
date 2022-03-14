@@ -544,6 +544,16 @@ preview-img-pop {
     font-weight: bold;
 }
 
+.button-close-ti1 {
+    position: relative;
+    left: 18px;
+    top: 28px;
+    background-color: red;
+    width: 30px;
+    color: white;
+    font-weight: bold;
+}
+
 .button-close-video {
     position: relative;
     left: 430px;
