@@ -248,7 +248,7 @@ body {
 .descripcion-guia-video-input {
     border: 1px dashed #9B9B9B;
     margin:20px 0;
-    height:3 0px;
+    height: 30px;
     width: 100%;
 }
 
@@ -517,11 +517,14 @@ body {
     display: none;
 }
 
+.container-imagen {
+    background-color: #C4C4C4;
+}
+
 .btn-img {
     display: block;
     width: 100%;
     min-height: 65px;
-    background-color: #C4C4C4;
     text-align: center;
 }
 
@@ -651,6 +654,10 @@ body {
     border-radius: 5px;
 }
 
+.card-imagen > label {
+    background-color: #C4C4C4;
+}
+
 .button-container {
     width: 40%;
     display: flex;
@@ -677,6 +684,9 @@ body {
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     border-radius: 5px;
     margin-right: 20px;
+    display: flex;
+    align-items: center;
+    background-color: #C4C4C4;
 }
 
 .card-imagen-carroucel > label {
@@ -684,6 +694,61 @@ body {
 }
 
 .card-imagen-carroucel > label > img {
-    width: 160px;
-    height: 130px;
+    width: 80px;
+    height: 80px;
+
+}
+
+.container-desplegable {
+    padding: 16px;
+}
+
+.container-desplegable-texto-imagen {
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.card-desplegable-imagen {
+    width: 110px;
+    height: 80px;
+    background-color: #C4C4C4;
+}
+
+.card-desplegable-texto {
+    height: 80px;
+    padding-left: 15px;
+    flex-grow: 1;
+}
+
+.container-desplegable-imagenes {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.preview-img-desplegable {
+    text-align: center;
+    min-height: 10px;
+    height: 50px;
+    position: relative;
+    margin-top: -20px;
+}
+
+.preview-img-desplegable > button {
+    position: relative;
+    left: 44px;
+    top: 20px;
+    background-color: red;
+    width: 30px;
+    color: white;
+    font-weight: bold;
+}
+
+.preview-img-desplegable > img {
+    width: 110px;
+    height: 80px;
+    margin-top: -8px;
+    margin-right: -8px;
 }

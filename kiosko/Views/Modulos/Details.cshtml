@@ -61,13 +61,17 @@
        $("#containerComponents").sortable();
     });
     var idModulo = $("#idModulo").val();
-    console.log(idModulo);
     var padre = "modulo"+idModulo;
     var indexImagen = 1;
     var indexCardTi = 1;
     var indexCardIm = 1;
     var DropzoneVideo;
-    $.ajax({
+    
+    loadComponents();
+
+    function loadComponents() {
+        $("#containerComponents").empty();
+        $.ajax({
           type: "POST",
           url: "/Componentes/GetAllComponentsForModulo",
           data: { "idModulo": idModulo},
@@ -77,7 +81,8 @@
               addComponent(item.tipoComponente, item.id, item);
             });
           }
-    });
+        });
+    }
 
     function addComponent(type, pkId, item) {
       let component = generateComponent(type, pkId, item);
@@ -90,7 +95,6 @@
 
     function generatePreview(stringId,indexImagen,type) {
       let idImg = "imagen"+stringId+"-"+indexImagen;
-      console.log(idImg);
       let idImglabel = "imagenlabel"+stringId+"-"+indexImagen;
       let idImgclose = "imagenclose"+stringId+"-"+indexImagen;
       let idPreview = "imgPreview"+stringId+"-"+indexImagen;
@@ -106,6 +110,9 @@
             classBtnClose = "button-close";
           break;
           case 'carrucel':
+            classBtnClose = "button-close-carroucel";
+          break;
+          case 'desplegable-texto-imagen':
             classBtnClose = "button-close-carroucel";
           break;
           default:
@@ -181,7 +188,6 @@
     function generatePreviewVideo(stringId){
       var file = $('#video'+stringId).prop('files');
       file = file[0];
-      console.log(file);
       $("#videolabel"+stringId).css("display","none");
       $("#videoclose"+stringId).css("display","block");
       let readerVideo = new FileReader();
@@ -207,8 +213,6 @@
     }
 
     function addImageToCarroucel(stringId,type){
-        console.log("Entre")
-        console.log(stringId)
         let idImg = "imagen"+stringId+"-"+indexImagen;
         let idLabelImg = "imagenlabel"+stringId+"-"+indexImagen;
         let idPreview = "imgPreview"+stringId+"-"+indexImagen;
@@ -228,14 +232,14 @@
     }
 
     function generateCardsImages(stringId, idComponent, item, pkId, stringType) {
-        let images = {
-            "id": 0,
-            "url": "",
-            "titulo": null,
-            "texto": null,
-            "files": null,
+        let images = [{
+            "id": "0",
+            "url": "/img/icono-imagen-chico.png",
+            "titulo": "",
+            "texto": "",
+            "files": "",
             "idComponente": pkId
-        }
+        }];
         if(item.length > 0){
             images = item;
         }
@@ -243,23 +247,24 @@
         images.map((item) => {
             let preview = "";
             let styleLabel = "";
-            if(item.Id !== 0){
+            let isDb = item.id === "0";
+            if(isDb){
+                preview = 
+                '<div id="imgPreview'+idComponent+'-'+indexImagen+'" class="preview-img-carroucel"></div>';
+            }else{
                 styleLabel = 'style="display: none;"';
                 preview = 
                 '<div id="imgPreview'+idComponent+'-'+indexImagen+'" class="preview-img-carroucel">'+
                     '<button id="imagenclose'+idComponent+'-'+indexImagen+'"  class="button-close-carroucel"  onclick="deletePreview('+stringId+','+indexImagen+')">x</button>'+
                     '<img src="'+item.url+'" />'+
                 '</div>';
-            }else{
-                preview = 
-                '<div id="imgPreview'+idComponent+'-'+indexImagen+'" class="preview-img-carroucel"></div>';
             }
             component +=
-            '<div class="card-imagen-carroucel" id="card-img-'+idComponent+'-'+indexCardIm+'" db-id="0">'+
+            '<div class="card-imagen-carroucel" id="card-img-'+idComponent+'-'+indexCardIm+'" db-id="'+item.id+'">'+
                 '<label for="imagen'+idComponent+'-'+indexImagen+'" id="imagenlabel'+idComponent+'-'+indexImagen+'" '+styleLabel+' class="btn-img">'+
                   '<img src="/img/icono-imagen-chico.png" class="label-imagen-1"/>'+
                 '</label>'+
-                '<input type="file" id="imagen'+idComponent+'-'+indexImagen+'" onchange="generatePreview('+stringId+','+indexImagen+','+stringType+')" typeInput="img" class="input-img">';
+                '<input type="file" id="imagen'+idComponent+'-'+indexImagen+'" onchange="generatePreview('+stringId+','+indexImagen+','+stringType+')" typeInput="img" class="input-img" value="'+item.url+'">';
             component += preview;
             component +=
             '</div>';
@@ -286,24 +291,26 @@
             '<div id="imgPreview'+idComponent+'-'+indexImagen+'" class="preview-img"></div>';
         }
         let component = 
-        '<label for="imagen'+idComponent+'-'+indexImagen+'" id="imagenlabel'+idComponent+'-'+indexImagen+'" '+styleLabel+' class="btn-img">'+
-            '<img src="/img/icono-imagen-chico.png" class="image-icon"/>'+
-        '</label>'+
-        '<input type="file" id="imagen'+idComponent+'-'+indexImagen+'" onchange="generatePreview('+stringId+','+indexImagen+','+stringType+')" class="input-img" typeInput="img" value="'+urlImage+'">';
+        '<div class="container-imagen">'+
+            '<label for="imagen'+idComponent+'-'+indexImagen+'" id="imagenlabel'+idComponent+'-'+indexImagen+'" '+styleLabel+' class="btn-img">'+
+                '<img src="/img/icono-imagen-chico.png" class="image-icon"/>'+
+            '</label>'+
+            '<input type="file" id="imagen'+idComponent+'-'+indexImagen+'" onchange="generatePreview('+stringId+','+indexImagen+','+stringType+')" class="input-img" typeInput="img" value="'+urlImage+'">'+
+        '</div>';
         component += preview;
         indexImagen = indexImagen + 1;
         return component;
     }
 
     function generateCardsDesplazante(stringId, idComponent, item, pkId, stringType) {
-        let images = {
-            "id": 0,
-            "url": "",
-            "titulo": null,
-            "texto": null,
-            "files": null,
+        let images = [{
+            "id": "0",
+            "url": "/img/icono-imagen-chico.png",
+            "titulo": "",
+            "texto": "",
+            "files": "",
             "idComponente": pkId
-        }
+        }];
         if(item.length > 0){
             images = item;
         }
@@ -311,25 +318,26 @@
         images.map((item) => {
             let preview = "";
             let styleLabel = "";
-            if(item.Id !== 0){
+            let isDb = item.id === "0";
+            if(isDb){
+                preview = 
+                '<div id="imgPreview'+idComponent+'-'+indexImagen+'" class="preview-img-small"></div>';
+            }else{
                 styleLabel = 'style="display: none;"';
                 preview = 
                 '<div id="imgPreview'+idComponent+'-'+indexImagen+'" class="preview-img-small">'+
                     '<button id="imagenclose'+idComponent+'-'+indexImagen+'"  class="button-close-small"  onclick="deletePreview('+stringId+','+indexImagen+')">x</button>'+
                     '<img src="'+item.url+'" />'+
                 '</div>';
-            }else{
-                preview = 
-                '<div id="imgPreview'+idComponent+'-'+indexImagen+'" class="preview-img-small"></div>';
             }
             component +=
-            '<div class="card-texto-imagen" id="card-ti-'+idComponent+'-'+indexCardTi+'" db-id="0">'+
+            '<div class="card-texto-imagen" id="card-ti-'+idComponent+'-'+indexCardTi+'" db-id="'+item.id+'">'+
                       '<div class="card-imagen">'+
                           '<p>Imagen</p>'+
                           '<label for="imagen'+idComponent+'-'+indexImagen+'" id="imagenlabel'+idComponent+'-'+indexImagen+'" '+styleLabel+' class="btn-img">'+
                             '<img src="/img/icono-imagen-chico.png" class="label-imagen-1"/>'+
                           '</label>'+
-                          '<input type="file" id="imagen'+idComponent+'-'+indexImagen+'" onchange="generatePreview('+stringId+','+indexImagen+','+stringType+')" typeInput="img" class="input-img">';
+                          '<input type="file" id="imagen'+idComponent+'-'+indexImagen+'" onchange="generatePreview('+stringId+','+indexImagen+','+stringType+')" typeInput="img" class="input-img" value="'+item.url+'">';
             component += preview;
             component +=
                       '</div>'+
@@ -338,7 +346,7 @@
                       '<input type="text" placeholder="Texto" typeInput="texto" class="mt-4" value="'+item.texto+'">'+
                     '</div>';
             indexImagen = indexImagen + 1;
-            indexCardIm = indexCardIm + 1;
+            indexCardTi = indexCardTi + 1;
         });
         return component;
     }
@@ -348,6 +356,7 @@
         let stringId = "'"+idComponent+"'";
         let stringType = "'"+type+"'";
         let component = "";
+        let itemDesplazantes = (item) ? item.desplazantes : [];
         switch(type) {
           case 'texto':
             let valueInpText = (item) ? item.descripcion : "";
@@ -398,7 +407,7 @@
                 '<div class="row container-dezplazante-texto-imagen">'+
                   '<div class="desplazante-texto-imagen" id="text'+idComponent+'">';
 
-            let desplazantes = generateCardsDesplazante(stringId, idComponent, item.desplazantes, pkId, stringType);
+            let desplazantes = generateCardsDesplazante(stringId, idComponent, itemDesplazantes, pkId, stringType);
             component += desplazantes;
                     
             component +=
@@ -435,7 +444,7 @@
                 '<div class="row container-carroucel">'+
                   '<div class="carroucel" id="containerCarroucel'+idComponent+'">';
 
-            let images = generateCardsImages(stringId, idComponent, item.desplazantes, pkId, stringType);
+            let images = generateCardsImages(stringId, idComponent, itemDesplazantes, pkId, stringType);
             component += images;
            
             component +=
@@ -447,6 +456,48 @@
               '</div>';
               indexImagen = indexImagen + 1;
               indexCardIm = indexCardIm + 1;
+          break;
+          case 'desplegable-texto-imagen':
+            component =
+              '<div class="col-lg-12 component" id="'+idComponent+'" db-id="'+pkId+'" type-component="desplegable-texto-imagen">'+
+                '<p class="tituloCmp">'+type+
+                  '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
+                '<p>'+
+                '<div class="container-desplegable row">'+
+                  '<div class="container-desplegable-texto-imagen">'+
+                    '<div class="card-desplegable-imagen">'+
+                      '<div class="d-flex col-lg-12 justify-content-end align-items-center">'+
+                        '<label for="imagen'+idComponent+'-'+indexImagen+'" id="imagenlabel'+idComponent+'-'+indexImagen+'" class="btn-img">'+
+                        '<img src="/img/icono-imagen-chico.png" class="label-imagen-1"></label>'+
+                        '<input type="file" id="imagen'+idComponent+'-'+indexImagen+'" class="input-desplegable-texto-imagen"  accept=".jpg, .png, .jpeg" onchange="generatePreview('+stringId+','+indexImagen+', '+stringType+')" typeInput="img1">'+
+                        '<div id="imgPreview'+idComponent+'-'+indexImagen+'" class="preview-img-desplegable"></div>'+
+                      '</div>'+
+                    '</div>'+
+                    '<div class="card-desplegable-texto">'+
+                      '<input class="subtitle-input" type="text" placeholder="subtitulo" typeInput="subtitulo">'+        
+                    '</div>'+
+                  '</div>'+
+                  '<textarea class="textarea mt-3" name="" id="" cols="" rows="3" placeholder="texto"></textarea><br/>'+
+                  '<div class="container-desplegable-imagenes mt-3">'+
+                    '<div class="card-imagen-carroucel">'+
+                      '<label for="imagen'+idComponent+'-'+(indexImagen + 1)+'" id="imagenlabel'+idComponent+'-'+(indexImagen + 1)+'" class="btn-img">'+
+                      '<img src="/img/icono-imagen-grande.png" class="label-footer"></label>'+
+                      '<input type="file" id="imagen'+idComponent+'-'+(indexImagen + 1)+'" class="input-desplegable-texto-imagen"  accept=".jpg, .png, .jpeg" onchange="generatePreview('+stringId+','+(indexImagen + 1)+', '+stringType+')" typeInput="img2">'+
+                      '<div id="imgPreview'+idComponent+'-'+(indexImagen + 1)+'" class="preview-img-carroucel"></div>'+
+                    '</div>'+
+                    '<div class="card-imagen-carroucel">'+
+                      '<label for="imagen'+idComponent+'-'+(indexImagen + 2)+'" id="imagenlabel'+idComponent+'-'+(indexImagen + 2)+'" class="btn-img">'+
+                      '<img src="/img/icono-imagen-grande.png" class="label-footer"></label>'+
+                      '<input type="file" id="imagen'+idComponent+'-'+(indexImagen + 2)+'"  accept=".jpg, .png, .jpeg" class="input-desplegable-texto-imagen" onchange="generatePreview('+stringId+','+(indexImagen + 2)+', '+stringType+')" typeInput="img3">'+
+                      '<div id="imgPreview'+idComponent+'-'+(indexImagen + 2)+'" class="preview-img-carroucel"></div>'+
+                    '</div>'+
+                  '</div>'+
+                  '<div class="d-flex col-lg-12 justify-content-end align-items-center">'+
+                    '<input type="checkbox"><span>Agregar fondo</span>'+
+                  '</div>'+
+                '</div>'+
+              '</div>';
+              indexImagen = indexImagen + 2;
           break;
           default:
             component = "";
@@ -474,11 +525,17 @@
           }else{
             toInsert.push(item);
           }
-          console.log(toInsert);
-          console.log(toUpdate);
-          //saveComponents(toInsert);
-          //updateComponents(toUpdate);
         });
+        console.log(toInsert);
+        console.log(toUpdate);
+        Swal.fire(
+            'Bien!',
+            'Los componentes se han actualizado con exito!',
+            'success'
+          )
+        
+        //saveComponents(toInsert);
+        updateComponents(toUpdate);
     }
     function formJsonComponent(idElement, typeElement, idComponent) {
       let jsonItem =
@@ -487,6 +544,8 @@
         "Padre": null,
         "TipoComponente": null,
         "Url": null,
+        "UrlDos": null,
+        "UrlTres": null,
         "Descripcion": null,
         "BackgroundColor": null,
         "AgregarFondo": 0,
@@ -494,7 +553,7 @@
         "Subtitulo": null,
         "Orden": null,
         "IdModulo": null,
-        "Files": null,
+        "Files": [],
         "Desplazantes": []
       }
       let jsonDesplazante = {
@@ -502,7 +561,7 @@
         "Url": null,
         "Titulo": null,
         "Texto": null,
-        "Files": null,
+        "Files": [],
         "IdComponente": null
       }
       switch(typeElement) {
@@ -540,7 +599,6 @@
           $("#"+idElement).find(".card-texto-imagen").each(function() {
             let id = $(this).attr('id');
             let pkey = $(this).attr('db-id');
-            console.log(id);
             $("#"+id).find("input").each(function() {
                 let typeInp = $(this).attr("typeInput");
                 if(typeInp == 'img'){
@@ -577,7 +635,6 @@
           $("#"+idElement).find(".card-imagen-carroucel").each(function() {
             let id = $(this).attr('id');
             let pkey = $(this).attr('db-id');
-            console.log('id cardd-'+id);
             $("#"+id).find("input").each(function() {
                 let typeInp = $(this).attr("typeInput");
                 if(typeInp == 'img'){
@@ -602,6 +659,46 @@
             }
           });
         break;
+        case "desplegable-texto-imagen":
+          $("#"+idElement).find("input").each(function() {
+            let typeInp = $(this).attr("typeInput");
+            if(typeInp == 'subtitulo'){
+                let value = $(this).val();
+                jsonItem.Subtitulo = value;
+            }
+            if(typeInp == 'img1'){
+                let value = $(this).prop("files");
+                if(value[0]){
+                    jsonItem.Url = window.location.origin+'/files/'+value[0].name;
+                    jsonItem.Files.push(value[0]);
+                }else{
+                    jsonItem.Url = $(this).attr("value");
+                }
+            }
+            if(typeInp == 'img2'){
+                let value = $(this).prop("files");
+                if(value[0]){
+                    jsonItem.UrlDos = window.location.origin+'/files/'+value[0].name;
+                    jsonItem.Files.push(value[0]);
+                }else{
+                    jsonItem.UrlDos = $(this).attr("value");
+                }
+            }
+            if(typeInp == 'img3'){
+                let value = $(this).prop("files");
+                if(value[0]){
+                    jsonItem.UrlTres = window.location.origin+'/files/'+value[0].name;
+                    jsonItem.Files.push(value[0]);
+                }else{
+                    jsonItem.UrlTres = $(this).attr("value");
+                }
+            }
+          });
+          $("#"+idElement).find("textarea").each(function() {
+            let value = $(this).val();
+            jsonItem.Descripcion = value;
+          });
+        break;
         default:
           jsonItem = "";
       }
@@ -614,7 +711,6 @@
         for ( var key in item ) {
             formData.append(key, item[key]);
         }
-        console.log(formData);
 
         $.ajax({
           type: "POST",
@@ -626,7 +722,10 @@
           success: function (response) {
             console.log('saved');
             console.log(response);
-            saveDesplazantes(item.Desplazantes, response.id);
+            item.Desplazantes.map(function(item){
+                saveDesplazante(item, response.id);
+            })
+            
           }
         });
       })
@@ -634,21 +733,36 @@
 
     function updateComponents(components) {
       components.map(function(item){
-          console.log(item);
+        const formData = new FormData();
+        for ( var key in item ) {
+            formData.append(key, item[key]);
+        }
+
         $.ajax({
           type: "POST",
-          url: "/Componentes/updateComponentForModulo",
+          url: "/Componentes/updateComponentForModulo2",
           headers: { "RequestVerificationToken": "@GetAntiXsrfRequestToken()" },
-          data: item,
+          data: formData,
+          processData : false,
+          contentType : false,
           success: function (response) {
-            console.log('saved');
+            console.log('updated');
+            console.log(response);
+            item.Desplazantes.map(function(item){
+                let isDb = item.Id === "0";
+                if(isDb){
+                    saveDesplazante(item, response.id);
+                }else{
+                    updateDesplazante(item, response.id);
+                }
+            })
           }
         });
       })
     }
 
-    function saveDesplazantes(desplazantes, id) {
-      desplazantes.map(function(item){
+    function saveDesplazante(item, id) {
+        console.log('guardar desplazantes');
         item.IdComponente = id;
         const formData = new FormData();
         for ( var key in item ) {
@@ -666,15 +780,27 @@
             console.log(response);
           }
         });
-      })
     }
-    /*
-    '<ul class="contendor-lista" id="cardImagen'+idComponent+'-'+indexImagen+'">'+
-                      '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeCardImagen('+stringId+','+indexImagen+')">'+
-                      '<label for="imagen'+idComponent+'-'+indexImagen+'" id="imagenlabel'+idComponent+'-'+indexImagen+'" class="estilos-desplazante"><img src="/img/icono-imagen-pqueño.png" class="desplazante"></label>'+
-                      '<li><input type="file" id="imagen'+idComponent+'-'+indexImagen+'" class="input-desplegable-texto-imagen" onchange="generatePreview('+stringId+','+indexImagen+','+stringType+')"></li>'+
-                      '<div id="imgPreview'+idComponent+'-'+indexImagen+'" class="estilo-imagen-desplazante"></div>'+
-                    '</ul>'+
-    */
+
+    function updateDesplazante(item, id) {
+        console.log('actualizar desplazantes');
+        item.IdComponente = id;
+        const formData = new FormData();
+        for ( var key in item ) {
+            formData.append(key, item[key]);
+        }
+        $.ajax({
+          type: "POST",
+          url: "/Componentes/updateDesplazantes",
+          headers: { "RequestVerificationToken": "@GetAntiXsrfRequestToken()" },
+          data: formData,
+          processData : false,
+          contentType : false,
+          success: function (response) {
+            console.log('updated desplazante');
+            console.log(response);
+          }
+        });
+    }
 </script>
 }

@@ -21,6 +21,8 @@ namespace kiosko.Models
         public string? Subtitulo { get; set; }
         public int? Orden { get; set; }
         public int IdModulo { get; set; }
+        public string? UrlDos { get; set; }
+        public string? UrlTres { get; set; }
 
         public virtual Modulo IdModuloNavigation { get; set; } = null!;
         public virtual ICollection<Desplazante> Desplazantes { get; set; }

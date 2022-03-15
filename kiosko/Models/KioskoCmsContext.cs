@@ -26,7 +26,6 @@ namespace kiosko.Models
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-
             modelBuilder.Entity<Componente>(entity =>
             {
                 entity.ToTable("componentes");
@@ -71,6 +70,14 @@ namespace kiosko.Models
                 entity.Property(e => e.Url)
                     .IsUnicode(false)
                     .HasColumnName("url");
+
+                entity.Property(e => e.UrlDos)
+                    .IsUnicode(false)
+                    .HasColumnName("url_dos");
+
+                entity.Property(e => e.UrlTres)
+                    .IsUnicode(false)
+                    .HasColumnName("url_tres");
 
                 entity.HasOne(d => d.IdModuloNavigation)
                     .WithMany(p => p.Componentes)
