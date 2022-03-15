@@ -4,11 +4,13 @@
     box-sizing: border-box;
     font-family: 'Poppins', sans-serif;
 }
+
 body {
-    background-image:url('img/fondo.png');
+    background-image: url('img/fondo.png');
 }
+
 .principal {
-    margin-top:30px;
+    margin-top: 30px;
 }
 
 .tituloCmp {
@@ -21,7 +23,6 @@ body {
 
 .texto {
     height: 140px;
-    
 }
 
 .inputTexto {
@@ -53,18 +54,18 @@ body {
     height: 88px;
 }
 
-.navegacion .header {
-    position:absolute;
-    display:flex;
-    left:85%;
-    top:1px;
-}
-
-
-    .header .header-hija {
-        margin-right: 20px;
-        margin-top: 20px;
+    .navegacion .header {
+        position: absolute;
+        display: flex;
+        left: 85%;
+        top: 1px;
     }
+
+
+.header .header-hija {
+    margin-right: 20px;
+    margin-top: 20px;
+}
 
 .header-hija .contenedor {
     position: absolute;
@@ -118,10 +119,9 @@ body {
 
 .menu-desplegable .boton-perfil {
     background-color: transparent;
-    display:flex;
-    padding-bottom:5px;
+    display: flex;
+    padding-bottom: 5px;
     border: none;
-    
 }
 
 .menu-desplegable .cerrar-sesion {
@@ -134,13 +134,12 @@ body {
 .menu-desplegable .editar-modulos {
     color: transparent;
     display: flex;
-    padding-top:10px;
+    padding-top: 10px;
     text-decoration: none;
     list-style: none;
 }
 
 .menu-desplegable:hover > .cerrar-sesion {
-    
     color: white;
     background-color: #455A64;
 }
@@ -151,18 +150,18 @@ body {
 
 
 .menu-desplegable:hover > .editar-modulos {
-    display:flex;
-    padding-top:10px;
+    display: flex;
+    padding-top: 10px;
     color: white;
     background-color: #455A64;
 }
 
 
-.logo-kiosko{
-    margin:20px;
+.logo-kiosko {
+    margin: 20px;
 }
 
-.logo-kiosko .kiosko {
+    .logo-kiosko .kiosko {
         width: 200px;
         height: 48.05px;
     }
@@ -175,7 +174,7 @@ body {
 }
 
 .scroll {
-    height:500px;
+    height: 500px;
     overflow-y: scroll;
 }
 
@@ -189,7 +188,8 @@ body {
 
 .posicion-logo {
     background-color: #455A64;
-}    
+}
+
 .dropzone {
     background: white;
     border-radius: 5px;
@@ -220,8 +220,9 @@ body {
     width: 300px;
     margin: 15px;
 }
-.contendor-lista{
-    padding:0 40px;
+
+.contendor-lista {
+    padding: 0 40px;
 }
 
 .texto-imagen-1 ul li {
@@ -240,42 +241,44 @@ body {
 }
 
 
-.descripcion-guia-video{
-    text-align:center;
-
+.descripcion-guia-video {
+    text-align: center;
 }
 
 .descripcion-guia-video-input {
     border: 1px dashed #9B9B9B;
-    margin:20px 0;
-    height:3 0px;
+    margin: 20px 0;
+    height: 3 0px;
     width: 100%;
 }
 
-    .descripcion-guia-video-input::placeholder{
-        text-align:center;
+    .descripcion-guia-video-input::placeholder {
+        text-align: center;
     }
 
 
-    .input-archivo {
-        margin-bottom: 30px;
-    }
+.input-archivo {
+    margin-bottom: 30px;
+}
 
 .texto-imagen-display {
     display: flex;
-    width:100%;
+    width: 100%;
 }
-.contenedor-padre{
-    text-align:center;
+
+.contenedor-padre {
+    text-align: center;
 }
+
 .position {
     margin-right: 30px;
-    margin-bottom:10px;
+    margin-bottom: 10px;
 }
 
 .input-desplegable-texto-imagen {
     display: none;
 }
+
 .label-desplegable-texto-imagen {
     width: 102px;
     height: 78px;
@@ -283,17 +286,15 @@ body {
 }
 
 .estilo-imagen-desplegable {
-    
     top: 0;
 }
 
     .estilo-imagen-desplegable img {
         width: 200px;
-        
     }
 
-.estilo-imagen-desplazante img{
-    width:200px;
+.estilo-imagen-desplazante img {
+    width: 200px;
 }
 /*.button-close {
     position: relative;
@@ -309,15 +310,15 @@ body {
     border: #9B9B9B 1px dashed;
     width: 100%;
     height: 42px;
-    margin-top:18px;
+    margin-top: 18px;
 }
 
 .imagen-general {
     display: inline-flex;
-    
 }
-.label-imagen-1{
-    margin-top:10px;
+
+.label-imagen-1 {
+    margin-top: 10px;
 }
 
 .label-footer {
@@ -325,8 +326,8 @@ body {
 }
 
 .imagen-1 {
-    margin:0 50px;
-    margin-top:5px;
+    margin: 0 50px;
+    margin-top: 5px;
 }
 
 .imagen-2 {
@@ -334,55 +335,56 @@ body {
     margin-top: 5px;
 }
 
-.checkbox{
-    margin-top:20px;
-    text-align:end;
+.checkbox {
+    margin-top: 20px;
+    text-align: end;
 }
+
 .label-desplegable-texto-imagen-2 {
     background-color: #C4C4C4;
     width: 154px;
     height: 129px
 }
+
 .label-desplegable-texto-imagen-1 {
     background-color: #C4C4C4;
     width: 154px;
     height: 129px
 }
 
-.estilo-imagen-desplegable-1 img{
-    width:200px;
-   
+.estilo-imagen-desplegable-1 img {
+    width: 200px;
 }
 
 .estilo-imagen-desplegable-2 img {
     width: 200px;
 }
 
-.button-close-video{
-    position:relative;
-    top:30px;
-   left:300px;
-    width:20px;
-    height:30px;
+.button-close-video {
+    position: relative;
+    top: 30px;
+    left: 300px;
+    width: 20px;
+    height: 30px;
 }
 
-.input-video-guia{
-    display:none;
+.input-video-guia {
+    display: none;
 }
 
 .label-video-guia {
     background-color: #C4C4C4;
-    text-align:center;
+    text-align: center;
     width: 119px;
     height: 100px;
-   
 }
+
 .video-guia-padre-input {
     text-align: center;
 }
 
 .label-video-guia img {
-    margin-top:25px;
+    margin-top: 25px;
 }
 
 
@@ -392,7 +394,7 @@ body {
 
 .estilos-desplazante {
     background-color: #C4C4C4;
-    margin-top:10px;
+    margin-top: 10px;
     width: 60px;
     height: 60px;
 }
@@ -408,19 +410,18 @@ body {
     margin-top: 15px;
 }
 
-.button-close-dti{
-    position:absolute;
-    width:20px;
-    height:30px;
+.button-close-dti {
+    position: absolute;
+    width: 20px;
+    height: 30px;
 }
 
 .button-close-ti {
     position: relative;
     width: 30px;
     height: 30px;
-    left:86px;
-    top:30px;
-    
+    left: 86px;
+    top: 30px;
 }
 
 .textarea {
@@ -450,7 +451,7 @@ body {
 
 
 
-    
+
 
 
 .junto1 {
@@ -475,9 +476,11 @@ body {
     padding-left: 5%;
     padding-right: 5%;
 }
-.container-texto-imagen > button {
-    margin-inline: 0 !important;
-}
+
+    .container-texto-imagen > button {
+        margin-inline: 0 !important;
+    }
+
 .input-img {
     display: none;
 }
@@ -575,11 +578,11 @@ preview-img-pop {
 }
 
 
-    .container-dezplazante-texto-imagen {
-        display: flex;
-        align-content: center;
-        align-items: center;
-    }
+.container-dezplazante-texto-imagen {
+    display: flex;
+    align-content: center;
+    align-items: center;
+}
 
 .desplazante-texto-imagen {
     width: 60%;
@@ -616,7 +619,6 @@ preview-img-pop {
     margin-left: 0%;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     border-radius: 5px;
-    
 }
 
 .button-container {
