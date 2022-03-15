@@ -58,7 +58,7 @@
 
 .inputTitulo {
     font-family: 'Poppins', sans-serif;
-    width: 70%;
+    width: 100%;
     font-size: 20px;
     text-align: center;
     border: 1px dashed #9B9B9B;
@@ -121,14 +121,14 @@
 .container-pop {
     text-align: center;
     width:100%;
-    height: 190px;
+    height: auto;
 }
 
 .hija-pop {
     width: 190px;
-    height: 150px;
+    height: auto;
     padding: 16px;
-    margin-left:33%;
+    margin-left:37.5%;
 }
 
 .button-close-pop {
@@ -142,22 +142,40 @@
 }
 
 .file-Amagen-pop-up {
-    display: block;
-    width: 100%;
-    height: 130px;
+    width: 150px;
+    height: auto;
+    padding: 16px;
+   
+    
     background-color: #C4C4C4;
-    text-align:center;
 }
-.label-imagen-pop{
-    margin-top:20px;
+
+.label-popvideo {
+    display:block;
+    width: 150px;
+    height: 130px;
+    margin-left:39%;
+    padding: 16px;
+    background-color: #C4C4C4;
+}
+
+.imagen-popvideo{
+    margin-top:25px;
 
 }
+
+.hija-popvideo {
+    height: auto;
+    text-align: center;
+    padding: 16px;
+}
+
 
 
 .preview-img-pop {
     text-align: center;
     min-height: 10px;
-    height: 120px;
+    height: auto;
     position: relative;
     margin-top: -20px;
 }
@@ -210,3 +228,5 @@
     border: none;
     font-size: 20px;
 }
+
+
