@@ -110,7 +110,10 @@
               break;   
               case 'Carrucel':
               clase = "button-close-ca";
-              break;   
+              break;  
+              case 'Texto-Imagen.1':
+              clase = "button-close-ti1";
+              break;
               default:
               clase = "button-close";
                     };
@@ -498,7 +501,7 @@
                             '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
                           '<p>'+
                           '<div>'+
-                          '<div class="junto">'+
+                            '<div class="junto">'+
                                 '<label class="file-Amagen" for="imagen'+idComponent+'-'+indexImagen+'" id="imagennew'+idComponent+'-'+indexImagen+'">   </label>'+
                                 '<input class="pop-up-input" type="file" id="imagen'+idComponent+'-'+indexImagen+'" accept=".png" onchange="generatePreview('+stringId+','+indexImagen+')">'+
                                 '<div class="titulomax">'+
@@ -516,11 +519,11 @@
                                 '<p class="selColor">Elige un color para asignarle.</p>'+
                                 'Color'+
                                 '<input class="Color-Selector"  type="color">'+
-                         '</div>'+
+                            '</div>'+
                         '</div>'+
                   '</div>';
                   indexImagen = indexImagen + 1;
-                break;
+                 break;
                  case 'Pop-up':
                 component =
                   '<div class="col-lg-12 texto component" id="'+idComponent+'">'+
@@ -588,7 +591,7 @@
                                 '</div>'+
                              '</div>'+
                         '</div>'+
-                        '<button class="Boton1">Agregar Fondo</button>'
+                        '<input type="checkbox" class="Boton1" name="AgregarFondo" value=""><label for="AgregarFondo"> Agregar Fondo</label><br>'+
                   '</div>';
                   indexImagen = indexImagen + 1;
                 break;

@@ -37,10 +37,11 @@
                   <li class="option-menu" onclick="addComponent('banner-informativo', 0)">Banner Informativo</li>
                   <li class="option-menu" onclick="addComponent('pop-up-video', 0)">Pop-Up Video</li>
                   <li class="option-menu" onclick="addComponent('video-guia', 0)">video-guia</li>
-                  <li class="option-menu" onclick="addComponent('ccceso-Cursos', 0)">Acceso-cursos</li>
+                  <li class="option-menu" onclick="addComponent('acceso-cursos', 0)">Acceso-cursos</li>
                   <li class="option-menu" onclick="addComponent('carrucel', 0)">Carrucel</li>
                   <li class="option-menu" onclick="addComponent('pop-up', 0)">Pop-up</li>
                   <li class="option-menu" onclick="addComponent('desplegable-texto-imagen', 0)">Desplegable texto-imagen</li>
+                  <li class="option-menu" onclick="addComponent('texto-imagen', 0)">Texto Imagen</li>
                 </ul>
                 <button class="btn btn-block btn-warning" onclick="saveChanges()">Guardar</button>
               </div>
@@ -169,7 +170,7 @@
           let imgFile = $("#"+idImg).prop("files");
           imgFile = imgFile[0];
           let reader = new FileReader();
-          reader.readAsDataURL(imgFile);
+          reader.readAsDataURL(imgFile); 
           $("#"+idImglabel).css("display","none");
           $("#"+idImgclose).css("display","block");
           let classBtnClose = "";
@@ -371,8 +372,8 @@
               break;
                case 'banner-informativo':
                 let valueInpText2 = (item) ? item.descripcion : "";
-                let valueInpColor = (item) ? item.backgroundColor : "";
-                component =
+                let valueInpColorBanner = (item) ? item.backgroundColor : "";
+                component = 
                   '<div class="col-lg-12 component" db-id="'+pkId+'" id="'+idComponent+'" type-component="banner-informativo">'+
                         '<div id="backgroundBanner">'+
                           '<p class="tituloCmp">'+type+
@@ -381,9 +382,41 @@
                           '<input class="inputTexto" type="text" placeholder="Texto" typeInput="text2" value="'+valueInpText2+'">'+
                           '<p class="selColor">Elige un color para asignarle.</p>'+
                             'Color '+
-                            '<input class="Color-Selector" type="color" typeInput="color-bainfo" value="'+valueInpColor+'">'+
+                            '<input class="Color-Selector" type="color" typeInput="Color" value="'+valueInpColorBanner+'">'+
                         '</div>'+
                   '</div>';
+                break;
+                case 'texto-imagen':
+                let valueInpImg2 = (item) ? item.url : "";
+                let valueInpText3 = (item) ? item.descripcion : "";
+                  component = 
+                  '<div class="col-lg-12 component" db-id="'+pkId+'" id="'+idComponent+'" type-component="texto-imagen">'+
+                        '<div id="background">'+
+                          '<p class="tituloCmp">'+type+
+                            '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
+                          '<p>'+
+                          '<div>'+
+                          '<div class="junto1">'+
+                                '<div class="card-imagen1">'+
+                                    '<p>Imagen</p>'+
+                                    '<label for="imagen'+idComponent+'-'+indexImagen+'" id="imagenlabel'+idComponent+'-'+indexImagen+'" class="btn-img">'+
+                                        '<img src="/img/icono-imagen-chico.png" class="label-imagen-1"/>'+
+                                    '</label>'+
+                                    '<input type="file" typeInput="img" id="imagen'+idComponent+'-'+indexImagen+'" onchange="generatePreview('+stringId+','+indexImagen+','+stringType+')" class="input-img">'+
+                                    '<div id="imgPreview'+idComponent+'-'+indexImagen+'" class="preview-img-small"></div>'+
+                                    '</div>'+
+                                    '<div class="titulomax1">'+
+                                        '<textarea class="inputTitulo1" typeInput="textarea" value="'+valueInpText3+'"></textarea>'+
+                                    '</div>'+
+                                '</div>'+
+                                '<div id="imgPreview'+idComponent+'-'+indexImagen+'" class="estilo-imagen"></div>'+ 
+                                     '<div id="preview'+idComponent+'" class="estilo-imagen">'+ 
+                                '</div>'+
+                             '</div>'+
+                        '</div>'+
+                        '<input type="checkbox" typeInput="check" class="Boton1" name="AgregarFondo" value="+'+valueInpText3+'"><label for="AgregarFondo"> Agregar Fondo</label><br>'+
+                  '</div>';
+                  indexImagen = indexImagen + 1;
                 break;
               case 'enlace':
               let valueInpTit = (item) ? item.titulo : "";
@@ -425,6 +458,41 @@
                         '</div>'+
                   '</div>';
               break;
+              case 'acceso-cursos':
+              let valueInpImg3 = (item) ? item.url : "";
+              let valueInpTit2 = (item) ? item.titulo : "";
+              let valueInpLink2 = (item) ? item.url : "";
+              let valueInpcolor2 = (item) ? item.backgroundColor : "";
+                component = 
+                   '<div class="col-lg-12 texto component" id="'+idComponent+'" db-id="'+pkId+'" type-component="acceso-cursos">'+
+                        '<div id="background">'+
+                          '<p class="tituloCmp">'+type+
+                            '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
+                          '<p>'+
+                          '<div>'+
+                          '<div class="junto">'+
+                                '<label class="file-Amagen" for="imagen'+idComponent+'-'+indexImagen+'" id="imagenlabel'+idComponent+'-'+indexImagen+'"></label>'+
+                                '<input class="pop-up-input" type="file" id="imagen'+idComponent+'-'+indexImagen+'" accept=".png" onchange="generatePreview('+stringId+','+indexImagen+')" typeInput="img-access" value="'+valueInpImg3+'">'+
+                                '<div class="titulomax">'+
+                                     '<input class="inputTitulo" type="text" placeholder="Titulo" typeInput="titulo-access" value="'+valueInpTit2+'"/>'+
+                                '</div>'+
+                                '</div>'+
+                                '</div>'+
+                                '<div id="imgPreview'+idComponent+'-'+indexImagen+'" class="estilo-imagen"></div>'+ 
+                                     '<div id="preview'+idComponent+'" class="estilo-imagen">'+ 
+                                     //'<input class="inputTitulo" type="text" placeholder="Titulo"/>'+
+                                     '<div class="inputLinkContainer">'+
+                                    '<input class="inputLink" id="inputLink'+idComponent+'" name="link" type="text" placeholder="∞" onkeyup="toggleButton('+stringId+')" typeInput="link-access" value="'+valueInpLink2+'"/>'+
+                                    '<button class="botonEnlace" onclick="AddPreviewLink('+stringId+')" id="previewLink'+idComponent+'"> <img src="/img/check.png" width="50px"/> </button>'+
+                                '</div>'+
+                                '<p class="selColor">Elige un color para asignarle.</p>'+
+                                'Color'+
+                                '<input class="Color-Selector"  type="color" typeInput="color-access" value="'+valueInpcolor2+'">'+
+                         '</div>'+
+                        '</div>'+
+                  '</div>';
+                  indexImagen = indexImagen + 1;
+                break;
               case 'video-guia':
               let valueInpVideoGuia = (item) ? item.url : "";
               let valueInpTextGuia = (item) ?  item.descripcion : "";
@@ -441,11 +509,9 @@
                                         '<div id="previewVideo'+idComponent+'"  class="video-guia-video">'+      
                                         '</div>'+
                                     '</div>'+
-
                                     '<div class="descripcion-guia-video">'+
                                         '<input type="text" class="descripcion-guia-video-input" placeholder="Descripcion" typeInput="text-guia" value="'+valueInpTextGuia+'">'+
                                     '</div>'+ 
-
                                         '<div>'+
                                             '<label>Elige color para asignarle </label>'+
                                         '</div>'+
@@ -500,12 +566,12 @@
               }else{
                 toInsert.push(item);
               }
-              console.log(toInsert);
-              console.log(toUpdate);
-
-              saveComponents(toInsert);
-              updateComponents(toUpdate);
             });
+            console.log(toInsert);
+            console.log(toUpdate);
+
+            saveComponents(toInsert);
+            updateComponents(toUpdate);
         }
         function formJsonComponent(idElement, typeElement, idComponent) {
           let jsonItem =
@@ -565,18 +631,17 @@
               });
             break;
             case 'banner-informativo':
-               $("#"+idElement).find("input").each(function() {
-                let typeInp = $(this).attr("typeInput");
+              $("#"+idElement).find("input").each(function() {
+               let typeInp = $(this).attr("typeInput");
                 if(typeInp == 'text2'){
                     let value = $(this).val();
-                        jsonItem.Descripcion = value;                 
-                    }
-                
-                if(typeInp == 'color-bainfo'){
+                    jsonItem.Descripcion = value;
+                }
+                if(typeInp == 'Color'){
                     let value = $(this).val();
                     jsonItem.BackgroundColor = value;
                 }
-              });
+                });
             break;
             case 'enlace':
               $("#"+idElement).find("input").each(function() {
@@ -615,6 +680,55 @@
                 
               });
             break;
+            case 'texto-imagen':
+            console.log("EntroCase")
+              $("#"+idElement).find("input").each(function() {
+                let typeInp = $(this).attr("typeInput");
+                console.log(typeInp)
+                if(typeInp == 'img'){
+                    let value = $(this).prop("files");
+                    if(value[0]){
+                        jsonItem.Url = window.location.origin+'/files/'+value[0].name;
+                        jsonItem.files = value[0];
+                    }else{
+                        jsonItem.Url = $(this).attr("value");
+                    }
+                }
+              });
+               $("#"+idElement).find("textarea").each(function() {
+                let typeInp = $(this).attr("typeInput");
+                console.log(typeInp)
+                if(typeInp == 'textarea'){
+                    let value = $(this).val();
+                    jsonItem.Descripcion = value;
+                }
+              });
+              break;
+               case 'acceso-cursos':
+              $("#"+idElement).find("input").each(function() {
+                let typeInp = $(this).attr("typeInput");
+                if(typeInp == 'link-access'){
+                        jsonItem.Url = $(this).val();       
+                }
+                if(typeInp == 'titulo-access'){
+                    let value = $(this).val();
+                    jsonItem.Titulo = value;
+                }
+                if(typeInp == 'color-access'){
+                    let value = $(this).val();
+                    jsonItem.BackgroundColor = value;
+                }
+                if(typeInp == 'img-access'){
+                    let value = $(this).prop("files");
+                    if(value[0]){
+                        jsonItem.Url = window.location.origin+'/files/'+value[0].name;
+                        jsonItem.files = value[0];
+                    }else{
+                        jsonItem.Url = $(this).attr("value");
+                    }
+                }
+              });
+            break;
             case 'video-guia':
               $("#"+idElement).find("input").each(function() {
                 let typeInp = $(this).attr("typeInput");
@@ -632,7 +746,6 @@
                     let value = $(this).val();
                     jsonItem.Descripcion = value;
                 }
-
                 if(typeInp == 'color-guia'){
                     let value = $(this).val();
                     jsonItem.BackgroundColor = value;
@@ -661,6 +774,7 @@
             default:
               jsonItem = "";
           }
+          console.log(jsonItem);
           return jsonItem;
         }
 
