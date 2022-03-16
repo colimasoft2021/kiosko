@@ -252,14 +252,14 @@ body {
     width: 100%;
 }
 
-    .descripcion-guia-video-input::placeholder{
-        text-align:center;
-    }
+.descripcion-guia-video-input::placeholder{
+    text-align:center;
+}
 
 
-    .input-archivo {
-        margin-bottom: 30px;
-    }
+.input-archivo {
+    margin-bottom: 30px;
+}
 
 .texto-imagen-display {
     display: flex;

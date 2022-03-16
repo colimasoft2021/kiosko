@@ -90,7 +90,43 @@
     }
 
     function removeComponent(idComponent) {
-      $("#"+idComponent).remove();
+      let idComponente = $("#"+idComponent).attr("db-id");
+      console.log(idComponente);
+      let isDb = idComponente === "0";
+      Swal.fire({
+        title: '¿Está seguro que desea borrar este componente?',
+        text: "Los cambios no podrán ser revertidos!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Eliminar',
+        cancelButtonText: 'Cancelar'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          if(!isDb){
+              console.log("diferente");
+              $.ajax({
+                type: "POST",
+                url: "/Componentes/deleteComponent",
+                headers: { "RequestVerificationToken": "@GetAntiXsrfRequestToken()" },
+                data: {id: idComponente},
+                success: function (response) {
+                  console.log('deleted');
+                  console.log(response);
+                  Swal.fire(
+                    'Bien!',
+                    'Los componentes se han actualizado con exito!',
+                    'success'
+                  )
+                  $("#"+idComponent).remove();
+                  saveChanges();
+                }
+              });
+          }
+          
+        }
+      })
     }
 
     function generatePreview(stringId,indexImagen,type) {
@@ -528,14 +564,14 @@
         });
         console.log(toInsert);
         console.log(toUpdate);
-        Swal.fire(
-            'Bien!',
-            'Los componentes se han actualizado con exito!',
-            'success'
-          )
         
-        //saveComponents(toInsert);
+        saveComponents(toInsert);
         updateComponents(toUpdate);
+        Swal.fire(
+          'Bien!',
+          'Los componentes se han actualizado con exito!',
+          'success'
+        )
     }
     function formJsonComponent(idElement, typeElement, idComponent) {
       let jsonItem =

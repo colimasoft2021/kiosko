@@ -24,14 +24,17 @@ namespace kiosko.Controllers
             _env = env;
         }
 
-        [HttpPost, ActionName("Delete")]
+        [HttpPost()]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public IActionResult deleteComponent(int id)
         {
-            var componente = await _context.Componentes.FindAsync(id);
+            var componente = _context.Componentes.Find(id);
+            IActionResult ret = null;
             _context.Componentes.Remove(componente);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            _context.SaveChanges();
+
+            ret = StatusCode(StatusCodes.Status201Created, componente);
+            return ret;
         }
 
         private bool ComponenteExists(int id)
