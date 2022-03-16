@@ -247,8 +247,8 @@ body {
 
 .descripcion-guia-video-input {
     border: 1px dashed #9B9B9B;
-    margin: 20px 0;
-    height: 3 0px;
+    margin:20px 0;
+    height:30px;
     width: 100%;
 }
 
@@ -374,7 +374,8 @@ body {
 
 .label-video-guia {
     background-color: #C4C4C4;
-    text-align: center;
+    display:block;
+    margin-left:42%;
     width: 119px;
     height: 100px;
 }
@@ -465,7 +466,7 @@ body {
 
 .titulomax1 {
     width: 80%;
-    height: 80;
+    height: 80px;
 }
 
 .pop-up-input {
