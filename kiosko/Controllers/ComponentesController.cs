@@ -24,14 +24,17 @@ namespace kiosko.Controllers
             _env = env;
         }
 
-        [HttpPost, ActionName("Delete")]
+        [HttpPost()]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public IActionResult deleteComponent(int id)
         {
-            var componente = await _context.Componentes.FindAsync(id);
+            var componente = _context.Componentes.Find(id);
+            IActionResult ret = null;
             _context.Componentes.Remove(componente);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            _context.SaveChanges();
+
+            ret = StatusCode(StatusCodes.Status201Created, componente);
+            return ret;
         }
 
         private bool ComponenteExists(int id)
@@ -47,8 +50,13 @@ namespace kiosko.Controllers
                 return Json(null);
             }
 
-            var componente = _context.Componentes.Where(c => c.IdModulo == idModulo).OrderBy(c => c.Orden);
-            return Json(componente);
+            var componentes = _context.Componentes.Where(c => c.IdModulo == idModulo).OrderBy(c => c.Orden);
+
+            foreach (var c in componentes)
+            {
+                _context.Desplazantes.Where(d => d.IdComponente == c.Id).Load();
+            }
+            return Json(componentes);
         }
 
         [HttpPost()]
@@ -85,6 +93,8 @@ namespace kiosko.Controllers
             componente.Padre = Request.Form["Padre"];
             componente.TipoComponente = Request.Form["TipoComponente"];
             componente.Url = Request.Form["Url"];
+            componente.UrlDos = Request.Form["UrlDos"];
+            componente.UrlTres = Request.Form["UrlTres"];
             componente.Descripcion = Request.Form["Descripcion"];
             componente.BackgroundColor = Request.Form["BackgroundColor"];
             componente.AgregarFondo = Int32.Parse(Request.Form["AgregarFondo"]);
@@ -108,6 +118,100 @@ namespace kiosko.Controllers
             _context.SaveChanges();
 
             ret = StatusCode(StatusCodes.Status201Created, componente);
+            return ret;
+        }
+
+        [HttpPost()]
+        [ValidateAntiForgeryToken]
+        public IActionResult updateComponentForModulo2()
+        {
+            Console.WriteLine(Request.Form);
+            var componente = new Componente();
+            componente.Id = Int32.Parse(Request.Form["Id"]);
+            componente.Padre = Request.Form["Padre"];
+            componente.TipoComponente = Request.Form["TipoComponente"];
+            componente.Url = Request.Form["Url"];
+            componente.UrlDos = Request.Form["UrlDos"];
+            componente.UrlTres = Request.Form["UrlTres"];
+            componente.Descripcion = Request.Form["Descripcion"];
+            componente.BackgroundColor = Request.Form["BackgroundColor"];
+            componente.AgregarFondo = Int32.Parse(Request.Form["AgregarFondo"]);
+            componente.Titulo = Request.Form["Titulo"];
+            componente.Subtitulo = Request.Form["Subtitulo"];
+            componente.Orden = Int32.Parse(Request.Form["Orden"]);
+            componente.IdModulo = Int32.Parse(Request.Form["IdModulo"]);
+
+            foreach (var formFile in Request.Form.Files)
+            {
+                var fulPath = Path.Combine(_env.ContentRootPath, "wwwroot\\files", formFile.FileName);
+                using (FileStream fs = System.IO.File.Create(fulPath))
+                {
+                    formFile.CopyTo(fs);
+                    fs.Flush();
+                }
+            }
+
+            IActionResult ret = null;
+            _context.Update(componente);
+            _context.SaveChanges();
+
+            ret = StatusCode(StatusCodes.Status201Created, componente);
+            return ret;
+        }
+
+        [HttpPost()]
+        [ValidateAntiForgeryToken]
+        public IActionResult saveDesplazantes()
+        {
+            var desplazante = new Desplazante();
+            desplazante.Id = Int32.Parse(Request.Form["Id"]);
+            desplazante.Url = Request.Form["Url"];
+            desplazante.Titulo = Request.Form["Titulo"];
+            desplazante.Texto = Request.Form["Texto"];
+            desplazante.IdComponente = Int32.Parse(Request.Form["IdComponente"]);
+
+            foreach (var formFile in Request.Form.Files)
+            {
+                var fulPath = Path.Combine(_env.ContentRootPath, "wwwroot\\files", formFile.FileName);
+                using (FileStream fs = System.IO.File.Create(fulPath))
+                {
+                    formFile.CopyTo(fs);
+                    fs.Flush();
+                }
+            }
+            IActionResult ret = null;
+            _context.Add(desplazante);
+            _context.SaveChanges();
+
+            ret = StatusCode(StatusCodes.Status201Created, desplazante);
+            return ret;
+        }
+
+        [HttpPost()]
+        [ValidateAntiForgeryToken]
+        public IActionResult updateDesplazantes()
+        {
+            var desplazante = new Desplazante();
+            desplazante.Id = Int32.Parse(Request.Form["Id"]);
+            desplazante.Url = Request.Form["Url"];
+            desplazante.Titulo = Request.Form["Titulo"];
+            desplazante.Texto = Request.Form["Texto"];
+            desplazante.IdComponente = Int32.Parse(Request.Form["IdComponente"]);
+
+            foreach (var formFile in Request.Form.Files)
+            {
+                var fulPath = Path.Combine(_env.ContentRootPath, "wwwroot\\files", formFile.FileName);
+                using (FileStream fs = System.IO.File.Create(fulPath))
+                {
+                    formFile.CopyTo(fs);
+                    fs.Flush();
+                }
+            }
+            IActionResult ret = null;
+            _context.Update(desplazante);
+            _context.SaveChanges();
+
+            ret = StatusCode(StatusCodes.Status201Created, desplazante);
             return ret;
         }
     }

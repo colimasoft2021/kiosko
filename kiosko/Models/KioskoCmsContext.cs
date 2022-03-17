@@ -18,6 +18,7 @@ namespace kiosko.Models
         }
 
         public virtual DbSet<Componente> Componentes { get; set; } = null!;
+        public virtual DbSet<Desplazante> Desplazantes { get; set; } = null!;
         public virtual DbSet<Modulo> Modulos { get; set; } = null!;
         public virtual DbSet<Progreso> Progresos { get; set; } = null!;
         public virtual DbSet<Usuario> Usuarios { get; set; } = null!;
@@ -28,6 +29,8 @@ namespace kiosko.Models
             modelBuilder.Entity<Componente>(entity =>
             {
                 entity.ToTable("componentes");
+
+                entity.HasIndex(e => e.IdModulo, "IX_componentes_id_modulo");
 
                 entity.Property(e => e.Id).HasColumnName("id");
 
@@ -52,7 +55,6 @@ namespace kiosko.Models
                     .HasColumnName("padre");
 
                 entity.Property(e => e.Subtitulo)
-                    .HasMaxLength(50)
                     .IsUnicode(false)
                     .HasColumnName("subtitulo");
 
@@ -62,7 +64,6 @@ namespace kiosko.Models
                     .HasColumnName("tipo_componente");
 
                 entity.Property(e => e.Titulo)
-                    .HasMaxLength(50)
                     .IsUnicode(false)
                     .HasColumnName("titulo");
 
@@ -70,11 +71,46 @@ namespace kiosko.Models
                     .IsUnicode(false)
                     .HasColumnName("url");
 
+                entity.Property(e => e.UrlDos)
+                    .IsUnicode(false)
+                    .HasColumnName("url_dos");
+
+                entity.Property(e => e.UrlTres)
+                    .IsUnicode(false)
+                    .HasColumnName("url_tres");
+
                 entity.HasOne(d => d.IdModuloNavigation)
                     .WithMany(p => p.Componentes)
                     .HasForeignKey(d => d.IdModulo)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_componentes_modulos");
+            });
+
+            modelBuilder.Entity<Desplazante>(entity =>
+            {
+                entity.ToTable("desplazantes");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.IdComponente).HasColumnName("id_componente");
+
+                entity.Property(e => e.Texto)
+                    .IsUnicode(false)
+                    .HasColumnName("texto");
+
+                entity.Property(e => e.Titulo)
+                    .IsUnicode(false)
+                    .HasColumnName("titulo");
+
+                entity.Property(e => e.Url)
+                    .IsUnicode(false)
+                    .HasColumnName("url");
+
+                entity.HasOne(d => d.IdComponenteNavigation)
+                    .WithMany(p => p.Desplazantes)
+                    .HasForeignKey(d => d.IdComponente)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_desplazantes_componentes");
             });
 
             modelBuilder.Entity<Modulo>(entity =>
