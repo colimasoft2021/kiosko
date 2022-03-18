@@ -5,6 +5,11 @@ namespace kiosko.Models
 {
     public partial class Componente
     {
+        public Componente()
+        {
+            Desplazantes = new HashSet<Desplazante>();
+        }
+
         public int Id { get; set; }
         public string? Padre { get; set; }
         public string? TipoComponente { get; set; }
@@ -16,7 +21,10 @@ namespace kiosko.Models
         public string? Subtitulo { get; set; }
         public int? Orden { get; set; }
         public int IdModulo { get; set; }
+        public string? UrlDos { get; set; }
+        public string? UrlTres { get; set; }
 
         public virtual Modulo IdModuloNavigation { get; set; } = null!;
+        public virtual ICollection<Desplazante> Desplazantes { get; set; }
     }
 }

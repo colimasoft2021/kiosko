@@ -14,814 +14,1166 @@
 <div class="content-wrapper">
     <!-- Main content -->
     <section class="content">
-      <div class="container-fluid">
-        <h2>@Html.DisplayFor(model => model.Titulo)</h2>
-        <div class="row">
-          <div class="col-lg-8">
-            <input type="hidden" value="@Html.DisplayFor(model => model.Id)" id="idModulo" />
-            <div class="row" id="sortable">
+        <div class="container-fluid">
+            <h2>@Html.DisplayFor(model => model.Titulo)</h2>
+            <div class="row">
+                <div class="col-lg-8">
+                    <input type="hidden" value="@Html.DisplayFor(model => model.Id)" id="idModulo" />
+                    <div class="row" id="containerComponents">
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Menu components</h5>
+                            <br />
+                            <ul id="menu">
+                                <li class="option-menu" onclick="addComponent('texto', 0)">Texto</li>
+                                <li class="option-menu" onclick="addComponent('subtitulo', 0)">Subtitulo</li>
+                                <li class="option-menu" onclick="addComponent('imagen', 0)">Imagen</li>
+                                <li class="option-menu" onclick="addComponent('desplazante-texto-imagen', 0)">Desplazante Texto-Imagen</li>
+                                <li class="option-menu" onclick="addComponent('video', 0)">Video</li>
+                                <li class="option-menu" onclick="addComponent('enlace', 0)">Enlace</li>
+                                <li class="option-menu" onclick="addComponent('banner-informativo', 0)">Banner Informativo</li>
+                                <li class="option-menu" onclick="addComponent('pop-up-video', 0)">Pop-Up Video</li>
+                                <li class="option-menu" onclick="addComponent('video-guia', 0)">video-guia</li>
+                                <li class="option-menu" onclick="addComponent('acceso-cursos', 0)">Acceso-cursos</li>
+                                <li class="option-menu" onclick="addComponent('carrucel', 0)">Carrucel</li>
+                                <li class="option-menu" onclick="addComponent('pop-up', 0)">Pop-up</li>
+                                <li class="option-menu" onclick="addComponent('desplegable-texto-imagen', 0)">Desplegable texto-imagen</li>
+                                <li class="option-menu" onclick="addComponent('texto-imagen', 0)">Texto Imagen</li>
+                                <li class="option-menu" onclick="addComponent('titulo', 0)">Titulo</li>
+                            </ul>
+                            <button class="btn btn-block btn-warning" onclick="saveChanges()">Guardar</button>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
-          <div class="col-lg-4">
-            <div class="card">
-              <div class="card-body">
-                <h5 class="card-title">Menu components</h5>
-                <br/>
-                <ul id="sortable">
-                  <li class="option-menu" onclick="addComponent('texto', 0)">Texto</li>
-                  <li class="option-menu" onclick="addComponent('subtitulo', 0)">Subtitulo</li>
-                  <li class="option-menu" onclick="addComponent('imagen', 0)">Imagen</li>
-                  <li class="option-menu" onclick="addComponent('desplazante-texto-imagen', 0)">Desplazante Texto-Imagen</li>
-                  <li class="option-menu" onclick="addComponent('video', 0)">Video</li>
-                  <li class="option-menu" onclick="addComponent('enlace', 0)">Enlace</li>
-                  <li class="option-menu" onclick="addComponent('banner-informativo', 0)">Banner Informativo</li>
-                  <li class="option-menu" onclick="addComponent('pop-up-video', 0)">Pop-Up Video</li>
-                  <li class="option-menu" onclick="addComponent('video-guia', 0)">video-guia</li>
-                  <li class="option-menu" onclick="addComponent('acceso-cursos', 0)">Acceso-cursos</li>
-                  <li class="option-menu" onclick="addComponent('carrucel', 0)">Carrucel</li>
-                  <li class="option-menu" onclick="addComponent('pop-up', 0)">Pop-up</li>
-                  <li class="option-menu" onclick="addComponent('desplegable-texto-imagen', 0)">Desplegable texto-imagen</li>
-                  <li class="option-menu" onclick="addComponent('texto-imagen', 0)">Texto Imagen</li>
-                </ul>
-                <button class="btn btn-block btn-warning" onclick="saveChanges()">Guardar</button>
-              </div>
+            <div class="row">
+                <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+                <a asp-action="Index">Back to List</a>
             </div>
-          </div>
         </div>
-        <div class="row">
-            <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-            <a asp-action="Index">Back to List</a>
-        </div>
-      </div>
     </section>
-  </div>
-  @section scripts {
-    <script type="text/javascript">
-        var idModulo = $("#idModulo").val();
-        console.log(idModulo);
-        var padre = "modulo"+idModulo;
-        var indexImagen = 1;
-        var indexCardTi = 1;
-        Dropzone.autoDiscover = false;
-        var DropzoneVideo;
+</div>
+@section scripts {
+<script type="text/javascript">
+    $(function () {
+        console.log('entro');
+       $("#containerComponents").sortable();
+    });
+    var idModulo = $("#idModulo").val();
+    var padre = "modulo"+idModulo;
+    var indexImagen = 1;
+    var indexCardTi = 1;
+    var indexCardIm = 1;
+    var DropzoneVideo;
+    
+    loadComponents();
+
+    function loadComponents() {
+        $("#containerComponents").empty();
         $.ajax({
-              type: "POST",
-              url: "/Componentes/GetAllComponentsForModulo",
-              data: { "idModulo": idModulo},
-              success: function (response) {
-                console.log(response);
-                response.map(item => {
-                  addComponent(item.tipoComponente, item.id, item);
-                });
-              }
+          type: "POST",
+          url: "/Componentes/GetAllComponentsForModulo",
+          data: { "idModulo": idModulo},
+          success: function (response) {
+            console.log(response);
+            response.map(item => {
+              addComponent(item.tipoComponente, item.id, item);
+            });
+          }
         });
-          var dropzone = new Dropzone('#DropImagen', {
-            parallelUploads: 2,
-            thumbnailHeight: 120,
-            thumbnailWidth: 120,
-            acceptedFiles: ".jpg",
-            maxFilesize: 3,
-            filesizeBase: 1000,
-          });
-          dropzoneVideo = new dropzone('#DropVideo', {
-            parallelUploads: 2,
-            thumbnailHeight: 120,
-            thumbnailWidth: 120,
-            acceptedFiles: ".mp4",
-            maxFilesize: 1,
-            filesizeBase: 1000,
-          });
-          $("#sortable").sortable();
-        function addComponent(type, pkId, item) {
-          let component = generateComponent(type, pkId, item);
-          $("#sortable").append(component.component);
-          if(type == "imagen"){
-              //generatePreviewFromDb(component.idComponent, component.indexImagen, item.url, item.typeElement);
-          }
-        }
-        function generatePreviewFromDb(stringId,indexImagen, urlImg, type) {
-          let idImg = "imagen"+stringId+"-"+indexImagen;
-          console.log(idImg);
-          let idImglabel = "imagenlabel"+stringId+"-"+indexImagen;
-          console.log(idImglabel);
-          let idImgclose = "imagenclose"+stringId+"-"+indexImagen;
-          console.log(idImgclose);
-          let idPreview = "imgPreview"+stringId+"-"+indexImagen;
-          console.log(idPreview);
-          $("#"+idImglabel).css("display","none");
-          $("#"+idImgclose).css("display","block");
-          let classBtnClose = "";
-          switch(type) {
-              case 'imagen':
-                classBtnClose = "button-close";
-              break;
-              case 'pop-up':
-                classBtnClose = "button-close-pop";
-              break;
-              default:
-                classBtnClose = "button-close-small";
-          }
-            let preview = $("#"+idPreview);
-            $("#"+idPreview).empty();
-            stringId = "'"+stringId+"'"
-            $("#"+idPreview).append('<button id="imagenclose'+stringId+'-'+indexImagen+'"  class="'+classBtnClose+'"  onclick="deletePreview('+stringId+','+indexImagen+')">x</button>');
-            imagen = document.createElement('img');
-            imagen.src = urlImg;
-            preview.innerHTML = "";
-            preview.append(imagen);
-        }
-        function removeComponent(idComponent) {
+    }
+
+    function addComponent(type, pkId, item) {
+      let component = generateComponent(type, pkId, item);
+      $("#containerComponents").append(component.component);
+    }
+
+    function removeComponent(idComponent) {
+      let idComponente = $("#"+idComponent).attr("db-id");
+      console.log(idComponente);
+      let isDb = idComponente === "0";
+      Swal.fire({
+        title: '¿Está seguro que desea borrar este componente?',
+        text: "Los cambios no podrán ser revertidos!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Eliminar',
+        cancelButtonText: 'Cancelar'
+      }).then((result) => {
+        if (result.isConfirmed) {
           $("#"+idComponent).remove();
+          if(!isDb){
+              console.log("diferente");
+              $.ajax({
+                type: "POST",
+                url: "/Componentes/deleteComponent",
+                headers: { "RequestVerificationToken": "@GetAntiXsrfRequestToken()" },
+                data: {id: idComponente},
+                success: function (response) {
+                  console.log('deleted');
+                  console.log(response);
+                  Swal.fire(
+                    'Bien!',
+                    'Los componentes se han actualizado con exito!',
+                    'success'
+                  )
+                  saveChanges();
+                }
+              });
+          }
+          
         }
-        function AddPreviewLink(stringId){
-            let enlace = document.getElementById('inputLink'+stringId).value;
-            console.log("Entre");
-            console.log(enlace);
-            console.log(stringId);
-            console.log('inputLink'+stringId);
-            document.getElementById("previewLink"+stringId).innerHTML = ['<iframe  width="300px" height="200px" src="'+enlace+'"></iframe>'];
+      })
+    }
+
+    function generatePreview(stringId,indexImagen,type) {
+      let idImg = "imagen"+stringId+"-"+indexImagen;
+      let idImglabel = "imagenlabel"+stringId+"-"+indexImagen;
+      let idImgclose = "imagenclose"+stringId+"-"+indexImagen;
+      let idPreview = "imgPreview"+stringId+"-"+indexImagen;
+      let imgFile = $("#"+idImg).prop("files");
+      imgFile = imgFile[0];
+      let reader = new FileReader();
+      reader.readAsDataURL(imgFile);
+      $("#"+idImglabel).css("display","none");
+      $("#"+idImgclose).css("display","block");
+      let classBtnClose = "";
+      switch(type) {
+          case 'imagen':
+            classBtnClose = "button-close";
+          break;
+          case 'carrucel':
+            classBtnClose = "button-close-carroucel";
+          break;
+          case 'desplegable-texto-imagen':
+            classBtnClose = "button-close-carroucel";
+          break;
+          default:
+            classBtnClose = "button-close-small";
+      }
+      reader.onload = function() {
+        let preview = $("#"+idPreview);
+        $("#"+idPreview).empty();
+        stringId = "'"+stringId+"'"
+        $("#"+idPreview).append('<button id="imagenclose'+stringId+'-'+indexImagen+'"  class="'+classBtnClose+'"  onclick="deletePreview('+stringId+','+indexImagen+')">x</button>');
+        imagen = document.createElement('img');
+        imagen.src = reader.result;
+        preview.innerHTML = "";
+        preview.append(imagen);
+      }
+    }
+
+    function deletePreview(stringId,indexImagen){
+      let idImg = "imagen"+stringId+"-"+indexImagen;
+      let idImglabel = "imagenlabel"+stringId+"-"+indexImagen;
+      let idPreview = "imgPreview"+stringId+"-"+indexImagen;
+      let idImgclose = "imagenclose"+stringId+"-"+indexImagen;
+      $("#"+idImglabel).css("display","block")
+      $("#"+idPreview).empty();
+      $("#"+idImgclose).css("display","none")
+    }
+
+    function AddTextoImagen(stringId, type){
+        let idImg = "imagen"+stringId+"-"+indexImagen;
+        let idPreview = "imgPreview"+stringId+"-"+indexImagen;
+        let newStringId = "'"+stringId+"'";
+        let stringType = "'"+type+"'";
+        let idImgLabel = "imagenlabel"+stringId+"-"+indexImagen;
+        let idCardTi = "card-ti-"+stringId+"-"+indexCardTi;
+        $("#text"+stringId).append(
+            '<div class="card-texto-imagen" id="'+idCardTi+'" db-id="0">'+
+              '<div class="card-imagen">'+
+                  '<p>Imagen</p>'+
+                  '<label for="'+idImg+'" id="'+idImgLabel+'" class="btn-img">'+
+                    '<img src="/img/icono-imagen-chico.png" class="label-imagen-1"/>'+
+                  '</label>'+
+                  '<input type="file" id="'+idImg+'" onchange="generatePreview('+newStringId+','+indexImagen+','+stringType+')" typeInput="img" class="input-img">'+
+                  '<div id="'+idPreview+'" class="preview-img-small"></div>'+
+              '</div>'+
+              '<input class="titulo-input mt-4" type="text" typeInput="titulo" placeholder="Titulo">'+
+              '<br/>'+
+              '<input type="text" placeholder="Texto" typeInput="texto" class="mt-4">'+
+            '</div>'
+        );
+        indexImagen = indexImagen + 1;
+        indexCardTi = indexCardTi + 1;
+    }
+
+    function generateDropImagen(stringId){
+      Dropzone.autoDiscover = false;
+      let DropImagen = {
+        maxFilesize: 5,
+        acceptedFiles: ".png",
+        addRemoveLinks: true,
+        clickable: true,
+        thumbnailWidth: 140,
+        thumbnailHeight: 140,
+        init: function() {
+          this.on("maxfilesexceeded", function(file) {
+            this.removeAllFiles();
+            this.addFile(file);
+          });
         }
-        function toggleButton(stringId){
-            var link = $('#inputLink'+stringId).val();
-            console.log(link);
-            if(link){
-                $('#previewLink'+stringId).css('visibility', 'visible');
-            } 
-            else{
-               $('#previewLink'+stringId).css('visibility', 'hidden');
+      }
+      $("form#DropImagen"+stringId).dropzone(DropImagen);
+    }
+
+    function generatePreviewVideo(stringId){
+      var file = $('#video'+stringId).prop('files');
+      file = file[0];
+      $("#videolabel"+stringId).css("display","none");
+      $("#videoclose"+stringId).css("display","block");
+      let readerVideo = new FileReader();
+      readerVideo.readAsDataURL(file);
+      readerVideo.onload = function(){
+        let preVideo = $('#previewVideo'+stringId);
+        $('#previewVideo'+stringId).empty();
+        let videoId = "'"+stringId+"'"
+        $('#previewVideo'+stringId).append('<button id="videoclose'+stringId+'"  class="button-close-video"  onclick="deletePreviewVideo('+videoId+')">x</button>');
+        video=document.createElement('video');
+        video.src = readerVideo.result;
+        video.style.width = "400px";
+        video.controls = true;
+        preVideo.innerHTML = "";
+        preVideo.append(video);
+      }
+    }
+
+    function deletePreviewVideo(stringId){
+      $("#videolabel"+stringId).css("display","block");
+      $("#previewVideo"+stringId).empty();
+      $("#videoclose"+stringId).css("display","none");
+    }
+
+    function addImageToCarroucel(stringId,type){
+        let idImg = "imagen"+stringId+"-"+indexImagen;
+        let idLabelImg = "imagenlabel"+stringId+"-"+indexImagen;
+        let idPreview = "imgPreview"+stringId+"-"+indexImagen;
+        let newStringId = "'"+stringId+"'";
+        let stringType = "'"+type+"'";
+        let idCardIm = "card-img-"+stringId+"-"+indexCardIm;
+        $("#containerCarroucel"+stringId).append(
+            '<div class="card-imagen-carroucel" id="'+idCardIm+'" db-id="0">'+
+                '<label for="'+idImg+'" id="'+idLabelImg+'" class="btn-img">'+
+                 '<img src="/img/icono-imagen-chico.png" class="label-imagen-1"/>'+
+                '</label>'+
+                '<input type="file" id="'+idImg+'" onchange="generatePreview('+newStringId+','+indexImagen+','+stringType+')" typeInput="img" class="input-img">'+
+                '<div id="'+idPreview+'" class="preview-img-carroucel"></div>'+
+            '</div>'
+        );
+        indexImagen = indexImagen + 1;
+    }
+
+    function generateCardsImages(stringId, idComponent, item, pkId, stringType) {
+        let images = [{
+            "id": "0",
+            "url": "/img/icono-imagen-chico.png",
+            "titulo": "",
+            "texto": "",
+            "files": "",
+            "idComponente": pkId
+        }];
+        if(item.length > 0){
+            images = item;
+        }
+        let component = "";
+        images.map((item) => {
+            let preview = "";
+            let styleLabel = "";
+            let isDb = item.id === "0";
+            if(isDb){
+                preview = 
+                '<div id="imgPreview'+idComponent+'-'+indexImagen+'" class="preview-img-carroucel"></div>';
+            }else{
+                styleLabel = 'style="display: none;"';
+                preview = 
+                '<div id="imgPreview'+idComponent+'-'+indexImagen+'" class="preview-img-carroucel">'+
+                    '<button id="imagenclose'+idComponent+'-'+indexImagen+'"  class="button-close-carroucel"  onclick="deletePreview('+stringId+','+indexImagen+')">x</button>'+
+                    '<img src="'+item.url+'" />'+
+                '</div>';
             }
+            component +=
+            '<div class="card-imagen-carroucel" id="card-img-'+idComponent+'-'+indexCardIm+'" db-id="'+item.id+'">'+
+                '<label for="imagen'+idComponent+'-'+indexImagen+'" id="imagenlabel'+idComponent+'-'+indexImagen+'" '+styleLabel+' class="btn-img">'+
+                  '<img src="/img/icono-imagen-chico.png" class="label-imagen-1"/>'+
+                '</label>'+
+                '<input type="file" id="imagen'+idComponent+'-'+indexImagen+'" onchange="generatePreview('+stringId+','+indexImagen+','+stringType+')" typeInput="img" class="input-img" value="'+item.url+'">';
+            component += preview;
+            component +=
+            '</div>';
+            indexImagen = indexImagen + 1;
+            indexCardIm = indexCardIm + 1;
+        });
+        return component;
+    }
+
+    function generateCardImage(stringId, idComponent, item, pkId, stringType) {
+        let preview = "";
+        let styleLabel = "";
+        let urlImage = "";
+        if(pkId !== 0){
+            styleLabel = 'style="display: none;"';
+            urlImage = item.url;
+            preview = 
+            '<div id="imgPreview'+idComponent+'-'+indexImagen+'" class="preview-img">'+
+                '<button id="imagenclose'+idComponent+'-'+indexImagen+'"  class="button-close"  onclick="deletePreview('+stringId+','+indexImagen+')">x</button>'+
+                '<img src="'+urlImage+'" />'+
+            '</div>';
+        }else{
+            preview = 
+            '<div id="imgPreview'+idComponent+'-'+indexImagen+'" class="preview-img"></div>';
         }
-        function generatePreview(stringId,indexImagen,type) {
-          let idImg = "imagen"+stringId+"-"+indexImagen;
-          console.log(idImg);
-          let idImglabel = "imagenlabel"+stringId+"-"+indexImagen;
-          let idImgclose = "imagenclose"+stringId+"-"+indexImagen;
-          let idPreview = "imgPreview"+stringId+"-"+indexImagen;
-          let imgFile = $("#"+idImg).prop("files");
-          imgFile = imgFile[0];
-          let reader = new FileReader();
-          reader.readAsDataURL(imgFile); 
-          $("#"+idImglabel).css("display","none");
-          $("#"+idImgclose).css("display","block");
-          let classBtnClose = "";
-          switch(type) {
-              case 'imagen':
-                classBtnClose = "button-close";
-              break;
-              case 'pop-up':
-                classBtnClose = "button-close-pop";
-              break;
-              default:
-                classBtnClose = "button-close-small";
-          }
-          reader.onload = function() {
-            let preview = $("#"+idPreview);
-            $("#"+idPreview).empty();
-            stringId = "'"+stringId+"'"
-            $("#"+idPreview).append('<button id="imagenclose'+stringId+'-'+indexImagen+'"  class="'+classBtnClose+'"  onclick="deletePreview('+stringId+','+indexImagen+')">x</button>');
-            imagen = document.createElement('img');
-            imagen.src = reader.result;
-            preview.innerHTML = "";
-            preview.append(imagen);
-          }
+        let component = 
+        '<div class="container-imagen">'+
+            '<label for="imagen'+idComponent+'-'+indexImagen+'" id="imagenlabel'+idComponent+'-'+indexImagen+'" '+styleLabel+' class="btn-img">'+
+                '<img src="/img/icono-imagen-chico.png" class="image-icon"/>'+
+            '</label>'+
+            '<input type="file" id="imagen'+idComponent+'-'+indexImagen+'" onchange="generatePreview('+stringId+','+indexImagen+','+stringType+')" class="input-img" typeInput="img" value="'+urlImage+'">'+
+        '</div>';
+        component += preview;
+        indexImagen = indexImagen + 1;
+        return component;
+    }
+
+    function generateCardsDesplazante(stringId, idComponent, item, pkId, stringType) {
+        let images = [{
+            "id": "0",
+            "url": "/img/icono-imagen-chico.png",
+            "titulo": "",
+            "texto": "",
+            "files": "",
+            "idComponente": pkId
+        }];
+        if(item.length > 0){
+            images = item;
         }
-        function deletePreview(stringId,indexImagen){
-          let idImg = "imagen"+stringId+"-"+indexImagen;
-          let idImglabel = "imagenlabel"+stringId+"-"+indexImagen;
-          let idPreview = "imgPreview"+stringId+"-"+indexImagen;
-          let idImgclose = "imagenclose"+stringId+"-"+indexImagen;
-          $("#"+idImglabel).css("display","block")
-          $("#"+idPreview).empty();
-          $("#"+idImgclose).css("display","none")
-        }
-        function AddTextoImagen(stringId, type){
-            let idImg = "imagen"+stringId+"-"+indexImagen;
-            let idPreview = "imgPreview"+stringId+"-"+indexImagen;
-            let newStringId = "'"+stringId+"'";
-            let stringType = "'"+type+"'";
-            let idImgLabel = "imagenlabel"+stringId+"-"+indexImagen;
-            let idCardTi = "card-ti-"+stringId+"-"+indexCardTi;
-            $("#text"+stringId).append(
-                '<div class="card-texto-imagen" id="'+idCardTi+'">'+
-                  '<div class="card-imagen">'+
-                      '<p>Imagen</p>'+
-                      '<label for="'+idImg+'" id="'+idImgLabel+'" class="btn-img">'+
-                        '<img src="/img/icono-imagen-chico.png" class="label-imagen-1"/>'+
-                      '</label>'+
-                      '<input type="file" id="'+idImg+'" onchange="generatePreview('+newStringId+','+indexImagen+','+stringType+')" class="input-img">'+
-                      '<div id="'+idPreview+'" class="preview-img-small"></div>'+
-                  '</div>'+
-                  '<input class="titulo-input mt-4" type="text" placeholder="Titulo">'+
-                  '<br/>'+
-                  '<input type="text" placeholder="Texto" class="mt-4">'+
-                '</div>'
-            );
+        let component = "";
+        images.map((item) => {
+            let preview = "";
+            let styleLabel = "";
+            let isDb = item.id === "0";
+            if(isDb){
+                preview = 
+                '<div id="imgPreview'+idComponent+'-'+indexImagen+'" class="preview-img-small"></div>';
+            }else{
+                styleLabel = 'style="display: none;"';
+                preview = 
+                '<div id="imgPreview'+idComponent+'-'+indexImagen+'" class="preview-img-small">'+
+                    '<button id="imagenclose'+idComponent+'-'+indexImagen+'"  class="button-close-small"  onclick="deletePreview('+stringId+','+indexImagen+')">x</button>'+
+                    '<img src="'+item.url+'" />'+
+                '</div>';
+            }
+            component +=
+            '<div class="card-texto-imagen" id="card-ti-'+idComponent+'-'+indexCardTi+'" db-id="'+item.id+'">'+
+                      '<div class="card-imagen">'+
+                          '<p>Imagen</p>'+
+                          '<label for="imagen'+idComponent+'-'+indexImagen+'" id="imagenlabel'+idComponent+'-'+indexImagen+'" '+styleLabel+' class="btn-img">'+
+                            '<img src="/img/icono-imagen-chico.png" class="label-imagen-1"/>'+
+                          '</label>'+
+                          '<input type="file" id="imagen'+idComponent+'-'+indexImagen+'" onchange="generatePreview('+stringId+','+indexImagen+','+stringType+')" typeInput="img" class="input-img" value="'+item.url+'">';
+            component += preview;
+            component +=
+                      '</div>'+
+                      '<input class="titulo-input mt-4" type="text" typeInput="titulo" placeholder="Titulo" value="'+item.titulo+'">'+
+                      '<br/>'+
+                      '<input type="text" placeholder="Texto" typeInput="texto" class="mt-4" value="'+item.texto+'">'+
+                    '</div>';
             indexImagen = indexImagen + 1;
             indexCardTi = indexCardTi + 1;
+        });
+        return component;
+    }
+
+    function AddPreviewLink(stringId){
+        let enlace = document.getElementById('inputLink'+stringId).value;
+        document.getElementById("previewLink"+stringId).innerHTML = ['<iframe  width="300px" height="200px" src="'+enlace+'"></iframe>'];
+    }
+
+    function toggleButton(stringId){
+        var link = $('#inputLink'+stringId).val();
+        if(link){
+            $('#previewLink'+stringId).css('visibility', 'visible');
+        } 
+        else{
+           $('#previewLink'+stringId).css('visibility', 'hidden');
         }
-        function generateDropImagen(stringId){
-          Dropzone.autoDiscover = false;
-          let DropImagen = {
-            maxFilesize: 5,
-            acceptedFiles: ".png",
-            addRemoveLinks: true,
-            clickable: true,
-            thumbnailWidth: 140,
-            thumbnailHeight: 140,
-            init: function() {
-              this.on("maxfilesexceeded", function(file) {
-                this.removeAllFiles();
-                this.addFile(file);
-              });
-            }
-          }
-          $("form#DropImagen"+stringId).dropzone(DropImagen);
-        }
-        function generatePreviewVideo(stringId){
-          var file = $('#video'+stringId).prop('files');
-          file = file[0];
-          console.log(file);
-          $("#videolabel"+stringId).css("display","none");
-          $("#videoclose"+stringId).css("display","block");
-          let readerVideo = new FileReader();
-          readerVideo.readAsDataURL(file);
-          readerVideo.onload = function(){
-            let preVideo = $('#previewVideo'+stringId);
-            $('#previewVideo'+stringId).empty();
-            let videoId = "'"+stringId+"'"
-            $('#previewVideo'+stringId).append('<button id="videoclose'+stringId+'"  class="button-close-video"  onclick="deletePreviewVideo('+videoId+')">x</button>');
-            video=document.createElement('video');
-            video.src = readerVideo.result;
-            video.style.width = "400px";
-            video.controls = true;
-            preVideo.innerHTML = "";
-            preVideo.append(video);
-          }
-        }
-        function deletePreviewVideo(stringId){
-          $("#videolabel"+stringId).css("display","block");
-          $("#previewVideo"+stringId).empty();
-          $("#videoclose"+stringId).css("display","none");
-        }
-        function generateComponent(type, pkId, item) {
-            let idComponent = Math.random().toString(36).substring(2,7);
-            let stringId = "'"+idComponent+"'";
-            let stringType = "'"+type+"'";
-            let component = "";
-            switch(type) {
-              case 'texto':
-                let valueInpText = (item) ? item.descripcion : "";
-                component = 
-                  '<div class="col-lg-12 component" db-id="'+pkId+'" id="'+idComponent+'" type-component="texto">'+
-                    '<p class="tituloCmp">'+type+
-                      '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
-                    '<p>'+
-                    '<input class="inputTexto" type="text" value="'+valueInpText+'">'+
-                  '</div>';
-              break;
-              case 'subtitulo':
-                let valueInpSub = (item) ? item.subtitulo : "";
-                component = 
-                  '<div class="col-lg-12 texto component" db-id="'+pkId+'" id="'+idComponent+'" type-component="subtitulo">'+
-                    '<p class="tituloCmp">'+type+
-                      '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
-                    '<p>'+
-                    '<input class="inputTexto" type="text" value="'+valueInpSub+'">'+
-                  '</div>';
-              break;
-              case 'imagen':
-                let valueInpImg = (item) ? item.url : "";
-                let valueInpPie = (item) ? item.descripcion : "";
-                component =
-                  '<div class="col-lg-12 component" db-id="'+pkId+'" id="'+idComponent+'" type-component="imagen">'+
-                    '<p class="tituloCmp">'+type+
-                      '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
-                    '</p>'+
-                    '<div class="container-texto-imagen">'+
+    }
+
+    function generateComponent(type, pkId, item) {
+        let idComponent = Math.random().toString(36).substring(2,7);
+        let stringId = "'"+idComponent+"'";
+        let stringType = "'"+type+"'";
+        let component = "";
+        let itemDesplazantes = (item) ? item.desplazantes : [];
+        switch(type) {
+          case 'texto':
+            let valueInpText = (item) ? item.descripcion : "";
+            component =
+              '<div class="col-lg-12 component" db-id="'+pkId+'" id="'+idComponent+'" type-component="texto">'+
+                '<p class="tituloCmp">'+type+
+                  '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
+                '<p>'+
+                '<input class="inputTexto" type="text" value="'+valueInpText+'">'+
+              '</div>';
+          break;
+          case 'subtitulo':
+            let valueInpSub = (item) ? item.subtitulo : "";
+            component =
+              '<div class="col-lg-12 texto component" db-id="'+pkId+'" id="'+idComponent+'" type-component="subtitulo">'+
+                '<p class="tituloCmp">'+type+
+                  '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
+                '<p>'+
+                '<input class="inputTexto" type="text" value="'+valueInpSub+'">'+
+              '</div>';
+          break;
+          case 'imagen':
+            let valueInpImg = (item) ? item.url : "";
+            let valueInpPie = (item) ? item.descripcion : "";
+            component =
+              '<div class="col-lg-12 component" db-id="'+pkId+'" id="'+idComponent+'" type-component="imagen">'+
+                '<p class="tituloCmp">'+type+
+                  '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
+                '</p>'+
+                '<div class="container-texto-imagen">';
+
+            let image = generateCardImage(stringId, idComponent, item, pkId, stringType);
+            component += image;
+                    
+            component +=
+                    '<input class="w-100 mt-1 inputTexto" type="text" placeholder="Pie de Foto" typeInput="pie-foto" value="'+valueInpPie+'"/>'+
+                '</div>'+
+                '<div>'+
+              '</div>';
+              indexImagen = indexImagen + 1;
+          break;
+          case 'desplazante-texto-imagen':
+            component =
+              '<div class="col-lg-12 component" db-id="'+pkId+'" id="'+idComponent+'" type-component="desplazante-texto-imagen">'+
+                '<p class="tituloCmp">'+type+
+                  '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
+                '<p>'+
+                '<div class="row container-dezplazante-texto-imagen">'+
+                  '<div class="desplazante-texto-imagen" id="text'+idComponent+'">';
+
+            let desplazantes = generateCardsDesplazante(stringId, idComponent, itemDesplazantes, pkId, stringType);
+            component += desplazantes;
+                    
+            component +=
+                  '</div>'+
+                  '<div class="button-container">'+
+                    '<button onclick="AddTextoImagen('+stringId+','+stringType+')" class="btn-add-more">+</button>'+
+                  '</div>'+
+                '</div>'+
+              '</div>';
+              indexImagen = indexImagen + 1;
+              indexCardTi = indexCardTi + 1;
+          break;
+          case 'video':
+            component =
+              '<div class="col-lg-12 component" db-id="'+pkId+'" id="'+idComponent+'" type-component="video">'+
+                '<p class="tituloCmp">'+type+
+                  '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
+                '<p>'+
+                '<div class="container-imagen">'+
+                    '<label for="video'+idComponent+'" id="videolabel'+idComponent+'" class="btn-img">'+
+                        '<img src="/img/video.png" class="video-icon"/>'+
+                    '</label>'+
+                    '<input type="file" accept="video/*" id="video'+idComponent+'" onchange="generatePreviewVideo('+stringId+')" class="input-img">'+
+                    '<div id="previewVideo'+idComponent+'" class="preview-img"></div>'+
+                '</div>'+
+              '</div>';
+          break;
+          case 'carrucel':
+            component =
+              '<div class="col-lg-12 component" db-id="'+pkId+'" id="'+idComponent+'" type-component="carrucel">'+
+                '<p class="tituloCmp">'+type+
+                  '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
+                '<p>'+
+                '<div class="row container-carroucel">'+
+                  '<div class="carroucel" id="containerCarroucel'+idComponent+'">';
+
+            let images = generateCardsImages(stringId, idComponent, itemDesplazantes, pkId, stringType);
+            component += images;
+           
+            component +=
+                  '</div>'+
+                  '<div class="button-container">'+
+                    '<button onclick="addImageToCarroucel('+stringId+','+stringType+')" class="btn-add-more">+</button>'+
+                  '</div>'+
+                '</div>'+
+              '</div>';
+              indexImagen = indexImagen + 1;
+              indexCardIm = indexCardIm + 1;
+          break;
+          case 'desplegable-texto-imagen':
+            component =
+              '<div class="col-lg-12 component" id="'+idComponent+'" db-id="'+pkId+'" type-component="desplegable-texto-imagen">'+
+                '<p class="tituloCmp">'+type+
+                  '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
+                '<p>'+
+                '<div class="container-desplegable row">'+
+                  '<div class="container-desplegable-texto-imagen">'+
+                    '<div class="card-desplegable-imagen">'+
+                      '<div class="d-flex col-lg-12 justify-content-end align-items-center">'+
                         '<label for="imagen'+idComponent+'-'+indexImagen+'" id="imagenlabel'+idComponent+'-'+indexImagen+'" class="btn-img">'+
-                            '<img src="/img/icono-imagen-chico.png" class="image-icon"/>'+
-                        '</label>'+
-                        '<input type="file" id="imagen'+idComponent+'-'+indexImagen+'" onchange="generatePreview('+stringId+','+indexImagen+','+stringType+')" class="input-img" typeInput="img" value="'+valueInpImg+'">'+
-                        '<div id="imgPreview'+idComponent+'-'+indexImagen+'" class="preview-img"></div>'+
-                        '<input class="w-100 mt-1 inputTexto" type="text" placeholder="Pie de Foto" typeInput="pie-foto" value="'+valueInpPie+'"/>'+
-                    '</div>'+
-                    '<div>'+
-                  '</div>';
-                  indexImagen = indexImagen + 1;
-              break;
-              case 'desplazante-texto-imagen':
-                component =
-                  '<div class="col-lg-12 component" db-id="'+pkId+'" id="'+idComponent+'" type-component="desplazante-texto-imagen">'+
-                    '<p class="tituloCmp">'+type+
-                      '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
-                    '<p>'+
-                    '<div class="row container-dezplazante-texto-imagen">'+
-                      '<div class="desplazante-texto-imagen" id="text'+idComponent+'">'+
-                        '<div class="card-texto-imagen" id="card-ti-'+idComponent+'-'+indexCardTi+'">'+
-                          '<div class="card-imagen">'+
-                              '<p>Imagen</p>'+
-                              '<label for="imagen'+idComponent+'-'+indexImagen+'" id="imagenlabel'+idComponent+'-'+indexImagen+'" class="btn-img">'+
-                                '<img src="/img/icono-imagen-chico.png" class="label-imagen-1"/>'+
-                              '</label>'+
-                              '<input type="file" id="imagen'+idComponent+'-'+indexImagen+'" onchange="generatePreview('+stringId+','+indexImagen+','+stringType+')" class="input-img">'+
-                              '<div id="imgPreview'+idComponent+'-'+indexImagen+'" class="preview-img-small"></div>'+
-                          '</div>'+
-                          '<input class="titulo-input mt-4" type="text" placeholder="Titulo">'+
-                          '<br/>'+
-                          '<input type="text" placeholder="Texto" class="mt-4">'+
-                        '</div>'+
-                      '</div>'+
-                      '<div class="button-container">'+
-                        '<button onclick="AddTextoImagen('+stringId+','+stringType+')" class="btn-add-more">+</button>'+
+                        '<img src="/img/icono-imagen-chico.png" class="label-imagen-1"></label>'+
+                        '<input type="file" id="imagen'+idComponent+'-'+indexImagen+'" class="input-desplegable-texto-imagen"  accept=".jpg, .png, .jpeg" onchange="generatePreview('+stringId+','+indexImagen+', '+stringType+')" typeInput="img1">'+
+                        '<div id="imgPreview'+idComponent+'-'+indexImagen+'" class="preview-img-desplegable"></div>'+
                       '</div>'+
                     '</div>'+
-                  '</div>';
-                  indexImagen = indexImagen + 1;
-                  indexCardTi = indexCardTi + 1;
-              break;
-              case 'video':
-                component =
-                  '<div class="col-lg-12 texto component" db-id="'+pkId+'" id="'+idComponent+'" type-component="video">'+
-                    '<p class="tituloCmp">'+type+
-                      '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
-                    '<p>'+
-                    '<div class="container-texto-imagen">'+
-                        '<label for="video'+idComponent+'" id="videolabel'+idComponent+'" class="btn-img">'+
-                            '<img src="/img/video.png" class="video-icon"/>'+
-                        '</label>'+
-                        '<input type="file" accept="video/*" id="video'+idComponent+'" onchange="generatePreviewVideo('+stringId+')" class="input-img">'+
-                        '<div id="previewVideo'+idComponent+'" class="preview-img"></div>'+
+                    '<div class="card-desplegable-texto">'+
+                      '<input class="subtitle-input" type="text" placeholder="subtitulo" typeInput="subtitulo">'+        
                     '</div>'+
-                  '</div>';
-              break;
-               case 'banner-informativo':
-                let valueInpText2 = (item) ? item.descripcion : "";
-                let valueInpColorBanner = (item) ? item.backgroundColor : "";
-                component = 
-                  '<div class="col-lg-12 component" db-id="'+pkId+'" id="'+idComponent+'" type-component="banner-informativo">'+
-                        '<div id="backgroundBanner">'+
-                          '<p class="tituloCmp">'+type+
-                            '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
-                          '<p>'+
-                          '<input class="inputTexto" type="text" placeholder="Texto" typeInput="text2" value="'+valueInpText2+'">'+
-                          '<p class="selColor">Elige un color para asignarle.</p>'+
-                            'Color '+
-                            '<input class="Color-Selector" type="color" typeInput="Color" value="'+valueInpColorBanner+'">'+
-                        '</div>'+
-                  '</div>';
-                break;
-                case 'texto-imagen':
-                let valueInpImg2 = (item) ? item.url : "";
-                let valueInpText3 = (item) ? item.descripcion : "";
-                  component = 
-                  '<div class="col-lg-12 component" db-id="'+pkId+'" id="'+idComponent+'" type-component="texto-imagen">'+
-                        '<div id="background">'+
-                          '<p class="tituloCmp">'+type+
-                            '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
-                          '<p>'+
-                          '<div>'+
-                          '<div class="junto1">'+
-                                '<div class="card-imagen1">'+
-                                    '<p>Imagen</p>'+
-                                    '<label for="imagen'+idComponent+'-'+indexImagen+'" id="imagenlabel'+idComponent+'-'+indexImagen+'" class="btn-img">'+
-                                        '<img src="/img/icono-imagen-chico.png" class="label-imagen-1"/>'+
-                                    '</label>'+
-                                    '<input type="file" typeInput="img" id="imagen'+idComponent+'-'+indexImagen+'" onchange="generatePreview('+stringId+','+indexImagen+','+stringType+')" class="input-img">'+
-                                    '<div id="imgPreview'+idComponent+'-'+indexImagen+'" class="preview-img-small"></div>'+
-                                    '</div>'+
-                                    '<div class="titulomax1">'+
-                                        '<textarea class="inputTitulo1" typeInput="textarea" value="'+valueInpText3+'"></textarea>'+
-                                    '</div>'+
-                                '</div>'+
-                                '<div id="imgPreview'+idComponent+'-'+indexImagen+'" class="estilo-imagen"></div>'+ 
-                                     '<div id="preview'+idComponent+'" class="estilo-imagen">'+ 
-                                '</div>'+
-                             '</div>'+
-                        '</div>'+
-                        '<input type="checkbox" typeInput="check" class="Boton1" name="AgregarFondo" value="+'+valueInpText3+'"><label for="AgregarFondo"> Agregar Fondo</label><br>'+
-                  '</div>';
-                  indexImagen = indexImagen + 1;
-                break;
-              case 'enlace':
-              let valueInpTit = (item) ? item.titulo : "";
-              let valueInpLink = (item) ? item.url : "";
-              let valueInpcolor = (item) ? item.backgroundColor : "";
-                component =
-                  '<div class="col-lg-12 texto component CompoEnlace" id="'+idComponent+'" db-id="'+pkId+'" type-component="enlace">'+
-                          '<p class="tituloCmp">'+type+
-                            '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
-                          '<p>'+
-                          '<div class="margenContainer">'+
-                                '<input class="inputTitulo" type="text" placeholder="Titulo"  typeInput="titulo" value="'+valueInpTit+'"/>'+
-                              '<div class="inputLinkContainer">'+
-                                    '<input class="inputLink" id="inputLink'+idComponent+'" name="link" type="text" placeholder="Link" onkeyup="toggleButton('+stringId+')"  typeInput="link" value="'+valueInpLink+'"/>'+
-                                    '<button class="botonEnlace" onclick="AddPreviewLink('+stringId+')" id="previewLink'+idComponent+'"> <img src="/img/check.png" width="50px"></button>'+
-                              '</div>'+
-                                '<p class="selColor">Elige un color para asignarle.</p>'+
-                                'Color '+
-                                '<input class="Color-Selector"  type="color" typeInput="color"  value="'+valueInpcolor+'">'+
-                          '</div>'+
-                  '</div>';
-                break;
-                case 'pop-up':
-                let valueInpUpText = (item) ? item.descripcion : "";
-                let valueInpImgPop = (item) ? item.url : "";
-                component =
-                  '<div class="col-lg-12 texto component" id="'+idComponent+'" db-id="'+pkId+'" type-component="pop-up">'+
-                          '<p class="tituloCmp">'+type+
-                            '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
-                          '<p>'+
-                           '<input class="inputTexto" type="text" placeholder="Texto..." typeInput="up-text" value="'+valueInpUpText+'">'+ 
-                          '<div class="container-pop">'+
-                                '<div class="hija-pop">'+
-                                    '<label class="file-Amagen-pop-up" for="imagen'+idComponent+'-'+indexImagen+'" id="imagenlabel'+idComponent+'-'+indexImagen+'"><img src="/img/icono-imagen-grande.png"/></label>'+
-                                    '<input class="pop-up-input" type="file" id="imagen'+idComponent+'-'+indexImagen+'" accept=".png" onchange="generatePreview('+stringId+','+indexImagen+','+stringType+')" typeInput="img-pop" value="'+valueInpImgPop+'">'+
-                                    '<div id="imgPreview'+idComponent+'-'+indexImagen+'" class="preview-img-pop">'+ 
-                                    '</div>'+
-                                '</div>'+
-                        '</div>'+
-                  '</div>';
-              break;
-              case 'acceso-cursos':
-              let valueInpImg3 = (item) ? item.url : "";
-              let valueInpTit2 = (item) ? item.titulo : "";
-              let valueInpLink2 = (item) ? item.url : "";
-              let valueInpcolor2 = (item) ? item.backgroundColor : "";
-                component = 
-                   '<div class="col-lg-12 texto component" id="'+idComponent+'" db-id="'+pkId+'" type-component="acceso-cursos">'+
-                        '<div id="background">'+
-                          '<p class="tituloCmp">'+type+
-                            '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
-                          '<p>'+
-                          '<div>'+
-                          '<div class="junto">'+
-                                '<label class="file-Amagen" for="imagen'+idComponent+'-'+indexImagen+'" id="imagenlabel'+idComponent+'-'+indexImagen+'"></label>'+
-                                '<input class="pop-up-input" type="file" id="imagen'+idComponent+'-'+indexImagen+'" accept=".png" onchange="generatePreview('+stringId+','+indexImagen+')" typeInput="img-access" value="'+valueInpImg3+'">'+
-                                '<div class="titulomax">'+
-                                     '<input class="inputTitulo" type="text" placeholder="Titulo" typeInput="titulo-access" value="'+valueInpTit2+'"/>'+
-                                '</div>'+
-                                '</div>'+
-                                '</div>'+
-                                '<div id="imgPreview'+idComponent+'-'+indexImagen+'" class="estilo-imagen"></div>'+ 
-                                     '<div id="preview'+idComponent+'" class="estilo-imagen">'+ 
-                                     //'<input class="inputTitulo" type="text" placeholder="Titulo"/>'+
-                                     '<div class="inputLinkContainer">'+
-                                    '<input class="inputLink" id="inputLink'+idComponent+'" name="link" type="text" placeholder="∞" onkeyup="toggleButton('+stringId+')" typeInput="link-access" value="'+valueInpLink2+'"/>'+
-                                    '<button class="botonEnlace" onclick="AddPreviewLink('+stringId+')" id="previewLink'+idComponent+'"> <img src="/img/check.png" width="50px"/> </button>'+
-                                '</div>'+
-                                '<p class="selColor">Elige un color para asignarle.</p>'+
-                                'Color'+
-                                '<input class="Color-Selector"  type="color" typeInput="color-access" value="'+valueInpcolor2+'">'+
-                         '</div>'+
-                        '</div>'+
-                  '</div>';
-                  indexImagen = indexImagen + 1;
-                break;
-              case 'video-guia':
-              let valueInpVideoGuia = (item) ? item.url : "";
-              let valueInpTextGuia = (item) ?  item.descripcion : "";
-              let valueInpColorGuia = (item) ? item.backgroundColor : "";
-                component =
-                  '<div class="col-lg-12  texto component CompEnlace " id="'+idComponent+'" db-id="'+pkId+'" type-component="video-guia">'+
-                          '<p class="tituloCmp">'+type+
-                            '<img src="/img/iconTrash.png"  alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
-                          '<p>'+
-                            '<div>'+
-                                    '<div class="video-guia-padre-input">'+
-                                        '<label for="video'+idComponent+'" id="videolabel'+idComponent+'" class="label-video-guia"><img src="/img/icono-video.png"></label>'+
-                                        '<input type="file" id="video'+idComponent+'" onchange="generatePreviewVideo('+stringId+')" class="input-video-guia" typeInput="video-guia" value="'+valueInpVideoGuia+'">'+
-                                        '<div id="previewVideo'+idComponent+'"  class="video-guia-video">'+      
-                                        '</div>'+
-                                    '</div>'+
-                                    '<div class="descripcion-guia-video">'+
-                                        '<input type="text" class="descripcion-guia-video-input" placeholder="Descripcion" typeInput="text-guia" value="'+valueInpTextGuia+'">'+
-                                    '</div>'+ 
-                                        '<div>'+
-                                            '<label>Elige color para asignarle </label>'+
-                                        '</div>'+
-                                    '<div>'+
-                                        '<span>Color: </span><input type="color" typeInput="color-guia" value="'+valueInpColorGuia+'">'+
-                                    '</div>'+
-                            '</div>'+
-                  '</div>';
-              break;
-              case 'pop-up-video':
-              let valueInpUpVideoText = (item) ? item.descripcion : "";
-              let valueInpUpVideo = (item) ?  item.url : "";
-                component =
-                   '<div class="col-lg-12 texto component" id="'+idComponent+'" db-id="'+pkId+'" type-component="pop-up-video">'+
-                          '<p class="tituloCmp">'+type+
-                            '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
-                          '<p>'+
-                          '<input class="inputTexto" type="text" placeholder="Texto..." typeInput="upvideo-text" value="'+valueInpUpVideoText+'">'+ 
-                          '<div class="container-pop">'+
-                                '<div class="hija-popvideo">'+
-                                    '<label class="label-popvideo" for="video'+idComponent+'" id="videolabel'+idComponent+'"><img src="/img/icono-video.png" class="imagen-popvideo"/></label>'+
-                                    '<input class="pop-up-input" type="file" accept="video/*" id="video'+idComponent+'" onchange="generatePreviewVideo('+stringId+')" typeInput="up-video" value="'+valueInpUpVideo+'">'+
-                                    '<div id="previewVideo'+idComponent+'">'+ 
-                                    '</div>'+
-                                '</div>'+
-                        '</div>'+
-                  '</div>';
-                break;
-              default:
-                component = "";
+                  '</div>'+
+                  '<textarea class="textarea mt-3" name="" id="" cols="" rows="3" placeholder="texto"></textarea><br/>'+
+                  '<div class="container-desplegable-imagenes mt-3">'+
+                    '<div class="card-imagen-carroucel">'+
+                      '<label for="imagen'+idComponent+'-'+(indexImagen + 1)+'" id="imagenlabel'+idComponent+'-'+(indexImagen + 1)+'" class="btn-img">'+
+                      '<img src="/img/icono-imagen-grande.png" class="label-footer"></label>'+
+                      '<input type="file" id="imagen'+idComponent+'-'+(indexImagen + 1)+'" class="input-desplegable-texto-imagen"  accept=".jpg, .png, .jpeg" onchange="generatePreview('+stringId+','+(indexImagen + 1)+', '+stringType+')" typeInput="img2">'+
+                      '<div id="imgPreview'+idComponent+'-'+(indexImagen + 1)+'" class="preview-img-carroucel"></div>'+
+                    '</div>'+
+                    '<div class="card-imagen-carroucel">'+
+                      '<label for="imagen'+idComponent+'-'+(indexImagen + 2)+'" id="imagenlabel'+idComponent+'-'+(indexImagen + 2)+'" class="btn-img">'+
+                      '<img src="/img/icono-imagen-grande.png" class="label-footer"></label>'+
+                      '<input type="file" id="imagen'+idComponent+'-'+(indexImagen + 2)+'"  accept=".jpg, .png, .jpeg" class="input-desplegable-texto-imagen" onchange="generatePreview('+stringId+','+(indexImagen + 2)+', '+stringType+')" typeInput="img3">'+
+                      '<div id="imgPreview'+idComponent+'-'+(indexImagen + 2)+'" class="preview-img-carroucel"></div>'+
+                    '</div>'+
+                  '</div>'+
+                  '<div class="d-flex col-lg-12 justify-content-end align-items-center">'+
+                    '<input type="checkbox"><span>Agregar fondo</span>'+
+                  '</div>'+
+                '</div>'+
+              '</div>';
+              indexImagen = indexImagen + 2;
+          break;
+          case 'banner-informativo':
+            let valueInpText2 = (item) ? item.descripcion : "";
+            let valueInpColorBanner = (item) ? item.backgroundColor : "";
+            component = 
+              '<div class="col-lg-12 component" db-id="'+pkId+'" id="'+idComponent+'" type-component="banner-informativo">'+
+                '<div id="backgroundBanner">'+
+                  '<p class="tituloCmp">'+type+
+                    '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
+                  '<p>'+
+                  '<input class="inputTexto" type="text" placeholder="Texto" typeInput="text2" value="'+valueInpText2+'">'+
+                  '<p class="selColor">Elige un color para asignarle.</p>'+
+                    'Color '+
+                    '<input class="Color-Selector" type="color" typeInput="Color" value="'+valueInpColorBanner+'">'+
+                '</div>'+
+              '</div>';
+          break;
+          case 'texto-imagen':
+            let valueInpImg2 = (item) ? item.url : "";
+            let valueInpText3 = (item) ? item.descripcion : "";
+            component = 
+              '<div class="col-lg-12 component" db-id="'+pkId+'" id="'+idComponent+'" type-component="texto-imagen">'+
+                '<div id="background">'+
+                  '<p class="tituloCmp">'+type+
+                    '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
+                  '<p>'+
+                  '<div>'+
+                    '<div class="junto1">'+
+                      '<div class="card-imagen1">'+
+                        '<p>Imagen</p>'+
+                        '<label for="imagen'+idComponent+'-'+indexImagen+'" id="imagenlabel'+idComponent+'-'+indexImagen+'" class="btn-img">'+
+                            '<img src="/img/icono-imagen-chico.png" class="label-imagen-1"/>'+
+                        '</label>'+
+                        '<input type="file" typeInput="img" id="imagen'+idComponent+'-'+indexImagen+'" onchange="generatePreview('+stringId+','+indexImagen+','+stringType+')" class="input-img">'+
+                        '<div id="imgPreview'+idComponent+'-'+indexImagen+'" class="preview-img-small"></div>'+
+                      '</div>'+
+                      '<div class="titulomax1">'+
+                          '<textarea class="inputTitulo1" typeInput="textarea" value="'+valueInpText3+'"></textarea>'+
+                      '</div>'+
+                    '</div>'+
+                    '<div id="imgPreview'+idComponent+'-'+indexImagen+'" class="estilo-imagen"></div>'+ 
+                         '<div id="preview'+idComponent+'" class="estilo-imagen">'+ 
+                    '</div>'+
+                  '</div>'+
+                '</div>'+
+                '<input type="checkbox" typeInput="check" class="Boton1" name="AgregarFondo" value="+'+valueInpText3+'"><label for="AgregarFondo"> Agregar Fondo</label><br>'+
+              '</div>';
+            indexImagen = indexImagen + 1;
+          break;
+          case 'enlace':
+            let valueInpTit = (item) ? item.titulo : "";
+            let valueInpLink = (item) ? item.url : "";
+            let valueInpcolor = (item) ? item.backgroundColor : "";
+            component =
+              '<div class="col-lg-12 texto component CompoEnlace" id="'+idComponent+'" db-id="'+pkId+'" type-component="enlace">'+
+                '<p class="tituloCmp">'+type+
+                  '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
+                '<p>'+
+                '<div class="margenContainer">'+
+                  '<input class="inputTitulo" type="text" placeholder="Titulo"  typeInput="titulo" value="'+valueInpTit+'"/>'+
+                  '<div class="inputLinkContainer">'+
+                    '<input class="inputLink" id="inputLink'+idComponent+'" name="link" type="text" placeholder="Link" onkeyup="toggleButton('+stringId+')"  typeInput="link" value="'+valueInpLink+'"/>'+
+                    '<button class="botonEnlace" onclick="AddPreviewLink('+stringId+')" id="previewLink'+idComponent+'"> <img src="/img/check.png" width="50px"></button>'+
+                  '</div>'+
+                  '<p class="selColor">Elige un color para asignarle.</p>'+
+                  'Color '+
+                  '<input class="Color-Selector"  type="color" typeInput="color"  value="'+valueInpcolor+'">'+
+                '</div>'+
+              '</div>';
+          break;
+          case 'pop-up':
+            let valueInpUpText = (item) ? item.descripcion : "";
+            let valueInpImgPop = (item) ? item.url : "";
+            component =
+              '<div class="col-lg-12 texto component" id="'+idComponent+'" db-id="'+pkId+'" type-component="pop-up">'+
+                '<p class="tituloCmp">'+type+
+                  '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
+                '<p>'+
+                '<input class="inputTexto" type="text" placeholder="Texto..." typeInput="up-text" value="'+valueInpUpText+'">'+ 
+                '<div class="container-pop">'+
+                  '<div class="hija-pop">'+
+                    '<label class="file-Amagen-pop-up" for="imagen'+idComponent+'-'+indexImagen+'" id="imagenlabel'+idComponent+'-'+indexImagen+'"><img src="/img/icono-imagen-grande.png"/></label>'+
+                    '<input class="pop-up-input" type="file" id="imagen'+idComponent+'-'+indexImagen+'" accept=".png" onchange="generatePreview('+stringId+','+indexImagen+','+stringType+')" typeInput="img-pop" value="'+valueInpImgPop+'">'+
+                    '<div id="imgPreview'+idComponent+'-'+indexImagen+'" class="preview-img-pop">'+ 
+                    '</div>'+
+                  '</div>'+
+                '</div>'+
+              '</div>';
+          break;
+          case 'acceso-cursos':
+            let valueInpImg3 = (item) ? item.url : "";
+            let valueInpTit2 = (item) ? item.titulo : "";
+            let valueInpLink2 = (item) ? item.url : "";
+            let valueInpcolor2 = (item) ? item.backgroundColor : "";
+            component = 
+              '<div class="col-lg-12 texto component" id="'+idComponent+'" db-id="'+pkId+'" type-component="acceso-cursos">'+
+                '<div id="background">'+
+                  '<p class="tituloCmp">'+type+
+                    '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
+                  '<p>'+
+                  '<div>'+
+                    '<div class="junto">'+
+                      '<label class="file-Amagen" for="imagen'+idComponent+'-'+indexImagen+'" id="imagenlabel'+idComponent+'-'+indexImagen+'"></label>'+
+                      '<input class="pop-up-input" type="file" id="imagen'+idComponent+'-'+indexImagen+'" accept=".png" onchange="generatePreview('+stringId+','+indexImagen+')" typeInput="img-access" value="'+valueInpImg3+'">'+
+                      '<div class="titulomax">'+
+                           '<input class="inputTitulo" type="text" placeholder="Titulo" typeInput="titulo-access" value="'+valueInpTit2+'"/>'+
+                      '</div>'+
+                    '</div>'+
+                  '</div>'+
+                  '<div id="imgPreview'+idComponent+'-'+indexImagen+'" class="estilo-imagen"></div>'+ 
+                  '<div id="preview'+idComponent+'" class="estilo-imagen">'+ 
+                    '<div class="inputLinkContainer">'+
+                        '<input class="inputLink" id="inputLink'+idComponent+'" name="link" type="text" placeholder="∞" onkeyup="toggleButton('+stringId+')" typeInput="link-access" value="'+valueInpLink2+'"/>'+
+                        '<button class="botonEnlace" onclick="AddPreviewLink('+stringId+')" id="previewLink'+idComponent+'"> <img src="/img/check.png" width="50px"/> </button>'+
+                    '</div>'+
+                    '<p class="selColor">Elige un color para asignarle.</p>'+
+                    'Color'+
+                    '<input class="Color-Selector"  type="color" typeInput="color-access" value="'+valueInpcolor2+'">'+
+                  '</div>'+
+                '</div>'+
+              '</div>';
+            indexImagen = indexImagen + 1;
+          break;
+          case 'video-guia':
+            let valueInpVideoGuia = (item) ? item.url : "";
+            let valueInpTextGuia = (item) ?  item.descripcion : "";
+            let valueInpColorGuia = (item) ? item.backgroundColor : "";
+            component =
+              '<div class="col-lg-12  texto component CompEnlace " id="'+idComponent+'" db-id="'+pkId+'" type-component="video-guia">'+
+                '<p class="tituloCmp">'+type+
+                  '<img src="/img/iconTrash.png"  alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
+                '<p>'+
+                '<div>'+
+                  '<div class="video-guia-padre-input">'+
+                    '<label for="video'+idComponent+'" id="videolabel'+idComponent+'" class="label-video-guia"><img src="/img/icono-video.png"></label>'+
+                    '<input type="file" id="video'+idComponent+'" onchange="generatePreviewVideo('+stringId+')" class="input-video-guia" typeInput="video-guia" value="'+valueInpVideoGuia+'">'+
+                    '<div id="previewVideo'+idComponent+'"  class="video-guia-video">'+      
+                    '</div>'+
+                  '</div>'+
+                  '<div class="descripcion-guia-video">'+
+                    '<input type="text" class="descripcion-guia-video-input" placeholder="Descripcion" typeInput="text-guia" value="'+valueInpTextGuia+'">'+
+                  '</div>'+ 
+                  '<div>'+
+                    '<label>Elige color para asignarle </label>'+
+                  '</div>'+
+                  '<div>'+
+                      '<span>Color: </span><input type="color" typeInput="color-guia" value="'+valueInpColorGuia+'">'+
+                  '</div>'+
+                '</div>'+
+              '</div>';
+          break;
+          case 'pop-up-video':
+            let valueInpUpVideoText = (item) ? item.descripcion : "";
+            let valueInpUpVideo = (item) ?  item.url : "";
+            component =
+              '<div class="col-lg-12 texto component" id="'+idComponent+'" db-id="'+pkId+'" type-component="pop-up-video">'+
+                '<p class="tituloCmp">'+type+
+                  '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
+                '<p>'+
+                '<input class="inputTexto" type="text" placeholder="Texto..." typeInput="upvideo-text" value="'+valueInpUpVideoText+'">'+ 
+                '<div class="container-pop">'+
+                  '<div class="hija-popvideo">'+
+                    '<label class="label-popvideo" for="video'+idComponent+'" id="videolabel'+idComponent+'"><img src="/img/icono-video.png" class="imagen-popvideo"/></label>'+
+                    '<input class="pop-up-input" type="file" accept="video/*" id="video'+idComponent+'" onchange="generatePreviewVideo('+stringId+')" typeInput="up-video" value="'+valueInpUpVideo+'">'+
+                    '<div id="previewVideo'+idComponent+'">'+ 
+                    '</div>'+
+                  '</div>'+
+                '</div>'+
+              '</div>';
+          break;
+          case 'titulo':
+            let valueInpText5 = (item) ? item.descripcion : "";
+            component =
+              '<div class="col-lg-6 component" db-id="'+pkId+'" id="'+idComponent+'" type-component="titulo">'+
+                  '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
+                '<p>'+
+                '<input class="inputTexto" type="text" placeholder="Titulo" value="'+valueInpText5+'">'+
+              '</div>';
+          break;
+          default:
+            component = "";
+        }
+        return {component: component, idComponent: idComponent, indexImagen: indexImagen};
+    }
+
+    function saveChanges() {
+      let toInsert = [];
+      let toUpdate = [];
+      $(".component").each(function(index){
+        let currentComponent = $(this);
+        let idElement = currentComponent.attr('id');
+        let idComponent = currentComponent.attr('db-id');
+        let typeElement = currentComponent.attr('type-component');
+        console.log(idElement+'-'+idComponent+'-'+typeElement);
+        let item = formJsonComponent(idElement, typeElement, idComponent);
+        item.Id = idComponent;
+        item.Padre = padre;
+        item.TipoComponente = typeElement;
+        item.Orden = index+1;
+        item.IdModulo = idModulo;
+        if(idComponent != 0) {
+          toUpdate.push(item);
+        }else{
+          toInsert.push(item);
+        }
+      });
+      console.log(toInsert);
+      console.log(toUpdate);
+      
+      saveComponents(toInsert);
+      updateComponents(toUpdate);
+      Swal.fire(
+        'Bien!',
+        'Los componentes se han actualizado con exito!',
+        'success'
+      )
+    }
+    
+    function formJsonComponent(idElement, typeElement, idComponent) {
+      let jsonItem =
+      {
+        "Id": null,
+        "Padre": null,
+        "TipoComponente": null,
+        "Url": null,
+        "UrlDos": null,
+        "UrlTres": null,
+        "Descripcion": null,
+        "BackgroundColor": null,
+        "AgregarFondo": 0,
+        "Titulo": null,
+        "Subtitulo": null,
+        "Orden": null,
+        "IdModulo": null,
+        "Files": [],
+        "Desplazantes": []
+      }
+      let jsonDesplazante = {
+        "Id": null,
+        "Url": null,
+        "Titulo": null,
+        "Texto": null,
+        "Files": [],
+        "IdComponente": null
+      }
+      switch(typeElement) {
+        case 'texto':
+          $("#"+idElement).find("input").each(function() {
+            let value = $(this).val();
+            jsonItem.Descripcion = value;
+          });
+        break;
+        case 'subtitulo':
+          $("#"+idElement).find("input").each(function() {
+            let value = $(this).val();
+            jsonItem.Subtitulo = value;
+          });
+        break;
+        case 'imagen':
+          $("#"+idElement).find("input").each(function() {
+            let typeInp = $(this).attr("typeInput");
+            if(typeInp == 'img'){
+                let value = $(this).prop("files");
+                if(value[0]){
+                    jsonItem.Url = window.location.origin+'/files/'+value[0].name;
+                    jsonItem.Files = value[0];
+                }else{
+                    jsonItem.Url = $(this).attr("value");
+                }
             }
-            return {component: component, idComponent: idComponent, indexImagen: indexImagen};
-        }
-        function saveChanges() {
-            let toInsert = [];
-            let toUpdate = [];
-            $(".component").each(function(index){
-              let currentComponent = $(this);
-              let idElement = currentComponent.attr('id');
-              let idComponent = currentComponent.attr('db-id');
-              let typeElement = currentComponent.attr('type-component');
-              console.log(idElement+'-'+idComponent+'-'+typeElement);
-              let item = formJsonComponent(idElement, typeElement, idComponent);
-              item.Id = idComponent;
-              item.Padre = padre;
-              item.TipoComponente = typeElement;
-              item.Orden = index+1;
-              item.IdModulo = idModulo;
-              if(idComponent != 0) {
-                toUpdate.push(item);
-              }else{
-                toInsert.push(item);
-              }
-            });
-            console.log(toInsert);
-            console.log(toUpdate);
-            saveComponents(toInsert);
-            updateComponents(toUpdate);
-        }
-        function formJsonComponent(idElement, typeElement, idComponent) {
-          let jsonItem =
-          {
-            "Id": null,
-            "Padre": null,
-            "TipoComponente": null,
-            "Url": null,
-            "Descripcion": null,
-            "BackgroundColor": null,
-            "AgregarFondo": 0,
-            "Titulo": null,
-            "Subtitulo": null,
-            "Orden": null,
-            "IdModulo": null,
-            "files": null
-          }
-          switch(typeElement) {
-            case 'texto':
-              $("#"+idElement).find("input").each(function() {
+            if(typeInp == 'pie-foto'){
                 let value = $(this).val();
                 jsonItem.Descripcion = value;
-              });
-            break;
-            case 'subtitulo':
-              $("#"+idElement).find("input").each(function() {
-                let value = $(this).val();
-                jsonItem.Subtitulo = value;
-              });
-            break;
-            case 'imagen':
-              $("#"+idElement).find("input").each(function() {
+            }
+          });
+        break;
+        case 'desplazante-texto-imagen':
+          $("#"+idElement).find(".card-texto-imagen").each(function() {
+            let id = $(this).attr('id');
+            let pkey = $(this).attr('db-id');
+            $("#"+id).find("input").each(function() {
                 let typeInp = $(this).attr("typeInput");
                 if(typeInp == 'img-pop'){
                     let value = $(this).prop("files");
                     if(value[0]){
-                        jsonItem.Url = window.location.origin+'/files/'+value[0].name;
-                        jsonItem.files = value[0];
+                        jsonDesplazante.Url = window.location.origin+'/files/'+value[0].name;
+                        jsonDesplazante.Files = value[0];
                     }else{
-                        jsonItem.Url = $(this).attr("value");
+                        jsonDesplazante.Url = $(this).attr("value");
                     }
-                }
-                if(typeInp == 'pie-foto'){
-                    let value = $(this).val();
-                    jsonItem.Descripcion = value;
-                }
-              });
-            break;
-            case 'desplazante-texto-imagen':
-              $("#"+idElement).find(".card-texto-imagen").each(function() {
-                let id = $(this).attr('id');
-                console.log(id);
-                $("#"+id).find("input").each(function() {
-                    let value = $(this);
-                    console.log(value);
-                });
-              });
-            break;
-            case 'banner-informativo':
-              $("#"+idElement).find("input").each(function() {
-               let typeInp = $(this).attr("typeInput");
-                if(typeInp == 'text2'){
-                    let value = $(this).val();
-                    jsonItem.Descripcion = value;
-                }
-                if(typeInp == 'Color'){
-                    let value = $(this).val();
-                    jsonItem.BackgroundColor = value;
-                }
-                });
-            break;
-            case 'enlace':
-              $("#"+idElement).find("input").each(function() {
-                let typeInp = $(this).attr("typeInput");
-                if(typeInp == 'link'){
-                        jsonItem.Url = $(this).val();
-                                      
                 }
                 if(typeInp == 'titulo'){
                     let value = $(this).val();
-                    jsonItem.Titulo = value;
+                    jsonDesplazante.Titulo = value;
                 }
-                if(typeInp == 'color'){
+                if(typeInp == 'texto'){
                     let value = $(this).val();
-                    jsonItem.BackgroundColor = value;
+                    jsonDesplazante.Texto = value;
                 }
-              });
-            break;
-            case 'pop-up':
-              $("#"+idElement).find("input").each(function() {
-                let typeInp = $(this).attr("typeInput");
-                if(typeInp == 'up-text'){
-                    let value = $(this).val();
-                    jsonItem.Descripcion = value;
-                }
-                if(typeInp == 'img'){
-                    let value = $(this).prop("files");
-                    if(value[0]){
-                        jsonItem.Url = window.location.origin+'/files/'+value[0].name;
-                        jsonItem.files = value[0];
-                    }else{
-                        jsonItem.Url = $(this).attr("value");
-                    }
-                }
-                
-              });
-            break;
-            case 'texto-imagen':
-            console.log("EntroCase")
-              $("#"+idElement).find("input").each(function() {
-                let typeInp = $(this).attr("typeInput");
-                console.log(typeInp)
-                if(typeInp == 'img'){
-                    let value = $(this).prop("files");
-                    if(value[0]){
-                        jsonItem.Url = window.location.origin+'/files/'+value[0].name;
-                        jsonItem.files = value[0];
-                    }else{
-                        jsonItem.Url = $(this).attr("value");
-                    }
-                }
-              });
-               $("#"+idElement).find("textarea").each(function() {
-                let typeInp = $(this).attr("typeInput");
-                console.log(typeInp)
-                if(typeInp == 'textarea'){
-                    let value = $(this).val();
-                    jsonItem.Descripcion = value;
-                }
-              });
-              break;
-               case 'acceso-cursos':
-              $("#"+idElement).find("input").each(function() {
-                let typeInp = $(this).attr("typeInput");
-                if(typeInp == 'link-access'){
-                        jsonItem.Url = $(this).val();       
-                }
-                if(typeInp == 'titulo-access'){
-                    let value = $(this).val();
-                    jsonItem.Titulo = value;
-                }
-                if(typeInp == 'color-access'){
-                    let value = $(this).val();
-                    jsonItem.BackgroundColor = value;
-                }
-                if(typeInp == 'img-access'){
-                    let value = $(this).prop("files");
-                    if(value[0]){
-                        jsonItem.Url = window.location.origin+'/files/'+value[0].name;
-                        jsonItem.files = value[0];
-                    }else{
-                        jsonItem.Url = $(this).attr("value");
-                    }
-                }
-              });
-            break;
-            case 'video-guia':
-              $("#"+idElement).find("input").each(function() {
-                let typeInp = $(this).attr("typeInput");
-                if(typeInp == 'video-guia'){
-                    let value = $(this).prop("files");
-                    if(value[0]){
-                        jsonItem.Url = window.location.origin+'/files/'+value[0].name;
-                        jsonItem.files = value[0];
-                    }else{
-                        jsonItem.Url = $(this).attr("value");
-                    }
-                                      
-                }
-                if(typeInp == 'text-guia'){
-                    let value = $(this).val();
-                    jsonItem.Descripcion = value;
-                }
-                if(typeInp == 'color-guia'){
-                    let value = $(this).val();
-                    jsonItem.BackgroundColor = value;
-                }
-              });
-            break;
-            case 'pop-up-video':
-              $("#"+idElement).find("input").each(function() {
-                let typeInp = $(this).attr("typeInput");
-                if(typeInp == 'upvideo-text'){
-                    let value = $(this).val();
-                    jsonItem.Descripcion = value;
-                }
-                if(typeInp == 'up-video'){
-                    let value = $(this).prop("files");
-                    if(value[0]){
-                        jsonItem.Url = window.location.origin+'/files/'+value[0].name;
-                        jsonItem.files = value[0];
-                    }else{
-                        jsonItem.Url = $(this).attr("value");
-                    }
-                }
-                
-              });
-            break;
-            default:
-              jsonItem = "";
-          }
-          console.log(jsonItem);
-          return jsonItem;
-        }
-        function saveComponents(components) {
-          components.map(function(item){
-            const formData = new FormData();
-            for ( var key in item ) {
-                formData.append(key, item[key]);
+            });
+            jsonDesplazante.Id = pkey;
+            jsonItem.Desplazantes.push(jsonDesplazante);
+            jsonDesplazante = {
+                "Id": null,
+                "Url": null,
+                "Titulo": null,
+                "Texto": null,
+                "Files": null,
+                "IdComponente": null
             }
-            console.log(formData);
+          });
+        break;
+        case 'carrucel':
+          $("#"+idElement).find(".card-imagen-carroucel").each(function() {
+            let id = $(this).attr('id');
+            let pkey = $(this).attr('db-id');
+            $("#"+id).find("input").each(function() {
+                let typeInp = $(this).attr("typeInput");
+                if(typeInp == 'img'){
+                    let value = $(this).prop("files");
+                    if(value[0]){
+                        jsonDesplazante.Url = window.location.origin+'/files/'+value[0].name;
+                        jsonDesplazante.Files = value[0];
+                    }else{
+                        jsonDesplazante.Url = $(this).attr("value");
+                    }
+                }
+            });
+            jsonDesplazante.Id = pkey;
+            jsonItem.Desplazantes.push(jsonDesplazante);
+            jsonDesplazante = {
+                "Id": null,
+                "Url": null,
+                "Titulo": null,
+                "Texto": null,
+                "Files": null,
+                "IdComponente": null
+            }
+          });
+        break;
+        case "desplegable-texto-imagen":
+          $("#"+idElement).find("input").each(function() {
+            let typeInp = $(this).attr("typeInput");
+            if(typeInp == 'subtitulo'){
+                let value = $(this).val();
+                jsonItem.Subtitulo = value;
+            }
+            if(typeInp == 'img1'){
+                let value = $(this).prop("files");
+                if(value[0]){
+                    jsonItem.Url = window.location.origin+'/files/'+value[0].name;
+                    jsonItem.Files.push(value[0]);
+                }else{
+                    jsonItem.Url = $(this).attr("value");
+                }
+            }
+            if(typeInp == 'img2'){
+                let value = $(this).prop("files");
+                if(value[0]){
+                    jsonItem.UrlDos = window.location.origin+'/files/'+value[0].name;
+                    jsonItem.Files.push(value[0]);
+                }else{
+                    jsonItem.UrlDos = $(this).attr("value");
+                }
+            }
+            if(typeInp == 'img3'){
+                let value = $(this).prop("files");
+                if(value[0]){
+                    jsonItem.UrlTres = window.location.origin+'/files/'+value[0].name;
+                    jsonItem.Files.push(value[0]);
+                }else{
+                    jsonItem.UrlTres = $(this).attr("value");
+                }
+            }
+          });
+          $("#"+idElement).find("textarea").each(function() {
+            let value = $(this).val();
+            jsonItem.Descripcion = value;
+          });
+        break;
+        case 'banner-informativo':
+          $("#"+idElement).find("input").each(function() {
+            let typeInp = $(this).attr("typeInput");
+            if(typeInp == 'text2'){
+              let value = $(this).val();
+              jsonItem.Descripcion = value;
+            }
+            if(typeInp == 'Color'){
+              let value = $(this).val();
+              jsonItem.BackgroundColor = value;
+            }
+          });
+        break;
+        case 'enlace':
+          $("#"+idElement).find("input").each(function() {
+            let typeInp = $(this).attr("typeInput");
+            if(typeInp == 'link'){
+              jsonItem.Url = $(this).val();
+                                  
+            }
+            if(typeInp == 'titulo'){
+              let value = $(this).val();
+              jsonItem.Titulo = value;
+            }
+            if(typeInp == 'color'){
+              let value = $(this).val();
+              jsonItem.BackgroundColor = value;
+            }
+          });
+        break;
+        case 'pop-up':
+          $("#"+idElement).find("input").each(function() {
+            let typeInp = $(this).attr("typeInput");
+            if(typeInp == 'up-text'){
+              let value = $(this).val();
+              jsonItem.Descripcion = value;
+            }
+            if(typeInp == 'img'){
+              let value = $(this).prop("files");
+              if(value[0]){
+                jsonItem.Url = window.location.origin+'/files/'+value[0].name;
+                jsonItem.files = value[0];
+              }else{
+                jsonItem.Url = $(this).attr("value");
+              }
+            }
+          });
+        break;
+        case 'texto-imagen':
+          $("#"+idElement).find("input").each(function() {
+            let typeInp = $(this).attr("typeInput");
+            if(typeInp == 'img'){
+              let value = $(this).prop("files");
+              if(value[0]){
+                jsonItem.Url = window.location.origin+'/files/'+value[0].name;
+                jsonItem.files = value[0];
+              }else{
+                jsonItem.Url = $(this).attr("value");
+              }
+            }
+          });
+          $("#"+idElement).find("textarea").each(function() {
+            let typeInp = $(this).attr("typeInput");
+            console.log(typeInp)
+            if(typeInp == 'textarea'){
+              let value = $(this).val();
+              jsonItem.Descripcion = value;
+            }
+          });
+        break;
+        case 'acceso-cursos':
+          $("#"+idElement).find("input").each(function() {
+            let typeInp = $(this).attr("typeInput");
+            if(typeInp == 'link-access'){
+              jsonItem.Url = $(this).val();       
+            }
+            if(typeInp == 'titulo-access'){
+              let value = $(this).val();
+              jsonItem.Titulo = value;
+            }
+            if(typeInp == 'color-access'){
+              let value = $(this).val();
+              jsonItem.BackgroundColor = value;
+            }
+            if(typeInp == 'img-access'){
+              let value = $(this).prop("files");
+              if(value[0]){
+                  jsonItem.Url = window.location.origin+'/files/'+value[0].name;
+                  jsonItem.files = value[0];
+              }else{
+                  jsonItem.Url = $(this).attr("value");
+              }
+            }
+          });
+        break;
+        case 'video-guia':
+          $("#"+idElement).find("input").each(function() {
+            let typeInp = $(this).attr("typeInput");
+            if(typeInp == 'video-guia'){
+              let value = $(this).prop("files");
+              if(value[0]){
+                jsonItem.Url = window.location.origin+'/files/'+value[0].name;
+                jsonItem.files = value[0];
+              }else{
+                jsonItem.Url = $(this).attr("value");
+              }                  
+            }
+            if(typeInp == 'text-guia'){
+              let value = $(this).val();
+              jsonItem.Descripcion = value;
+            }
+            if(typeInp == 'color-guia'){
+              let value = $(this).val();
+              jsonItem.BackgroundColor = value;
+            }
+          });
+        break;
+        case 'pop-up-video':
+          $("#"+idElement).find("input").each(function() {
+            let typeInp = $(this).attr("typeInput");
+            if(typeInp == 'upvideo-text'){
+              let value = $(this).val();
+              jsonItem.Descripcion = value;
+            }
+            if(typeInp == 'up-video'){
+              let value = $(this).prop("files");
+              if(value[0]){
+                  jsonItem.Url = window.location.origin+'/files/'+value[0].name;
+                  jsonItem.files = value[0];
+              }else{
+                  jsonItem.Url = $(this).attr("value");
+              }
+            }
+          });
+        break;
+        case 'titulo':
+          $("#"+idElement).find("input").each(function() {
+            let value = $(this).val();
+            jsonItem.Descripcion = value;
+          });
+        break;
+        default:
+          jsonItem = "";
+      }
+      return jsonItem;
+    }
+
+    function saveComponents(components) {
+      components.map(function(item){
+        const formData = new FormData();
+        for ( var key in item ) {
+            formData.append(key, item[key]);
+        }
+
+        $.ajax({
+          type: "POST",
+          url: "/Componentes/saveComponentForModulo2",
+          headers: { "RequestVerificationToken": "@GetAntiXsrfRequestToken()" },
+          data: formData,
+          processData : false,
+          contentType : false,
+          success: function (response) {
+            console.log('saved');
+            console.log(response);
+            item.Desplazantes.map(function(item){
+                saveDesplazante(item, response.id);
+            })
             
-            $.ajax({
-              type: "POST",
-              url: "/Componentes/saveComponentForModulo2",
-              headers: { "RequestVerificationToken": "@GetAntiXsrfRequestToken()" },
-              data: formData,
-              processData : false,
-              contentType : false,
-              success: function (response) {
-                console.log('saved');
-                console.log(response);
-              }
-            });
-          })
-        }
-        
-        function updateComponents(components) {
-          components.map(function(item){
-              console.log(item);
-            $.ajax({
-              type: "POST",
-              url: "/Componentes/updateComponentForModulo",
-              headers: { "RequestVerificationToken": "@GetAntiXsrfRequestToken()" },
-              data: item,
-              success: function (response) {
-                console.log('saved');
-              }
-            });
-          })
-        }
-        function buildFormData(formData, data, parentKey) {
-          if (data && typeof data === 'object' && !(data instanceof Date) && !(data instanceof File)) {
-            Object.keys(data).forEach(key => {
-              buildFormData(formData, data[key], parentKey ? `${parentKey}[${key}]` : key);
-            });
-          } else {
-            const value = data == null ? '' : data;
-            formData.append(parentKey, value);
           }
+        });
+      })
+    }
+
+    function updateComponents(components) {
+      components.map(function(item){
+        const formData = new FormData();
+        for ( var key in item ) {
+            formData.append(key, item[key]);
         }
-        /*
-        component =
-                  '<div class="col-lg-12 component" id="'+idComponent+'">'+
-                    '<p class="tituloCmp">'+type+
-                      '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
-                    '</p>'+
-                    '<div class="col-lg-11 container-texto-imagen">'+
-                        '<button id="DropImagen" class="btn btn-block">'+
-                          '<form class="dropzone needsclick" id="DropImagen'+idComponent+'" action="/upload" onclick="generateDropImagen('+stringId+')">'+
-                            '<img class="perfil" src="/img/img.png" width="100px" alt="perfil"/>'+
-                          '</form>'+
-                        '</button>'+
-                    '</div>'+
-                    '<div>'+
-                      '<input class="w-100 mt-1 inputs" type="text" placeholder="Pie de Foto"/>'+
-                    '</div>'+
-                  '</div>';
-        */
-    </script>
+
+        $.ajax({
+          type: "POST",
+          url: "/Componentes/updateComponentForModulo2",
+          headers: { "RequestVerificationToken": "@GetAntiXsrfRequestToken()" },
+          data: formData,
+          processData : false,
+          contentType : false,
+          success: function (response) {
+            console.log('updated');
+            console.log(response);
+            item.Desplazantes.map(function(item){
+                let isDb = item.Id === "0";
+                if(isDb){
+                    saveDesplazante(item, response.id);
+                }else{
+                    updateDesplazante(item, response.id);
+                }
+            })
+          }
+        });
+      })
+    }
+
+    function saveDesplazante(item, id) {
+        console.log('guardar desplazantes');
+        item.IdComponente = id;
+        const formData = new FormData();
+        for ( var key in item ) {
+            formData.append(key, item[key]);
+        }
+        $.ajax({
+          type: "POST",
+          url: "/Componentes/saveDesplazantes",
+          headers: { "RequestVerificationToken": "@GetAntiXsrfRequestToken()" },
+          data: formData,
+          processData : false,
+          contentType : false,
+          success: function (response) {
+            console.log('saved desplazante');
+            console.log(response);
+          }
+        });
+    }
+
+    function updateDesplazante(item, id) {
+        console.log('actualizar desplazantes');
+        item.IdComponente = id;
+        const formData = new FormData();
+        for ( var key in item ) {
+            formData.append(key, item[key]);
+        }
+        $.ajax({
+          type: "POST",
+          url: "/Componentes/updateDesplazantes",
+          headers: { "RequestVerificationToken": "@GetAntiXsrfRequestToken()" },
+          data: formData,
+          processData : false,
+          contentType : false,
+          success: function (response) {
+            console.log('updated desplazante');
+            console.log(response);
+          }
+        });
+    }
+</script>
 }

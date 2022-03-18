@@ -49,7 +49,6 @@ function addButtonToMenu() {
     let title = "'Agregar nuevo Modulo'";
     let lastId = 0;
     $("#sortableMenu > li").each(function () {
-        console.log("entro");
         lastId++;
     });
     lastId = lastId + 1;
