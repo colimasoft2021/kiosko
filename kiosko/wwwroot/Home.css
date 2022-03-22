@@ -13,6 +13,70 @@ body {
     margin-top: 30px;
 }
 
+/* Menu */
+
+.container-general{
+    position:sticky;
+    top:20px;
+}
+.container-button {
+    text-align: center;
+    position: sticky;
+    top: 30px;
+}
+
+.button-class {
+    background-color: #FF805B;
+    border-color: #FF805B; 
+    width: 60%;
+    height: 60px;
+    border-radius: 8px;
+    
+    color: white;
+    font-size: 20px;
+}
+
+.showmenu-container {
+    text-align: center;
+    position: sticky;
+    top: 115px;
+}
+
+.showmmenu-button {
+    width: 80px;
+    height: 80px;
+    border-radius: 100px;
+    color:white;
+    font-size: 50px;
+    background-color: #19AA80;
+}
+
+.menu-container {
+    position: sticky;
+    top: 195px;
+}
+
+#menu {
+    list-style: none;
+    padding: 20px;
+    background-color: white;
+    border-radius: 20px;
+}
+
+#menu:hover {
+    cursor:pointer;
+}
+
+#menu .option-menu {
+    height:30px;
+    margin:5px;
+}
+
+#menu .option-menu:hover {
+    background-color: #F8F9FA;
+}
+/* Menu */
+
 .tituloCmp {
     text-transform: capitalize;
     font-family: 'Poppins', sans-serif;
