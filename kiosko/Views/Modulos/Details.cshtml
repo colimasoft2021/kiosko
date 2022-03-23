@@ -22,12 +22,17 @@
                     <div class="row" id="containerComponents">
                     </div>
                 </div>
-                <div class="col-lg-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">Menu components</h5>
-                            <br />
-                            <ul id="menu">
+                <div class="col-lg-4 container-general">
+                        <div class="container-button"> 
+                            <button class="button-class mb-4" onclick="saveChanges()">Guardar</button>
+                        </div>
+
+                        <div class="showmenu-container">
+                        <button class="showmmenu-button" onclick="showMenu()">+</button>
+                        </div>
+                        
+                        <div class="menu-container"> 
+                            <ul id="menu" style="display: none">
                                 <li class="option-menu" onclick="addComponent('texto', 0)">Texto</li>
                                 <li class="option-menu" onclick="addComponent('subtitulo', 0)">Subtitulo</li>
                                 <li class="option-menu" onclick="addComponent('imagen', 0)">Imagen</li>
@@ -44,9 +49,7 @@
                                 <li class="option-menu" onclick="addComponent('texto-imagen', 0)">Texto Imagen</li>
                                 <li class="option-menu" onclick="addComponent('titulo', 0)">Titulo</li>
                             </ul>
-                            <button class="btn btn-block btn-warning" onclick="saveChanges()">Guardar</button>
                         </div>
-                    </div>
                 </div>
             </div>
             <div class="row">
@@ -85,6 +88,17 @@
           }
         });
     }
+
+  var isShowing = "block";
+  function showMenu() {
+  	console.log('entro');
+      $("#menu").css("display", isShowing);
+      if(isShowing == "block"){
+      	isShowing = "none";
+      }else{
+      	isShowing = "block";
+      }
+  }
 
     function addComponent(type, pkId, item) {
       let component = generateComponent(type, pkId, item);
