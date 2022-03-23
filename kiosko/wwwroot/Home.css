@@ -595,8 +595,8 @@ body {
 
 .button-close-carroucel {
     position: relative;
-    left: 65px;
     background-color: red;
+    margin-left: 130px;
     width: 30px;
     color: white;
     font-weight: bold;
@@ -609,7 +609,7 @@ body {
 }
 
 .desplazante-texto-imagen, .carroucel {
-    width: 60%;
+    width: 80%;
     display: flex;
     overflow-x: scroll;
     padding: 10px;
@@ -644,19 +644,19 @@ body {
 }
 
 .button-container {
-    width: 40%;
+    width: 20%;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
 .btn-add-more {
-    width: 130px;
-    height: 130px;
+    width: 50px;
+    height: 50px;
     background: #FFFFFF;
-    box-shadow: 2px 6px 27px 2px #454545;
+    box-shadow: 1px 3px 13px 1px #454545;
     border-radius: 5px;
-    font-size: 72px;
+    font-size: 30px;
     font-weight: 600;
     color: rgba(56, 56, 56, 0.73);
 }
@@ -669,8 +669,8 @@ body {
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     border-radius: 5px;
     margin-right: 20px;
-    display: flex;
-    align-items: center;
+    /*display: flex;
+    align-items: center;*/
     background-color: #C4C4C4;
 }
 

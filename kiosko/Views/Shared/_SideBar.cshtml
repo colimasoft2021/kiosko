@@ -1,4 +1,13 @@
-﻿<aside class="main-sidebar sidebar-dark-primary elevation-4 posicion-logo">
+﻿@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+
+@functions
+{
+    public string GetAntiXsrfRequestToken()
+    {
+        return Xsrf.GetAndStoreTokens(Context).RequestToken;
+    }
+}
+<aside class="main-sidebar sidebar-dark-primary elevation-4 posicion-logo">
     <!-- Brand Logo -->
     <div class="logo-kiosko">
         <img class="kiosko" src="~/img/logo.png" />

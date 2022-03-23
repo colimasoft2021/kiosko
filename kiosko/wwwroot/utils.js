@@ -1,5 +1,10 @@
 ﻿$(function () {
     $("#sortableMenu").sortable();
+    getAllModulos();
+});
+
+function getAllModulos() {
+    $("#sortableMenu").empty();
     $.ajax({
         type: "GET",
         url: "/Modulos/GetAllModulos",
@@ -14,7 +19,7 @@
             addButtonsToSubMenu();
         }
     });
-});
+}
 
 function addItemToMenu(item, menuOpen) {
     let desplegable = item.desplegable;
@@ -78,22 +83,24 @@ function addButtonsToSubMenu() {
 }
 
 var jsonNewModulo = {
-    "titulo": "",
-    "accesoDirecto": 1,
-    "orden": 1,
-    "desplegable": 0,
-    "idModulo": "",
-    "padre": null
+    "Id": 0,
+    "Titulo": "",
+    "AccesoDirecto": 1,
+    "Orden": 1,
+    "Desplegable": 0,
+    "IdModulo": "",
+    "Padre": null
 }
 
 function openModalNewModulo(title, lastId, padre) {
     jsonNewModulo = {
-        "titulo": "",
-        "accesoDirecto": 1,
-        "orden": 1,
-        "desplegable": 0,
-        "idModulo": "",
-        "padre": null
+        "Id": 0,
+        "Titulo": "",
+        "AccesoDirecto": 1,
+        "Orden": 1,
+        "Desplegable": 0,
+        "IdModulo": "",
+        "Padre": null
     }
     if (padre) {
         let arrayLastId = lastId.split("-");
@@ -101,12 +108,12 @@ function openModalNewModulo(title, lastId, padre) {
         let index = lastId.lastIndexOf("-");
         let newModuloId = lastId.substring(0, index);
         newModuloId = newModuloId + '-' + lastIndex;
-        jsonNewModulo.idModulo = newModuloId;
-        jsonNewModulo.padre = padre;
+        jsonNewModulo.IdModulo = newModuloId;
+        jsonNewModulo.Padre = padre;
     } else {
-        delete jsonNewModulo.padre;
+        delete jsonNewModulo.Padre;
     }
-    jsonNewModulo.idModulo = lastId;
+    jsonNewModulo.IdModulo = lastId;
     $("#modalTitle").text(title);
     $("#modalNewModulo").modal("show");
 }
@@ -115,14 +122,16 @@ function saveNewModulo() {
     let title = $("#titleNewModulo").val();
     let desplegable = $('input[name="radioDesplegable"]:checked').val();
     parseInt(desplegable);
-    jsonNewModulo.titulo = title;
-    jsonNewModulo.desplegable = desplegable;
+    jsonNewModulo.Titulo = title;
+    jsonNewModulo.Desplegable = desplegable;
     $.ajax({
         type: "POST",
         url: "/Modulos/SaveMenuModulo",
+        headers: { "RequestVerificationToken": "@GetAntiXsrfRequestToken()" },
         data: jsonNewModulo,
         success: function (response) {
             console.log('saved');
+            getAllModulos();
         }
     });
     $("#modalNewModulo").modal("hide");
