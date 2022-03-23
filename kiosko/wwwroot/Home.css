@@ -747,3 +747,14 @@ body {
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     border-radius: 5px;
 }
+.card-imagen2 {
+    width: 100px;
+    display: block;
+    background-color: grey;
+    height: 140px;
+    padding: 16px;
+    text-align: center;
+    margin-left: 0%;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 5px;
+}
