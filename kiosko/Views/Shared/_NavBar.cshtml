@@ -6,49 +6,47 @@
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css">
 
-<nav class="main-header navbar navbar-expand navbar-white navbar-light navegacion">
+<nav class="main-header navbar navbar-white navbar-light navegacion">
     <!-- Left navbar links -->
-    <ul class="navbar-nav">
+    <ul class="nav-container">
       <li class="nav-item">
-        <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+        <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars" style="color: #1f2d3d;"></i></a>
       </li>
       @if (signInManager.IsSignedIn(User))
                     {
-                         <li class="nav-item">
+                         <li class="textlogin">
                              Hello @userManager.GetUserName(User)
                         </li>
                     }
    </ul>     
 
-
-   <section class="header">
-
-            <div class="header-hija">
-
-                <div class="contenedor">
-                    <input type="text" placeholder="Buscar">
-                    <div class="boton-busqueda">
-                        <i class="fa fa-search"></i>
-                    </div>
-                </div>
-
-
-                <div class="menu-desplegable">
-                    <button class="boton-perfil">
-                        <img class="perfil" src="/img/perfil.png" alt="perfil">
-                    </button>
-
-                    <a class="cerrar-sesion" asp-controller="Account" asp-action="Logout">
-                        <li class="lista-item">Cerrar Sesion</li>
-                    </a>
-            
-                    <a class="editar-modulos" href="/Modulos/Index">
-                        <li>Editar Modulos</li>
-                    </a>
-                    
-                </div>
+        <div class="container-perfil">
+            <div class="boton-container">
+                <button onclick="showOption()">
+                <img src="~/img/usuario (2).png" />
+                </button>
             </div>
-        </section>
-
+            <div class="menu-item-container">
+                   <ul id="menu-perfil" style="display: none">
+                     <li>
+                        <a class="ancla-contain" asp-controller="Account" asp-action="Logout">Cerrar Sesion</a>
+                     </li>
+                   </ul>
+            </div>
+        </div>
   </nav>
   <!-- /.navbar -->
+
+  <script type="text/javascript">
+
+    var isShowing = "block";
+    function showOption() {
+      console.log('entro');
+        $("#menu-perfil").css("display", isShowing);
+        if(isShowing == "block"){
+          isShowing = "none";
+        }else{
+      	  isShowing = "block";
+          }
+    }
+</script>

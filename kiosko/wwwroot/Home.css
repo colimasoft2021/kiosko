@@ -19,7 +19,7 @@ body {
     position:sticky;
     top:20px;
 }
-.container-button {
+.container-button-menu {
     text-align: center;
     position: sticky;
     top: 30px;
@@ -115,109 +115,10 @@ body {
 
 .navegacion {
     background-color: #455A64;
+    display:flex;
+    flex-flow:row nowrap;
+    padding:2%;
     height: 88px;
-}
-
-    .navegacion .header {
-        position: absolute;
-        display: flex;
-        left: 85%;
-        top: 1px;
-    }
-
-
-.header .header-hija {
-    margin-right: 20px;
-    margin-top: 20px;
-}
-
-.header-hija .contenedor {
-    position: absolute;
-    transform: translate(-100%);
-    padding: 10px;
-}
-
-    .header-hija .contenedor input {
-        outline: none;
-        box-sizing: border-box;
-        height: 29px;
-        width: 0px;
-        padding: 0 20px;
-        color: #000;
-        border-radius: 50px;
-        font-size: 15px;
-        border: transparent;
-        transition: all .7s ease;
-    }
-
-        .header-hija .contenedor input::placeholder {
-            color: grey;
-        }
-
-.header-hija .boton-busqueda {
-    position: absolute;
-    right: 9px;
-    top: 2px;
-    width: 45px;
-    height: 45px;
-    background: #455A64;
-    line-height: 45px;
-    border-radius: 50%;
-    text-align: center;
-    cursor: pointer;
-    transition: .5s;
-}
-
-    .header-hija .boton-busqueda i {
-        font-size: 15px;
-        color: white;
-        line-height: 0px;
-        transition: all .7s ease;
-    }
-
-.header-hija .contenedor:hover input {
-    width: 350px;
-}
-
-
-
-.menu-desplegable .boton-perfil {
-    background-color: transparent;
-    display: flex;
-    padding-bottom: 5px;
-    border: none;
-}
-
-.menu-desplegable .cerrar-sesion {
-    color: transparent;
-    display: flex;
-    text-decoration: none;
-    list-style: none;
-}
-
-.menu-desplegable .editar-modulos {
-    color: transparent;
-    display: flex;
-    padding-top: 10px;
-    text-decoration: none;
-    list-style: none;
-}
-
-.menu-desplegable:hover > .cerrar-sesion {
-    color: white;
-    background-color: #455A64;
-}
-
-.menu-desplegable .cerrar-sesion > :hover {
-    background-color: dimgrey;
-}
-
-
-.menu-desplegable:hover > .editar-modulos {
-    display: flex;
-    padding-top: 10px;
-    color: white;
-    background-color: #455A64;
 }
 
 
@@ -810,6 +711,103 @@ body {
     margin-left: 0%;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     border-radius: 5px;
+}
+
+/*css login*/
+.container-login {
+    width: 460px;
+}
+
+.top-container {
+    width:100%;
+    height:25px;
+    background: linear-gradient(90.05deg, #E9501C -2.22%, #E11F1C 34.54%, #41AB34 50.47%, #008BD2 76.73%, #E6007E 102.8%);
+border-radius: 12px 12px 0px 0px;
+}
+
+.logo-container {
+    margin-top: 40px;
+}
+
+.text-container {
+    margin-bottom:10%;
+    text-align: center;
+}
+
+.text-container > p{
+    font-size:22px;
+    color:#000000;
+}
+
+.label-container{
+    margin:7px 0px;
+}
+
+.label-container > span {
+    font-size: 15px;
+}
+
+.container-user{
+    margin-bottom:5%;
+}
+.input-user::placeholder{
+   font-family:"Font Awesome 5 Free";
+   font-size:15px;
+}
+
+.container-password {
+    margin-bottom: 2%;
+}
+
+.item-container{
+    text-align:center;
+}
+
+.span-item {
+    margin-right:28%;
+    margin-left:2%;
+}
+.fondo-login {
+    align-items: center;
+    background-color: #e9ecef;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    justify-content: center;
+}
+
+.container-button{
+    margin:40px 0px;
+}
+
+.container-button > button {
+    width:100%;
+    height:45px;
+    color:#FFFFFF;
+    font-size:20px;
+
+    background-color: #07577F;
+    border-radius:9px;
+}
+/*boton perfil*/
+.nav-container{
+    display:flex;
+    list-style:none;
+}
+
+.boton-container >button{
+    border-radius:25px;
+}
+
+.container-perfil {
+    width: 130px;
+    padding: 10px;
+    text-align: center;
+}
+
+
+.menu-item-container {
+    position: absolute;
 }
 .card-imagen2 {
     width: 100px;
