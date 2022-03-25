@@ -123,6 +123,9 @@ function saveNewModulo() {
         data: jsonNewModulo,
         success: function (response) {
             console.log('saved');
+            let id = response.id;
+            let urlModulo = window.location.origin + '/Modulos/Details?=' + id;
+            window.location.assign(urlModulo);
         }
     });
     $("#modalNewModulo").modal("hide");
