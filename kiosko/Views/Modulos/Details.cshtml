@@ -141,10 +141,14 @@
                 success: function (response) {
                   console.log('deleted');
                   console.log(response);
-                  Swal.fire(
-                    'Bien!',
-                    'Los componentes se han actualizado con exito!',
-                    'success'
+                  Swal.fire({
+
+                   title: 'Bien!',
+                   text: 'Los componentes se han actualizado con exito!',
+                   type: 'success',
+                   showConfirmButton: false,
+                   timer: 1500
+                  }
                   )
                   saveChanges();
                 }
@@ -661,7 +665,7 @@
                       '<div class="card-imagen1">'+
                         '<p>Imagen</p>'+
                         '<label for="imagen'+idComponent+'-'+indexImagen+'" id="imagenlabel'+idComponent+'-'+indexImagen+'" class="btn-img">'+
-                            '<img src="/img/icono-imagen-chico.png" class="label-imagen-1"/>'+
+                            '<img src="/img/icono-imagen-chico.png" class="label-imagen-1"></label>'+
                         '</label>'+
                         '<input type="file" typeInput="img" id="imagen'+idComponent+'-'+indexImagen+'" onchange="generatePreview('+stringId+','+indexImagen+','+stringType+')" class="input-img">'+
                         '<div id="imgPreview'+idComponent+'-'+indexImagen+'" class="preview-img-small"></div>'+
@@ -810,6 +814,15 @@
                 '</div>'+
               '</div>';
           break;
+          case 'titulo':
+            let valueInpText5 = (item) ? item.descripcion : "";
+            component =
+              '<div class="col-lg-6 component" db-id="'+pkId+'" id="'+idComponent+'" type-component="titulo">'+
+                  '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
+                '<p>'+
+                '<input class="inputTexto" type="text" placeholder="Titulo" value="'+valueInpText5+'">'+
+              '</div>';
+          break;
           default:
             component = "";
         }
@@ -842,10 +855,14 @@
       
       saveComponents(toInsert);
       updateComponents(toUpdate);
-      Swal.fire(
-        'Bien!',
-        'Los componentes se han actualizado con exito!',
-        'success'
+      Swal.fire({
+
+            title: 'Bien!',
+            text: 'Los componentes se han actualizado con exito!',
+            type: 'success',
+            showConfirmButton: false,
+            timer: 1500
+          }
       )
     }
     
@@ -1158,6 +1175,12 @@
                   jsonItem.Url = $(this).attr("value");
               }
             }
+          });
+        break;
+        case 'titulo':
+          $("#"+idElement).find("input").each(function() {
+            let value = $(this).val();
+            jsonItem.Descripcion = value;
           });
         break;
         default:
