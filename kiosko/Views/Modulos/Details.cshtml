@@ -33,20 +33,20 @@
                         
                         <div class="menu-container"> 
                             <ul id="menu" style="display: none">
-                                <li class="option-menu" onclick="addComponent('texto', 0)">Texto</li>
-                                <li class="option-menu" onclick="addComponent('subtitulo', 0)">Subtitulo</li>
-                                <li class="option-menu" onclick="addComponent('imagen', 0)">Imagen</li>
-                                <li class="option-menu" onclick="addComponent('desplazante-texto-imagen', 0)">Desplazante Texto-Imagen</li>
-                                <li class="option-menu" onclick="addComponent('video', 0)">Video</li>
+                                <li class="option-menu is-general" onclick="addComponent('texto', 0)">Texto</li>
+                                <li class="option-menu is-general" onclick="addComponent('subtitulo', 0)">Subtitulo</li>
+                                <li class="option-menu is-general" onclick="addComponent('imagen', 0)">Imagen</li>
+                                <li class="option-menu is-general" onclick="addComponent('desplazante-texto-imagen', 0)">Desplazante Texto-Imagen</li>
+                                <li class="option-menu is-general" onclick="addComponent('video', 0)">Video</li>
                                 <li class="option-menu" onclick="addComponent('enlace', 0)">Enlace</li>
-                                <li class="option-menu" onclick="addComponent('banner-informativo', 0)">Banner Informativo</li>
-                                <li class="option-menu" onclick="addComponent('pop-up-video', 0)">Pop-Up Video</li>
-                                <li class="option-menu" onclick="addComponent('video-guia', 0)">video-guia</li>
-                                <li class="option-menu" onclick="addComponent('acceso-cursos', 0)">Acceso-cursos</li>
-                                <li class="option-menu" onclick="addComponent('carrucel', 0)">Carrucel</li>
-                                <li class="option-menu" onclick="addComponent('pop-up', 0)">Pop-up</li>
-                                <li class="option-menu" onclick="addComponent('desplegable-texto-imagen', 0)">Desplegable texto-imagen</li>
-                                <li class="option-menu" onclick="addComponent('texto-imagen', 0)">Texto Imagen</li>
+                                <li class="option-menu is-general" onclick="addComponent('banner-informativo', 0)">Banner Informativo</li>
+                                <li class="option-menu is-general" onclick="addComponent('pop-up-video', 0)">Pop-Up Video</li>
+                                <li class="option-menu is-general" onclick="addComponent('video-guia', 0)">video-guia</li>
+                                <li class="option-menu is-general" onclick="addComponent('acceso-cursos', 0)">Acceso-cursos</li>
+                                <li class="option-menu is-general" onclick="addComponent('carrucel', 0)">Carrucel</li>
+                                <li class="option-menu is-general" onclick="addComponent('pop-up', 0)">Pop-up</li>
+                                <li class="option-menu is-general" onclick="addComponent('desplegable-texto-imagen', 0)">Desplegable texto-imagen</li>
+                                <li class="option-menu is-general" onclick="addComponent('texto-imagen', 0)">Texto Imagen</li>
                             </ul>
                         </div>
                 </div>
@@ -61,7 +61,6 @@
 @section scripts {
 <script type="text/javascript">
     $(function () {
-        console.log('entro');
        $("#containerComponents").sortable();
     });
     var idModulo = $("#idModulo").val();
@@ -70,6 +69,12 @@
     var indexCardTi = 1;
     var indexCardIm = 1;
     var DropzoneVideo;
+
+    if(idModulo == 1){
+        $(".is-general").css("display", "none");
+    }else{
+        $(".is-general").css("display", "block");
+    }
     
     loadComponents();
 
@@ -81,8 +86,9 @@
           data: { "idModulo": idModulo},
           success: function (response) {
             console.log(response);
+            let fromDb = 1;
             response.map(item => {
-              addComponent(item.tipoComponente, item.id, item);
+              addComponent(item.tipoComponente, item.id, item, fromDb);
             });
           }
         });
@@ -99,9 +105,14 @@
       }
   }
 
-    function addComponent(type, pkId, item) {
+    function addComponent(type, pkId, item, fromDb) {
       let component = generateComponent(type, pkId, item);
       $("#containerComponents").append(component.component);
+      if(!fromDb){
+          $('html, body').animate({
+            scrollTop: $("#"+component.idComponent).offset().top
+          }, 1000);
+      }
     }
 
     function removeComponent(idComponent) {
@@ -130,10 +141,14 @@
                 success: function (response) {
                   console.log('deleted');
                   console.log(response);
-                  Swal.fire(
-                    'Bien!',
-                    'Los componentes se han actualizado con exito!',
-                    'success'
+                  Swal.fire({
+
+                   title: 'Bien!',
+                   text: 'Los componentes se han actualizado con exito!',
+                   type: 'success',
+                   showConfirmButton: false,
+                   timer: 1500
+                  }
                   )
                   saveChanges();
                 }
@@ -146,6 +161,7 @@
 
     function generatePreview(stringId,indexImagen,type) {
       let idImg = "imagen"+stringId+"-"+indexImagen;
+      let stringIdImg = "'card-img-"+stringId+"-"+indexImagen+"'";
       let idImglabel = "imagenlabel"+stringId+"-"+indexImagen;
       let idImgclose = "imagenclose"+stringId+"-"+indexImagen;
       let idPreview = "imgPreview"+stringId+"-"+indexImagen;
@@ -172,8 +188,12 @@
       reader.onload = function() {
         let preview = $("#"+idPreview);
         $("#"+idPreview).empty();
-        stringId = "'"+stringId+"'"
-        $("#"+idPreview).append('<button id="imagenclose'+stringId+'-'+indexImagen+'"  class="'+classBtnClose+'"  onclick="deletePreview('+stringId+','+indexImagen+')">x</button>');
+        stringId = "'"+stringId+"'";
+        console.log(type);
+        if(type != "carrucel"){
+            console.log('entro if');
+            $("#"+idPreview).append('<button id="imagenclose'+stringId+'-'+indexImagen+'"  class="'+classBtnClose+'"  onclick="deletePreview('+stringId+','+indexImagen+')">x</button>');
+        }
         imagen = document.createElement('img');
         imagen.src = reader.result;
         preview.innerHTML = "";
@@ -198,8 +218,10 @@
         let stringType = "'"+type+"'";
         let idImgLabel = "imagenlabel"+stringId+"-"+indexImagen;
         let idCardTi = "card-ti-"+stringId+"-"+indexCardTi;
+        let stringIdCardTi = "'card-ti-"+stringId+"-"+indexCardTi+"'";
         $("#text"+stringId).append(
             '<div class="card-texto-imagen" id="'+idCardTi+'" db-id="0">'+
+              '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringIdCardTi+')">'+
               '<div class="card-imagen">'+
                   '<p>Imagen</p>'+
                   '<label for="'+idImg+'" id="'+idImgLabel+'" class="btn-img">'+
@@ -270,8 +292,10 @@
         let newStringId = "'"+stringId+"'";
         let stringType = "'"+type+"'";
         let idCardIm = "card-img-"+stringId+"-"+indexCardIm;
+        let stringIdCard = "'card-img-"+stringId+"-"+indexCardIm+"'";
         $("#containerCarroucel"+stringId).append(
             '<div class="card-imagen-carroucel" id="'+idCardIm+'" db-id="0">'+
+                '<button id="imagenclose'+stringId+'-'+indexImagen+'"  class="button-close-carroucel"  onclick="removeComponent('+stringIdCard+')">x</button>'+
                 '<label for="'+idImg+'" id="'+idLabelImg+'" class="btn-img">'+
                  '<img src="/img/icono-imagen-chico.png" class="label-imagen-1"/>'+
                 '</label>'+
@@ -299,6 +323,7 @@
             let preview = "";
             let styleLabel = "";
             let isDb = item.id === "0";
+            let idImg = "'card-img-"+idComponent+"-"+indexImagen+"'";
             if(isDb){
                 preview = 
                 '<div id="imgPreview'+idComponent+'-'+indexImagen+'" class="preview-img-carroucel"></div>';
@@ -306,12 +331,13 @@
                 styleLabel = 'style="display: none;"';
                 preview = 
                 '<div id="imgPreview'+idComponent+'-'+indexImagen+'" class="preview-img-carroucel">'+
-                    '<button id="imagenclose'+idComponent+'-'+indexImagen+'"  class="button-close-carroucel"  onclick="deletePreview('+stringId+','+indexImagen+')">x</button>'+
+                    /*'<button id="imagenclose'+idComponent+'-'+indexImagen+'"  class="button-close-carroucel"  onclick="removeComponent('+idImg+')">x</button>'+*/
                     '<img src="'+item.url+'" />'+
                 '</div>';
             }
             component +=
             '<div class="card-imagen-carroucel" id="card-img-'+idComponent+'-'+indexCardIm+'" db-id="'+item.id+'">'+
+                '<button id="imagenclose'+idComponent+'-'+indexImagen+'"  class="button-close-carroucel"  onclick="removeComponent('+idImg+')">x</button>'+
                 '<label for="imagen'+idComponent+'-'+indexImagen+'" id="imagenlabel'+idComponent+'-'+indexImagen+'" '+styleLabel+' class="btn-img">'+
                   '<img src="/img/icono-imagen-chico.png" class="label-imagen-1"/>'+
                 '</label>'+
@@ -329,25 +355,29 @@
         let preview = "";
         let styleLabel = "";
         let urlImage = "";
+        let classPreview = "preview-img";
+        if(stringType === "'texto-imagen'"){
+            classPreview = "preview-img-small";
+        }
         if(pkId !== 0){
             styleLabel = 'style="display: none;"';
             urlImage = item.url;
             preview = 
-            '<div id="imgPreview'+idComponent+'-'+indexImagen+'" class="preview-img">'+
+            '<div id="imgPreview'+idComponent+'-'+indexImagen+'" class="'+classPreview+'">'+
                 '<button id="imagenclose'+idComponent+'-'+indexImagen+'"  class="button-close"  onclick="deletePreview('+stringId+','+indexImagen+')">x</button>'+
                 '<img src="'+urlImage+'" />'+
             '</div>';
         }else{
             preview = 
-            '<div id="imgPreview'+idComponent+'-'+indexImagen+'" class="preview-img"></div>';
+            '<div id="imgPreview'+idComponent+'-'+indexImagen+'" class="'+classPreview+'"></div>';
         }
         let component = 
-        '<div class="container-imagen">'+
+        /*'<div class="container-imagen">'+*/
             '<label for="imagen'+idComponent+'-'+indexImagen+'" id="imagenlabel'+idComponent+'-'+indexImagen+'" '+styleLabel+' class="btn-img">'+
                 '<img src="/img/icono-imagen-chico.png" class="image-icon"/>'+
             '</label>'+
-            '<input type="file" id="imagen'+idComponent+'-'+indexImagen+'" onchange="generatePreview('+stringId+','+indexImagen+','+stringType+')" class="input-img" typeInput="img" value="'+urlImage+'">'+
-        '</div>';
+            '<input type="file" id="imagen'+idComponent+'-'+indexImagen+'" onchange="generatePreview('+stringId+','+indexImagen+','+stringType+')" class="input-img" typeInput="img" value="'+urlImage+'">';
+        /*'</div>';*/
         component += preview;
         indexImagen = indexImagen + 1;
         return component;
@@ -370,6 +400,7 @@
             let preview = "";
             let styleLabel = "";
             let isDb = item.id === "0";
+            let idImg = "'card-ti-"+idComponent+"-"+indexCardTi+"'";
             if(isDb){
                 preview = 
                 '<div id="imgPreview'+idComponent+'-'+indexImagen+'" class="preview-img-small"></div>';
@@ -383,6 +414,7 @@
             }
             component +=
             '<div class="card-texto-imagen" id="card-ti-'+idComponent+'-'+indexCardTi+'" db-id="'+item.id+'">'+
+                      '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+idImg+')">'+
                       '<div class="card-imagen">'+
                           '<p>Imagen</p>'+
                           '<label for="imagen'+idComponent+'-'+indexImagen+'" id="imagenlabel'+idComponent+'-'+indexImagen+'" '+styleLabel+' class="btn-img">'+
@@ -415,6 +447,38 @@
         else{
            $('#previewLink'+stringId).css('visibility', 'hidden');
         }
+    }
+
+    function generateCardVideo(stringId, idComponent, item, pkId, stringType) {
+        let preview = "";
+        let styleLabel = "";
+        let urlVideo = "";
+        let classLabel = "btn-img";
+        if(stringType === "'pop-up-video'"){
+            classLabel = "label-popvideo";
+        }else if(stringType === "'video-guia'") {
+            classLabel = "label-video-guia";
+        }
+        if(pkId !== 0){
+            styleLabel = 'style="display: none;"';
+            urlVideo = item.url;
+            preview = 
+            '<div id="previewVideo'+idComponent+'" class="preview-img">'+
+                '<button id="videoclose'+stringId+'"  class="button-close-video"  onclick="deletePreviewVideo('+stringId+')">x</button>'+
+                '<video src="'+urlVideo+'" style="width: 400px;" controls/>'+
+            '</div>';
+        }else{
+            preview = 
+            '<div id="previewVideo'+idComponent+'" class="preview-img"></div>';
+        }
+        let component = 
+        '<label for="video'+idComponent+'" id="videolabel'+idComponent+'" '+styleLabel+' class="'+classLabel+'">'+
+            '<img src="/img/video.png" class="video-icon"/>'+
+        '</label>'+
+        '<input type="file" accept="video/*" id="video'+idComponent+'" onchange="generatePreviewVideo('+stringId+')" typeInput="video" value="'+urlVideo+'" class="input-img">';
+
+        component += preview;
+        return component;
     }
 
     function generateComponent(type, pkId, item) {
@@ -452,12 +516,13 @@
                 '<p class="tituloCmp">'+type+
                   '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
                 '</p>'+
-                '<div class="container-texto-imagen">';
-
+                '<div class="container-texto-imagen">'+
+                    '<div class="container-imagen">';
             let image = generateCardImage(stringId, idComponent, item, pkId, stringType);
             component += image;
                     
             component +=
+                    '</div>'+
                     '<input class="w-100 mt-1 inputTexto" type="text" placeholder="Pie de Foto" typeInput="pie-foto" value="'+valueInpPie+'"/>'+
                 '</div>'+
                 '<div>'+
@@ -492,12 +557,12 @@
                 '<p class="tituloCmp">'+type+
                   '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
                 '<p>'+
-                '<div class="container-imagen">'+
-                    '<label for="video'+idComponent+'" id="videolabel'+idComponent+'" class="btn-img">'+
-                        '<img src="/img/video.png" class="video-icon"/>'+
-                    '</label>'+
-                    '<input type="file" accept="video/*" id="video'+idComponent+'" onchange="generatePreviewVideo('+stringId+')" class="input-img">'+
-                    '<div id="previewVideo'+idComponent+'" class="preview-img"></div>'+
+                '<div class="container-imagen">';
+
+            let video = generateCardVideo(stringId, idComponent, item, pkId, stringType);
+            component += video;
+
+            component +=
                 '</div>'+
               '</div>';
           break;
@@ -592,20 +657,25 @@
                   '<p>'+
                   '<div>'+
                     '<div class="junto1">'+
+                    '<div class="card-imagen1">'+
+                        '<p>Imagen</p>';
+            let cardImage = generateCardImage(stringId, idComponent, item, pkId, stringType);
+            component += cardImage;
+                      /*
                       '<div class="card-imagen1">'+
                         '<p>Imagen</p>'+
                         '<label for="imagen'+idComponent+'-'+indexImagen+'" id="imagenlabel'+idComponent+'-'+indexImagen+'" class="btn-img">'+
-                            '<img src="/img/icono-imagen-chico.png" class="label-imagen-1"/>'+
+                            '<img src="/img/icono-imagen-chico.png" class="label-imagen-1"></label>'+
                         '</label>'+
                         '<input type="file" typeInput="img" id="imagen'+idComponent+'-'+indexImagen+'" onchange="generatePreview('+stringId+','+indexImagen+','+stringType+')" class="input-img">'+
                         '<div id="imgPreview'+idComponent+'-'+indexImagen+'" class="preview-img-small"></div>'+
+                      '</div>'
+                      */
+            component +=
                       '</div>'+
                       '<div class="titulomax1">'+
                           '<textarea class="inputTitulo1" typeInput="textarea" value="'+valueInpText3+'"></textarea>'+
                       '</div>'+
-                    '</div>'+
-                    '<div id="imgPreview'+idComponent+'-'+indexImagen+'" class="estilo-imagen"></div>'+ 
-                         '<div id="preview'+idComponent+'" class="estilo-imagen">'+ 
                     '</div>'+
                   '</div>'+
                 '</div>'+
@@ -697,11 +767,17 @@
                   '<img src="/img/iconTrash.png"  alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
                 '<p>'+
                 '<div>'+
-                  '<div class="video-guia-padre-input">'+
-                    '<label for="video'+idComponent+'" id="videolabel'+idComponent+'" class="label-video-guia"><img src="/img/icono-video.png"></label>'+
+                  '<div class="video-guia-padre-input">';
+
+            let cardVideoGuia = generateCardVideo(stringId, idComponent, item, pkId, stringType);
+            component += cardVideoGuia;
+
+                    /*'<label for="video'+idComponent+'" id="videolabel'+idComponent+'" class="label-video-guia"><img src="/img/icono-video.png"></label>'+
                     '<input type="file" id="video'+idComponent+'" onchange="generatePreviewVideo('+stringId+')" class="input-video-guia" typeInput="video-guia" value="'+valueInpVideoGuia+'">'+
                     '<div id="previewVideo'+idComponent+'"  class="video-guia-video">'+      
-                    '</div>'+
+                    '</div>'+*/
+
+            component +=
                   '</div>'+
                   '<div class="descripcion-guia-video">'+
                     '<input type="text" class="descripcion-guia-video-input" placeholder="Descripcion" typeInput="text-guia" value="'+valueInpTextGuia+'">'+
@@ -725,13 +801,26 @@
                 '<p>'+
                 '<input class="inputTexto" type="text" placeholder="Texto..." typeInput="upvideo-text" value="'+valueInpUpVideoText+'">'+ 
                 '<div class="container-pop">'+
-                  '<div class="hija-popvideo">'+
-                    '<label class="label-popvideo" for="video'+idComponent+'" id="videolabel'+idComponent+'"><img src="/img/icono-video.png" class="imagen-popvideo"/></label>'+
+                  '<div class="hija-popvideo">';
+
+            let cardVideo = generateCardVideo(stringId, idComponent, item, pkId, stringType);
+            component += cardVideo;
+                    /*'<label class="label-popvideo" for="video'+idComponent+'" id="videolabel'+idComponent+'"><img src="/img/icono-video.png" class="imagen-popvideo"/></label>'+
                     '<input class="pop-up-input" type="file" accept="video/*" id="video'+idComponent+'" onchange="generatePreviewVideo('+stringId+')" typeInput="up-video" value="'+valueInpUpVideo+'">'+
                     '<div id="previewVideo'+idComponent+'">'+ 
-                    '</div>'+
+                    '</div>'+*/
+            component +=
                   '</div>'+
                 '</div>'+
+              '</div>';
+          break;
+          case 'titulo':
+            let valueInpText5 = (item) ? item.descripcion : "";
+            component =
+              '<div class="col-lg-6 component" db-id="'+pkId+'" id="'+idComponent+'" type-component="titulo">'+
+                  '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+')">'+
+                '<p>'+
+                '<input class="inputTexto" type="text" placeholder="Titulo" value="'+valueInpText5+'">'+
               '</div>';
           break;
           default:
@@ -766,10 +855,14 @@
       
       saveComponents(toInsert);
       updateComponents(toUpdate);
-      Swal.fire(
-        'Bien!',
-        'Los componentes se han actualizado con exito!',
-        'success'
+      Swal.fire({
+
+            title: 'Bien!',
+            text: 'Los componentes se han actualizado con exito!',
+            type: 'success',
+            showConfirmButton: false,
+            timer: 1500
+          }
       )
     }
     
@@ -837,7 +930,7 @@
             let pkey = $(this).attr('db-id');
             $("#"+id).find("input").each(function() {
                 let typeInp = $(this).attr("typeInput");
-                if(typeInp == 'img-pop'){
+                if(typeInp == 'img'){
                     let value = $(this).prop("files");
                     if(value[0]){
                         jsonDesplazante.Url = window.location.origin+'/files/'+value[0].name;
@@ -976,7 +1069,7 @@
               let value = $(this).prop("files");
               if(value[0]){
                 jsonItem.Url = window.location.origin+'/files/'+value[0].name;
-                jsonItem.files = value[0];
+                jsonItem.Files = value[0];
               }else{
                 jsonItem.Url = $(this).attr("value");
               }
@@ -990,7 +1083,7 @@
               let value = $(this).prop("files");
               if(value[0]){
                 jsonItem.Url = window.location.origin+'/files/'+value[0].name;
-                jsonItem.files = value[0];
+                jsonItem.Files = value[0];
               }else{
                 jsonItem.Url = $(this).attr("value");
               }
@@ -1023,7 +1116,7 @@
               let value = $(this).prop("files");
               if(value[0]){
                   jsonItem.Url = window.location.origin+'/files/'+value[0].name;
-                  jsonItem.files = value[0];
+                  jsonItem.Files = value[0];
               }else{
                   jsonItem.Url = $(this).attr("value");
               }
@@ -1037,7 +1130,7 @@
               let value = $(this).prop("files");
               if(value[0]){
                 jsonItem.Url = window.location.origin+'/files/'+value[0].name;
-                jsonItem.files = value[0];
+                jsonItem.Files = value[0];
               }else{
                 jsonItem.Url = $(this).attr("value");
               }                  
@@ -1055,7 +1148,7 @@
         case 'pop-up-video':
           $("#"+idElement).find("input").each(function() {
             let typeInp = $(this).attr("typeInput");
-            if(typeInp == 'upvideo-text'){
+            if(typeInp == 'video'){
               let value = $(this).val();
               jsonItem.Descripcion = value;
             }
@@ -1063,11 +1156,31 @@
               let value = $(this).prop("files");
               if(value[0]){
                   jsonItem.Url = window.location.origin+'/files/'+value[0].name;
-                  jsonItem.files = value[0];
+                  jsonItem.Files = value[0];
               }else{
                   jsonItem.Url = $(this).attr("value");
               }
             }
+          });
+        break;
+        case 'video':
+          $("#"+idElement).find("input").each(function() {
+            let typeInp = $(this).attr("typeInput");
+            if(typeInp == 'video'){
+              let value = $(this).prop("files");
+              if(value[0]){
+                  jsonItem.Url = window.location.origin+'/files/'+value[0].name;
+                  jsonItem.Files = value[0];
+              }else{
+                  jsonItem.Url = $(this).attr("value");
+              }
+            }
+          });
+        break;
+        case 'titulo':
+          $("#"+idElement).find("input").each(function() {
+            let value = $(this).val();
+            jsonItem.Descripcion = value;
           });
         break;
         default:
@@ -1163,7 +1276,6 @@
         $.ajax({
           type: "POST",
           url: "/Componentes/updateDesplazantes",
-          headers: { "RequestVerificationToken": "@GetAntiXsrfRequestToken()" },
           data: formData,
           processData : false,
           contentType : false,
