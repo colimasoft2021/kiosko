@@ -33,20 +33,20 @@
                         
                         <div class="menu-container"> 
                             <ul id="menu" style="display: none">
-                                <li class="option-menu" onclick="addComponent('texto', 0)">Texto</li>
-                                <li class="option-menu" onclick="addComponent('subtitulo', 0)">Subtitulo</li>
-                                <li class="option-menu" onclick="addComponent('imagen', 0)">Imagen</li>
-                                <li class="option-menu" onclick="addComponent('desplazante-texto-imagen', 0)">Desplazante Texto-Imagen</li>
-                                <li class="option-menu" onclick="addComponent('video', 0)">Video</li>
+                                <li class="option-menu is-general" onclick="addComponent('texto', 0)">Texto</li>
+                                <li class="option-menu is-general" onclick="addComponent('subtitulo', 0)">Subtitulo</li>
+                                <li class="option-menu is-general" onclick="addComponent('imagen', 0)">Imagen</li>
+                                <li class="option-menu is-general" onclick="addComponent('desplazante-texto-imagen', 0)">Desplazante Texto-Imagen</li>
+                                <li class="option-menu is-general" onclick="addComponent('video', 0)">Video</li>
                                 <li class="option-menu" onclick="addComponent('enlace', 0)">Enlace</li>
-                                <li class="option-menu" onclick="addComponent('banner-informativo', 0)">Banner Informativo</li>
-                                <li class="option-menu" onclick="addComponent('pop-up-video', 0)">Pop-Up Video</li>
-                                <li class="option-menu" onclick="addComponent('video-guia', 0)">video-guia</li>
-                                <li class="option-menu" onclick="addComponent('acceso-cursos', 0)">Acceso-cursos</li>
-                                <li class="option-menu" onclick="addComponent('carrucel', 0)">Carrucel</li>
-                                <li class="option-menu" onclick="addComponent('pop-up', 0)">Pop-up</li>
-                                <li class="option-menu" onclick="addComponent('desplegable-texto-imagen', 0)">Desplegable texto-imagen</li>
-                                <li class="option-menu" onclick="addComponent('texto-imagen', 0)">Texto Imagen</li>
+                                <li class="option-menu is-general" onclick="addComponent('banner-informativo', 0)">Banner Informativo</li>
+                                <li class="option-menu is-general" onclick="addComponent('pop-up-video', 0)">Pop-Up Video</li>
+                                <li class="option-menu is-general" onclick="addComponent('video-guia', 0)">video-guia</li>
+                                <li class="option-menu is-general" onclick="addComponent('acceso-cursos', 0)">Acceso-cursos</li>
+                                <li class="option-menu is-general" onclick="addComponent('carrucel', 0)">Carrucel</li>
+                                <li class="option-menu is-general" onclick="addComponent('pop-up', 0)">Pop-up</li>
+                                <li class="option-menu is-general" onclick="addComponent('desplegable-texto-imagen', 0)">Desplegable texto-imagen</li>
+                                <li class="option-menu is-general" onclick="addComponent('texto-imagen', 0)">Texto Imagen</li>
                             </ul>
                         </div>
                 </div>
@@ -61,7 +61,6 @@
 @section scripts {
 <script type="text/javascript">
     $(function () {
-        console.log('entro');
        $("#containerComponents").sortable();
     });
     var idModulo = $("#idModulo").val();
@@ -70,6 +69,12 @@
     var indexCardTi = 1;
     var indexCardIm = 1;
     var DropzoneVideo;
+
+    if(idModulo == 1){
+        $(".is-general").css("display", "none");
+    }else{
+        $(".is-general").css("display", "block");
+    }
     
     loadComponents();
 
@@ -81,8 +86,9 @@
           data: { "idModulo": idModulo},
           success: function (response) {
             console.log(response);
+            let fromDb = 1;
             response.map(item => {
-              addComponent(item.tipoComponente, item.id, item);
+              addComponent(item.tipoComponente, item.id, item, fromDb);
             });
           }
         });
@@ -99,12 +105,14 @@
       }
   }
 
-    function addComponent(type, pkId, item) {
+    function addComponent(type, pkId, item, fromDb) {
       let component = generateComponent(type, pkId, item);
       $("#containerComponents").append(component.component);
-      $('html, body').animate({
-        scrollTop: $("#"+component.idComponent).offset().top
-      }, 1000);
+      if(!fromDb){
+          $('html, body').animate({
+            scrollTop: $("#"+component.idComponent).offset().top
+          }, 1000);
+      }
     }
 
     function removeComponent(idComponent) {
@@ -319,14 +327,14 @@
                 styleLabel = 'style="display: none;"';
                 preview = 
                 '<div id="imgPreview'+idComponent+'-'+indexImagen+'" class="preview-img-carroucel">'+
-                    '<button id="imagenclose'+idComponent+'-'+indexImagen+'"  class="button-close-carroucel"  onclick="removeComponent('+idImg+')">x</button>'+
+                    /*'<button id="imagenclose'+idComponent+'-'+indexImagen+'"  class="button-close-carroucel"  onclick="removeComponent('+idImg+')">x</button>'+*/
                     '<img src="'+item.url+'" />'+
                 '</div>';
             }
             component +=
             '<div class="card-imagen-carroucel" id="card-img-'+idComponent+'-'+indexCardIm+'" db-id="'+item.id+'">'+
                 '<button id="imagenclose'+idComponent+'-'+indexImagen+'"  class="button-close-carroucel"  onclick="removeComponent('+idImg+')">x</button>'+
-                '<label for="imagen'+idComponent+'-'+indexImagen+'" id="imagenlabel'+idComponent+'-'+indexImagen+'" class="btn-img">'+
+                '<label for="imagen'+idComponent+'-'+indexImagen+'" id="imagenlabel'+idComponent+'-'+indexImagen+'" '+styleLabel+' class="btn-img">'+
                   '<img src="/img/icono-imagen-chico.png" class="label-imagen-1"/>'+
                 '</label>'+
                 '<input type="file" id="imagen'+idComponent+'-'+indexImagen+'" onchange="generatePreview('+stringId+','+indexImagen+','+stringType+')" typeInput="img" class="input-img" value="'+item.url+'">';
