@@ -51,7 +51,7 @@ namespace kiosko.Controllers
             var modulos = _context.Modulos.OrderBy(c => c.Orden);
             return Json(modulos);
         }
-
+        // GET: Modulos/GetModulosComponentsForApp
         public JsonResult GetModulosAndComponentsForApp()
         {
             var modulos = _context.Modulos.OrderBy(c => c.Orden);
@@ -61,6 +61,18 @@ namespace kiosko.Controllers
             }
             return Json(modulos);
         }
+
+        [HttpPost()]
+        public IActionResult SaveMenuModulo(Modulo modulo)
+        {
+            IActionResult ret = null;
+            _context.Add(modulo);
+            _context.SaveChanges();
+
+            ret = StatusCode(StatusCodes.Status201Created, modulo);
+            return ret;
+        }
+
         /*
         public JsonResult GetModulosAndProgressByUser()
         {
