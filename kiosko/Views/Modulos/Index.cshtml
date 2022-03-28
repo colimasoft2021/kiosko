@@ -4,45 +4,190 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
 
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Titulo)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.AccesoDirecto)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Orden)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Titulo)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AccesoDirecto)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Orden)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
+@functions
+{
+    public string GetAntiXsrfRequestToken()
+    {
+        return Xsrf.GetAndStoreTokens(Context).RequestToken;
+    }
 }
-    </tbody>
-</table>
+
+<div class="content-wrapper">
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12 mt-3">
+                    <div class="card">
+                        <table id="tablaModulos" class="table table-bordered table-hover">
+                          <thead>
+                              <tr>
+                                <th>Id</th>
+                                <th>Título</th>
+                                <th>Padre</th>
+                                <th>Es Desplegable</th>
+                                <th>Tiempo de inactividad</th>
+                                <th>Acciones</th>
+                              </tr>
+                          </thead>
+                          <tbody id="tBodyModulos">
+                          </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div class="modal fade" id="modalEditarModulo">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title" id="modalTitleModulo">Actualizar modulo</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <form id="formEditModulo">
+                <div class="modal-body">
+                    <div class="card-body">
+                      <input type="hidden" name="idModulo" id="idModulo" class="form-control">
+                      <div class="form-group">
+                        <label for="tituloModulo">Título</label>
+                        <input type="text" name="tituloModulo" id="tituloModulo" class="form-control">
+                      </div>
+                      <div class="form-group">
+                        <label for="tiempoInactividad">Tiempo máximo de inactividad (días)</label>
+                        <input type="number" name="tiempoInactividad" id="tiempoInactividad" class="form-control">
+                      </div>
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-between">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                  <button type="submit" class="btn btn-primary">Actualizar</button>
+                </div>
+            </form>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+</div>
+@section scripts {
+    <script type="text/javascript">
+      $(function () {
+        getModulos();
+      });
+      function getModulos() {
+        $("#tBodyModulos").empty();
+        $.ajax({
+            type: "GET",
+            url: "/Modulos/GetAllModulos",
+            success: function (response) {
+                console.log(response);
+                response.map(item => {
+                    addItemToTable(item);
+                });
+                $('#tablaModulos').DataTable({
+                  "paging": true,
+                  "lengthChange": false,
+                  "searching": false,
+                  "ordering": true,
+                  "info": true,
+                  "autoWidth": false,
+                  "responsive": true,
+                });
+            }
+        });
+      }
+
+      function addItemToTable(item) {
+          let id = item.id;
+          let desplegable = item.desplegable;
+          let titulo = item.titulo;
+          let stringTitulo = "'"+titulo+"'";
+          let padre = item.padre;
+          let idModulo = item.idModulo;
+          let textDesplegable = item.desplegable === 0 ? 'No' : 'Si';
+          let tiempoInactividad = item.tiempoInactividad == null ? 0 : item.tiempoInactividad;
+          let trTable = "";
+              trTable += '<tr id="tr' + idModulo + '">';
+              trTable += '<td>'+idModulo+'</td>';
+              trTable += '<td>'+titulo+'</td>';
+              trTable += '<td>'+padre+'</td>';
+              trTable += '<td>'+textDesplegable+'</td>';
+              trTable += '<td>'+tiempoInactividad+' días</td>';
+              trTable += '<td><p><img src="/img/iconPencil.png" alt="icon trash" onclick="openModalEditModulo('+stringTitulo+','+tiempoInactividad+','+id+')">&nbsp;&nbsp;&nbsp;&nbsp;';
+              trTable += '<img src="/img/iconTrash.png" alt="icon trash"></p></td>';
+              trTable += '</tr>';
+          if (padre !== null) {
+              console.log('entro if padre di nul');
+              $("#tr" + padre).after(trTable);
+          } else {
+              $("#tBodyModulos").append(trTable);
+          }
+      }
+
+      function openModalEditModulo(titulo, tiempoInactividad, id) {
+          $("#tituloModulo").val(titulo);
+          $("#tiempoInactividad").val(tiempoInactividad);
+          $("#idModulo").val(id);
+          $("#modalEditarModulo").modal("show");
+      }
+
+      $.validator.setDefaults({
+        submitHandler: function () {
+            let formData = {
+              idModulo: $("#idModulo").val(),
+              tituloModulo: $("#tituloModulo").val(),
+              tiempoInactividad: $("#tiempoInactividad").val(),
+            };
+            $.ajax({
+              type: "POST",
+              url: "/Modulos/updateModulo",
+              headers: { "RequestVerificationToken": "@GetAntiXsrfRequestToken()" },
+              data: formData,
+              success: function (response) {
+                Swal.fire({
+                    title: 'Bien!',
+                    text: 'La información del modulo se ha actualizado con exito!',
+                    type: 'success',
+                    showConfirmButton: false,
+                    timer: 1500
+                  })
+              }
+            });
+        }
+      });
+      $('#formEditModulo').validate({
+        rules: {
+          tituloModulo: {
+            required: true,
+          },
+          tiempoInactividad: {
+            required: true,
+          },
+        },
+        messages: {
+          tituloModulo: {
+            required: "Ingrese el título del modulo",
+          },
+          tiempoInactividad: {
+            required: "Ingrese el tiempo de inactividad",
+          },
+        },
+        errorElement: 'span',
+        errorPlacement: function (error, element) {
+          error.addClass('invalid-feedback');
+          element.closest('.form-group').append(error);
+        },
+        highlight: function (element, errorClass, validClass) {
+          $(element).addClass('is-invalid');
+        },
+        unhighlight: function (element, errorClass, validClass) {
+          $(element).removeClass('is-invalid');
+        }
+      });
+    </script>
+}
