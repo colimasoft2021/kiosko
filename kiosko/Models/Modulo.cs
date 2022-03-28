@@ -17,6 +17,7 @@ namespace kiosko.Models
         public int? Desplegable { get; set; }
         public string? IdModulo { get; set; }
         public string? Padre { get; set; }
+        public int? TiempoInactividad { get; set; }
 
         public virtual ICollection<Componente> Componentes { get; set; }
     }

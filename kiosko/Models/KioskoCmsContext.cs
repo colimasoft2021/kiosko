@@ -140,6 +140,8 @@ namespace kiosko.Models
                     .HasMaxLength(50)
                     .IsUnicode(false)
                     .HasColumnName("titulo");
+
+                entity.Property(e => e.TiempoInactividad).HasColumnName("tiempo_inactividad");
             });
 
             modelBuilder.Entity<Progreso>(entity =>
@@ -187,10 +189,10 @@ namespace kiosko.Models
                     .IsUnicode(false)
                     .HasColumnName("rol");
 
-                entity.Property(e => e.Usuario1)
+                entity.Property(e => e.NombreUsuario)
                     .HasMaxLength(50)
                     .IsUnicode(false)
-                    .HasColumnName("usuario");
+                    .HasColumnName("nombre_usuario");
             });
 
             OnModelCreatingPartial(modelBuilder);

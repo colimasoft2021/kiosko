@@ -54,11 +54,10 @@ namespace kiosko.Controllers
         // GET: Modulos/GetModulosComponentsForApp
         public JsonResult GetModulosAndComponentsForApp()
         {
-            var modulos = _context.Modulos.OrderBy(c => c.Orden);
-            foreach (var m in modulos)
-            {
-                _context.Componentes.Where(c => c.IdModulo == m.Id).OrderBy(c => c.Orden).Load();
-            }
+            var modulos = _context.Modulos.OrderBy(c => c.Orden)
+                .Include(m => m.Componentes)
+                    .ThenInclude(m => m.Desplazantes)
+                    .ToList();
             return Json(modulos);
         }
 
@@ -67,6 +66,37 @@ namespace kiosko.Controllers
         {
             IActionResult ret = null;
             _context.Add(modulo);
+            _context.SaveChanges();
+
+            ret = StatusCode(StatusCodes.Status201Created, modulo);
+            return ret;
+        }
+
+        [HttpPost()]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> updateModulo()
+        {
+            var idModulo = Int32.Parse(Request.Form["idModulo"]);
+            var modulo = await _context.Modulos
+                .FirstOrDefaultAsync(m => m.Id == idModulo);
+            modulo.Titulo = Request.Form["tituloModulo"];
+            modulo.TiempoInactividad = Int32.Parse(Request.Form["tiempoInactividad"]);
+
+            IActionResult ret = null;
+            _context.Update(modulo);
+            _context.SaveChanges();
+
+            ret = StatusCode(StatusCodes.Status201Created, modulo);
+            return ret;
+        }
+
+        [HttpPost()]
+        [ValidateAntiForgeryToken]
+        public IActionResult deleteModulo(int id)
+        {
+            var modulo = _context.Modulos.Find(id);
+            IActionResult ret = null;
+            _context.Modulos.Remove(modulo);
             _context.SaveChanges();
 
             ret = StatusCode(StatusCodes.Status201Created, modulo);

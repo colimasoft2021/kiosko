@@ -4,6 +4,8 @@ $(function () {
     getAllModulos();
 });
 
+var lastIdModulo = 0;
+
 function getAllModulos() {
     $("#sortableMenu").empty();
     $.ajax({
@@ -11,6 +13,7 @@ function getAllModulos() {
         url: "/Modulos/GetAllModulos",
         success: function (response) {
             console.log(response);
+            lastIdModulo = response.length + 1;
             let menuOpen = "menu-open";
             response.map(item => {
                 addItemToMenu(item, menuOpen);
@@ -53,12 +56,7 @@ function addItemToMenu(item, menuOpen) {
 
 function addButtonToMenu() {
     let title = "'Agregar nuevo Modulo'";
-    let lastId = 0;
-    $("#sortableMenu > li").each(function () {
-        lastId++;
-    });
-    lastId = lastId + 1;
-    lastId = "modulo" + lastId;
+    let lastId = "modulo" + lastIdModulo;
     lastId = "'" + lastId + "'";
     $("#sortableMenu").append(
         '<button type="button " onclick="openModalNewModulo(' + title + ', ' + lastId + ')">Agregar modulo</button>'
@@ -69,12 +67,9 @@ function addButtonsToSubMenu() {
     $("#sortableMenu").find("ul").each(function () {
         let idElement = $(this).attr('id');
         let submodulo = $(this).attr('title');
-        let lastId = "";
-        $("#" + idElement).find("li").each(function () {
-            lastId = $(this).attr('id');
-        });
         let title = "Agregar nuevo Submodulo a " + submodulo;
         title = "'" + title + "'";
+        let lastId = "modulo" + lastIdModulo;
         lastId = "'" + lastId + "'";
         let padre = "'" + idElement + "'";
         $("#" + idElement).append(
@@ -94,6 +89,9 @@ var jsonNewModulo = {
 }
 
 function openModalNewModulo(title, lastId, padre) {
+    console.log(title);
+    console.log(lastId);
+    console.log(padre);
     jsonNewModulo = {
         "Id": 0,
         "Titulo": "",
