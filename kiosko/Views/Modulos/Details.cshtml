@@ -1276,6 +1276,7 @@
         $.ajax({
           type: "POST",
           url: "/Componentes/updateDesplazantes",
+          headers: { "RequestVerificationToken": "@GetAntiXsrfRequestToken()" },
           data: formData,
           processData : false,
           contentType : false,

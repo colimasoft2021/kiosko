@@ -364,3 +364,4 @@ FodyWeavers.xsd
 
 StartUp.cs
 appsettings.json
+appsettings.Development.json

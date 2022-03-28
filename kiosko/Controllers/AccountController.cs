@@ -45,7 +45,7 @@ namespace kiosko.Controllers
                 {
                     await _signInManager.SignInAsync(user, isPersistent: false);
 
-                    return RedirectToAction("index", "Home");
+                    return RedirectToAction("index", "Modulos");
                 }
 
                 foreach (var error in result.Errors)
@@ -65,7 +65,7 @@ namespace kiosko.Controllers
         public IActionResult Login()
         {
             if(User.Identity.IsAuthenticated)
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Modulos");
 
             return View();
         }

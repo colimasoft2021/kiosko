@@ -86,7 +86,7 @@ namespace kiosko.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,IdUsuario,Usuario1,Clave,Rol")] Usuario usuario)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,IdUsuario,NombreUsuario,Clave,Rol")] Usuario usuario)
         {
             if (id != usuario.Id)
             {
@@ -149,5 +149,19 @@ namespace kiosko.Controllers
         {
             return _context.Usuarios.Any(e => e.Id == id);
         }
+
+        [HttpPost()]
+        public IActionResult saveNewUser(Usuario usuario)
+        {
+            Console.WriteLine(usuario);
+            IActionResult ret = null;
+            _context.Add(usuario);
+            _context.SaveChanges();
+
+            ret = StatusCode(StatusCodes.Status201Created, usuario);
+            return ret;
+        }
+
+
     }
 }
