@@ -5,6 +5,9 @@ $(function () {
 });
 
 var lastIdModulo = 0;
+const urlParams = new URLSearchParams(window.location.search);
+var idCurremtModulo = urlParams.get('id');
+console.log(idCurremtModulo);
 
 function getAllModulos() {
     $("#sortableMenu").empty();
@@ -21,9 +24,12 @@ function getAllModulos() {
             });
             addButtonToMenu();
             addButtonsToSubMenu();
+            $("#modulo" + idCurremtModulo).children("a").addClass("active");
         }
     });
 }
+
+
 
 function addItemToMenu(item, menuOpen) {
     let desplegable = item.desplegable;
