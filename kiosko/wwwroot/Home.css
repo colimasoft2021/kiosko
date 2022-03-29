@@ -7,6 +7,8 @@
 
 body {
     background-image: url('img/fondo.png');
+    background-repeat: no-repeat;
+    background-size:100%;
 }
 
 .principal {
@@ -115,10 +117,9 @@ body {
 
 .navegacion {
     background-color: #455A64;
-    display:flex;
-    flex-flow:row nowrap;
-    padding:2%;
     height: 88px;
+    transition: margin-left .3s ease-in-out;
+    margin-left: 250px;
 }
 
 
@@ -759,8 +760,14 @@ border-radius: 12px 12px 0px 0px;
     margin-bottom: 2%;
 }
 
-.item-container{
-    text-align:center;
+.input-password::placeholder {
+    font-family: 'FontAwesome';
+    font-weight: 100;
+    font-size: 15px;
+}
+
+.item-container {
+    text-align: center;
 }
 
 .span-item {
@@ -790,25 +797,39 @@ border-radius: 12px 12px 0px 0px;
     border-radius:9px;
 }
 /*boton perfil*/
-.nav-container{
-    display:flex;
-    list-style:none;
+.icon{
+    margin-left:20px;
+}
+.icon-inside {
+    margin-top: 30px;
+    transform: rotate(0deg);
 }
 
-.boton-container >button{
-    border-radius:25px;
+.button-arrow-right {
+    transform: rotate(180deg);
 }
 
-.container-perfil {
-    width: 130px;
-    padding: 10px;
-    text-align: center;
+.profile-container {
+    margin-top: -25px;
+    text-align: end;
 }
 
+.message {
+    margin-right: 3%;
+}
+
+.profile-button {
+    margin-right: 7%;
+    border:transparent;
+    border-radius:15px;
+}
 
 .menu-item-container {
-    position: absolute;
+    margin-right: 4%;
 }
+
+
+/*boton perfil*/
 .card-imagen2 {
     width: 100px;
     display: block;
