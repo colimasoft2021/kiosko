@@ -17,39 +17,50 @@
   <link rel="stylesheet" href="~/Assets/plugins/fontawesome-free/css/all.min.css">
   <link rel="stylesheet" href="~/Assets/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
   <link rel="stylesheet" href="~/Assets/dist/css/adminlte.min.css">
+  <link rel="stylesheet" href="~/Home.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
 </head>
 <body class="hold-transition login-page">
-<div class="login-box">
-  <div class="card card-outline card-primary">
-    <div class="card-header text-center">
-      <a href="#" class="h1">Kiosko</a>
+    <img class="men-image" src="~/img/hombre.png" />
+    <img class="women-image" src="~/img/mujer.png" />
+<div class="login-box container-login">
+    <div class="top-container">
+        
+    </div>
+  <div class="card card-outline">
+    <div class="text-center logo-container">
+      <img src="~/img/logo.png" />
     </div>
     <div class="card-body">
-      <p class="login-box-msg">Iniciar sesión</p>
 
+        <div class="text-container">
+            <p>Iniciar Sesión</p>
+        </div>
       <form method="post">
-        <div class="input-group mb-3">
-          <input asp-for="Usuario" class="form-control" placeholder="Usuario" />
-          <span asp-validation-for="Usuario" class="text-danger"></span>
-          <div class="input-group-append">
-            <div class="input-group-text">
-              <span class="fas fa-envelope"></span>
+       <div>
+            <div class="label-container">
+                <span>Correo o Nombre de Usuario</span>
             </div>
-          </div>
-        </div>
-        <div class="input-group mb-3">
-          <input asp-for="Clave" class="form-control" placeholder="Clave"/>
-          <span asp-validation-for="Clave" class="text-danger"></span>
-          <div class="input-group-append">
-            <div class="input-group-text">
-              <span class="fas fa-lock"></span>
+            <div class="container-user">
+                <input asp-for="Usuario" class="form-control input-user" placeholder="" />
+                <span asp-validation-for="Usuario" class="text-danger"></span>
             </div>
-          </div>
-        </div>
-        <div class="row d-flex justify-content-center">
-          <div class="col-4">
-            <button type="submit" class="btn btn-primary btn-block">Acceder</button>
-          </div>
+            <div class="label-container">
+                <span>Contraseña</span>
+            </div>
+            <div class="container-password">
+                <input asp-for="Clave" class="form-control input-password" placeholder="&#xf023" />
+                <span asp-validation-for="Clave" class="text-danger"></span>
+             </div>
+             <div class="item-container">
+                 <input type="checkbox" /><span class="span-item">Recordarme</span>
+                 <a href="#">¿Olvidaste tu contraseña?</a> 
+             </div>
+            <div class="container-button">
+                <button type="submit">Iniciar Sesion</button>
+            </div>
         </div>
       </form>
     </div>

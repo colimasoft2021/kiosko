@@ -119,7 +119,7 @@
               trTable += '<td>'+textDesplegable+'</td>';
               trTable += '<td>'+tiempoInactividad+' días</td>';
               trTable += '<td><p><img src="/img/iconPencil.png" alt="icon trash" onclick="openModalEditModulo('+stringTitulo+','+tiempoInactividad+','+id+')">&nbsp;&nbsp;&nbsp;&nbsp;';
-              trTable += '<img src="/img/iconTrash.png" alt="icon trash"></p></td>';
+              trTable += '<img src="/img/iconTrash.png" alt="icon trash" onclick="removeModulo('+id+')"></p></td>';
               trTable += '</tr>';
           if (padre !== null) {
               console.log('entro if padre di nul');
@@ -189,5 +189,45 @@
           $(element).removeClass('is-invalid');
         }
       });
+
+   function removeModulo(idModulo) {
+    console.log(idModulo);
+    Swal.fire({
+        title: '¿Está seguro que desea borrar este modulo?',
+        text: "Los cambios no podrán ser revertidos!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Eliminar',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+                console.log("diferente");
+                $.ajax({
+                    type: "POST",
+                    url: "/Modulos/deleteModulo",
+                    headers: { "RequestVerificationToken": "@GetAntiXsrfRequestToken()" },
+                    data: { id: idModulo  },
+                    success: function (response) {
+                        console.log('deleted');
+                        console.log(response);
+                        Swal.fire({
+
+                            title: 'Bien!',
+                            text: 'El modulo a sido borrado con exito',
+                            type: 'success',
+                            showConfirmButton: false,
+                            timer: 3000
+                        }
+                        )
+                        
+                    }
+                });
+
+        }
+    })
+}
+
     </script>
 }
