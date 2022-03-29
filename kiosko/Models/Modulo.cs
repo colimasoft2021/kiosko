@@ -8,6 +8,7 @@ namespace kiosko.Models
         public Modulo()
         {
             Componentes = new HashSet<Componente>();
+            Progresos = new HashSet<Progreso>();
         }
 
         public int Id { get; set; }
@@ -20,5 +21,6 @@ namespace kiosko.Models
         public int? TiempoInactividad { get; set; }
 
         public virtual ICollection<Componente> Componentes { get; set; }
+        public virtual ICollection<Progreso> Progresos { get; set; }
     }
 }
