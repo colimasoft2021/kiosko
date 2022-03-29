@@ -1,9 +1,13 @@
-﻿$(function () {
+﻿
+$(function () {
     $("#sortableMenu").sortable();
     getAllModulos();
 });
 
 var lastIdModulo = 0;
+const urlParams = new URLSearchParams(window.location.search);
+var idCurremtModulo = urlParams.get('id');
+console.log(idCurremtModulo);
 
 function getAllModulos() {
     $("#sortableMenu").empty();
@@ -20,9 +24,12 @@ function getAllModulos() {
             });
             addButtonToMenu();
             addButtonsToSubMenu();
+            $("#modulo" + idCurremtModulo).children("a").addClass("active");
         }
     });
 }
+
+
 
 function addItemToMenu(item, menuOpen) {
     let desplegable = item.desplegable;
@@ -129,7 +136,10 @@ function saveNewModulo() {
         data: jsonNewModulo,
         success: function (response) {
             console.log('saved');
-            getAllModulos();
+
+            let id = response.id;
+            let urlModulo = window.location.origin + '/Modulos/Details?id=' + id;
+            window.location.assign(urlModulo);
         }
     });
     $("#modalNewModulo").modal("hide");
