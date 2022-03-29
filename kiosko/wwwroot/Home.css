@@ -6,25 +6,42 @@
 }
 
 body {
-    background-image: url('img/botón_d.jpg');
+    background-image: url('img/fondo_deep.png');
     background-repeat: no-repeat;
-    background-size:100%;
-    
+    background-size: cover;
+}
+/*imagenes*/
+.top-container-deep {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background-color: white;
+}
+.top-container-deep > img{
+    width: 100%;
+}
+.general-pictures {
+    position: fixed;
+    display: flex;
 }
 
-.men-image{
-    position:absolute;
+.men-image-container {
+    margin-top: 3%;
+    margin-left: -32%;
+}
+
+.men-image-container > img {
     height:590px;
-    top:21%;
-    left:24%;
-}
-.women-image {
-    position: absolute;
-    height: 590px;
-    top: 21%;
-    left: 59%;
 }
 
+.women-image-container {
+    margin-top: 3%;
+    margin-left: 52%;
+}
+.women-image-container > img {
+    height:590px;
+}
+/* imagenes */
 .principal {
     margin-top: 30px;
 }
@@ -735,7 +752,7 @@ body {
 
 .top-container {
     width:100%;
-    height:25px;
+    height:9px;
     background: linear-gradient(90.05deg, #E9501C -2.22%, #E11F1C 34.54%, #41AB34 50.47%, #008BD2 76.73%, #E6007E 102.8%);
 border-radius: 12px 12px 0px 0px;
 }
