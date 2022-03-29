@@ -6,9 +6,23 @@
 }
 
 body {
-    background-image: url('img/fondo.png');
+    background-image: url('img/botón_d.jpg');
     background-repeat: no-repeat;
     background-size:100%;
+    
+}
+
+.men-image{
+    position:absolute;
+    height:590px;
+    top:21%;
+    left:24%;
+}
+.women-image {
+    position: absolute;
+    height: 590px;
+    top: 21%;
+    left: 59%;
 }
 
 .principal {
