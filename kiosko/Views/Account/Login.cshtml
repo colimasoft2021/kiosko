@@ -19,9 +19,21 @@
   <link rel="stylesheet" href="~/Assets/dist/css/adminlte.min.css">
   <link rel="stylesheet" href="~/Home.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
 </head>
 <body class="hold-transition login-page">
+    <div class="top-container-deep">
+        <img src="~/img/fondo_top.png" />
+    </div>
+    <div class="general-pictures">
+        <div class="men-image-container">
+            <img src="~/img/hombre.png" />
+        </div>
+        <div class="women-image-container">
+            <img src="~/img/mujer.png" />
+        </div>
+    </div>
 <div class="login-box container-login">
     <div class="top-container">
         
@@ -48,7 +60,7 @@
                 <span>Contraseña</span>
             </div>
             <div class="container-password">
-                <input asp-for="Clave" class="form-control input-password" placeholder="Contraseña" />
+                <input asp-for="Clave" class="form-control input-password" placeholder="&#xf023" />
                 <span asp-validation-for="Clave" class="text-danger"></span>
              </div>
              <div class="item-container">

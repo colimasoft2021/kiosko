@@ -10,6 +10,6 @@ namespace kiosko.Models
         public string NombreUsuario { get; set; } = null!;
         public string? Clave { get; set; }
         public string? Rol { get; set; }
-        public byte[]? Email { get; set; }
+        public string? Email { get; set; }
     }
 }

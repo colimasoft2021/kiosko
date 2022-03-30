@@ -6,9 +6,42 @@
 }
 
 body {
-    background-image: url('img/fondo.png');
+    background-image: url('img/fondo_deep.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+/*imagenes*/
+.top-container-deep {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background-color: white;
+}
+.top-container-deep > img{
+    width: 100%;
+}
+.general-pictures {
+    position: fixed;
+    display: flex;
 }
 
+.men-image-container {
+    margin-top: 3%;
+    margin-left: -32%;
+}
+
+.men-image-container > img {
+    height:590px;
+}
+
+.women-image-container {
+    margin-top: 3%;
+    margin-left: 52%;
+}
+.women-image-container > img {
+    height:590px;
+}
+/* imagenes */
 .principal {
     margin-top: 30px;
 }
@@ -115,10 +148,9 @@ body {
 
 .navegacion {
     background-color: #455A64;
-    display:flex;
-    flex-flow:row nowrap;
-    padding:2%;
     height: 88px;
+    transition: margin-left .3s ease-in-out;
+    margin-left: 250px;
 }
 
 
@@ -720,7 +752,7 @@ body {
 
 .top-container {
     width:100%;
-    height:25px;
+    height:9px;
     background: linear-gradient(90.05deg, #E9501C -2.22%, #E11F1C 34.54%, #41AB34 50.47%, #008BD2 76.73%, #E6007E 102.8%);
 border-radius: 12px 12px 0px 0px;
 }
@@ -766,8 +798,14 @@ border-radius: 12px 12px 0px 0px;
     margin-bottom: 2%;
 }
 
-.item-container{
-    text-align:center;
+.input-password::placeholder {
+    font-family: 'FontAwesome';
+    font-weight: 100;
+    font-size: 15px;
+}
+
+.item-container {
+    text-align: center;
 }
 
 .span-item {
@@ -797,25 +835,39 @@ border-radius: 12px 12px 0px 0px;
     border-radius:9px;
 }
 /*boton perfil*/
-.nav-container{
-    display:flex;
-    list-style:none;
+.icon{
+    margin-left:20px;
+}
+.icon-inside {
+    margin-top: 30px;
+    transform: rotate(0deg);
 }
 
-.boton-container >button{
-    border-radius:25px;
+.button-arrow-right {
+    transform: rotate(180deg);
 }
 
-.container-perfil {
-    width: 130px;
-    padding: 10px;
-    text-align: center;
+.profile-container {
+    margin-top: -25px;
+    text-align: end;
 }
 
+.message {
+    margin-right: 3%;
+}
+
+.profile-button {
+    margin-right: 7%;
+    border:transparent;
+    border-radius:15px;
+}
 
 .menu-item-container {
-    position: absolute;
+    margin-right: 4%;
 }
+
+
+/*boton perfil*/
 .card-imagen2 {
     width: 100px;
     display: block;
@@ -827,7 +879,11 @@ border-radius: 12px 12px 0px 0px;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     border-radius: 5px;
 }
-
-.swal2-popup {
-    border-block-color: rebeccapurple;
+.menu-configuration {
+    display: flex;
+    float: left;
+    margin-top: 95%;
+    width: 100%;
+    align-items: flex-end;
+    justify-content: center;
 }
