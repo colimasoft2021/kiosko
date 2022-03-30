@@ -757,6 +757,13 @@ body {
 border-radius: 12px 12px 0px 0px;
 }
 
+.top-containered {
+    width: 100%;
+    height: 25px;
+    background: linear-gradient(90.05deg, #E9501C -2.22%, #E11F1C 34.54%, #41AB34 50.47%, #008BD2 76.73%, #E6007E 102.8%);
+    border-radius: 12px 12px 0px 0px;
+}
+
 .logo-container {
     margin-top: 40px;
 }
@@ -872,7 +879,6 @@ border-radius: 12px 12px 0px 0px;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     border-radius: 5px;
 }
-
 .menu-configuration {
     display: flex;
     float: left;
