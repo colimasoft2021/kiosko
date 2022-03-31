@@ -166,6 +166,10 @@ namespace kiosko.Models
 
                 entity.Property(e => e.Porcentaje).HasColumnName("porcentaje");
 
+                entity.Property(e => e.FechaActualizacion)
+                    .HasColumnType("datetime")
+                    .HasColumnName("fecha_actualizacion");
+
                 entity.HasOne(d => d.IdModuloNavigation)
                     .WithMany(p => p.Progresos)
                     .HasForeignKey(d => d.IdModulo)

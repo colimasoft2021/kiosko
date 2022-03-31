@@ -12,6 +12,7 @@ namespace kiosko.Models
         public DateTime? FechaFin { get; set; }
         public bool? Finalizado { get; set; }
         public double? Porcentaje { get; set; }
+        public DateTime? FechaActualizacion { get; set; }
 
         public virtual Modulo IdModuloNavigation { get; set; } = null!;
     }
