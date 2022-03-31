@@ -37,6 +37,19 @@ namespace kiosko.Controllers
             return ret;
         }
 
+        [HttpPost()]
+        [ValidateAntiForgeryToken]
+        public IActionResult deleteDesplazante(int id)
+        {
+            var desplazante = _context.Desplazantes.Find(id);
+            IActionResult ret = null;
+            _context.Desplazantes.Remove(desplazante);
+            _context.SaveChanges();
+
+            ret = StatusCode(StatusCodes.Status201Created, desplazante);
+            return ret;
+        }
+
         private bool ComponenteExists(int id)
         {
             return _context.Componentes.Any(e => e.Id == id);

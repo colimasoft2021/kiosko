@@ -24,7 +24,7 @@ function getAllModulos() {
             });
             addButtonToMenu();
             addButtonsToSubMenu();
-            $("#modulo" + idCurremtModulo).children("a").addClass("active");
+            $(".modulo" + idCurremtModulo).children("a").addClass("active");
         }
     });
 }
@@ -47,7 +47,7 @@ function addItemToMenu(item, menuOpen) {
         menuItems += '</ul>';
         menuItems += '</li>';
     } else {
-        menuItems += '<li class="nav-item" id="' + idModulo + '">';
+        menuItems += '<li class="nav-item modulo' + item.id + '" id="' + idModulo + '">';
         menuItems += '<a href="/Modulos/Details?id=' + item.id + '" class="nav-link">';
         menuItems += '<p>' + titulo + '</p>';
         menuItems += '</a>';
