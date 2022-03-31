@@ -56,6 +56,7 @@ namespace kiosko.Controllers
                 progreso.Finalizado = false;
                 progreso.FechaInicio = fechaHoy;
                 progreso.Porcentaje = 0;
+                progreso.FechaActualizacion = fechaHoy;
                 if (!ProgresoExists(usuario.IdUsuario, m.Id))
                 {
                     _context.Add(progreso);
@@ -90,19 +91,19 @@ namespace kiosko.Controllers
             ret = StatusCode(StatusCodes.Status201Created, progreso);
             return ret;
         }
-        /*
+
         public IActionResult CheckProgress()
         {
             IActionResult ret = null;
             var emailGerente = "jriveraj3@gmail.com";
-            var updateProgreso = _context.Progresos.Where(p => p.IdModulo == progreso.IdModulo).Where(p => p.IdUsuario == progreso.IdUsuario).FirstOrDefault();
-            updateProgreso.Porcentaje = progreso.Porcentaje;
-            _context.Update(updateProgreso);
-            _context.SaveChanges();
-            ret = StatusCode(StatusCodes.Status201Created, progreso);
+            var modulos = _context.Modulos.Where(m => m.Padre == null).Where(m => m.Id > 0);
+            var usuarios = _context.Usuarios;
+            foreach(var u in usuarios)
+            {
+                var progresos = _context.Progresos.Where(p => p.IdUsuario == u.IdUsuario);
+            }
             return ret;
         }
-        */
 
     }
 }

@@ -65,6 +65,7 @@ namespace kiosko.Controllers
         public IActionResult SaveMenuModulo(Modulo modulo)
         {
             IActionResult ret = null;
+            modulo.TiempoInactividad = 5;
             _context.Add(modulo);
             _context.SaveChanges();
 
