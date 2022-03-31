@@ -48,7 +48,7 @@ namespace kiosko.Controllers
 
         public JsonResult GetAllModulos()
         {
-            var modulos = _context.Modulos.OrderBy(c => c.Orden);
+            var modulos = _context.Modulos.Where(m => m.Id > 1).OrderBy(m => m.Orden);
             return Json(modulos);
         }
         // GET: Modulos/GetModulosComponentsForApp
@@ -89,29 +89,15 @@ namespace kiosko.Controllers
             ret = StatusCode(StatusCodes.Status201Created, modulo);
             return ret;
         }
-
         [HttpPost()]
-        [ValidateAntiForgeryToken]
-        public IActionResult deleteModulo(int id)
+        public IActionResult GetModulosAndProgressByUser([FromBody] Usuario usuario)
         {
-            var modulo = _context.Modulos.Find(id);
-            IActionResult ret = null;
-            _context.Modulos.Remove(modulo);
-            _context.SaveChanges();
-
-            ret = StatusCode(StatusCodes.Status201Created, modulo);
-            return ret;
-        }
-
-        /*
-        public JsonResult GetModulosAndProgressByUser()
-        {
-            var dataUser = _context.Usuarios.Where(u => u.IdUsuario == 1);
-            foreach(var u in dataUser)
+            var modulos = _context.Modulos;
+            foreach (var m in modulos)
             {
-                var modulos = _context.Modulos.OrderBy(c => c.Orden).Load();
+                _context.Progresos.Where(p => p.IdModulo == m.Id).Where(p => p.IdUsuario == usuario.IdUsuario).Load();
             }
+            return Json(modulos);
         }
-        */
     }
 }

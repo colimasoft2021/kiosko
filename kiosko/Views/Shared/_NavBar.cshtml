@@ -6,26 +6,22 @@
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css">
 
-<nav class="main-header navbar navbar-white navbar-light navegacion">
+<nav class="main-header navegacion">
     <!-- Left navbar links -->
-    <ul class="nav-container">
-      <li class="nav-item">
-        <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars" style="color: #1f2d3d;"></i></a>
-      </li>
-      @if (signInManager.IsSignedIn(User))
+        <a  class="icon" data-widget="pushmenu" href="#" role="button" onclick="iconRotate()"><i id="iconbutton" class="fas fa-angle-left icon-inside" style="color: #1f2d3d;"></i></a>
+     
+        <div class="profile-container">
+                    @if (signInManager.IsSignedIn(User))
                     {
-                         <li class="textlogin">
-                             Hello @userManager.GetUserName(User)
-                        </li>
+                        
+                             <span class="message">Hello @userManager.GetUserName(User)</span>
+                        
                     }
-   </ul>     
-
-        <div class="container-perfil">
-            <div class="boton-container">
-                <button onclick="showOption()">
-                <img src="~/img/usuario (2).png" />
+        
+                <button class="profile-button" onclick="showOption()">
+                <img src="~/img/usuario.png" />
                 </button>
-            </div>
+            
             <div class="menu-item-container">
                    <ul id="menu-perfil" style="display: none">
                      <li>
@@ -48,5 +44,9 @@
         }else{
       	  isShowing = "block";
           }
+    }
+
+    function iconRotate(){
+        $("#iconbutton").toggleClass("button-arrow-right");
     }
 </script>

@@ -83,7 +83,6 @@ namespace kiosko.Models
                 entity.HasOne(d => d.IdModuloNavigation)
                     .WithMany(p => p.Componentes)
                     .HasForeignKey(d => d.IdModulo)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_componentes_modulos");
             });
 
@@ -110,7 +109,6 @@ namespace kiosko.Models
                 entity.HasOne(d => d.IdComponenteNavigation)
                     .WithMany(p => p.Desplazantes)
                     .HasForeignKey(d => d.IdComponente)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_desplazantes_componentes");
             });
 
@@ -136,12 +134,12 @@ namespace kiosko.Models
                     .IsUnicode(false)
                     .HasColumnName("padre");
 
+                entity.Property(e => e.TiempoInactividad).HasColumnName("tiempo_inactividad");
+
                 entity.Property(e => e.Titulo)
                     .HasMaxLength(50)
                     .IsUnicode(false)
                     .HasColumnName("titulo");
-
-                entity.Property(e => e.TiempoInactividad).HasColumnName("tiempo_inactividad");
             });
 
             modelBuilder.Entity<Progreso>(entity =>
@@ -165,6 +163,14 @@ namespace kiosko.Models
                 entity.Property(e => e.IdModulo).HasColumnName("id_modulo");
 
                 entity.Property(e => e.IdUsuario).HasColumnName("id_usuario");
+
+                entity.Property(e => e.Porcentaje).HasColumnName("porcentaje");
+
+                entity.HasOne(d => d.IdModuloNavigation)
+                    .WithMany(p => p.Progresos)
+                    .HasForeignKey(d => d.IdModulo)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_progresos_modulos");
             });
 
             modelBuilder.Entity<Usuario>(entity =>
@@ -180,19 +186,20 @@ namespace kiosko.Models
 
                 entity.Property(e => e.Email)
                     .HasMaxLength(50)
+                    .IsUnicode(false)
                     .HasColumnName("email");
 
                 entity.Property(e => e.IdUsuario).HasColumnName("id_usuario");
-
-                entity.Property(e => e.Rol)
-                    .HasMaxLength(50)
-                    .IsUnicode(false)
-                    .HasColumnName("rol");
 
                 entity.Property(e => e.NombreUsuario)
                     .HasMaxLength(50)
                     .IsUnicode(false)
                     .HasColumnName("nombre_usuario");
+
+                entity.Property(e => e.Rol)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("rol");
             });
 
             OnModelCreatingPartial(modelBuilder);
