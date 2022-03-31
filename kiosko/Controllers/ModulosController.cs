@@ -90,6 +90,20 @@ namespace kiosko.Controllers
             ret = StatusCode(StatusCodes.Status201Created, modulo);
             return ret;
         }
+
+        [HttpPost()]
+        [ValidateAntiForgeryToken]
+        public IActionResult deleteModulo(int id)
+        {
+            var modulo = _context.Modulos.Find(id);
+            IActionResult ret = null;
+            _context.Modulos.Remove(modulo);
+            _context.SaveChanges();
+
+            ret = StatusCode(StatusCodes.Status201Created, modulo);
+            return ret;
+        }
+
         [HttpPost()]
         public IActionResult GetModulosAndProgressByUser([FromBody] Usuario usuario)
         {
