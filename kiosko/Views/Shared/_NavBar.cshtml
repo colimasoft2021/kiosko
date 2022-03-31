@@ -1,6 +1,5 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @using kiosko.Models
-
 @inject SignInManager<IdentityUser> signInManager
 @inject UserManager<IdentityUser> userManager
 
@@ -46,7 +45,24 @@
           }
     }
 
+    var show = "none";
+    var icon = "block";
     function iconRotate(){
         $("#iconbutton").toggleClass("button-arrow-right");
-    }
+        $("#logoKiosko").css("display", show);
+        $("#iconoKiosko").css("display", icon);
+        if(show == "none"){
+            show ="block";
+        }else{
+            show = "none";
+        }
+        if(icon == "block"){
+            icon = "none";
+        }
+        else{
+            icon = "block";
+        }
+
+        }
+    
 </script>
