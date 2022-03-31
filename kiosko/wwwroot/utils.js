@@ -25,7 +25,6 @@ function getAllModulos() {
             addButtonToMenu();
             addButtonsToSubMenu();
             $("#modulo" + idCurremtModulo).children("a").addClass("active");
-            console.log(idCurremtModulo);
         }
     });
 }
