@@ -121,10 +121,11 @@
       Swal.fire({
         title: '¿Está seguro que desea borrar este componente?',
         text: "Los cambios no podrán ser revertidos!",
-        icon: 'warning',
+        imageUrl: '/img/señalroja.png',
+        imageHeight: 212,
         showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
+        confirmButtonColor: '#E11F1C',
+        cancelButtonColor: '#5A5A5A',
         confirmButtonText: 'Eliminar',
         cancelButtonText: 'Cancelar'
       }).then((result) => {
@@ -143,8 +144,9 @@
                   Swal.fire({
                    title: 'Bien!',
                    text: 'Los componentes se han actualizado con exito!',
-                   type: 'success',
-                   showConfirmButton: false,
+                   imageUrl: '/img/señalverde.png',
+                   imageHeight: 212,
+                   
                    timer: 1500
                   }
                   )
@@ -836,7 +838,8 @@
       Swal.fire({
             title: 'Bien!',
             text: 'Los componentes se han actualizado con exito!',
-            type: 'success',
+            imageUrl: '/img/señalverde.png',
+            imageHeight: 212,
             showConfirmButton: false,
             timer: 1500
           }
