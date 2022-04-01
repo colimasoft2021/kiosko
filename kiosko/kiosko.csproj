@@ -2112,6 +2112,6 @@
     <Folder Include="wwwroot\files\" />
   </ItemGroup>
 
-  <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
+  <ProjectExtensions><VisualStudio><UserProperties appsettings_1development_1json__JsonSchema="https://ffizer.github.io/ffizer/ffizer.schema.json" appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
 
 </Project>
