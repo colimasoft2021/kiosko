@@ -27,22 +27,15 @@ namespace kiosko.Controllers
         [HttpPost()]
         public IActionResult saveNewUser([FromBody] Usuario usuario)
         {
-            Console.WriteLine(usuario);
             IActionResult ret = null;
 
             if (!UsuarioExists(usuario.IdUsuario))
             {
                 _context.Add(usuario);
                 _context.SaveChanges();
-                ret = StatusCode(StatusCodes.Status201Created, usuario);
-            }
-            else
-            {
-                var result = _context.Usuarios.Where(u => u.IdUsuario == usuario.IdUsuario);
-                ret = StatusCode(StatusCodes.Status201Created, result);
             }
 
-
+            var dataUsuario = _context.Usuarios.Where(u => u.IdUsuario == usuario.IdUsuario).AsNoTracking().FirstOrDefault();
 
             var modulos = _context.Modulos.Where(m => m.Padre == null);
 
@@ -51,18 +44,19 @@ namespace kiosko.Controllers
             foreach (var m in modulos)
             {
                 var progreso = new Progreso();
-                progreso.IdUsuario = usuario.IdUsuario;
+                progreso.IdUsuario = dataUsuario.Id;
                 progreso.IdModulo = m.Id;
                 progreso.Finalizado = false;
                 progreso.FechaInicio = fechaHoy;
                 progreso.Porcentaje = 0;
                 progreso.FechaActualizacion = fechaHoy;
-                if (!ProgresoExists(usuario.IdUsuario, m.Id))
+                if (!ProgresoExists(dataUsuario.Id, m.Id))
                 {
                     _context.Add(progreso);
                 }
             }
             _context.SaveChanges();
+            ret = StatusCode(StatusCodes.Status201Created, usuario);
             return ret;
         }
 
@@ -89,19 +83,6 @@ namespace kiosko.Controllers
             _context.Update(updateProgreso);
             _context.SaveChanges();
             ret = StatusCode(StatusCodes.Status201Created, progreso);
-            return ret;
-        }
-
-        public IActionResult CheckProgress()
-        {
-            IActionResult ret = null;
-            var emailGerente = "jriveraj3@gmail.com";
-            var modulos = _context.Modulos.Where(m => m.Padre == null).Where(m => m.Id > 0);
-            var usuarios = _context.Usuarios;
-            foreach(var u in usuarios)
-            {
-                var progresos = _context.Progresos.Where(p => p.IdUsuario == u.IdUsuario);
-            }
             return ret;
         }
 

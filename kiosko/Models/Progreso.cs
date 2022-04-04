@@ -15,5 +15,6 @@ namespace kiosko.Models
         public DateTime? FechaActualizacion { get; set; }
 
         public virtual Modulo IdModuloNavigation { get; set; } = null!;
+        public virtual Usuario IdUsuarioNavigation { get; set; } = null!;
     }
 }
