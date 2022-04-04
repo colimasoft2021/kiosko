@@ -286,6 +286,8 @@
         let stringType = "'"+type+"'";
         let idCardIm = "card-img-"+stringId+"-"+indexCardIm;
         let stringIdCard = "'card-img-"+stringId+"-"+indexCardIm+"'";
+        console.log(idCardIm);
+        console.log(stringIdCard);
         let typeRelated = "'cardRelatedImage'";
         $("#containerCarroucel"+stringId).append(
             '<div class="card-imagen-carroucel" id="'+idCardIm+'" db-id="0">'+
@@ -298,6 +300,7 @@
             '</div>'
         );
         indexImagen = indexImagen + 1;
+        indexCardIm = indexCardIm + 1;
     }
     function generateCardsImages(stringId, idComponent, item, pkId, stringType) {
         let images = [{
@@ -317,7 +320,7 @@
             let preview = "";
             let styleLabel = "";
             let isDb = item.id === "0";
-            let idImg = "'card-img-"+idComponent+"-"+indexImagen+"'";
+            let idImg = "'card-img-"+idComponent+"-"+indexCardIm+"'";
             if(isDb){
                 preview = 
                 '<div id="imgPreview'+idComponent+'-'+indexImagen+'" class="preview-img-carroucel"></div>';

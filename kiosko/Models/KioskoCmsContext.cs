@@ -148,6 +148,10 @@ namespace kiosko.Models
 
                 entity.Property(e => e.Id).HasColumnName("id");
 
+                entity.Property(e => e.FechaActualizacion)
+                    .HasColumnType("datetime")
+                    .HasColumnName("fecha_actualizacion");
+
                 entity.Property(e => e.FechaFin)
                     .HasColumnType("datetime")
                     .HasColumnName("fecha_fin");
@@ -166,15 +170,16 @@ namespace kiosko.Models
 
                 entity.Property(e => e.Porcentaje).HasColumnName("porcentaje");
 
-                entity.Property(e => e.FechaActualizacion)
-                    .HasColumnType("datetime")
-                    .HasColumnName("fecha_actualizacion");
-
                 entity.HasOne(d => d.IdModuloNavigation)
                     .WithMany(p => p.Progresos)
                     .HasForeignKey(d => d.IdModulo)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_progresos_modulos");
+
+                entity.HasOne(d => d.IdUsuarioNavigation)
+                    .WithMany(p => p.Progresos)
+                    .HasForeignKey(d => d.IdUsuario)
+                    .HasConstraintName("FK_progresos_usuarios");
             });
 
             modelBuilder.Entity<Usuario>(entity =>
