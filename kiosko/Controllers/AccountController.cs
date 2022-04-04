@@ -53,7 +53,7 @@ namespace kiosko.Controllers
                     ModelState.AddModelError("", error.Description);
                 }
 
-                ModelState.AddModelError(string.Empty, "Invalid Login Attempt");
+                ModelState.AddModelError(string.Empty, "Error: Usuario y/o contraseña incorrectos.");
 
             }
             return View(model);
@@ -79,10 +79,10 @@ namespace kiosko.Controllers
 
                 if (result.Succeeded)
                 {
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Index", "Modulos");
                 }
 
-                ModelState.AddModelError(string.Empty, "Invalid Login Attempt");
+                ModelState.AddModelError(string.Empty, "Error: Usuario y/o contraseña incorrectos.");
 
             }
             return View(user);

@@ -168,7 +168,7 @@ namespace kiosko.Controllers
                     cuerpoMensaje += "</div>";
                 }
                 _mailService.SendEmailGmail("juan.rivera@colimasoft.com", "Alerta de capacitación", cuerpoMensaje);
-                return Json(cuerpoMensaje);
+                return Json(alertas);
             }
             catch (Exception ex)
             {
