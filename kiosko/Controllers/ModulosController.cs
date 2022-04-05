@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using kiosko.Models;
 using Microsoft.AspNetCore.Authorization;
+using System.Net.Mail;
+using System.Net;
 
 namespace kiosko.Controllers
 {
@@ -45,6 +47,7 @@ namespace kiosko.Controllers
 
             return View(model);
         }
+
 
         public JsonResult GetAllModulos()
         {

@@ -65,8 +65,38 @@
              </div>
              <div class="item-container">
                  <input type="checkbox" /><span class="span-item">Recordarme</span>
-                 <a href="#">¿Olvidaste tu contraseña?</a> 
+                 <a href="#" data-toggle="modal" data-target="#passwordmodal">¿Olvidaste tu contraseña?</a> 
              </div>
+
+               <div class="modal fade" id="passwordmodal">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h4 class="modal-title" id="modalTitleModulo">Actualizar Contraseña</h4>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <form id="sendEmail">
+                        <div class="modal-body">
+                            <div class="card-body">
+                              <div class="form-group">
+                                <label for="email">Correo</label>
+                                <input type="email" name="email" id="email" class="form-control">
+                              </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer justify-content-between">
+                          <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                          <button type="submit" class="btn btn-primary">Enviar</button>
+                        </div>
+                    </form>
+                  </div>
+                  <!-- /.modal-content -->
+                </div>
+                <!-- /.modal-dialog -->
+            </div>
+
             <div class="container-button">
                 <button type="submit">Iniciar Sesion</button>
             </div>
@@ -78,5 +108,55 @@
 <script src="~/Assets/plugins/jquery/jquery.min.js"></script>
 <script src="~/Assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script src="~/Assets/dist/js/adminlte.min.js"></script>
+
+<script type="text/javascript">
+
+$.validator.setDefaults({
+        submitHandler: function () {
+            let formData = {
+              email: $("#email").val(),
+            };
+            $.ajax({
+              type: "POST",
+              url: "/Account/sendingEmail",
+              headers: { "RequestVerificationToken": "@GetAntiXsrfRequestToken()" },
+              data: formData,
+              success: function (response) {
+                Swal.fire({
+                    text: 'Verifica la bandeja de entreada!',
+                    type: 'success',
+                    showConfirmButton: false,
+                    timer: 1500
+                  })
+                  location.reload();
+              }
+            });
+        }
+      });
+      $('#sendEmail').validate({
+        rules: {
+          email: {
+            required: true,
+          },
+        },
+        messages: {
+          email: {
+            required: "Ingrese un Correo Valido",
+          },
+        },
+        errorElement: 'span',
+        errorPlacement: function (error, element) {
+          error.addClass('invalid-feedback');
+          element.closest('.form-group').append(error);
+        },
+        highlight: function (element, errorClass, validClass) {
+          $(element).addClass('is-invalid');
+        },
+        unhighlight: function (element, errorClass, validClass) {
+          $(element).removeClass('is-invalid');
+        }
+      });    
+
+</script>
 </body>
 </html>
