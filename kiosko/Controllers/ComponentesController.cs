@@ -100,7 +100,6 @@ namespace kiosko.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult saveComponentForModulo2()
         {
-            Console.WriteLine(Request.Form);
             var componente = new Componente();
             componente.Id = Int32.Parse(Request.Form["Id"]);
             componente.Padre = Request.Form["Padre"];

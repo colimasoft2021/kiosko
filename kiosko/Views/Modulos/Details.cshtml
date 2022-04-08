@@ -105,8 +105,6 @@
       }
     }
     function removeComponent(idComponent, type) {
-        console.log(type);
-        console.log(idComponent);
       let idComponente = $("#"+idComponent).attr("db-id");
       console.log(idComponente);
       let isDb = idComponente === "0";
@@ -343,20 +341,49 @@
         });
         return component;
     }
-    function generateCardImage(stringId, idComponent, item, pkId, stringType) {
+    function generateCardImage(stringId, idComponent, item, pkId, stringType, typeInput) {
         let preview = "";
         let styleLabel = "";
         let urlImage = "";
         let classPreview = "preview-img";
+        let attrTypeInput = "img";
+        let classBtnClose = "button-close";
         if(stringType === "'texto-imagen'"){
             classPreview = "preview-img-small";
         }
+        if(typeInput) {
+            attrTypeInput = typeInput;
+        }
+
+        if(typeInput && typeInput == "img2") {
+            classPreview = "preview-img-carroucel";
+            classBtnClose = "button-close-carroucel";
+        }else if(typeInput && typeInput == "img3"){
+            classPreview = "preview-img-carroucel";
+            classBtnClose = "button-close-carroucel";
+        }else if(typeInput && typeInput == "img1"){
+            classPreview = "preview-img-desplegable";
+        }else if(typeInput && typeInput == "img-access"){
+            classPreview = "preview-img-desplegable";
+        }
+
         if(pkId !== 0){
             styleLabel = 'style="display: none;"';
-            urlImage = item.url;
+            
+            if(typeInput && typeInput == "img2") {
+                urlImage = item.urlDos;
+            }else if(typeInput && typeInput == "img3"){
+                urlImage = item.urlTres;
+            }else if(typeInput && typeInput == "img1"){
+                urlImage = item.url;
+            }else if(typeInput && typeInput == "img-access"){
+                urlImage = item.url;
+            }else{
+                urlImage = item.url;
+            }
             preview = 
             '<div id="imgPreview'+idComponent+'-'+indexImagen+'" class="'+classPreview+'">'+
-                '<button id="imagenclose'+idComponent+'-'+indexImagen+'"  class="button-close"  onclick="deletePreview('+stringId+','+indexImagen+')">x</button>'+
+                '<button id="imagenclose'+idComponent+'-'+indexImagen+'"  class="'+classBtnClose+'"  onclick="deletePreview('+stringId+','+indexImagen+')">x</button>'+
                 '<img src="'+urlImage+'" />'+
             '</div>';
         }else{
@@ -368,7 +395,7 @@
             '<label for="imagen'+idComponent+'-'+indexImagen+'" id="imagenlabel'+idComponent+'-'+indexImagen+'" '+styleLabel+' class="btn-img">'+
                 '<img src="/img/icono-imagen-chico.png" class="image-icon"/>'+
             '</label>'+
-            '<input type="file" id="imagen'+idComponent+'-'+indexImagen+'" onchange="generatePreview('+stringId+','+indexImagen+','+stringType+')" class="input-img" typeInput="img" value="'+urlImage+'">';
+            '<input type="file" id="imagen'+idComponent+'-'+indexImagen+'" onchange="generatePreview('+stringId+','+indexImagen+','+stringType+')" class="input-img" typeInput="'+attrTypeInput+'" value="'+urlImage+'">';
         /*'</div>';*/
         component += preview;
         indexImagen = indexImagen + 1;
@@ -573,7 +600,9 @@
               indexCardIm = indexCardIm + 1;
           break;
           case 'desplegable-texto-imagen':
-          let valueInpCheckDes = (item) ? item.agregarfondo : "";
+            let valueInpCheckDes = (item) ? item.agregarfondo : "";
+            let valueSubtitulo = (item) ? item.subtitulo : "";
+            let valueDescription = (item) ? item.descripcion : "";
             component =
               '<div class="col-lg-12 component" id="'+idComponent+'" db-id="'+pkId+'" type-component="desplegable-texto-imagen">'+
                 '<p class="tituloCmp">'+type+
@@ -582,30 +611,27 @@
                 '<div class="container-desplegable row">'+
                   '<div class="container-desplegable-texto-imagen">'+
                     '<div class="card-desplegable-imagen">'+
-                      '<div class="d-flex col-lg-12 justify-content-end align-items-center">'+
-                        '<label for="imagen'+idComponent+'-'+indexImagen+'" id="imagenlabel'+idComponent+'-'+indexImagen+'" class="btn-img">'+
-                        '<img src="/img/icono-imagen-chico.png" class="label-imagen-1"></label>'+
-                        '<input type="file" id="imagen'+idComponent+'-'+indexImagen+'" class="input-desplegable-texto-imagen"  accept=".jpg, .png, .jpeg" onchange="generatePreview('+stringId+','+indexImagen+', '+stringType+')" typeInput="img1">'+
-                        '<div id="imgPreview'+idComponent+'-'+indexImagen+'" class="preview-img-desplegable"></div>'+
+                      '<div class="d-flex col-lg-12 justify-content-end align-items-center">';
+            let imageDes1 = generateCardImage(stringId, idComponent, item, pkId, stringType, 'img1');
+            component += imageDes1;
+            component +=
                       '</div>'+
                     '</div>'+
                     '<div class="card-desplegable-texto">'+
-                      '<input class="subtitle-input" type="text" placeholder="subtitulo" typeInput="subtitulo">'+        
+                      '<input class="subtitle-input" type="text" placeholder="subtitulo" typeInput="subtitulo" value="'+valueSubtitulo+'">'+        
                     '</div>'+
                   '</div>'+
-                  '<textarea class="textarea mt-3" name="" id="" cols="" rows="3" placeholder="texto"></textarea><br/>'+
+                  '<textarea class="textarea mt-3" name="" id="" cols="" rows="3" placeholder="texto" value="'+valueDescription+'"></textarea><br/>'+
                   '<div class="container-desplegable-imagenes mt-3">'+
-                    '<div class="card-imagen-carroucel">'+
-                      '<label for="imagen'+idComponent+'-'+(indexImagen + 1)+'" id="imagenlabel'+idComponent+'-'+(indexImagen + 1)+'" class="btn-img">'+
-                      '<img src="/img/icono-imagen-grande.png" class="label-footer"></label>'+
-                      '<input type="file" id="imagen'+idComponent+'-'+(indexImagen + 1)+'" class="input-desplegable-texto-imagen"  accept=".jpg, .png, .jpeg" onchange="generatePreview('+stringId+','+(indexImagen + 1)+', '+stringType+')" typeInput="img2">'+
-                      '<div id="imgPreview'+idComponent+'-'+(indexImagen + 1)+'" class="preview-img-carroucel"></div>'+
+                    '<div class="card-imagen-carroucel">';
+            let imageDes2 = generateCardImage(stringId, idComponent, item, pkId, stringType, 'img2');
+            component += imageDes2;
+            component +=
                     '</div>'+
-                    '<div class="card-imagen-carroucel">'+
-                      '<label for="imagen'+idComponent+'-'+(indexImagen + 2)+'" id="imagenlabel'+idComponent+'-'+(indexImagen + 2)+'" class="btn-img">'+
-                      '<img src="/img/icono-imagen-grande.png" class="label-footer"></label>'+
-                      '<input type="file" id="imagen'+idComponent+'-'+(indexImagen + 2)+'"  accept=".jpg, .png, .jpeg" class="input-desplegable-texto-imagen" onchange="generatePreview('+stringId+','+(indexImagen + 2)+', '+stringType+')" typeInput="img3">'+
-                      '<div id="imgPreview'+idComponent+'-'+(indexImagen + 2)+'" class="preview-img-carroucel"></div>'+
+                    '<div class="card-imagen-carroucel">';
+            let imageDes3 = generateCardImage(stringId, idComponent, item, pkId, stringType, 'img3');
+            component += imageDes3;
+            component +=
                     '</div>'+
                   '</div>'+
                   '<div class="d-flex col-lg-12 justify-content-end align-items-center">'+
@@ -710,34 +736,49 @@
               '</div>';
           break;
           case 'acceso-cursos':
-            let valueInpImg3 = (item) ? item.url : "";
-            let valueInpTit2 = (item) ? item.titulo : "";
-            let valueInpLink2 = (item) ? item.url : "";
-            let valueInpcolor2 = (item) ? item.backgroundColor : "";
+            let valueInpImgAcc = (item) ? item.url : "";
+            let valueInpTitleAcc = (item) ? item.titulo : "";
+            let valueInpLinkAcc = (item) ? item.urlDos : "";
+            let valueInpcolorAcc = (item) ? item.backgroundColor : "";
             component = 
               '<div class="col-lg-12 texto component" id="'+idComponent+'" db-id="'+pkId+'" type-component="acceso-cursos">'+
                 '<div id="background">'+
                   '<p class="tituloCmp">'+type+
                     '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+','+stringType+')">'+
                   '<p>'+
+
+                  '<div class="container-desplegable-texto-imagen">'+
+                    '<div class="card-desplegable-imagen">'+
+                      '<div class="d-flex col-lg-12 justify-content-end align-items-center">';
+            let imageAcceso = generateCardImage(stringId, idComponent, item, pkId, stringType, 'img-access');
+            component += imageAcceso;
+            component +=
+                      '</div>'+
+                    '</div>'+
+                    '<div class="card-desplegable-texto">'+
+                      '<input class="subtitle-input" type="text" placeholder="Subtitulo" typeInput="titulo-access" value="'+valueInpTitleAcc+'"/>'+      
+                    '</div>'+
+                  '</div>'+
+                  /*
                   '<div>'+
                     '<div class="junto">'+
                       '<label class="file-Amagen" for="imagen'+idComponent+'-'+indexImagen+'" id="imagenlabel'+idComponent+'-'+indexImagen+'"></label>'+
-                      '<input class="pop-up-input" type="file" id="imagen'+idComponent+'-'+indexImagen+'" accept=".png" onchange="generatePreview('+stringId+','+indexImagen+')" typeInput="img-access" value="'+valueInpImg3+'">'+
+                      '<input class="pop-up-input" type="file" id="imagen'+idComponent+'-'+indexImagen+'" accept=".png" onchange="generatePreview('+stringId+','+indexImagen+')" typeInput="img-access" value="'+valueInpImgAcc+'">'+
+                      '<div id="imgPreview'+idComponent+'-'+indexImagen+'" class="estilo-imagen"></div>'+ 
                       '<div class="titulomax">'+
-                           '<input class="inputTitulo" type="text" placeholder="Titulo" typeInput="titulo-access" value="'+valueInpTit2+'"/>'+
+                           '<input class="inputTitulo" type="text" placeholder="Titulo" typeInput="titulo-access" value="'+valueInpTitleAcc+'"/>'+
                       '</div>'+
                     '</div>'+
                   '</div>'+
-                  '<div id="imgPreview'+idComponent+'-'+indexImagen+'" class="estilo-imagen"></div>'+ 
+                  */
                   '<div id="preview'+idComponent+'" class="estilo-imagen">'+ 
                     '<div class="inputLinkContainer">'+
-                        '<input class="inputLink" id="inputLink'+idComponent+'" name="link" type="text" placeholder="∞" onkeyup="toggleButton('+stringId+')" typeInput="link-access" value="'+valueInpLink2+'"/>'+
+                        '<input class="inputLink" id="inputLink'+idComponent+'" name="link" type="text" placeholder="∞" onkeyup="toggleButton('+stringId+')" typeInput="link-access" value="'+valueInpLinkAcc+'"/>'+
                         '<button class="botonEnlace" onclick="AddPreviewLink('+stringId+')" id="previewLink'+idComponent+'"> <img src="/img/check.png" width="50px"/> </button>'+
                     '</div>'+
                     '<p class="selColor">Elige un color para asignarle.</p>'+
                     'Color'+
-                    '<input class="Color-Selector"  type="color" typeInput="color-access" value="'+valueInpcolor2+'">'+
+                    '<input class="Color-Selector"  type="color" typeInput="color-access" value="'+valueInpcolorAcc+'">'+
                   '</div>'+
                 '</div>'+
               '</div>';
@@ -843,8 +884,7 @@
             imageHeight: 212,
             showConfirmButton: false,
             timer: 1500
-          }
-      )
+      })
     }
     
     function formJsonComponent(idElement, typeElement, idComponent) {
@@ -1007,9 +1047,9 @@
                 let value = $(this).val();
                 jsonItem.AgregarFondo = value;
                 if(value == true){
-                jsonItem.AgregarFondo = 1;
-                }else{
                     jsonItem.AgregarFondo = 1;
+                }else{
+                    jsonItem.AgregarFondo = 0;
                 }
             }
           });
@@ -1102,7 +1142,7 @@
           $("#"+idElement).find("input").each(function() {
             let typeInp = $(this).attr("typeInput");
             if(typeInp == 'link-access'){
-              jsonItem.Url = $(this).val();       
+              jsonItem.UrlDos = $(this).val();       
             }
             if(typeInp == 'titulo-access'){
               let value = $(this).val();
@@ -1269,9 +1309,9 @@
         }
         $.ajax({
           type: "POST",
-          url: "/Componentes/updateDesplazantes",
+          url: "/Modulos/sendEmailForgotPassword",
           headers: { "RequestVerificationToken": "@GetAntiXsrfRequestToken()" },
-          data: formData,
+          data: {email: "myemail@email.com"},
           processData : false,
           contentType : false,
           success: function (response) {

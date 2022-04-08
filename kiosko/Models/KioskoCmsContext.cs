@@ -22,6 +22,7 @@ namespace kiosko.Models
         public virtual DbSet<Modulo> Modulos { get; set; } = null!;
         public virtual DbSet<Progreso> Progresos { get; set; } = null!;
         public virtual DbSet<Usuario> Usuarios { get; set; } = null!;
+        public object AspeNetUser { get; internal set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

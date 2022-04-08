@@ -16,7 +16,12 @@ builder.Services.AddControllers().AddJsonOptions(x =>
                 x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<KioskoCmsContext>(opt => opt.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
-builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<KioskoCmsContext>();
+builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<KioskoCmsContext>().AddDefaultTokenProviders();
+builder.Services.Configure<DataProtectionTokenProviderOptions>(opt =>
+   opt.TokenLifespan = TimeSpan.FromHours(2));
+
+builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
+builder.Services.AddSingleton<AuthorizationService>();
 
 var app = builder.Build();
 

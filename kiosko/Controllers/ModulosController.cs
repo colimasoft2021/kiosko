@@ -9,6 +9,8 @@ using Microsoft.EntityFrameworkCore;
 using kiosko.Models;
 using Microsoft.AspNetCore.Authorization;
 using kiosko.Helpers;
+using System.Text.RegularExpressions;
+using System.Text;
 
 namespace kiosko.Controllers
 {
@@ -16,11 +18,13 @@ namespace kiosko.Controllers
     {
         private readonly KioskoCmsContext _context;
         MailService _mailService;
+        AuthorizationService _authorizationService;
 
-        public ModulosController(KioskoCmsContext context, MailService mailService)
+        public ModulosController(KioskoCmsContext context, MailService mailService, AuthorizationService authorizationService)
         {
             _context = context;
             _mailService = mailService;
+            _authorizationService = authorizationService;
         }
 
         // GET: Modulos
@@ -61,6 +65,20 @@ namespace kiosko.Controllers
                 .Include(m => m.Componentes)
                     .ThenInclude(m => m.Desplazantes)
                     .ToList();
+            /*
+            var modulos = _context.Modulos.AsNoTracking(); ;
+            var dataModulos = new DataModulos();
+            foreach (var modulo in modulos)
+            {
+                if (modulo.Padre == null)
+                {
+                    var dataModulo = new Modulo();
+                    dataModulo = modulo;
+                    dataModulos.Modulos.Add(dataModulo);
+                }
+            }
+            return Json(dataModulos);
+            */
             return Json(modulos);
         }
 
@@ -110,16 +128,38 @@ namespace kiosko.Controllers
         [HttpPost()]
         public IActionResult GetModulosAndProgressByUser([FromBody] Usuario usuario)
         {
+            if (!Request.Headers.ContainsKey("Authorization"))
+            {
+                return Unauthorized();
+            }
+            var paramAuthorization = Request.Headers["Authorization"].ToString();
+            var isAuthorized = _authorizationService.CheckAuthorization(paramAuthorization);
+            if (!isAuthorized)
+            {
+                return Unauthorized();
+            }
             var modulos = _context.Modulos;
-            foreach (var m in modulos)
+
+            /*foreach (var m in modulos)
             {
                 _context.Progresos.Where(p => p.IdModulo == m.Id).Where(p => p.IdUsuario == usuario.IdUsuario).Load();
-            }
+            }*/
             return Json(modulos);
         }
 
         public IActionResult EnviarAlertas()
         {
+
+            if (!Request.Headers.ContainsKey("Authorization"))
+            {
+                return Unauthorized();
+            }
+            var paramAuthorization = Request.Headers["Authorization"].ToString();
+            var isAuthorized = _authorizationService.CheckAuthorization(paramAuthorization);
+            if (!isAuthorized)
+            {
+                return Unauthorized();
+            }
             try
             {
                 var usuarios = _context.Usuarios
@@ -175,8 +215,9 @@ namespace kiosko.Controllers
                 throw;
             }
         }
+
     }
-    public partial class DataUsuario
+    public class DataUsuario
     {
         public DataUsuario()
         {
@@ -200,5 +241,36 @@ namespace kiosko.Controllers
         public string Modulo { get; set; }
         public double? Porcentaje { get; set; }
         public int TiempoInactividad { get; set; }
+    }
+
+    public class DataModulos
+    {
+        public DataModulos()
+        {
+            CustomModulos = new HashSet<CustomModulo>();
+        }
+        public virtual ICollection<CustomModulo> CustomModulos { get; set; }
+    }
+
+    public class CustomModulo {
+        public CustomModulo()
+        {
+            Componentes = new HashSet<Componente>();
+            Progresos = new HashSet<Progreso>();
+            Submodulos = new HashSet<CustomModulo>();
+        }
+
+        public int Id { get; set; }
+        public string? Titulo { get; set; }
+        public int? AccesoDirecto { get; set; }
+        public int? Orden { get; set; }
+        public int? Desplegable { get; set; }
+        public string? IdModulo { get; set; }
+        public string? Padre { get; set; }
+        public int? TiempoInactividad { get; set; }
+
+        public virtual ICollection<Componente> Componentes { get; set; }
+        public virtual ICollection<Progreso> Progresos { get; set; }
+        public virtual ICollection<CustomModulo> Submodulos { get; set; }
     }
 }

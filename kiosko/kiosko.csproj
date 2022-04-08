@@ -2092,6 +2092,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Auth0.ManagementApi" Version="7.15.0" />
     <PackageReference Include="EntityFramework" Version="6.4.4" />
     <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.2.7" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.2" />
