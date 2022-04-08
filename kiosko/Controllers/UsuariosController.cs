@@ -7,16 +7,19 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using kiosko.Models;
+using kiosko.Helpers;
 
 namespace kiosko.Controllers
 {
     public class UsuariosController : Controller
     {
         private readonly KioskoCmsContext _context;
+        AuthorizationService _authorizationService;
 
-        public UsuariosController(KioskoCmsContext context)
+        public UsuariosController(KioskoCmsContext context, AuthorizationService authorizationService)
         {
             _context = context;
+            _authorizationService = authorizationService;
         }
 
         private bool UsuarioExists(int IdUsuario)
@@ -27,37 +30,55 @@ namespace kiosko.Controllers
         [HttpPost()]
         public IActionResult saveNewUser([FromBody] Usuario usuario)
         {
-            IActionResult ret = null;
-
-            if (!UsuarioExists(usuario.IdUsuario))
+            var error = new { message = "Unauthorized" };
+            if (!Request.Headers.ContainsKey("Authorization"))
             {
-                _context.Add(usuario);
-                _context.SaveChanges();
+                return StatusCode(StatusCodes.Status401Unauthorized, error);
             }
-
-            var dataUsuario = _context.Usuarios.Where(u => u.IdUsuario == usuario.IdUsuario).AsNoTracking().FirstOrDefault();
-
-            var modulos = _context.Modulos.Where(m => m.Padre == null);
-
-            DateTime fechaHoy = DateTime.Now;
-
-            foreach (var m in modulos)
+            var paramAuthorization = Request.Headers["Authorization"].ToString();
+            var isAuthorized = _authorizationService.CheckAuthorization(paramAuthorization);
+            if (!isAuthorized)
             {
-                var progreso = new Progreso();
-                progreso.IdUsuario = dataUsuario.Id;
-                progreso.IdModulo = m.Id;
-                progreso.Finalizado = false;
-                progreso.FechaInicio = fechaHoy;
-                progreso.Porcentaje = 0;
-                progreso.FechaActualizacion = fechaHoy;
-                if (!ProgresoExists(dataUsuario.Id, m.Id))
+                return StatusCode(StatusCodes.Status401Unauthorized, error);
+            }
+            try { 
+                IActionResult ret = null;
+
+                if (!UsuarioExists(usuario.IdUsuario))
                 {
-                    _context.Add(progreso);
+                    _context.Add(usuario);
+                    _context.SaveChanges();
                 }
+
+                var dataUsuario = _context.Usuarios.Where(u => u.IdUsuario == usuario.IdUsuario).AsNoTracking().FirstOrDefault();
+
+                var modulos = _context.Modulos.Where(m => m.Padre == null);
+
+                DateTime fechaHoy = DateTime.Now;
+
+                foreach (var m in modulos)
+                {
+                    var progreso = new Progreso();
+                    progreso.IdUsuario = dataUsuario.Id;
+                    progreso.IdModulo = m.Id;
+                    progreso.Finalizado = false;
+                    progreso.FechaInicio = fechaHoy;
+                    progreso.Porcentaje = 0;
+                    progreso.FechaActualizacion = fechaHoy;
+                    if (!ProgresoExists(dataUsuario.Id, m.Id))
+                    {
+                        _context.Add(progreso);
+                    }
+                }
+                _context.SaveChanges();
+                ret = StatusCode(StatusCodes.Status201Created, dataUsuario);
+                return ret;
             }
-            _context.SaveChanges();
-            ret = StatusCode(StatusCodes.Status201Created, usuario);
-            return ret;
+            catch (Exception ex)
+            {
+                error = new { message = ex.Message };
+                return StatusCode(StatusCodes.Status500InternalServerError, error);
+            }
         }
 
         private bool ProgresoExists(int IdUsuario, int Id)
@@ -77,13 +98,38 @@ namespace kiosko.Controllers
         [HttpPost()]
         public IActionResult UpdateProgress([FromBody] Progreso progreso)
         {
-            IActionResult ret = null;
-            var updateProgreso = _context.Progresos.Where(p => p.IdModulo == progreso.IdModulo).Where(p => p.IdUsuario == progreso.IdUsuario).FirstOrDefault();
-            updateProgreso.Porcentaje = progreso.Porcentaje;
-            _context.Update(updateProgreso);
-            _context.SaveChanges();
-            ret = StatusCode(StatusCodes.Status201Created, progreso);
-            return ret;
+            var error = new { message = "Unauthorized" };
+            if (!Request.Headers.ContainsKey("Authorization"))
+            {
+                return StatusCode(StatusCodes.Status401Unauthorized, error);
+            }
+            var paramAuthorization = Request.Headers["Authorization"].ToString();
+            var isAuthorized = _authorizationService.CheckAuthorization(paramAuthorization);
+            if (!isAuthorized)
+            {
+                return StatusCode(StatusCodes.Status401Unauthorized, error);
+            }
+            try
+            {
+                IActionResult ret = null;
+                DateTime fechaHoy = DateTime.Now;
+                var updateProgreso = _context.Progresos.Where(p => p.IdModulo == progreso.IdModulo).Where(p => p.IdUsuario == progreso.IdUsuario).FirstOrDefault();
+                updateProgreso.Porcentaje = progreso.Porcentaje;
+                updateProgreso.FechaActualizacion = fechaHoy;
+                if (progreso.Porcentaje == 100)
+                {
+                    updateProgreso.FechaFin = fechaHoy;
+                    updateProgreso.Finalizado = true;
+                }
+                _context.Update(updateProgreso);
+                ret = StatusCode(StatusCodes.Status200OK, updateProgreso);
+                return ret;
+            }
+            catch (Exception ex)
+            {
+                error = new { message = ex.Message };
+                return StatusCode(StatusCodes.Status500InternalServerError, error);
+            }
         }
 
     }
