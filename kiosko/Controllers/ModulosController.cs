@@ -58,28 +58,72 @@ namespace kiosko.Controllers
             var modulos = _context.Modulos.Where(m => m.Id > 1).OrderBy(m => m.Orden);
             return Json(modulos);
         }
-        // GET: Modulos/GetModulosComponentsForApp
-        public JsonResult GetModulosAndComponentsForApp()
+
+        [HttpPost()]
+        public IActionResult GetModulosAndComponentsForApp([FromBody] Usuario usuario)
         {
+            var error = new { message = "Unauthorized" };
+            if (!Request.Headers.ContainsKey("Authorization"))
+            {
+                return StatusCode(StatusCodes.Status401Unauthorized, error);
+            }
+            var paramAuthorization = Request.Headers["Authorization"].ToString();
+            var isAuthorized = _authorizationService.CheckAuthorization(paramAuthorization);
+            if (!isAuthorized)
+            {
+                return StatusCode(StatusCodes.Status401Unauthorized, error);
+            }
             var modulos = _context.Modulos.OrderBy(c => c.Orden)
                 .Include(m => m.Componentes)
                     .ThenInclude(m => m.Desplazantes)
                     .ToList();
-            /*
-            var modulos = _context.Modulos.AsNoTracking(); ;
+            //var modulos = _context.Modulos.AsNoTracking();
             var dataModulos = new DataModulos();
             foreach (var modulo in modulos)
             {
+                var progresos = _context.Progresos.Where(p => p.IdModulo == modulo.Id).Where(p => p.IdUsuario == usuario.Id).FirstOrDefault();
+                var dataModulo = new CustomModulo();
+                dataModulo.Id = modulo.Id;
+                dataModulo.Titulo = modulo.Titulo;
+                dataModulo.AccesoDirecto = modulo.AccesoDirecto;
+                dataModulo.Orden = modulo.Orden;
+                dataModulo.Desplegable = modulo.Desplegable;
+                dataModulo.IdModulo = modulo.IdModulo;
+                dataModulo.Padre = modulo.Padre;
+                dataModulo.TiempoInactividad = modulo.TiempoInactividad;
+                dataModulo.Componentes = modulo.Componentes;
                 if (modulo.Padre == null)
                 {
-                    var dataModulo = new Modulo();
-                    dataModulo = modulo;
-                    dataModulos.Modulos.Add(dataModulo);
+                    
+                    dataModulo.IdProgreso = progresos.Id;
+                    dataModulo.Porcentaje = progresos.Porcentaje;
+                    dataModulos.CustomModulos.Add(dataModulo);
+                }
+                else
+                {
+                    foreach (var custom in dataModulos.CustomModulos)
+                    {
+                        if (custom.IdModulo == modulo.Padre)
+                        {
+                            custom.Submodulos.Add(dataModulo);
+                        }
+                        else
+                        {
+                            foreach(var sub in custom.Submodulos)
+                            {
+                                if (sub.IdModulo == modulo.Padre)
+                                {
+                                    sub.Submodulos.Add(dataModulo);
+                                }
+                            }
+                        }
+                    }
                 }
             }
+
             return Json(dataModulos);
-            */
-            return Json(modulos);
+            
+            //return Json(modulos);
         }
 
         [HttpPost()]
@@ -256,11 +300,12 @@ namespace kiosko.Controllers
         public CustomModulo()
         {
             Componentes = new HashSet<Componente>();
-            Progresos = new HashSet<Progreso>();
             Submodulos = new HashSet<CustomModulo>();
         }
 
         public int Id { get; set; }
+        public int IdProgreso { get; set; }
+        public double? Porcentaje { get; set; }
         public string? Titulo { get; set; }
         public int? AccesoDirecto { get; set; }
         public int? Orden { get; set; }
@@ -269,8 +314,9 @@ namespace kiosko.Controllers
         public string? Padre { get; set; }
         public int? TiempoInactividad { get; set; }
 
+
         public virtual ICollection<Componente> Componentes { get; set; }
-        public virtual ICollection<Progreso> Progresos { get; set; }
         public virtual ICollection<CustomModulo> Submodulos { get; set; }
     }
+
 }
