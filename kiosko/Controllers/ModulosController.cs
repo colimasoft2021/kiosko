@@ -77,7 +77,6 @@ namespace kiosko.Controllers
                 .Include(m => m.Componentes)
                     .ThenInclude(m => m.Desplazantes)
                     .ToList();
-            //var modulos = _context.Modulos.AsNoTracking();
             var dataModulos = new DataModulos();
             foreach (var modulo in modulos)
             {
