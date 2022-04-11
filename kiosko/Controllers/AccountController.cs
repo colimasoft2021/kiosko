@@ -120,10 +120,11 @@ namespace kiosko.Controllers
         [HttpPost]
         public async Task<IActionResult> SendResetPwdLink(string email)
         {
+            var message = new { status = "", message = "" };
             IActionResult ret = null;
-            try
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user != null)
             {
-                var user = await _userManager.FindByEmailAsync(email);
                 var token = await _userManager.GeneratePasswordResetTokenAsync(user);
                 byte[] tokenGeneratedBytes = Encoding.UTF8.GetBytes(token);
                 var tokenEncoded = WebEncoders.Base64UrlEncode(tokenGeneratedBytes);
@@ -134,13 +135,23 @@ namespace kiosko.Controllers
                 cuerpoMensaje += "<a href=";
                 cuerpoMensaje += buillink;
                 cuerpoMensaje += ">Da click aquí</a>";
-                _mailService.SendEmailGmail(email, "Alerta de capacitación", cuerpoMensaje);
-                ret = StatusCode(StatusCodes.Status201Created);
+                try
+                {
+                    _mailService.SendEmailGmail(email, "Recuperación de contraseña", cuerpoMensaje);
+                    message = new { status = "ok", message = "Email enviado" };
+                    ret = StatusCode(StatusCodes.Status200OK, message);
+                }
+                catch (Exception ex)
+                {
+                    message = new { status = "error", message = ex.Message };
+                    ret = StatusCode(StatusCodes.Status500InternalServerError, message);
+                    throw ex;
+                }
             }
-            catch (Exception e)
+            else
             {
-                ret = StatusCode(StatusCodes.Status500InternalServerError);
-                throw e;
+                message = new { status = "error", message = "Internal server error" };
+                ret = StatusCode(StatusCodes.Status500InternalServerError, message);
             }
             return ret;
         }
@@ -150,16 +161,24 @@ namespace kiosko.Controllers
         {
             IActionResult ret = null;
             var user = await _userManager.FindByIdAsync(id);
+            var message = new { status = "", message = "" };
+            if (user == null)
+            {
+                message = new { status = "error", message = "Internal server error" };
+                ret = StatusCode(StatusCodes.Status500InternalServerError, message);
+            }
             var codeDecodedBytes = WebEncoders.Base64UrlDecode(token);
             var tokenDecoded = Encoding.UTF8.GetString(codeDecodedBytes);
             var result = await _userManager.ResetPasswordAsync(user, tokenDecoded, password);
             if (!result.Succeeded)
             {
-                ret = StatusCode(StatusCodes.Status500InternalServerError, result);
+                message = new { status = "error", message = "Internal server error" };
+                ret = StatusCode(StatusCodes.Status500InternalServerError, message);
             }
             else
             {
-                ret = StatusCode(StatusCodes.Status201Created, result);
+                message = new { status = "ok", message = "Contraseña actualizada" };
+                ret = StatusCode(StatusCodes.Status201Created, message);
             }
             return ret;
         }
