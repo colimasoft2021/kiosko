@@ -53,87 +53,123 @@ namespace kiosko.Controllers
             return View(model);
         }
 
-        public JsonResult GetAllModulos()
+        public IActionResult GetAllModulos()
         {
-            var modulos = _context.Modulos.Where(m => m.Id > 1).OrderBy(m => m.Orden);
-            return Json(modulos);
+            var message = new { status = "", message = "" };
+            IActionResult ret = null;
+            try { 
+                var modulos = _context.Modulos.Where(m => m.Id > 1).OrderBy(m => m.Orden);
+                ret = StatusCode(StatusCodes.Status200OK, modulos);
+            }
+            catch (Exception ex)
+            {
+                message = new { status = "error", message = ex.Message };
+                ret = StatusCode(StatusCodes.Status500InternalServerError, message);
+            }
+            return ret;
         }
 
         [HttpPost()]
         public IActionResult GetModulosAndComponentsForApp([FromBody] Usuario usuario)
         {
-            var error = new { message = "Unauthorized" };
+            var message = new { status = "", message = "" };
+            IActionResult ret = null;
+
             if (!Request.Headers.ContainsKey("Authorization"))
             {
-                return StatusCode(StatusCodes.Status401Unauthorized, error);
+                message = new { status = "error", message = "Unauthorized" };
+                return StatusCode(StatusCodes.Status401Unauthorized, message);
             }
             var paramAuthorization = Request.Headers["Authorization"].ToString();
             var isAuthorized = _authorizationService.CheckAuthorization(paramAuthorization);
             if (!isAuthorized)
             {
-                return StatusCode(StatusCodes.Status401Unauthorized, error);
+                message = new { status = "error", message = "Unauthorized" };
+                return StatusCode(StatusCodes.Status401Unauthorized, message);
             }
-            var modulos = _context.Modulos.OrderBy(c => c.Orden)
-                .Include(m => m.Componentes)
-                    .ThenInclude(m => m.Desplazantes)
-                    .ToList();
-            var dataModulos = new DataModulos();
-            foreach (var modulo in modulos)
-            {
-                var progresos = _context.Progresos.Where(p => p.IdModulo == modulo.Id).Where(p => p.IdUsuario == usuario.Id).FirstOrDefault();
-                var dataModulo = new CustomModulo();
-                dataModulo.Id = modulo.Id;
-                dataModulo.Titulo = modulo.Titulo;
-                dataModulo.AccesoDirecto = modulo.AccesoDirecto;
-                dataModulo.Orden = modulo.Orden;
-                dataModulo.Desplegable = modulo.Desplegable;
-                dataModulo.IdModulo = modulo.IdModulo;
-                dataModulo.Padre = modulo.Padre;
-                dataModulo.TiempoInactividad = modulo.TiempoInactividad;
-                dataModulo.Componentes = modulo.Componentes;
-                if (modulo.Padre == null)
+
+            var exist = UsuarioExists(usuario.Id);
+
+            if (!exist) {
+                message = new { status = "error", message = "No existe el usuario" };
+                return StatusCode(StatusCodes.Status200OK, message);
+            }
+
+            try { 
+                var modulos = _context.Modulos.OrderBy(c => c.Orden)
+                    .Include(m => m.Componentes)
+                        .ThenInclude(m => m.Desplazantes)
+                        .ToList();
+                var dataModulos = new DataModulos();
+                foreach (var modulo in modulos)
                 {
-                    
-                    dataModulo.IdProgreso = progresos.Id;
-                    dataModulo.Porcentaje = progresos.Porcentaje;
-                    dataModulos.CustomModulos.Add(dataModulo);
-                }
-                else
-                {
-                    foreach (var custom in dataModulos.CustomModulos)
+                    var progresos = _context.Progresos.Where(p => p.IdModulo == modulo.Id).Where(p => p.IdUsuario == usuario.Id).FirstOrDefault();
+                    var dataModulo = new CustomModulo();
+                    dataModulo.Id = modulo.Id;
+                    dataModulo.Titulo = modulo.Titulo;
+                    dataModulo.AccesoDirecto = modulo.AccesoDirecto;
+                    dataModulo.Orden = modulo.Orden;
+                    dataModulo.Desplegable = modulo.Desplegable;
+                    dataModulo.IdModulo = modulo.IdModulo;
+                    dataModulo.Padre = modulo.Padre;
+                    dataModulo.TiempoInactividad = modulo.TiempoInactividad;
+                    dataModulo.Componentes = modulo.Componentes;
+                    if (modulo.Padre == null)
                     {
-                        if (custom.IdModulo == modulo.Padre)
+                    
+                        dataModulo.IdProgreso = progresos.Id;
+                        dataModulo.Porcentaje = progresos.Porcentaje;
+                        dataModulos.CustomModulos.Add(dataModulo);
+                    }
+                    else
+                    {
+                        foreach (var custom in dataModulos.CustomModulos)
                         {
-                            custom.Submodulos.Add(dataModulo);
-                        }
-                        else
-                        {
-                            foreach(var sub in custom.Submodulos)
+                            if (custom.IdModulo == modulo.Padre)
                             {
-                                if (sub.IdModulo == modulo.Padre)
+                                custom.Submodulos.Add(dataModulo);
+                            }
+                            else
+                            {
+                                foreach(var sub in custom.Submodulos)
                                 {
-                                    sub.Submodulos.Add(dataModulo);
+                                    if (sub.IdModulo == modulo.Padre)
+                                    {
+                                        sub.Submodulos.Add(dataModulo);
+                                    }
                                 }
                             }
                         }
                     }
                 }
-            }
 
-            return Json(dataModulos);
-            
-            //return Json(modulos);
+                ret = StatusCode(StatusCodes.Status200OK, dataModulos);
+            }
+            catch (Exception ex)
+            {
+                message = new { status = "error", message = ex.Message };
+                ret = StatusCode(StatusCodes.Status500InternalServerError, message);
+            }
+            return ret;
         }
 
         [HttpPost()]
         public IActionResult SaveMenuModulo(Modulo modulo)
         {
+            var message = new { status = "", message = "" };
             IActionResult ret = null;
-            modulo.TiempoInactividad = 5;
-            _context.Add(modulo);
-            _context.SaveChanges();
+            try { 
+                modulo.TiempoInactividad = 5;
+                _context.Add(modulo);
+                _context.SaveChanges();
 
-            ret = StatusCode(StatusCodes.Status201Created, modulo);
+                ret = StatusCode(StatusCodes.Status201Created, modulo);
+            }
+            catch (Exception ex)
+            {
+                message = new { status = "error", message = ex.Message };
+                ret = StatusCode(StatusCodes.Status500InternalServerError, message);
+            }
             return ret;
         }
 
@@ -141,17 +177,26 @@ namespace kiosko.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> updateModulo()
         {
-            var idModulo = Int32.Parse(Request.Form["idModulo"]);
-            var modulo = await _context.Modulos
-                .FirstOrDefaultAsync(m => m.Id == idModulo);
-            modulo.Titulo = Request.Form["tituloModulo"];
-            modulo.TiempoInactividad = Int32.Parse(Request.Form["tiempoInactividad"]);
-
+            var message = new { status = "", message = "" };
             IActionResult ret = null;
-            _context.Update(modulo);
-            _context.SaveChanges();
+            try {
+                var idModulo = Int32.Parse(Request.Form["idModulo"]);
+                var modulo = await _context.Modulos
+                    .FirstOrDefaultAsync(m => m.Id == idModulo);
+                modulo.Titulo = Request.Form["tituloModulo"];
+                modulo.TiempoInactividad = Int32.Parse(Request.Form["tiempoInactividad"]);
 
-            ret = StatusCode(StatusCodes.Status201Created, modulo);
+                _context.Update(modulo);
+                _context.SaveChanges();
+
+                ret = StatusCode(StatusCodes.Status200OK, modulo);
+            
+            }
+            catch (Exception ex)
+            {
+                message = new { status = "error", message = ex.Message };
+                ret = StatusCode(StatusCodes.Status500InternalServerError, message);
+            }
             return ret;
         }
 
@@ -159,49 +204,41 @@ namespace kiosko.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult deleteModulo(int id)
         {
-            var modulo = _context.Modulos.Find(id);
+            var message = new { status = "", message = "" };
             IActionResult ret = null;
-            _context.Modulos.Remove(modulo);
-            _context.SaveChanges();
+            try
+            {
+                var modulo = _context.Modulos.Find(id);
+                _context.Modulos.Remove(modulo);
+                _context.SaveChanges();
 
-            ret = StatusCode(StatusCodes.Status201Created, modulo);
+                ret = StatusCode(StatusCodes.Status201Created, modulo);
+            
+            }
+            catch (Exception ex)
+            {
+                message = new { status = "error", message = ex.Message };
+                ret = StatusCode(StatusCodes.Status500InternalServerError, message);
+            }
             return ret;
-        }
-
-        [HttpPost()]
-        public IActionResult GetModulosAndProgressByUser([FromBody] Usuario usuario)
-        {
-            if (!Request.Headers.ContainsKey("Authorization"))
-            {
-                return Unauthorized();
-            }
-            var paramAuthorization = Request.Headers["Authorization"].ToString();
-            var isAuthorized = _authorizationService.CheckAuthorization(paramAuthorization);
-            if (!isAuthorized)
-            {
-                return Unauthorized();
-            }
-            var modulos = _context.Modulos;
-
-            /*foreach (var m in modulos)
-            {
-                _context.Progresos.Where(p => p.IdModulo == m.Id).Where(p => p.IdUsuario == usuario.IdUsuario).Load();
-            }*/
-            return Json(modulos);
         }
 
         public IActionResult EnviarAlertas()
         {
+            var message = new { status = "", message = "" };
+            IActionResult ret = null;
 
             if (!Request.Headers.ContainsKey("Authorization"))
             {
-                return Unauthorized();
+                message = new { status = "error", message = "Unauthorized" };
+                return StatusCode(StatusCodes.Status401Unauthorized, message);
             }
             var paramAuthorization = Request.Headers["Authorization"].ToString();
             var isAuthorized = _authorizationService.CheckAuthorization(paramAuthorization);
             if (!isAuthorized)
             {
-                return Unauthorized();
+                message = new { status = "error", message = "Unauthorized" };
+                return StatusCode(StatusCodes.Status401Unauthorized, message);
             }
             try
             {
@@ -250,13 +287,30 @@ namespace kiosko.Controllers
                     }
                     cuerpoMensaje += "</div>";
                 }
-                _mailService.SendEmailGmail("juan.rivera@colimasoft.com", "Alerta de capacitación", cuerpoMensaje);
-                return Json(alertas);
+                try
+                {
+                    _mailService.SendEmailGmail("juan.rivera@colimasoft.com", "Alerta de capacitación", cuerpoMensaje);
+                    message = new { status = "ok", message = "Email enviado" };
+                    ret = StatusCode(StatusCodes.Status200OK, message);
+                }
+                catch (Exception ex)
+                {
+                    message = new { status = "error", message = ex.Message };
+                    ret = StatusCode(StatusCodes.Status500InternalServerError, message);
+                }
             }
             catch (Exception ex)
             {
-                throw;
+                message = new { status = "error", message = ex.Message };
+                ret = StatusCode(StatusCodes.Status500InternalServerError, message);
             }
+
+            return ret;
+        }
+
+        private bool UsuarioExists(int IdUsuario)
+        {
+            return _context.Usuarios.Any(e => e.IdUsuario == IdUsuario);
         }
 
     }
