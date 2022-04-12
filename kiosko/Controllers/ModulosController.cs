@@ -248,10 +248,13 @@ namespace kiosko.Controllers
 
                 var alertas = new DataUsuario();
 
+                
+
                 foreach (var user in usuarios)
                 {
                     var infoUsuario = new UsuarioAlerta();
                     infoUsuario.Nombre = user.NombreUsuario;
+                    infoUsuario.IdUsuarioKiosko = user.IdUsuario;
                     foreach (var p in user.Progresos.ToList())
                     {
                         var inactividadModulo = p.IdModuloNavigation.TiempoInactividad;
@@ -270,6 +273,29 @@ namespace kiosko.Controllers
                         }
                     }
                 }
+                /*
+                var comisionistas = new Comisionistas();
+                foreach (var com in usuarios)
+                {
+                    var infoComisionista = new DataComisionista();
+                    infoComisionista.EmailComisionista = "";
+                    infoComisionista.NombreComisionista = "";
+                    
+                    foreach(var emp in com.Empleados)
+                    {
+                        foreach(var user in alertas)
+                        {
+                            if (emp.IdUsuario == user.IdUsuario)
+                            {
+                                infoComisionista.Empleados.Add(user);
+                                comisionistas.DataComisionistas.Add(infoComisionista);
+                            }
+                        }
+                        
+                    }
+                }
+                */
+
                 string cuerpoMensaje = "<h2>Los siguientes usuarios no han retomado su capacitacion</h2><br/><br/>";
                 foreach (var usuario in alertas.UsuariosAlertas)
                 {
@@ -291,7 +317,7 @@ namespace kiosko.Controllers
                 {
                     _mailService.SendEmailGmail("juan.rivera@colimasoft.com", "Alerta de capacitación", cuerpoMensaje);
                     message = new { status = "ok", message = "Email enviado" };
-                    ret = StatusCode(StatusCodes.Status200OK, message);
+                    ret = StatusCode(StatusCodes.Status200OK, alertas);
                 }
                 catch (Exception ex)
                 {
@@ -314,6 +340,27 @@ namespace kiosko.Controllers
         }
 
     }
+
+    public class Comisionistas
+    {
+        public Comisionistas()
+        {
+            DataComisionistas = new HashSet<DataComisionista>();
+        }
+        public virtual ICollection<DataComisionista> DataComisionistas { get; set; }
+    }
+    public class DataComisionista
+    {
+        public DataComisionista()
+        {
+            Empleados = new HashSet<UsuarioAlerta>();
+        }
+        public string EmailComisionista { get; set; }
+        public string NombreComisionista { set; get; } 
+        public virtual ICollection<UsuarioAlerta> Empleados { get; set; }
+    
+    }
+
     public class DataUsuario
     {
         public DataUsuario()
@@ -330,6 +377,7 @@ namespace kiosko.Controllers
             ModulosInactivos = new HashSet<ModuloInactivo>();
         }
         public string Nombre { get; set; }
+        public int IdUsuarioKiosko { get; set; }
         public virtual ICollection<ModuloInactivo> ModulosInactivos { get; set; }
     }
 
