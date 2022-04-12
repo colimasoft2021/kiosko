@@ -19,12 +19,14 @@ namespace kiosko.Controllers
         private readonly KioskoCmsContext _context;
         MailService _mailService;
         AuthorizationService _authorizationService;
+        ErrorService _errorService;
 
-        public ModulosController(KioskoCmsContext context, MailService mailService, AuthorizationService authorizationService)
+        public ModulosController(KioskoCmsContext context, MailService mailService, AuthorizationService authorizationService, ErrorService errorService)
         {
             _context = context;
             _mailService = mailService;
             _authorizationService = authorizationService;
+            _errorService = errorService;
         }
 
         // GET: Modulos
@@ -63,6 +65,7 @@ namespace kiosko.Controllers
             }
             catch (Exception ex)
             {
+                _errorService.SaveErrorMessage("_context.Modulos", "ModulosController", "GetAllModulos", ex.Message);
                 message = new { status = "error", message = ex.Message };
                 ret = StatusCode(StatusCodes.Status500InternalServerError, message);
             }
@@ -84,6 +87,8 @@ namespace kiosko.Controllers
             var isAuthorized = _authorizationService.CheckAuthorization(paramAuthorization);
             if (!isAuthorized)
             {
+                _errorService.SaveErrorMessage("_authorizationService.CheckAuthorization", "ModulosController", 
+                    "GetModulosAndComponentsForApp", "Unauthorized/Sin Autorizacion");
                 message = new { status = "error", message = "Unauthorized" };
                 return StatusCode(StatusCodes.Status401Unauthorized, message);
             }
@@ -147,6 +152,7 @@ namespace kiosko.Controllers
             }
             catch (Exception ex)
             {
+                _errorService.SaveErrorMessage("_context.Modulos", "ModulosController", "GetModulosAndComponentsForApp", ex.Message);
                 message = new { status = "error", message = ex.Message };
                 ret = StatusCode(StatusCodes.Status500InternalServerError, message);
             }
@@ -167,6 +173,8 @@ namespace kiosko.Controllers
             }
             catch (Exception ex)
             {
+                _errorService.SaveErrorMessage("_context.Add", "ModulosController", 
+                    "SaveMenuModulo", ex.Message);
                 message = new { status = "error", message = ex.Message };
                 ret = StatusCode(StatusCodes.Status500InternalServerError, message);
             }
@@ -194,6 +202,8 @@ namespace kiosko.Controllers
             }
             catch (Exception ex)
             {
+                _errorService.SaveErrorMessage("_context.Modulos", "ModulosController", 
+                    "updateModulo", ex.Message);
                 message = new { status = "error", message = ex.Message };
                 ret = StatusCode(StatusCodes.Status500InternalServerError, message);
             }
@@ -217,6 +227,8 @@ namespace kiosko.Controllers
             }
             catch (Exception ex)
             {
+                _errorService.SaveErrorMessage("_context.Modulos.Find", "ModulosController", 
+                    "deleteModulo", ex.Message);
                 message = new { status = "error", message = ex.Message };
                 ret = StatusCode(StatusCodes.Status500InternalServerError, message);
             }
@@ -230,6 +242,8 @@ namespace kiosko.Controllers
 
             if (!Request.Headers.ContainsKey("Authorization"))
             {
+                _errorService.SaveErrorMessage("!Request.Headers.ContainsKey", "ModulosController", 
+                    "EnviarAlertas", "Faltan Headers Auth - Unauthorized/Sin Autorizacion");
                 message = new { status = "error", message = "Unauthorized" };
                 return StatusCode(StatusCodes.Status401Unauthorized, message);
             }
@@ -237,6 +251,8 @@ namespace kiosko.Controllers
             var isAuthorized = _authorizationService.CheckAuthorization(paramAuthorization);
             if (!isAuthorized)
             {
+                _errorService.SaveErrorMessage("_authorizationService.CheckAuthorization", "ModulosController", 
+                    "EnviarAlertas", "Credenciales Incorrectas - Unauthorized/Sin Autorizacion");
                 message = new { status = "error", message = "Unauthorized" };
                 return StatusCode(StatusCodes.Status401Unauthorized, message);
             }
@@ -295,12 +311,16 @@ namespace kiosko.Controllers
                 }
                 catch (Exception ex)
                 {
+                    _errorService.SaveErrorMessage("_mailService.SendEmailGmail", "ModulosController", 
+                        "EnviarAlertas", ex.Message);
                     message = new { status = "error", message = ex.Message };
                     ret = StatusCode(StatusCodes.Status500InternalServerError, message);
                 }
             }
             catch (Exception ex)
             {
+                _errorService.SaveErrorMessage("_context.Usuarios - alertas = new DataUsuario()", 
+                    "ModulosController", "EnviarAlertas", ex.Message);
                 message = new { status = "error", message = ex.Message };
                 ret = StatusCode(StatusCodes.Status500InternalServerError, message);
             }

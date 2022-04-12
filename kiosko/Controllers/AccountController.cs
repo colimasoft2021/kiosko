@@ -139,7 +139,7 @@ namespace kiosko.Controllers
                 cuerpoMensaje += ">Da click aquí</a>";
                 try
                 {
-                    //_mailService.SendEmailGmail(email, "Recuperación de contraseña", cuerpoMensaje);
+                    _mailService.SendEmailGmail(email, "Recuperación de contraseña", cuerpoMensaje);
                     message = new { status = "ok", message = "Email enviado" };
                     ret = StatusCode(StatusCodes.Status200OK, message);
                 }
