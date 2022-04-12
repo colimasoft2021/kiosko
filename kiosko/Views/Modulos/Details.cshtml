@@ -410,7 +410,8 @@
         indexImagen = indexImagen + 1;
         return component;
     }
-    function generateCardsDesplazante(stringId, idComponent, item, pkId, stringType) {
+    function generateCardsDesplazante(stringId, idComponent, item, pkId, stringType, descripcion) {
+        console.log(item);
         let images = [{
             "id": "0",
             "url": "/img/icono-imagen-chico.png",
@@ -980,7 +981,7 @@
                 }
                 if(typeInp == 'texto'){
                     let value = $(this).val();
-                    jsonDesplazante.Descripcion = value;
+                    jsonDesplazante.Texto = value;
                 }
             });
             jsonDesplazante.Id = pkey;
@@ -1322,9 +1323,9 @@
         }
         $.ajax({
           type: "POST",
-          url: "/Modulos/sendEmailForgotPassword",
+          url: "/Componentes/updateDesplazantes",
           headers: { "RequestVerificationToken": "@GetAntiXsrfRequestToken()" },
-          data: {email: "myemail@email.com"},
+          data: formData,
           processData : false,
           contentType : false,
           success: function (response) {
