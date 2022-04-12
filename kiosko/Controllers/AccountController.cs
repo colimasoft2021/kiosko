@@ -148,7 +148,6 @@ namespace kiosko.Controllers
                     _errorService.SaveErrorMessage("_mailService.SendEmailGmail", "AccountController", "SendResetPwdwLink", ex.Message);
                     message = new { status = "error", message = ex.Message };
                     ret = StatusCode(StatusCodes.Status500InternalServerError, message);
-                    throw ex;
                 }
             }
             else

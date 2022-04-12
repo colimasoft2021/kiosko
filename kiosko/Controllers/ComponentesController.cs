@@ -28,12 +28,21 @@ namespace kiosko.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult deleteComponent(int id)
         {
-            var componente = _context.Componentes.Find(id);
             IActionResult ret = null;
-            _context.Componentes.Remove(componente);
-            _context.SaveChanges();
-
-            ret = StatusCode(StatusCodes.Status201Created, componente);
+            var message = new { status = "", message = "" };
+            try
+            {
+                var componente = _context.Componentes.Find(id);
+                _context.Componentes.Remove(componente);
+                _context.SaveChanges();
+                message = new { status = "ok", message = "Componente eliminado" };
+                ret = StatusCode(StatusCodes.Status200OK, message);
+            }
+            catch (Exception ex)
+            {
+                message = new { status = "error", message = ex.Message };
+                ret = StatusCode(StatusCodes.Status500InternalServerError, message);
+            }
             return ret;
         }
 
@@ -41,12 +50,21 @@ namespace kiosko.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult deleteDesplazante(int id)
         {
-            var desplazante = _context.Desplazantes.Find(id);
             IActionResult ret = null;
-            _context.Desplazantes.Remove(desplazante);
-            _context.SaveChanges();
-
-            ret = StatusCode(StatusCodes.Status201Created, desplazante);
+            var message = new { status = "", message = "" };
+            try
+            {
+                var desplazante = _context.Desplazantes.Find(id);
+                _context.Desplazantes.Remove(desplazante);
+                _context.SaveChanges();
+                message = new { status = "ok", message = "Componente eliminado" };
+                ret = StatusCode(StatusCodes.Status200OK, message);
+            }
+            catch (Exception ex)
+            {
+                message = new { status = "error", message = ex.Message };
+                ret = StatusCode(StatusCodes.Status500InternalServerError, message);
+            }
             return ret;
         }
 
@@ -74,62 +92,46 @@ namespace kiosko.Controllers
 
         [HttpPost()]
         [ValidateAntiForgeryToken]
-        public IActionResult saveComponentForModulo(Componente componente)
-        {
-            IActionResult ret = null;
-                _context.Add(componente);
-                _context.SaveChanges();
-
-                ret = StatusCode(StatusCodes.Status201Created, componente);
-            return ret;
-        }
-
-        [HttpPost()]
-        [ValidateAntiForgeryToken]
-        public IActionResult updateComponentForModulo(Componente componente)
-        {
-            IActionResult ret = null;
-            _context.Update(componente);
-            _context.SaveChanges();
-
-            ret = StatusCode(StatusCodes.Status201Created, componente);
-            return ret;
-        }
-
-        [HttpPost()]
-        [ValidateAntiForgeryToken]
         public IActionResult saveComponentForModulo2()
         {
-            var componente = new Componente();
-            componente.Id = Int32.Parse(Request.Form["Id"]);
-            componente.Padre = Request.Form["Padre"];
-            componente.TipoComponente = Request.Form["TipoComponente"];
-            componente.Url = Request.Form["Url"];
-            componente.UrlDos = Request.Form["UrlDos"];
-            componente.UrlTres = Request.Form["UrlTres"];
-            componente.Descripcion = Request.Form["Descripcion"];
-            componente.BackgroundColor = Request.Form["BackgroundColor"];
-            componente.AgregarFondo = Int32.Parse(Request.Form["AgregarFondo"]);
-            componente.Titulo = Request.Form["Titulo"];
-            componente.Subtitulo = Request.Form["Subtitulo"];
-            componente.Orden = Int32.Parse(Request.Form["Orden"]);
-            componente.IdModulo = Int32.Parse(Request.Form["IdModulo"]);
-
-            foreach (var formFile in Request.Form.Files)
-            {
-                var fulPath = Path.Combine(_env.ContentRootPath, "wwwroot\\files", formFile.FileName);
-                using (FileStream fs = System.IO.File.Create(fulPath))
-                {
-                    formFile.CopyTo(fs);
-                    fs.Flush();
-                }
-            }
-
             IActionResult ret = null;
-            _context.Add(componente);
-            _context.SaveChanges();
+            var message = new { status = "", message = "" };
+            try
+            {
+                var componente = new Componente();
+                componente.Id = Int32.Parse(Request.Form["Id"]);
+                componente.Padre = Request.Form["Padre"];
+                componente.TipoComponente = Request.Form["TipoComponente"];
+                componente.Url = Request.Form["Url"];
+                componente.UrlDos = Request.Form["UrlDos"];
+                componente.UrlTres = Request.Form["UrlTres"];
+                componente.Descripcion = Request.Form["Descripcion"];
+                componente.BackgroundColor = Request.Form["BackgroundColor"];
+                componente.AgregarFondo = Int32.Parse(Request.Form["AgregarFondo"]);
+                componente.Titulo = Request.Form["Titulo"];
+                componente.Subtitulo = Request.Form["Subtitulo"];
+                componente.Orden = Int32.Parse(Request.Form["Orden"]);
+                componente.IdModulo = Int32.Parse(Request.Form["IdModulo"]);
 
-            ret = StatusCode(StatusCodes.Status201Created, componente);
+                foreach (var formFile in Request.Form.Files)
+                {
+                    var fulPath = Path.Combine(_env.ContentRootPath, "wwwroot\\files", formFile.FileName);
+                    using (FileStream fs = System.IO.File.Create(fulPath))
+                    {
+                        formFile.CopyTo(fs);
+                        fs.Flush();
+                    }
+                }
+
+                _context.Add(componente);
+                _context.SaveChanges();
+                ret = StatusCode(StatusCodes.Status201Created, componente);
+            }
+            catch (Exception ex)
+            {
+                message = new { status = "error", message = ex.Message };
+                ret = StatusCode(StatusCodes.Status500InternalServerError, message);
+            }
             return ret;
         }
 
@@ -137,37 +139,45 @@ namespace kiosko.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult updateComponentForModulo2()
         {
-            Console.WriteLine(Request.Form);
-            var componente = new Componente();
-            componente.Id = Int32.Parse(Request.Form["Id"]);
-            componente.Padre = Request.Form["Padre"];
-            componente.TipoComponente = Request.Form["TipoComponente"];
-            componente.Url = Request.Form["Url"];
-            componente.UrlDos = Request.Form["UrlDos"];
-            componente.UrlTres = Request.Form["UrlTres"];
-            componente.Descripcion = Request.Form["Descripcion"];
-            componente.BackgroundColor = Request.Form["BackgroundColor"];
-            componente.AgregarFondo = Int32.Parse(Request.Form["AgregarFondo"]);
-            componente.Titulo = Request.Form["Titulo"];
-            componente.Subtitulo = Request.Form["Subtitulo"];
-            componente.Orden = Int32.Parse(Request.Form["Orden"]);
-            componente.IdModulo = Int32.Parse(Request.Form["IdModulo"]);
-
-            foreach (var formFile in Request.Form.Files)
-            {
-                var fulPath = Path.Combine(_env.ContentRootPath, "wwwroot\\files", formFile.FileName);
-                using (FileStream fs = System.IO.File.Create(fulPath))
-                {
-                    formFile.CopyTo(fs);
-                    fs.Flush();
-                }
-            }
-
             IActionResult ret = null;
-            _context.Update(componente);
-            _context.SaveChanges();
+            var message = new { status = "", message = "" };
+            try
+            {
+                var componente = new Componente();
+                componente.Id = Int32.Parse(Request.Form["Id"]);
+                componente.Padre = Request.Form["Padre"];
+                componente.TipoComponente = Request.Form["TipoComponente"];
+                componente.Url = Request.Form["Url"];
+                componente.UrlDos = Request.Form["UrlDos"];
+                componente.UrlTres = Request.Form["UrlTres"];
+                componente.Descripcion = Request.Form["Descripcion"];
+                componente.BackgroundColor = Request.Form["BackgroundColor"];
+                componente.AgregarFondo = Int32.Parse(Request.Form["AgregarFondo"]);
+                componente.Titulo = Request.Form["Titulo"];
+                componente.Subtitulo = Request.Form["Subtitulo"];
+                componente.Orden = Int32.Parse(Request.Form["Orden"]);
+                componente.IdModulo = Int32.Parse(Request.Form["IdModulo"]);
 
-            ret = StatusCode(StatusCodes.Status201Created, componente);
+                foreach (var formFile in Request.Form.Files)
+                {
+                    var fulPath = Path.Combine(_env.ContentRootPath, "wwwroot\\files", formFile.FileName);
+                    using (FileStream fs = System.IO.File.Create(fulPath))
+                    {
+                        formFile.CopyTo(fs);
+                        fs.Flush();
+                    }
+                }
+
+                _context.Update(componente);
+                _context.SaveChanges();
+
+                ret = StatusCode(StatusCodes.Status200OK, componente);
+            }
+            catch (Exception ex)
+            {
+                message = new { status = "error", message = ex.Message };
+                ret = StatusCode(StatusCodes.Status500InternalServerError, message);
+            }
             return ret;
         }
 
@@ -175,27 +185,37 @@ namespace kiosko.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult saveDesplazantes()
         {
-            var desplazante = new Desplazante();
-            desplazante.Id = Int32.Parse(Request.Form["Id"]);
-            desplazante.Url = Request.Form["Url"];
-            desplazante.Titulo = Request.Form["Titulo"];
-            desplazante.Texto = Request.Form["Texto"];
-            desplazante.IdComponente = Int32.Parse(Request.Form["IdComponente"]);
-
-            foreach (var formFile in Request.Form.Files)
-            {
-                var fulPath = Path.Combine(_env.ContentRootPath, "wwwroot\\files", formFile.FileName);
-                using (FileStream fs = System.IO.File.Create(fulPath))
-                {
-                    formFile.CopyTo(fs);
-                    fs.Flush();
-                }
-            }
             IActionResult ret = null;
-            _context.Add(desplazante);
-            _context.SaveChanges();
+            var message = new { status = "", message = "" };
+            try
+            {
+                var desplazante = new Desplazante();
+                desplazante.Id = Int32.Parse(Request.Form["Id"]);
+                desplazante.Url = Request.Form["Url"];
+                desplazante.Titulo = Request.Form["Titulo"];
+                desplazante.Texto = Request.Form["Texto"];
+                desplazante.IdComponente = Int32.Parse(Request.Form["IdComponente"]);
 
-            ret = StatusCode(StatusCodes.Status201Created, desplazante);
+                foreach (var formFile in Request.Form.Files)
+                {
+                    var fulPath = Path.Combine(_env.ContentRootPath, "wwwroot\\files", formFile.FileName);
+                    using (FileStream fs = System.IO.File.Create(fulPath))
+                    {
+                        formFile.CopyTo(fs);
+                        fs.Flush();
+                    }
+                }
+
+                _context.Add(desplazante);
+                _context.SaveChanges();
+
+                ret = StatusCode(StatusCodes.Status201Created, desplazante);
+            }
+            catch (Exception ex)
+            {
+                message = new { status = "error", message = ex.Message };
+                ret = StatusCode(StatusCodes.Status500InternalServerError, message);
+            }
             return ret;
         }
 
@@ -203,27 +223,37 @@ namespace kiosko.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult updateDesplazantes()
         {
-            var desplazante = new Desplazante();
-            desplazante.Id = Int32.Parse(Request.Form["Id"]);
-            desplazante.Url = Request.Form["Url"];
-            desplazante.Titulo = Request.Form["Titulo"];
-            desplazante.Texto = Request.Form["Texto"];
-            desplazante.IdComponente = Int32.Parse(Request.Form["IdComponente"]);
-
-            foreach (var formFile in Request.Form.Files)
-            {
-                var fulPath = Path.Combine(_env.ContentRootPath, "wwwroot\\files", formFile.FileName);
-                using (FileStream fs = System.IO.File.Create(fulPath))
-                {
-                    formFile.CopyTo(fs);
-                    fs.Flush();
-                }
-            }
             IActionResult ret = null;
-            _context.Update(desplazante);
-            _context.SaveChanges();
+            var message = new { status = "", message = "" };
+            try
+            {
+                var desplazante = new Desplazante();
+                desplazante.Id = Int32.Parse(Request.Form["Id"]);
+                desplazante.Url = Request.Form["Url"];
+                desplazante.Titulo = Request.Form["Titulo"];
+                desplazante.Texto = Request.Form["Texto"];
+                desplazante.IdComponente = Int32.Parse(Request.Form["IdComponente"]);
 
-            ret = StatusCode(StatusCodes.Status201Created, desplazante);
+                foreach (var formFile in Request.Form.Files)
+                {
+                    var fulPath = Path.Combine(_env.ContentRootPath, "wwwroot\\files", formFile.FileName);
+                    using (FileStream fs = System.IO.File.Create(fulPath))
+                    {
+                        formFile.CopyTo(fs);
+                        fs.Flush();
+                    }
+                }
+
+                _context.Update(desplazante);
+                _context.SaveChanges();
+
+                ret = StatusCode(StatusCodes.Status201Created, desplazante);
+            }
+            catch (Exception ex)
+            {
+                message = new { status = "error", message = ex.Message };
+                ret = StatusCode(StatusCodes.Status500InternalServerError, message);
+            }
             return ret;
         }
     }
