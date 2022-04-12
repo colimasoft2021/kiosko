@@ -22,8 +22,7 @@ namespace kiosko.Controllers
 
         public AccountController(UserManager<IdentityUser> userManager,
                               SignInManager<IdentityUser> signInManager,
-                               MailService mailService,
-                               ErrorService errorService)
+                               MailService mailService, ErrorService errorService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -140,13 +139,13 @@ namespace kiosko.Controllers
                 cuerpoMensaje += ">Da click aquí</a>";
                 try
                 {
-                    _mailService.SendEmailGmail(email, "Recuperación de contraseña", cuerpoMensaje);
+                    //_mailService.SendEmailGmail(email, "Recuperación de contraseña", cuerpoMensaje);
                     message = new { status = "ok", message = "Email enviado" };
                     ret = StatusCode(StatusCodes.Status200OK, message);
                 }
                 catch (Exception ex)
                 {
-                    _errorService.SaveErrorMessage("_mailService.SendEmailGmail","AccountController", "SendResetPwdwLink", ex.Message);
+                    _errorService.SaveErrorMessage("_mailService.SendEmailGmail", "AccountController", "SendResetPwdwLink", ex.Message);
                     message = new { status = "error", message = ex.Message };
                     ret = StatusCode(StatusCodes.Status500InternalServerError, message);
                     throw ex;
@@ -178,7 +177,7 @@ namespace kiosko.Controllers
             var result = await _userManager.ResetPasswordAsync(user, tokenDecoded, password);
             if (!result.Succeeded)
             {
-                _errorService.SaveErrorMessage("_userManager.ResetPasswordAsync", "AccountController", "UpdatePassword", "Contraseña no Actualizada")
+                _errorService.SaveErrorMessage("_userManager.ResetPasswordAsync", "AccountController", "UpdatePassword", "Contraseña no Actualizada");
                 message = new { status = "error", message = "Internal server error" };
                 ret = StatusCode(StatusCodes.Status500InternalServerError, message);
             }

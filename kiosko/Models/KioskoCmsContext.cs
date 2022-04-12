@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace kiosko.Models
 {
-    public partial class KioskoCmsContext : DbContext
+    public partial class KioskoCmsContext : IdentityDbContext
     {
         public KioskoCmsContext()
         {
