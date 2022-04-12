@@ -140,6 +140,15 @@ function saveNewModulo() {
             let id = response.id;
             let urlModulo = window.location.origin + '/Modulos/Details?id=' + id;
             window.location.assign(urlModulo);
+        },
+        error: function (error) {
+            Swal.fire({
+                title: 'Error!',
+                text: 'Ha ocurrido un error al actualizar la información. Inténtelo de nuevo más tarde y si el problema persiste contacte con soporte!',
+                imageUrl: '/img/señalroja.png',
+                imageHeight: 212,
+                timer: 2000,
+            })
         }
     });
     $("#modalNewModulo").modal("hide");
