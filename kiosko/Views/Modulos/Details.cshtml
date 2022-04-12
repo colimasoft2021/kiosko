@@ -175,6 +175,9 @@
           case 'desplegable-texto-imagen':
             classBtnClose = "button-close-carroucel";
           break;
+          case 'pop-up':
+            classBtnClose = "button-close";
+          break;
           default:
             classBtnClose = "button-close-small";
       }
@@ -348,8 +351,14 @@
         let classPreview = "preview-img";
         let attrTypeInput = "img";
         let classBtnClose = "button-close";
+        console.log(stringType);
         if(stringType === "'texto-imagen'"){
             classPreview = "preview-img-small";
+            classBtnClose = "button-close-small";
+            console.log('entro if');
+        }else if(stringType === "'pop-up'"){
+            classBtnClose = "button-close";
+            console.log('entro if else');
         }
         if(typeInput) {
             attrTypeInput = typeInput;
@@ -406,7 +415,7 @@
             "id": "0",
             "url": "/img/icono-imagen-chico.png",
             "titulo": "",
-            "texto": "",
+            "descripcion": "",
             "files": "",
             "idComponente": pkId
         }];
@@ -686,7 +695,7 @@
             component +=
                       '</div>'+
                       '<div class="titulomax1">'+
-                          '<textarea class="inputTitulo1" typeInput="textarea" value="'+valueInpText3+'"></textarea>'+
+                          '<textarea class="inputTitulo1" typeInput="textarea" value="">'+valueInpText3+'</textarea>'+
                       '</div>'+
                     '</div>'+
                   '</div>'+
@@ -725,13 +734,18 @@
                   '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+','+stringType+')">'+
                 '<p>'+
                 '<input class="inputTexto" type="text" placeholder="Texto..." typeInput="up-text" value="'+valueInpUpText+'">'+ 
-                '<div class="container-pop">'+
+                '<div class="container-imagen">';
+            let cardImagePopUp = generateCardImage(stringId, idComponent, item, pkId, stringType);
+            component += cardImagePopUp;
+                /*
                   '<div class="hija-pop">'+
                     '<label class="file-Amagen-pop-up" for="imagen'+idComponent+'-'+indexImagen+'" id="imagenlabel'+idComponent+'-'+indexImagen+'"><img src="/img/icono-imagen-grande.png"/></label>'+
                     '<input class="pop-up-input" type="file" id="imagen'+idComponent+'-'+indexImagen+'" accept=".png" onchange="generatePreview('+stringId+','+indexImagen+','+stringType+')" typeInput="img-pop" value="'+valueInpImgPop+'">'+
                     '<div id="imgPreview'+idComponent+'-'+indexImagen+'" class="preview-img-pop">'+ 
                     '</div>'+
                   '</div>'+
+                */
+            component +=
                 '</div>'+
               '</div>';
           break;
@@ -966,7 +980,7 @@
                 }
                 if(typeInp == 'texto'){
                     let value = $(this).val();
-                    jsonDesplazante.Texto = value;
+                    jsonDesplazante.Descripcion = value;
                 }
             });
             jsonDesplazante.Id = pkey;
@@ -1130,7 +1144,6 @@
           });
           $("#"+idElement).find("textarea").each(function() {
             let typeInp = $(this).attr("typeInput");
-            console.log(typeInp)
             if(typeInp == 'textarea'){
               let value = $(this).val();
               jsonItem.Descripcion = value;
@@ -1166,7 +1179,7 @@
         case 'video-guia':
           $("#"+idElement).find("input").each(function() {
             let typeInp = $(this).attr("typeInput");
-            if(typeInp == 'video-guia'){
+            if(typeInp == 'video'){
               let value = $(this).prop("files");
               if(value[0]){
                 jsonItem.Url = window.location.origin+'/files/'+value[0].name;
@@ -1188,11 +1201,11 @@
         case 'pop-up-video':
           $("#"+idElement).find("input").each(function() {
             let typeInp = $(this).attr("typeInput");
-            if(typeInp == 'video'){
+            if(typeInp == 'upvideo-text'){
               let value = $(this).val();
               jsonItem.Descripcion = value;
             }
-            if(typeInp == 'up-video'){
+            if(typeInp == 'video'){
               let value = $(this).prop("files");
               if(value[0]){
                   jsonItem.Url = window.location.origin+'/files/'+value[0].name;

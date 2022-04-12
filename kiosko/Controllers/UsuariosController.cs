@@ -30,16 +30,18 @@ namespace kiosko.Controllers
         [HttpPost()]
         public IActionResult saveNewUser([FromBody] Usuario usuario)
         {
-            var error = new { message = "Unauthorized" };
+            var message = new { status = "", message = "" };
             if (!Request.Headers.ContainsKey("Authorization"))
             {
-                return StatusCode(StatusCodes.Status401Unauthorized, error);
+                message = new { status = "error", message = "Unauthorized" };
+                return StatusCode(StatusCodes.Status401Unauthorized, message);
             }
             var paramAuthorization = Request.Headers["Authorization"].ToString();
             var isAuthorized = _authorizationService.CheckAuthorization(paramAuthorization);
             if (!isAuthorized)
             {
-                return StatusCode(StatusCodes.Status401Unauthorized, error);
+                message = new { status = "error", message = "Unauthorized" };
+                return StatusCode(StatusCodes.Status401Unauthorized, message);
             }
             try { 
                 IActionResult ret = null;
@@ -76,8 +78,8 @@ namespace kiosko.Controllers
             }
             catch (Exception ex)
             {
-                error = new { message = ex.Message };
-                return StatusCode(StatusCodes.Status500InternalServerError, error);
+                message = new { status = "error", message = ex.Message };
+                return StatusCode(StatusCodes.Status500InternalServerError, message);
             }
         }
 
@@ -98,16 +100,18 @@ namespace kiosko.Controllers
         [HttpPost()]
         public IActionResult UpdateProgress([FromBody] Progreso progreso)
         {
-            var error = new { message = "Unauthorized" };
+            var message = new { status = "", message = "" };
             if (!Request.Headers.ContainsKey("Authorization"))
             {
-                return StatusCode(StatusCodes.Status401Unauthorized, error);
+                message = new { status = "error", message = "Unauthorized" };
+                return StatusCode(StatusCodes.Status401Unauthorized, message);
             }
             var paramAuthorization = Request.Headers["Authorization"].ToString();
             var isAuthorized = _authorizationService.CheckAuthorization(paramAuthorization);
             if (!isAuthorized)
             {
-                return StatusCode(StatusCodes.Status401Unauthorized, error);
+                message = new { status = "error", message = "Unauthorized" };
+                return StatusCode(StatusCodes.Status401Unauthorized, message);
             }
             try
             {
@@ -122,13 +126,14 @@ namespace kiosko.Controllers
                     updateProgreso.Finalizado = true;
                 }
                 _context.Update(updateProgreso);
-                ret = StatusCode(StatusCodes.Status200OK, updateProgreso);
+                message = new { status = "ok", message = "Progreso actualizado correctamente" };
+                ret = StatusCode(StatusCodes.Status200OK, message);
                 return ret;
             }
             catch (Exception ex)
             {
-                error = new { message = ex.Message };
-                return StatusCode(StatusCodes.Status500InternalServerError, error);
+                message = new { status = "ok", message = ex.Message };
+                return StatusCode(StatusCodes.Status500InternalServerError, message);
             }
         }
 

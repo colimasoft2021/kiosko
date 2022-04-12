@@ -145,7 +145,6 @@ namespace kiosko.Controllers
                 {
                     message = new { status = "error", message = ex.Message };
                     ret = StatusCode(StatusCodes.Status500InternalServerError, message);
-                    throw ex;
                 }
             }
             else
