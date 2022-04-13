@@ -101,6 +101,7 @@ namespace kiosko.Controllers
                         .ThenInclude(m => m.Desplazantes)
                         .ToList();
                 var dataModulos = new DataModulos();
+                var numeroHijos = 0;
                 foreach (var modulo in modulos)
                 {
                     var progresos = _context.Progresos.Where(p => p.IdModulo == modulo.Id).Where(p => p.IdUsuario == usuario.Id).FirstOrDefault();
@@ -114,12 +115,14 @@ namespace kiosko.Controllers
                     dataModulo.Padre = modulo.Padre;
                     dataModulo.TiempoInactividad = modulo.TiempoInactividad;
                     dataModulo.Componentes = modulo.Componentes;
+                    dataModulo.NumeroHijos = 0;
                     if (modulo.Padre == null)
                     {
                     
                         dataModulo.IdProgreso = progresos.Id;
                         dataModulo.Porcentaje = progresos.Porcentaje;
                         dataModulos.CustomModulos.Add(dataModulo);
+                        dataModulo.NumeroHijos = 0;
                     }
                     else
                     {
@@ -128,6 +131,12 @@ namespace kiosko.Controllers
                             if (custom.IdModulo == modulo.Padre)
                             {
                                 custom.Submodulos.Add(dataModulo);
+                                if(modulo.Desplegable == 0)
+                                {
+                                    var totalHijos = custom.NumeroHijos;
+                                    totalHijos++;
+                                    custom.NumeroHijos = totalHijos;
+                                }
                             }
                             else
                             {
@@ -136,6 +145,12 @@ namespace kiosko.Controllers
                                     if (sub.IdModulo == modulo.Padre)
                                     {
                                         sub.Submodulos.Add(dataModulo);
+                                        if (modulo.Desplegable == 0)
+                                        {
+                                            var totalHijos = custom.NumeroHijos;
+                                            totalHijos++;
+                                            custom.NumeroHijos = totalHijos;
+                                        }
                                     }
                                 }
                             }
@@ -162,6 +177,24 @@ namespace kiosko.Controllers
                 modulo.TiempoInactividad = 5;
                 _context.Add(modulo);
                 _context.SaveChanges();
+
+                if (modulo.Padre == null)
+                {
+                    DateTime fechaHoy = DateTime.Now;
+                    var usuarios = _context.Usuarios.AsNoTracking();
+                    foreach (var usuario in usuarios)
+                    {
+                        var progreso = new Progreso();
+                        progreso.IdUsuario = usuario.Id;
+                        progreso.IdModulo = modulo.Id;
+                        progreso.Finalizado = false;
+                        progreso.FechaInicio = fechaHoy;
+                        progreso.Porcentaje = 0;
+                        progreso.FechaActualizacion = fechaHoy;
+                        _context.Add(progreso);
+                    }
+                    _context.SaveChanges();
+                }
 
                 ret = StatusCode(StatusCodes.Status201Created, modulo);
             }
@@ -336,7 +369,7 @@ namespace kiosko.Controllers
 
         private bool UsuarioExists(int IdUsuario)
         {
-            return _context.Usuarios.Any(e => e.IdUsuario == IdUsuario);
+            return _context.Usuarios.Any(e => e.Id == IdUsuario);
         }
 
     }
@@ -414,6 +447,7 @@ namespace kiosko.Controllers
         public string? IdModulo { get; set; }
         public string? Padre { get; set; }
         public int? TiempoInactividad { get; set; }
+        public int? NumeroHijos { get; set; }
 
 
         public virtual ICollection<Componente> Componentes { get; set; }
