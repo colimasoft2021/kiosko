@@ -18,14 +18,16 @@ namespace kiosko.Controllers
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
         MailService _mailService;
+        ErrorService _errorService;
 
         public AccountController(UserManager<IdentityUser> userManager,
                               SignInManager<IdentityUser> signInManager,
-                               MailService mailService)
+                               MailService mailService, ErrorService errorService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _mailService = mailService;
+            _errorService = errorService;
         }
 
         public IActionResult Register()
@@ -143,12 +145,14 @@ namespace kiosko.Controllers
                 }
                 catch (Exception ex)
                 {
+                    _errorService.SaveErrorMessage("_mailService.SendEmailGmail", "AccountController", "SendResetPwdwLink", ex.Message);
                     message = new { status = "error", message = ex.Message };
                     ret = StatusCode(StatusCodes.Status500InternalServerError, message);
                 }
             }
             else
             {
+                _errorService.SaveErrorMessage("_userManager.FindByEmailAsync", "AccountController", "SendResetPwdwLink", "Usuario no existe");
                 message = new { status = "error", message = "Internal server error" };
                 ret = StatusCode(StatusCodes.Status500InternalServerError, message);
             }
@@ -163,6 +167,7 @@ namespace kiosko.Controllers
             var message = new { status = "", message = "" };
             if (user == null)
             {
+                _errorService.SaveErrorMessage("_userManager.FindByIdAsync", "AccountController", "UpdatePassword", "No existe el usuario con el Id");
                 message = new { status = "error", message = "Internal server error" };
                 ret = StatusCode(StatusCodes.Status500InternalServerError, message);
             }
@@ -171,6 +176,7 @@ namespace kiosko.Controllers
             var result = await _userManager.ResetPasswordAsync(user, tokenDecoded, password);
             if (!result.Succeeded)
             {
+                _errorService.SaveErrorMessage("_userManager.ResetPasswordAsync", "AccountController", "UpdatePassword", "Contraseña no Actualizada");
                 message = new { status = "error", message = "Internal server error" };
                 ret = StatusCode(StatusCodes.Status500InternalServerError, message);
             }
