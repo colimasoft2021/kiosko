@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Authorization;
 using kiosko.Helpers;
 using System.Text.RegularExpressions;
 using System.Text;
+using System.Net;
+using Newtonsoft.Json;
 
 namespace kiosko.Controllers
 {
@@ -306,31 +308,39 @@ namespace kiosko.Controllers
                         }
                     }
                 }
-                /*
-                var comisionistas = new Comisionistas();
-                foreach (var com in usuarios)
+
+                var comisionistas = GetComisionistas();
+                string stringComisionistas = JsonConvert.SerializeObject(comisionistas.Value);
+                var enumComisionistas = JsonConvert.DeserializeObject<IEnumerable<Test>>(stringComisionistas);
+
+                var arrayComisionistas = new Comisionistas();
+                foreach (var com in enumComisionistas)
                 {
                     var infoComisionista = new DataComisionista();
-                    infoComisionista.EmailComisionista = "";
-                    infoComisionista.NombreComisionista = "";
-                    
-                    foreach(var emp in com.Empleados)
+                    foreach (var emp in com.empleados)
                     {
-                        foreach(var user in alertas)
+                        int matches = 0;
+                        foreach(var user in alertas.UsuariosAlertas)
                         {
-                            if (emp.IdUsuario == user.IdUsuario)
+                            if (emp.id_Empleado == user.IdUsuarioKiosko)
                             {
+                                user.Nombre = emp.nombre+ " " + emp.apellidos;
                                 infoComisionista.Empleados.Add(user);
-                                comisionistas.DataComisionistas.Add(infoComisionista);
+                                matches++;
                             }
                         }
-                        
+                        if(matches > 0)
+                        {
+                            infoComisionista.EmailComisionista = com.correo;
+                            infoComisionista.NombreComisionista = com.nombre_Comisionista;
+                            arrayComisionistas.DataComisionistas.Add(infoComisionista);
+                        }
                     }
                 }
-                */
 
-                string cuerpoMensaje = "<h2>Los siguientes usuarios no han retomado su capacitacion</h2><br/><br/>";
-                foreach (var usuario in alertas.UsuariosAlertas)
+
+                //string cuerpoMensaje = "<h2>Los siguientes usuarios no han retomado su capacitacion</h2><br/><br/>";
+                /*foreach (var usuario in alertas.UsuariosAlertas)
                 {
                     cuerpoMensaje += "<div style='height: auto; border: 1px solid blue; padding: 10px 10px 10px 10px; margin-bottom: 20px;'>";
                     cuerpoMensaje += "<h4 style='margin-bottom: 10px;'>";
@@ -345,18 +355,25 @@ namespace kiosko.Controllers
                         cuerpoMensaje += "</ul>";
                     }
                     cuerpoMensaje += "</div>";
-                }
-                try
+                }*/
+                string cuerpoMensaje = "";
+                foreach(var com in arrayComisionistas.DataComisionistas)
                 {
-                    _mailService.SendEmailGmail("juan.rivera@colimasoft.com", "Alerta de capacitación", cuerpoMensaje);
-                    message = new { status = "ok", message = "Email enviado" };
-                    ret = StatusCode(StatusCodes.Status200OK, alertas);
+                    //implementar saludo
+                    foreach (var emp in com.Empleados)
+                    {
+                        //pintar un div para cada empleado, pintar el nombre y enseguida una lista de los modulos inactivos
+                        foreach(var modulo in emp.ModulosInactivos)
+                        {
+                            //pintar los datos en la lista de los modulos inactivos
+                        }
+                        //cerrar el div
+                    }
+                    //implementar el try para enviar correo
+                    cuerpoMensaje = "";
                 }
-                catch (Exception ex)
-                {
-                    message = new { status = "error", message = ex.Message };
-                    ret = StatusCode(StatusCodes.Status500InternalServerError, message);
-                }
+                message = new { status = "ok", message = "correos enviados" };
+                ret = StatusCode(StatusCodes.Status200OK, message);
             }
             catch (Exception ex)
             {
@@ -372,6 +389,56 @@ namespace kiosko.Controllers
             return _context.Usuarios.Any(e => e.Id == IdUsuario);
         }
 
+        public JsonResult GetComisionistas()
+        {
+            var enpointUrl = "https://accesossicom.mikiosko.mx/api/Usuarios/getcomisionistas";
+            var username = "SicomAcess";
+            var password = "$1c0om007";
+            List<Test> dataComisionistas = new List<Test>();
+            try
+            {
+                string authEncoded = System.Convert.ToBase64String(Encoding.GetEncoding("ISO-8859-1")
+                    .GetBytes(username + ":" + password));
+                var httpWebRequest = (HttpWebRequest)WebRequest.Create(enpointUrl);
+                httpWebRequest.Headers.Add("Authorization", "Basic " + authEncoded);
+                httpWebRequest.ContentType = "application/json";
+                httpWebRequest.Method = "GET";
+                var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
+                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+                {
+                    var result = streamReader.ReadToEnd();
+                    dataComisionistas = JsonConvert.DeserializeObject<List<Test>>(result);
+                }
+                return Json(dataComisionistas);
+            }
+            catch (Exception ex)
+            {
+                var message = new { status = "error", message = ex.Message };
+                return Json(message); 
+            }
+        }
+
+    }
+
+    public class Test
+    {
+        public Test()
+        {
+            empleados = new HashSet<ArrayEmpleado>();
+        }
+        public string correo { get; set; }
+        public string tienda { get; set; }
+        public string iD_Comisionista { get; set; }
+        public string nombre_Comisionista { get; set; }
+        public virtual ICollection<ArrayEmpleado> empleados { get; set; }
+
+    }
+
+    public class ArrayEmpleado
+    {
+        public int id_Empleado { get; set; }
+        public string nombre { get; set; } 
+        public string apellidos { get; set; }
     }
 
     public class Comisionistas
