@@ -270,15 +270,15 @@ namespace kiosko.Controllers
             return ret;
         }
 
-        public IActionResult EnviarAlertas()
+        public IActionResult SendAlertas()
         {
             var message = new { status = "", message = "" };
             IActionResult ret = null;
 
             if (!Request.Headers.ContainsKey("Authorization"))
             {
-                _errorService.SaveErrorMessage("!Request.Headers.ContainsKey", "ModulosController", 
-                    "EnviarAlertas", "Faltan Headers Auth - Unauthorized/Sin Autorizacion");
+                _errorService.SaveErrorMessage("!Request.Headers.ContainsKey", "ModulosController",
+                    "SendAlertas", "Faltan Headers Auth - Unauthorized/Sin Autorizacion");
                 message = new { status = "error", message = "Unauthorized" };
                 return StatusCode(StatusCodes.Status401Unauthorized, message);
             }
@@ -287,7 +287,7 @@ namespace kiosko.Controllers
             if (!isAuthorized)
             {
                 _errorService.SaveErrorMessage("_authorizationService.CheckAuthorization", "ModulosController",
-                    "EnviarAlertas", "Credenciales Incorrectas - Unauthorized/Sin Autorizacion");
+                    "SendAlertas", "Credenciales Incorrectas - Unauthorized/Sin Autorizacion");
                 message = new { status = "error", message = "Unauthorized" };
                 return StatusCode(StatusCodes.Status401Unauthorized, message);
             }
@@ -382,7 +382,7 @@ namespace kiosko.Controllers
                     catch (Exception ex)
                     {
                         _errorService.SaveErrorMessage("_mailService.SendEmailGmail", "ModulosController",
-                            "EnviarAlertas", ex.Message);
+                            "SendAlertas", ex.Message);
                         message = new { status = "error", message = ex.Message };
                         ret = StatusCode(StatusCodes.Status500InternalServerError, message);
                         throw ex;
@@ -396,7 +396,7 @@ namespace kiosko.Controllers
             catch (Exception ex)
             {
                 _errorService.SaveErrorMessage("_context.Usuarios - alertas = new DataUsuario()", 
-                    "ModulosController", "EnviarAlertas", ex.Message);
+                    "ModulosController", "SendAlertas", ex.Message);
                 message = new { status = "error", message = ex.Message };
                 ret = StatusCode(StatusCodes.Status500InternalServerError, message);
             }
@@ -437,103 +437,6 @@ namespace kiosko.Controllers
             }
         }
 
-    }
-    public class ComisionistasApi
-    {
-        public ComisionistasApi()
-        {
-            empleados = new HashSet<ArrayEmpleado>();
-        }
-        public string correo { get; set; }
-        public string tienda { get; set; }
-        public string iD_Comisionista { get; set; }
-        public string nombre_Comisionista { get; set; }
-        public virtual ICollection<ArrayEmpleado> empleados { get; set; }
-    }
-    public class ArrayEmpleado
-    {
-        public int id_Empleado { get; set; }
-        public string nombre { get; set; }
-        public string apellidos { get; set; }
-    }
-    public class Comisionistas
-    {
-        public Comisionistas()
-        {
-            DataComisionistas = new HashSet<DataComisionista>();
-        }
-        public virtual ICollection<DataComisionista> DataComisionistas { get; set; }
-    }
-    public class DataComisionista
-    {
-        public DataComisionista()
-        {
-            Empleados = new HashSet<UsuarioAlerta>();
-        }
-        public string EmailComisionista { get; set; }
-        public string NombreComisionista { set; get; } 
-        public virtual ICollection<UsuarioAlerta> Empleados { get; set; }
-    
-    }
-
-    public class DataUsuario
-    {
-        public DataUsuario()
-        {
-            UsuariosAlertas = new HashSet<UsuarioAlerta>();
-        }
-        public virtual ICollection<UsuarioAlerta> UsuariosAlertas { get; set; }
-
-    }
-    public class UsuarioAlerta
-    {
-        public UsuarioAlerta()
-        {
-            ModulosInactivos = new HashSet<ModuloInactivo>();
-        }
-        public string Nombre { get; set; }
-        public int IdUsuarioKiosko { get; set; }
-        public virtual ICollection<ModuloInactivo> ModulosInactivos { get; set; }
-    }
-
-    public class ModuloInactivo
-    {
-        public string Modulo { get; set; }
-        public double? Porcentaje { get; set; }
-        public int TiempoInactividad { get; set; }
-    }
-
-    public class DataModulos
-    {
-        public DataModulos()
-        {
-            CustomModulos = new HashSet<CustomModulo>();
-        }
-        public virtual ICollection<CustomModulo> CustomModulos { get; set; }
-    }
-
-    public class CustomModulo {
-        public CustomModulo()
-        {
-            Componentes = new HashSet<Componente>();
-            Submodulos = new HashSet<CustomModulo>();
-        }
-
-        public int Id { get; set; }
-        public int IdProgreso { get; set; }
-        public double? Porcentaje { get; set; }
-        public string? Titulo { get; set; }
-        public int? AccesoDirecto { get; set; }
-        public int? Orden { get; set; }
-        public int? Desplegable { get; set; }
-        public string? IdModulo { get; set; }
-        public string? Padre { get; set; }
-        public int? TiempoInactividad { get; set; }
-        public int? NumeroHijos { get; set; }
-
-
-        public virtual ICollection<Componente> Componentes { get; set; }
-        public virtual ICollection<CustomModulo> Submodulos { get; set; }
     }
 
 }
