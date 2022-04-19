@@ -21,6 +21,7 @@ namespace kiosko.Models
         public virtual DbSet<Desplazante> Desplazantes { get; set; } = null!;
         public virtual DbSet<Error> Errors { get; set; } = null!;
         public virtual DbSet<Modulo> Modulos { get; set; } = null!;
+        public virtual DbSet<Modulosfijo> Modulosfijos { get; set; } = null!;
         public virtual DbSet<Progreso> Progresos { get; set; } = null!;
         public virtual DbSet<Usuario> Usuarios { get; set; } = null!;
         public object AspeNetUser { get; internal set; }
@@ -153,6 +154,33 @@ namespace kiosko.Models
 
                 entity.Property(e => e.Titulo)
                     .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("titulo");
+            });
+
+            modelBuilder.Entity<Modulosfijo>(entity =>
+            {
+                entity.ToTable("modulosfijos");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.Desplegable)
+                    .HasMaxLength(255)
+                    .IsUnicode(false)
+                    .HasColumnName("desplegable");
+
+                entity.Property(e => e.IdModulo)
+                    .HasMaxLength(255)
+                    .IsUnicode(false)
+                    .HasColumnName("id_modulo");
+
+                entity.Property(e => e.Padre)
+                    .HasMaxLength(255)
+                    .IsUnicode(false)
+                    .HasColumnName("padre");
+
+                entity.Property(e => e.Titulo)
+                    .HasMaxLength(255)
                     .IsUnicode(false)
                     .HasColumnName("titulo");
             });

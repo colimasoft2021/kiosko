@@ -889,7 +889,17 @@ border-radius: 12px 12px 0px 0px;
 .menu-configuration {
     display: flex;
     float: left;
-    margin-top: 95%;
+    margin-top: 70px;
+    margin-bottom: 10%;
+    width: 100%;
+    align-items: flex-end;
+    justify-content: center;
+}
+.menu-static {
+    display: flex;
+    float: left;
+    margin-top: 50%;
+    margin-bottom: 20%;
     width: 100%;
     align-items: flex-end;
     justify-content: center;

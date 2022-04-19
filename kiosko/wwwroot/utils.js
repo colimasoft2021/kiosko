@@ -2,6 +2,7 @@
 $(function () {
     $("#sortableMenu").sortable();
     getAllModulos();
+    getAllModulosEstatic();
 });
 
 var lastIdModulo = 0;
@@ -153,3 +154,52 @@ function saveNewModulo() {
     });
     $("#modalNewModulo").modal("hide");
 }
+
+var lastIdModuloEst = 0;
+function getAllModulosEstatic() {
+    $.ajax({
+        type: "GET",
+        url: "/Modulos/GetModulosEstatic",
+        success: function (response) {
+            console.log(response);
+            lastIdModuloEst = response.length + 1;
+            let menuOpenEst = "menu-open";
+            response.map(item => {
+                addItemEstaticToMenu(item, menuOpenEst);
+                menuOpenEst = "";
+            });
+            //addButtonToMenuEst();
+            //addButtonsToSubMenu();
+            /*$(".modulo" + idCurremtModulo).children("a").addClass("active");*/
+        }
+    });
+}
+function addItemEstaticToMenu(item, menuOpen) {
+    let desplegable = item.desplegable;
+    let titulo = item.titulo;
+    let padre = item.padre;
+    let idModulo = item.idModulo;
+    let menuItems = "";
+    let margin = (padre) ? "marginUl" : "";
+    if (desplegable == 1) {
+        menuItems += '<li class="nav-item ' + menuOpen + ' ' + margin + '" >';
+        menuItems += '<a href="#" class="nav-link">';
+        menuItems += '<p>' + titulo + '<i class="fas fa-angle-left right"></i></p>';
+        menuItems += '</a>';
+        menuItems += '<ul class="nav nav-treeview" id="' + idModulo + '" title="' + titulo + '">';
+        menuItems += '</ul>';
+        menuItems += '</li>';
+    } else {
+        menuItems += '<li class="nav-item modulo' + item.id + '" id="' + idModulo + '">';
+        menuItems += '<a href="/Modulos/DetailsEst?id=' + item.id + '" class="nav-link">';
+        menuItems += '<p>' + titulo + '</p>';
+        menuItems += '</a>';
+        menuItems += '</li>';
+    }
+    if (padre !== null) {
+        $("#" + padre).append(menuItems);
+    } else {
+        $("#EstaticMenu").append(menuItems);
+    }
+}
+
