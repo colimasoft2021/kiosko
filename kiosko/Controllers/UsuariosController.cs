@@ -131,6 +131,11 @@ namespace kiosko.Controllers
                 IActionResult ret = null;
                 DateTime fechaHoy = DateTime.Now;
                 var updateProgreso = _context.Progresos.Where(p => p.IdModulo == progreso.IdModulo).Where(p => p.IdUsuario == progreso.IdUsuario).FirstOrDefault();
+                if(progreso.Porcentaje <= updateProgreso.Porcentaje )
+                {
+                    message = new { status = "succed", message = "Progreso no actualizado" };
+                    return StatusCode(StatusCodes.Status204NoContent, message);
+                }
                 updateProgreso.Porcentaje = progreso.Porcentaje;
                 updateProgreso.FechaActualizacion = fechaHoy;
                 if (progreso.Porcentaje == 100)
@@ -139,6 +144,7 @@ namespace kiosko.Controllers
                     updateProgreso.Finalizado = true;
                 }
                 _context.Update(updateProgreso);
+                _context.SaveChanges();
                 message = new { status = "ok", message = "Progreso actualizado correctamente" };
                 ret = StatusCode(StatusCodes.Status200OK, message);
                 return ret;

@@ -126,6 +126,7 @@ namespace kiosko.Controllers
                     
                         dataModulo.IdProgreso = progresos.Id;
                         dataModulo.Porcentaje = progresos.Porcentaje;
+                        dataModulo.finalizado = progresos.Finalizado;
                         dataModulos.CustomModulos.Add(dataModulo);
                         dataModulo.NumeroHijos = 0;
                     }
@@ -460,6 +461,7 @@ namespace kiosko.Controllers
         public int Id { get; set; }
         public int IdProgreso { get; set; }
         public double? Porcentaje { get; set; }
+        public bool? finalizado { get; set; }
         public string? Titulo { get; set; }
         public int? AccesoDirecto { get; set; }
         public int? Orden { get; set; }
