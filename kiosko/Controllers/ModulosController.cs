@@ -56,26 +56,6 @@ namespace kiosko.Controllers
 
             return View(model);
         }
-
-        [Authorize]
-        // GET: Modulos/Details/5
-        public async Task<IActionResult> DetailsEst(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var model = await _context.Modulosfijos
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (model == null)
-            {
-                return NotFound();
-            }
-
-            return View(model);
-        }
-
         public IActionResult GetAllModulos()
         {
             var message = new { status = "", message = "" };
@@ -87,25 +67,6 @@ namespace kiosko.Controllers
             catch (Exception ex)
             {
                 _errorService.SaveErrorMessage("_context.Modulos", "ModulosController", "GetAllModulos", ex.Message);
-                message = new { status = "error", message = ex.Message };
-                ret = StatusCode(StatusCodes.Status500InternalServerError, message);
-            }
-            return ret;
-        }
-
-        public IActionResult GetModulosEstatic()
-        {
-            var message = new { status = "", message = "" };
-            IActionResult ret = null;
-            try
-            {
-                var MensajesIniciles = _context.Modulosfijos.Where(m => m.Id > 1).ToList();
-                ret = StatusCode(StatusCodes.Status200OK, MensajesIniciles);
-            }
-            catch (Exception ex)
-            {
-                _errorService.SaveErrorMessage("_context.Modulosfijos", "ModulosController", 
-                    "GetModulosEstatic", ex.Message);
                 message = new { status = "error", message = ex.Message };
                 ret = StatusCode(StatusCodes.Status500InternalServerError, message);
             }

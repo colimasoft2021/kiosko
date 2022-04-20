@@ -2,7 +2,6 @@
 $(function () {
     $("#sortableMenu").sortable();
     getAllModulos();
-    getAllModulosEstatic();
 });
 
 var lastIdModulo = 0;
@@ -155,25 +154,6 @@ function saveNewModulo() {
     $("#modalNewModulo").modal("hide");
 }
 
-var lastIdModuloEst = 0;
-function getAllModulosEstatic() {
-    $.ajax({
-        type: "GET",
-        url: "/Modulos/GetModulosEstatic",
-        success: function (response) {
-            console.log(response);
-            lastIdModuloEst = response.length + 1;
-            let menuOpenEst = "menu-open";
-            response.map(item => {
-                addItemEstaticToMenu(item, menuOpenEst);
-                menuOpenEst = "";
-            });
-            //addButtonToMenuEst();
-            //addButtonsToSubMenu();
-            /*$(".modulo" + idCurremtModulo).children("a").addClass("active");*/
-        }
-    });
-}
 function addItemEstaticToMenu(item, menuOpen) {
     let desplegable = item.desplegable;
     let titulo = item.titulo;
