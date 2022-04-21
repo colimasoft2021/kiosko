@@ -175,6 +175,38 @@ namespace kiosko.Controllers
             return ret;
         }
 
+        [HttpGet]
+        public IActionResult MessagesInitialsForApp()
+        {
+            var message = new { status = "", message = "" };
+            IActionResult ret = null;
+            try
+            {
+                List<AvisoInicial> avisos = new List<AvisoInicial>();
+                AvisoInicial mensajeInicial = new AvisoInicial();
+                var avisosIniciales = _context.Componentes.Where(c => c.Padre == "modulo2").OrderBy(c => c.Orden).ToList();
+                foreach (var mensaje in avisosIniciales)
+                {
+                    mensajeInicial.Id = mensaje.Id;
+                    mensajeInicial.tipoComponente = mensaje.TipoComponente;
+                    mensajeInicial.url = mensaje.Url;
+                    mensajeInicial.descripcion = mensaje.Descripcion;
+
+                    avisos.Add(mensajeInicial);
+                }
+                ret = StatusCode(StatusCodes.Status200OK, avisos);
+            }
+            catch (Exception ex)
+            {
+                _errorService.SaveErrorMessage("_context.Modulos", "ModulosController", "GetAllModulos", ex.Message);
+                message = new { status = "error", message = ex.Message };
+                ret = StatusCode(StatusCodes.Status500InternalServerError, message);
+            }
+            return ret;
+        }
+
+
+
         [HttpPost()]
         public IActionResult SaveMenuModulo(Modulo modulo)
         {
