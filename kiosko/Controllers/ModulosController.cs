@@ -20,13 +20,17 @@ namespace kiosko.Controllers
         MailService _mailService;
         AuthorizationService _authorizationService;
         ErrorService _errorService;
+        private readonly IWebHostEnvironment _env;
 
-        public ModulosController(KioskoCmsContext context, MailService mailService, AuthorizationService authorizationService, ErrorService errorService)
+        public ModulosController(KioskoCmsContext context, MailService mailService, AuthorizationService authorizationService, ErrorService errorService,
+            IWebHostEnvironment env)
         {
             _context = context;
             _mailService = mailService;
             _authorizationService = authorizationService;
             _errorService = errorService;
+            _env = env;
+
         }
 
         // GET: Modulos
@@ -208,12 +212,32 @@ namespace kiosko.Controllers
 
 
         [HttpPost()]
-        public IActionResult SaveMenuModulo(Modulo modulo)
+        public IActionResult SaveMenuModulo()
         {
             var message = new { status = "", message = "" };
             IActionResult ret = null;
-            try { 
+            try {
+                var modulo = new Modulo();
                 modulo.TiempoInactividad = 5;
+                modulo.Id = Int32.Parse(Request.Form["Id"]);
+                modulo.Titulo = Request.Form["Titulo"];
+                modulo.AccesoDirecto = Int32.Parse(Request.Form["AccesoDirecto"]);
+                modulo.Orden = Int32.Parse(Request.Form["Orden"]);
+                modulo.Desplegable = Int32.Parse(Request.Form["Desplegable"]);
+                modulo.IdModulo = Request.Form["IdModulo"];
+                modulo.Padre = Request.Form["Padre"];
+                modulo.Url = Request.Form["Url"];
+                if (modulo.Padre == "undefined")
+                    modulo.Padre = null;
+                foreach (var formFile in Request.Form.Files)
+                {
+                    var fulPath = Path.Combine(_env.ContentRootPath, "wwwroot\\files", formFile.FileName);
+                    using (FileStream fs = System.IO.File.Create(fulPath))
+                    {
+                        formFile.CopyTo(fs);
+                        fs.Flush();
+                    }
+                }
                 _context.Add(modulo);
                 _context.SaveChanges();
 

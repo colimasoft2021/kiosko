@@ -969,7 +969,7 @@
         case 'imagen':
           $("#"+idElement).find("input").each(function() {
             let typeInp = $(this).attr("typeInput");
-            if(typeInp == 'img'){
+            if(typeInp == 'img'){ 
                 let value = $(this).prop("files");
                 if(value[0]){
                     jsonItem.Url = window.location.origin+'/files/'+value[0].name;

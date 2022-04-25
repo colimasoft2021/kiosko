@@ -155,6 +155,10 @@ namespace kiosko.Models
                     .HasMaxLength(50)
                     .IsUnicode(false)
                     .HasColumnName("titulo");
+
+                entity.Property(e => e.Url)
+                    .IsUnicode(false)
+                    .HasColumnName("url");
             });
 
             modelBuilder.Entity<Progreso>(entity =>

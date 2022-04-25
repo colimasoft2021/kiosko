@@ -19,7 +19,7 @@ namespace kiosko.Models
         public string? IdModulo { get; set; }
         public string? Padre { get; set; }
         public int? TiempoInactividad { get; set; }
-
+        public string? Url { get; set; }
         public virtual ICollection<Componente> Componentes { get; set; }
         public virtual ICollection<Progreso> Progresos { get; set; }
     }

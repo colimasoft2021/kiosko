@@ -91,7 +91,9 @@ var jsonNewModulo = {
     "Orden": 1,
     "Desplegable": 0,
     "IdModulo": "",
-    "Padre": null
+    "Padre": null,
+    "Url": "",
+    "Files": ""
 }
 
 function openModalNewModulo(title, lastId, padre) {
@@ -105,7 +107,9 @@ function openModalNewModulo(title, lastId, padre) {
         "Orden": 1,
         "Desplegable": 0,
         "IdModulo": "",
-        "Padre": null
+        "Padre": null,
+        "Url": "",
+        "Files": ""
     }
     if (padre) {
         let arrayLastId = lastId.split("-");
@@ -126,14 +130,31 @@ function openModalNewModulo(title, lastId, padre) {
 function saveNewModulo() {
     let title = $("#titleNewModulo").val();
     let desplegable = $('input[name="radioDesplegable"]:checked').val();
+    let value = $("#imagenIcono").prop("files");
+    if (value[0]) {
+        jsonNewModulo.Url = window.location.origin + '/files/' + value[0].name;
+        jsonNewModulo.Files = value[0];
+    }
     parseInt(desplegable);
     jsonNewModulo.Titulo = title;
     jsonNewModulo.Desplegable = desplegable;
+    const formData = new FormData();
+    formData.append("Id", jsonNewModulo.Id);
+    formData.append("Titulo", jsonNewModulo.Titulo);
+    formData.append("AccesoDirecto", jsonNewModulo.AccesoDirecto);
+    formData.append("Orden", jsonNewModulo.Orden);
+    formData.append("Desplegable", jsonNewModulo.Desplegable);
+    formData.append("IdModulo", jsonNewModulo.IdModulo);
+    formData.append("Padre", jsonNewModulo.Padre);
+    formData.append("Url", jsonNewModulo.Url);
+    formData.append("Files", jsonNewModulo.Files);
     $.ajax({
         type: "POST",
         url: "/Modulos/SaveMenuModulo",
         headers: { "RequestVerificationToken": "@GetAntiXsrfRequestToken()" },
-        data: jsonNewModulo,
+        data: formData,
+        processData: false,
+        contentType: false,
         success: function (response) {
             console.log('saved');
 
