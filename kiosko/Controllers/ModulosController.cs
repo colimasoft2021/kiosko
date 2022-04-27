@@ -284,6 +284,17 @@ namespace kiosko.Controllers
                 modulo.Titulo = Request.Form["tituloModulo"];
                 modulo.TiempoInactividad = Int32.Parse(Request.Form["tiempoInactividad"]);
 
+                modulo.Url = Request.Form["Url"];
+                foreach (var formFile in Request.Form.Files)
+                {
+                    var fulPath = Path.Combine(_env.ContentRootPath, "wwwroot\\files", formFile.FileName);
+                    using (FileStream fs = System.IO.File.Create(fulPath))
+                    {
+                        formFile.CopyTo(fs);
+                        fs.Flush();
+                    }
+                }
+
                 _context.Update(modulo);
                 _context.SaveChanges();
 

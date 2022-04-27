@@ -908,3 +908,8 @@ border-radius: 12px 12px 0px 0px;
 .error-login > ul > li {
     list-style: none;
 }
+
+#icon-Image {
+    height: 50px;
+    width: 50px;
+}
