@@ -10,6 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
 builder.Services.AddSingleton<MailService>();
+builder.Services.AddScoped<ErrorService>();
 
 // Add services to the container.
 builder.Services.AddControllers().AddJsonOptions(x =>

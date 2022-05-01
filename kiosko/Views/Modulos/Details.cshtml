@@ -36,13 +36,14 @@
                                 <li class="option-menu is-general" onclick="addComponent('imagen', 0)">Imagen</li>
                                 <li class="option-menu is-general" onclick="addComponent('desplazante-texto-imagen', 0)">Desplazante Texto-Imagen</li>
                                 <li class="option-menu is-general" onclick="addComponent('video', 0)">Video</li>
-                                <li class="option-menu" onclick="addComponent('enlace', 0)">Enlace</li>
+                                <li class="option-menu is-acceso" onclick="addComponent('enlace', 0)">Enlace</li>
                                 <li class="option-menu is-general" onclick="addComponent('banner-informativo', 0)">Banner Informativo</li>
                                 <li class="option-menu is-general" onclick="addComponent('pop-up-video', 0)">Pop-Up Video</li>
                                 <li class="option-menu is-general" onclick="addComponent('video-guia', 0)">video-guia</li>
                                 <li class="option-menu is-general" onclick="addComponent('acceso-cursos', 0)">Acceso-cursos</li>
                                 <li class="option-menu is-general" onclick="addComponent('carrucel', 0)">Carrucel</li>
                                 <li class="option-menu is-general" onclick="addComponent('pop-up', 0)">Pop-up</li>
+                                <li class="option-menu is-aviso" onclick="addComponent('aviso-inicial', 0)">Aviso</li>
                                 <li class="option-menu is-general" onclick="addComponent('desplegable-texto-imagen', 0)">Desplegable texto-imagen</li>
                                 <li class="option-menu is-general" onclick="addComponent('texto-imagen', 0)">Texto Imagen</li>
                                 <li class="option-menu is-general" onclick="addComponent('imagen-titulo-desc', 0)">Imagen + titulo + descripción</li>
@@ -66,8 +67,15 @@
     var DropzoneVideo;
     if(idModulo == 1){
         $(".is-general").css("display", "none");
+        $(".is-aviso").css("display", "none")
+    }else if (idModulo == 2){
+        $(".is-aviso").css("display", "block");
+        $(".is-general").css("display", "none");
+        $(".is-acceso").css("display", "none");
     }else{
+        $(".is-aviso").css("display", "none")
         $(".is-general").css("display", "block");
+        $(".is-acceso").css("display", "none");
     }
     
     loadComponents();
@@ -228,6 +236,7 @@
               '<input class="titulo-input mt-4" type="text" typeInput="titulo" placeholder="Titulo">'+
               '<br/>'+
               '<input type="text" placeholder="Texto" typeInput="texto" class="mt-4">'+
+              '<input class="Color-Selector" type="color" typeInput="color" value="">'+
             '</div>'
         );
         indexImagen = indexImagen + 1;
@@ -419,7 +428,8 @@
             "titulo": "",
             "descripcion": "",
             "files": "",
-            "idComponente": pkId
+            "idComponente": pkId,
+            "backgroundColor": "",
         }];
         if(item.length > 0){
             images = item;
@@ -752,6 +762,22 @@
                 '</div>'+
               '</div>';
           break;
+          case 'aviso-inicial':
+            let valueInpUpTextMsg = (item) ? item.descripcion : "";
+            let valueInpImgPopMsg = (item) ? item.url : "";
+            component =
+              '<div class="col-lg-12 texto component" id="'+idComponent+'" db-id="'+pkId+'" type-component="aviso-inicial">'+
+                '<p class="tituloCmp">'+type+
+                  '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+','+stringType+')">'+
+                '<p>'+
+                '<input class="inputTexto" type="text" placeholder="Texto..." typeInput="up-text" value="'+valueInpUpTextMsg+'">'+ 
+                '<div class="container-imagen">';
+            let cardImagePopUpMsg = generateCardImage(stringId, idComponent, item, pkId, stringType);
+            component += cardImagePopUpMsg;
+            component +=
+                '</div>'+
+              '</div>';
+          break;
           case 'acceso-cursos':
             let valueInpImgAcc = (item) ? item.url : "";
             let valueInpTitleAcc = (item) ? item.titulo : "";
@@ -955,7 +981,8 @@
         "Titulo": null,
         "Texto": null,
         "Files": [],
-        "IdComponente": null
+        "IdComponente": null,
+        "BackgroundColor": null
       }
       switch(typeElement) {
         case 'texto':
@@ -973,7 +1000,7 @@
         case 'imagen':
           $("#"+idElement).find("input").each(function() {
             let typeInp = $(this).attr("typeInput");
-            if(typeInp == 'img'){
+            if(typeInp == 'img'){ 
                 let value = $(this).prop("files");
                 if(value[0]){
                     jsonItem.Url = window.location.origin+'/files/'+value[0].name;
@@ -995,7 +1022,7 @@
             $("#"+id).find("input").each(function() {
                 let typeInp = $(this).attr("typeInput");
                 if(typeInp == 'img'){
-                    let value = $(this).prop("files");
+                   let value = $(this).prop("files");
                     if(value[0]){
                         jsonDesplazante.Url = window.location.origin+'/files/'+value[0].name;
                         jsonDesplazante.Files = value[0];
@@ -1011,6 +1038,10 @@
                     let value = $(this).val();
                     jsonDesplazante.Texto = value;
                 }
+                if(typeInp == 'color'){
+                      let value = $(this).val();
+                      jsonDesplazante.BackgroundColor = value;
+                }
             });
             jsonDesplazante.Id = pkey;
             jsonItem.Desplazantes.push(jsonDesplazante);
@@ -1020,7 +1051,8 @@
                 "Titulo": null,
                 "Texto": null,
                 "Files": null,
-                "IdComponente": null
+                "IdComponente": null,
+                "BackgroundColor": null,
             }
           });
         break;
@@ -1132,6 +1164,24 @@
           });
         break;
         case 'pop-up':
+          $("#"+idElement).find("input").each(function() {
+            let typeInp = $(this).attr("typeInput");
+            if(typeInp == 'up-text'){
+              let value = $(this).val();
+              jsonItem.Descripcion = value;
+            }
+            if(typeInp == 'img'){
+              let value = $(this).prop("files");
+              if(value[0]){
+                jsonItem.Url = window.location.origin+'/files/'+value[0].name;
+                jsonItem.Files = value[0];
+              }else{
+                jsonItem.Url = $(this).attr("value");
+              }
+            }
+          });
+        break;
+        case 'aviso-inicial':
           $("#"+idElement).find("input").each(function() {
             let typeInp = $(this).attr("typeInput");
             if(typeInp == 'up-text'){
@@ -1265,7 +1315,7 @@
             jsonItem.Descripcion = value;
           });
         break;
-        case "desplegable-texto-imagen":
+        case "imagen-titulo-desc":
           $("#"+idElement).find("input").each(function() {
             let typeInp = $(this).attr("typeInput");
             if(typeInp == 'titulo'){

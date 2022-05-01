@@ -11,8 +11,6 @@ using Microsoft.AspNetCore.Authorization;
 using kiosko.Helpers;
 using System.Text.RegularExpressions;
 using System.Text;
-using System.Net;
-using Newtonsoft.Json;
 
 namespace kiosko.Controllers
 {
@@ -21,12 +19,18 @@ namespace kiosko.Controllers
         private readonly KioskoCmsContext _context;
         MailService _mailService;
         AuthorizationService _authorizationService;
+        ErrorService _errorService;
+        private readonly IWebHostEnvironment _env;
 
-        public ModulosController(KioskoCmsContext context, MailService mailService, AuthorizationService authorizationService)
+        public ModulosController(KioskoCmsContext context, MailService mailService, AuthorizationService authorizationService, ErrorService errorService,
+            IWebHostEnvironment env)
         {
             _context = context;
             _mailService = mailService;
             _authorizationService = authorizationService;
+            _errorService = errorService;
+            _env = env;
+
         }
 
         // GET: Modulos
@@ -60,11 +64,12 @@ namespace kiosko.Controllers
             var message = new { status = "", message = "" };
             IActionResult ret = null;
             try { 
-                var modulos = _context.Modulos.Where(m => m.Id > 1).OrderBy(m => m.Orden);
+                var modulos = _context.Modulos.Where(m => m.Id > 2).OrderBy(m => m.Orden);
                 ret = StatusCode(StatusCodes.Status200OK, modulos);
             }
             catch (Exception ex)
             {
+                _errorService.SaveErrorMessage("_context.Modulos", "ModulosController", "GetAllModulos", ex.Message);
                 message = new { status = "error", message = ex.Message };
                 ret = StatusCode(StatusCodes.Status500InternalServerError, message);
             }
@@ -86,6 +91,8 @@ namespace kiosko.Controllers
             var isAuthorized = _authorizationService.CheckAuthorization(paramAuthorization);
             if (!isAuthorized)
             {
+                _errorService.SaveErrorMessage("_authorizationService.CheckAuthorization", "ModulosController", 
+                    "GetModulosAndComponentsForApp", "Unauthorized/Sin Autorizacion");
                 message = new { status = "error", message = "Unauthorized" };
                 return StatusCode(StatusCodes.Status401Unauthorized, message);
             }
@@ -98,7 +105,7 @@ namespace kiosko.Controllers
             }
 
             try { 
-                var modulos = _context.Modulos.OrderBy(c => c.Orden)
+                var modulos = _context.Modulos.Where(c => c.Id != 2).OrderBy(c => c.Orden)
                     .Include(m => m.Componentes)
                         .ThenInclude(m => m.Desplazantes)
                         .ToList();
@@ -118,11 +125,13 @@ namespace kiosko.Controllers
                     dataModulo.TiempoInactividad = modulo.TiempoInactividad;
                     dataModulo.Componentes = modulo.Componentes;
                     dataModulo.NumeroHijos = 0;
+                    dataModulo.Url = modulo.Url;
                     if (modulo.Padre == null)
                     {
                     
                         dataModulo.IdProgreso = progresos.Id;
                         dataModulo.Porcentaje = progresos.Porcentaje;
+                        dataModulo.finalizado = progresos.Finalizado;
                         dataModulos.CustomModulos.Add(dataModulo);
                         dataModulo.NumeroHijos = 0;
                     }
@@ -164,19 +173,73 @@ namespace kiosko.Controllers
             }
             catch (Exception ex)
             {
+                _errorService.SaveErrorMessage("_context.Modulos", "ModulosController", "GetModulosAndComponentsForApp", ex.Message);
                 message = new { status = "error", message = ex.Message };
                 ret = StatusCode(StatusCodes.Status500InternalServerError, message);
             }
             return ret;
         }
 
-        [HttpPost()]
-        public IActionResult SaveMenuModulo(Modulo modulo)
+        [HttpGet]
+        public IActionResult MessagesInitialsForApp()
         {
             var message = new { status = "", message = "" };
             IActionResult ret = null;
-            try { 
+            try
+            {
+                List<AvisoInicial> avisos = new List<AvisoInicial>();
+                AvisoInicial mensajeInicial = new AvisoInicial();
+                var avisosIniciales = _context.Componentes.Where(c => c.Padre == "modulo2").OrderBy(c => c.Orden).ToList();
+                foreach (var mensaje in avisosIniciales)
+                {
+                    mensajeInicial.Id = mensaje.Id;
+                    mensajeInicial.tipoComponente = mensaje.TipoComponente;
+                    mensajeInicial.url = mensaje.Url;
+                    mensajeInicial.descripcion = mensaje.Descripcion;
+
+                    avisos.Add(mensajeInicial);
+                }
+                ret = StatusCode(StatusCodes.Status200OK, avisos);
+            }
+            catch (Exception ex)
+            {
+                _errorService.SaveErrorMessage("_context.Modulos", "ModulosController", "GetAllModulos", ex.Message);
+                message = new { status = "error", message = ex.Message };
+                ret = StatusCode(StatusCodes.Status500InternalServerError, message);
+            }
+            return ret;
+        }
+
+
+
+        [HttpPost()]
+        public IActionResult SaveMenuModulo()
+        {
+            var message = new { status = "", message = "" };
+            IActionResult ret = null;
+            try {
+                var modulo = new Modulo();
                 modulo.TiempoInactividad = 5;
+                modulo.Id = Int32.Parse(Request.Form["Id"]);
+                modulo.Titulo = Request.Form["Titulo"];
+                modulo.AccesoDirecto = Int32.Parse(Request.Form["AccesoDirecto"]);
+                modulo.Orden = Int32.Parse(Request.Form["Orden"]);
+                modulo.Desplegable = Int32.Parse(Request.Form["Desplegable"]);
+                modulo.IdModulo = Request.Form["IdModulo"];
+                modulo.Padre = Request.Form["Padre"];
+                modulo.Url = Request.Form["Url"];
+                modulo.Favorito = Convert.ToBoolean(Request.Form["Favorito"]);
+                if (modulo.Padre == "undefined")
+                    modulo.Padre = null;
+                foreach (var formFile in Request.Form.Files)
+                {
+                    var fulPath = Path.Combine(_env.ContentRootPath, "wwwroot\\files", formFile.FileName);
+                    using (FileStream fs = System.IO.File.Create(fulPath))
+                    {
+                        formFile.CopyTo(fs);
+                        fs.Flush();
+                    }
+                }
                 _context.Add(modulo);
                 _context.SaveChanges();
 
@@ -202,6 +265,8 @@ namespace kiosko.Controllers
             }
             catch (Exception ex)
             {
+                _errorService.SaveErrorMessage("_context.Add", "ModulosController", 
+                    "SaveMenuModulo", ex.Message);
                 message = new { status = "error", message = ex.Message };
                 ret = StatusCode(StatusCodes.Status500InternalServerError, message);
             }
@@ -220,6 +285,18 @@ namespace kiosko.Controllers
                     .FirstOrDefaultAsync(m => m.Id == idModulo);
                 modulo.Titulo = Request.Form["tituloModulo"];
                 modulo.TiempoInactividad = Int32.Parse(Request.Form["tiempoInactividad"]);
+                modulo.Favorito = Convert.ToBoolean(Request.Form["Favorito"]);
+
+                modulo.Url = Request.Form["Url"];
+                foreach (var formFile in Request.Form.Files)
+                {
+                    var fulPath = Path.Combine(_env.ContentRootPath, "wwwroot\\files", formFile.FileName);
+                    using (FileStream fs = System.IO.File.Create(fulPath))
+                    {
+                        formFile.CopyTo(fs);
+                        fs.Flush();
+                    }
+                }
 
                 _context.Update(modulo);
                 _context.SaveChanges();
@@ -229,6 +306,8 @@ namespace kiosko.Controllers
             }
             catch (Exception ex)
             {
+                _errorService.SaveErrorMessage("_context.Modulos", "ModulosController", 
+                    "updateModulo", ex.Message);
                 message = new { status = "error", message = ex.Message };
                 ret = StatusCode(StatusCodes.Status500InternalServerError, message);
             }
@@ -252,6 +331,8 @@ namespace kiosko.Controllers
             }
             catch (Exception ex)
             {
+                _errorService.SaveErrorMessage("_context.Modulos.Find", "ModulosController", 
+                    "deleteModulo", ex.Message);
                 message = new { status = "error", message = ex.Message };
                 ret = StatusCode(StatusCodes.Status500InternalServerError, message);
             }
@@ -265,6 +346,8 @@ namespace kiosko.Controllers
 
             if (!Request.Headers.ContainsKey("Authorization"))
             {
+                _errorService.SaveErrorMessage("!Request.Headers.ContainsKey", "ModulosController", 
+                    "EnviarAlertas", "Faltan Headers Auth - Unauthorized/Sin Autorizacion");
                 message = new { status = "error", message = "Unauthorized" };
                 return StatusCode(StatusCodes.Status401Unauthorized, message);
             }
@@ -272,6 +355,8 @@ namespace kiosko.Controllers
             var isAuthorized = _authorizationService.CheckAuthorization(paramAuthorization);
             if (!isAuthorized)
             {
+                _errorService.SaveErrorMessage("_authorizationService.CheckAuthorization", "ModulosController", 
+                    "EnviarAlertas", "Credenciales Incorrectas - Unauthorized/Sin Autorizacion");
                 message = new { status = "error", message = "Unauthorized" };
                 return StatusCode(StatusCodes.Status401Unauthorized, message);
             }
@@ -308,75 +393,48 @@ namespace kiosko.Controllers
                         }
                     }
                 }
-
-                var comisionistas = GetComisionistas();
-                string stringComisionistas = JsonConvert.SerializeObject(comisionistas.Value);
-                var enumComisionistas = JsonConvert.DeserializeObject<IEnumerable<Test>>(stringComisionistas);
-
-                var arrayComisionistas = new Comisionistas();
-                foreach (var com in enumComisionistas)
+                
+                var comisionistas = new Comisionistas();
+                foreach (var com in comisionistas.DataComisionistas)
                 {
-                    var infoComisionista = new DataComisionista();
-                    foreach (var emp in com.empleados)
-                    {
-                        int matches = 0;
-                        foreach(var user in alertas.UsuariosAlertas)
-                        {
-                            if (emp.id_Empleado == user.IdUsuarioKiosko)
-                            {
-                                user.Nombre = emp.nombre+ " " + emp.apellidos;
-                                infoComisionista.Empleados.Add(user);
-                                matches++;
-                            }
-                        }
-                        if(matches > 0)
-                        {
-                            infoComisionista.EmailComisionista = com.correo;
-                            infoComisionista.NombreComisionista = com.nombre_Comisionista;
-                            arrayComisionistas.DataComisionistas.Add(infoComisionista);
-                        }
-                    }
-                }
-
-
-                //string cuerpoMensaje = "<h2>Los siguientes usuarios no han retomado su capacitacion</h2><br/><br/>";
-                /*foreach (var usuario in alertas.UsuariosAlertas)
-                {
-                    cuerpoMensaje += "<div style='height: auto; border: 1px solid blue; padding: 10px 10px 10px 10px; margin-bottom: 20px;'>";
-                    cuerpoMensaje += "<h4 style='margin-bottom: 10px;'>";
-                    cuerpoMensaje += usuario.Nombre;
-                    cuerpoMensaje += "</h4>";
-                    foreach (var modulo in usuario.ModulosInactivos)
-                    {
-                        cuerpoMensaje += "<h5>Modulo Inactivo: " + modulo.Modulo + "</h5>";
-                        cuerpoMensaje += "<ul>";
-                        cuerpoMensaje += "<li>Porcentaje de avance: " + modulo.Porcentaje + "%</li>";
-                        cuerpoMensaje += "<li>Tiempo de inactividad: " + modulo.TiempoInactividad + " días</li>";
-                        cuerpoMensaje += "</ul>";
-                    }
-                    cuerpoMensaje += "</div>";
-                }*/
-                string cuerpoMensaje = "";
-                foreach(var com in arrayComisionistas.DataComisionistas)
-                {
-                    //implementar saludo
+                    com.NombreComisionista = "";
+                    string cuerpoMensaje = "<h2>Hola " + com.NombreComisionista + " Los siguientes usuarios no han retomado su capacitacion</h2><br/><br/>";
                     foreach (var emp in com.Empleados)
                     {
-                        //pintar un div para cada empleado, pintar el nombre y enseguida una lista de los modulos inactivos
-                        foreach(var modulo in emp.ModulosInactivos)
+                        cuerpoMensaje += "<div style='height: auto; border: 1px solid blue; padding: 10px 10px 10px 10px; margin-bottom: 20px;'>";
+                        cuerpoMensaje += "<h4 style='margin-bottom: 10px;'>";
+                        cuerpoMensaje += emp.Nombre;
+                        cuerpoMensaje += "</h4>";
+                        foreach (var modulo in emp.ModulosInactivos)
                         {
-                            //pintar los datos en la lista de los modulos inactivos
+                            cuerpoMensaje += "<h5>Modulo Inactivo: " + modulo.Modulo + "</h5>";
+                            cuerpoMensaje += "<ul>";
+                            cuerpoMensaje += "<li>Porcentaje de avance: " + modulo.Porcentaje + "%</li>";
+                            cuerpoMensaje += "<li>Tiempo de inactividad: " + modulo.TiempoInactividad + " días</li>";
+                            cuerpoMensaje += "</ul>";
                         }
-                        //cerrar el div
+                        cuerpoMensaje += "</div>";
                     }
-                    //implementar el try para enviar correo
-                    cuerpoMensaje = "";
+                    try
+                    {
+                        _mailService.SendEmailGmail("juan.rivera@colimasoft.com", "Alerta de capacitación", cuerpoMensaje);
+                        message = new { status = "ok", message = "Email enviado" };
+                        ret = StatusCode(StatusCodes.Status200OK, alertas);
+                    }
+                    catch (Exception ex)
+                    {
+                        _errorService.SaveErrorMessage("_mailService.SendEmailGmail", "ModulosController",
+                            "EnviarAlertas", ex.Message);
+                        message = new { status = "error", message = ex.Message };
+                        ret = StatusCode(StatusCodes.Status500InternalServerError, message);
+                    }
                 }
-                message = new { status = "ok", message = "correos enviados" };
-                ret = StatusCode(StatusCodes.Status200OK, message);
+                
             }
             catch (Exception ex)
             {
+                _errorService.SaveErrorMessage("_context.Usuarios - alertas = new DataUsuario()", 
+                    "ModulosController", "EnviarAlertas", ex.Message);
                 message = new { status = "error", message = ex.Message };
                 ret = StatusCode(StatusCodes.Status500InternalServerError, message);
             }
@@ -389,56 +447,6 @@ namespace kiosko.Controllers
             return _context.Usuarios.Any(e => e.Id == IdUsuario);
         }
 
-        public JsonResult GetComisionistas()
-        {
-            var enpointUrl = "https://accesossicom.mikiosko.mx/api/Usuarios/getcomisionistas";
-            var username = "SicomAcess";
-            var password = "$1c0om007";
-            List<Test> dataComisionistas = new List<Test>();
-            try
-            {
-                string authEncoded = System.Convert.ToBase64String(Encoding.GetEncoding("ISO-8859-1")
-                    .GetBytes(username + ":" + password));
-                var httpWebRequest = (HttpWebRequest)WebRequest.Create(enpointUrl);
-                httpWebRequest.Headers.Add("Authorization", "Basic " + authEncoded);
-                httpWebRequest.ContentType = "application/json";
-                httpWebRequest.Method = "GET";
-                var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
-                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
-                {
-                    var result = streamReader.ReadToEnd();
-                    dataComisionistas = JsonConvert.DeserializeObject<List<Test>>(result);
-                }
-                return Json(dataComisionistas);
-            }
-            catch (Exception ex)
-            {
-                var message = new { status = "error", message = ex.Message };
-                return Json(message); 
-            }
-        }
-
-    }
-
-    public class Test
-    {
-        public Test()
-        {
-            empleados = new HashSet<ArrayEmpleado>();
-        }
-        public string correo { get; set; }
-        public string tienda { get; set; }
-        public string iD_Comisionista { get; set; }
-        public string nombre_Comisionista { get; set; }
-        public virtual ICollection<ArrayEmpleado> empleados { get; set; }
-
-    }
-
-    public class ArrayEmpleado
-    {
-        public int id_Empleado { get; set; }
-        public string nombre { get; set; } 
-        public string apellidos { get; set; }
     }
 
     public class Comisionistas
@@ -507,6 +515,7 @@ namespace kiosko.Controllers
         public int Id { get; set; }
         public int IdProgreso { get; set; }
         public double? Porcentaje { get; set; }
+        public bool? finalizado { get; set; }
         public string? Titulo { get; set; }
         public int? AccesoDirecto { get; set; }
         public int? Orden { get; set; }
@@ -515,7 +524,7 @@ namespace kiosko.Controllers
         public string? Padre { get; set; }
         public int? TiempoInactividad { get; set; }
         public int? NumeroHijos { get; set; }
-
+        public string? Url { get; set; }
 
         public virtual ICollection<Componente> Componentes { get; set; }
         public virtual ICollection<CustomModulo> Submodulos { get; set; }

@@ -15,11 +15,14 @@ namespace kiosko.Controllers
     {
         private readonly KioskoCmsContext _context;
         AuthorizationService _authorizationService;
+        ErrorService _errorService;
 
-        public UsuariosController(KioskoCmsContext context, AuthorizationService authorizationService)
+        public UsuariosController(KioskoCmsContext context, AuthorizationService authorizationService,
+            ErrorService errorService)
         {
             _context = context;
             _authorizationService = authorizationService;
+            _errorService = errorService;
         }
 
         private bool UsuarioExists(int IdUsuario)
@@ -33,6 +36,8 @@ namespace kiosko.Controllers
             var message = new { status = "", message = "" };
             if (!Request.Headers.ContainsKey("Authorization"))
             {
+                _errorService.SaveErrorMessage("Request.Headers.ContainsKey", "UsuariosController", 
+                    "saveNewUser", "Faltan Headers Auth - Unauthorized/Sin Autorizacion");
                 message = new { status = "error", message = "Unauthorized" };
                 return StatusCode(StatusCodes.Status401Unauthorized, message);
             }
@@ -40,6 +45,8 @@ namespace kiosko.Controllers
             var isAuthorized = _authorizationService.CheckAuthorization(paramAuthorization);
             if (!isAuthorized)
             {
+                _errorService.SaveErrorMessage("_authorizationService.CheckAuthorization", "UsuariosController",
+                    "saveNewUser", "Credenciales Incorrectas - Unauthorized/Sin Autorizacion");
                 message = new { status = "error", message = "Unauthorized" };
                 return StatusCode(StatusCodes.Status401Unauthorized, message);
             }
@@ -78,6 +85,8 @@ namespace kiosko.Controllers
             }
             catch (Exception ex)
             {
+                _errorService.SaveErrorMessage("Usuario - _context.Add", "UsuariosController", 
+                    "saveNewUser", ex.Message);
                 message = new { status = "error", message = ex.Message };
                 return StatusCode(StatusCodes.Status500InternalServerError, message);
             }
@@ -103,6 +112,8 @@ namespace kiosko.Controllers
             var message = new { status = "", message = "" };
             if (!Request.Headers.ContainsKey("Authorization"))
             {
+                _errorService.SaveErrorMessage("Request.Headers.ContainsKey", "UsuariosController",
+                    "UpdateProgress", "Faltan Headers Auth - Unauthorized/Sin Autorizacion");
                 message = new { status = "error", message = "Unauthorized" };
                 return StatusCode(StatusCodes.Status401Unauthorized, message);
             }
@@ -110,6 +121,8 @@ namespace kiosko.Controllers
             var isAuthorized = _authorizationService.CheckAuthorization(paramAuthorization);
             if (!isAuthorized)
             {
+                _errorService.SaveErrorMessage("_authorizationService.CheckAuthorization", "UsuariosController",
+                    "UpdateProgress", "Credenciales Incorrectas - Unauthorized/Sin Autorizacion");
                 message = new { status = "error", message = "Unauthorized" };
                 return StatusCode(StatusCodes.Status401Unauthorized, message);
             }
@@ -118,6 +131,11 @@ namespace kiosko.Controllers
                 IActionResult ret = null;
                 DateTime fechaHoy = DateTime.Now;
                 var updateProgreso = _context.Progresos.Where(p => p.IdModulo == progreso.IdModulo).Where(p => p.IdUsuario == progreso.IdUsuario).FirstOrDefault();
+                if(progreso.Porcentaje <= updateProgreso.Porcentaje )
+                {
+                    message = new { status = "succed", message = "Progreso no actualizado" };
+                    return StatusCode(StatusCodes.Status204NoContent, message);
+                }
                 updateProgreso.Porcentaje = progreso.Porcentaje;
                 updateProgreso.FechaActualizacion = fechaHoy;
                 if (progreso.Porcentaje == 100)
@@ -126,12 +144,15 @@ namespace kiosko.Controllers
                     updateProgreso.Finalizado = true;
                 }
                 _context.Update(updateProgreso);
+                _context.SaveChanges();
                 message = new { status = "ok", message = "Progreso actualizado correctamente" };
                 ret = StatusCode(StatusCodes.Status200OK, message);
                 return ret;
             }
             catch (Exception ex)
             {
+                _errorService.SaveErrorMessage("updateProgreso - _context.Progresos", "UsuariosController",
+                    "UpdateProgress", ex.Message);
                 message = new { status = "ok", message = ex.Message };
                 return StatusCode(StatusCodes.Status500InternalServerError, message);
             }

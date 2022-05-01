@@ -91,7 +91,10 @@ var jsonNewModulo = {
     "Orden": 1,
     "Desplegable": 0,
     "IdModulo": "",
-    "Padre": null
+    "Padre": null,
+    "Url": "",
+    "Files": "",
+    "Favorito": ""
 }
 
 function openModalNewModulo(title, lastId, padre) {
@@ -105,7 +108,10 @@ function openModalNewModulo(title, lastId, padre) {
         "Orden": 1,
         "Desplegable": 0,
         "IdModulo": "",
-        "Padre": null
+        "Padre": null,
+        "Url": "",
+        "Files": "",
+        "Favorito": false
     }
     if (padre) {
         let arrayLastId = lastId.split("-");
@@ -126,20 +132,52 @@ function openModalNewModulo(title, lastId, padre) {
 function saveNewModulo() {
     let title = $("#titleNewModulo").val();
     let desplegable = $('input[name="radioDesplegable"]:checked').val();
+    let value = $("#imagenIcono").prop("files");
+    let favorito = $("#guiasRapidas").prop("checked");
+    if (value[0]) {
+        jsonNewModulo.Url = window.location.origin + '/files/' + value[0].name;
+        jsonNewModulo.Files = value[0];
+    }
     parseInt(desplegable);
     jsonNewModulo.Titulo = title;
     jsonNewModulo.Desplegable = desplegable;
+    jsonNewModulo.Favorito = favorito;
+    const formData = new FormData();
+    formData.append("Id", jsonNewModulo.Id);
+    formData.append("Titulo", jsonNewModulo.Titulo);
+    formData.append("AccesoDirecto", jsonNewModulo.AccesoDirecto);
+    formData.append("Orden", jsonNewModulo.Orden);
+    formData.append("Desplegable", jsonNewModulo.Desplegable);
+    formData.append("IdModulo", jsonNewModulo.IdModulo);
+    formData.append("Padre", jsonNewModulo.Padre);
+    formData.append("Url", jsonNewModulo.Url);
+    formData.append("Files", jsonNewModulo.Files);
+    formData.append("Favorito", jsonNewModulo.Favorito);
+    console.log(jsonNewModulo);
     $.ajax({
         type: "POST",
         url: "/Modulos/SaveMenuModulo",
         headers: { "RequestVerificationToken": "@GetAntiXsrfRequestToken()" },
-        data: jsonNewModulo,
+        data: formData,
+        processData: false,
+        contentType: false,
         success: function (response) {
             console.log('saved');
 
             let id = response.id;
             let urlModulo = window.location.origin + '/Modulos/Details?id=' + id;
-            window.location.assign(urlModulo);
+            
+            Swal.fire({
+                title: 'Bien!',
+                text: 'La información del modulo se ha agregado con exito!',
+                type: 'success',
+                showConfirmButton: false,
+                timer: 3000,
+            }).then((result) => {
+                window.location.assign(urlModulo);
+                location.reload();
+            });
+
         },
         error: function (error) {
             Swal.fire({
@@ -147,9 +185,55 @@ function saveNewModulo() {
                 text: 'Ha ocurrido un error al actualizar la información. Inténtelo de nuevo más tarde y si el problema persiste contacte con soporte!',
                 imageUrl: '/img/señalroja.png',
                 imageHeight: 212,
-                timer: 2000,
-            })
+                timer: 5000,
+            }).then((result) => {
+                location.reload();
+            });
         }
     });
     $("#modalNewModulo").modal("hide");
 }
+
+function addItemEstaticToMenu(item, menuOpen) {
+    let desplegable = item.desplegable;
+    let titulo = item.titulo;
+    let padre = item.padre;
+    let idModulo = item.idModulo;
+    let menuItems = "";
+    let margin = (padre) ? "marginUl" : "";
+    if (desplegable == 1) {
+        menuItems += '<li class="nav-item ' + menuOpen + ' ' + margin + '" >';
+        menuItems += '<a href="#" class="nav-link">';
+        menuItems += '<p>' + titulo + '<i class="fas fa-angle-left right"></i></p>';
+        menuItems += '</a>';
+        menuItems += '<ul class="nav nav-treeview" id="' + idModulo + '" title="' + titulo + '">';
+        menuItems += '</ul>';
+        menuItems += '</li>';
+    } else {
+        menuItems += '<li class="nav-item modulo' + item.id + '" id="' + idModulo + '">';
+        menuItems += '<a href="/Modulos/DetailsEst?id=' + item.id + '" class="nav-link">';
+        menuItems += '<p>' + titulo + '</p>';
+        menuItems += '</a>';
+        menuItems += '</li>';
+    }
+    if (padre !== null) {
+        $("#" + padre).append(menuItems);
+    } else {
+        $("#EstaticMenu").append(menuItems);
+    }
+}
+
+$("#radioPrimary2").click(function () {
+    $("#iconoImg").hide();
+    $("#guiaRapida").show();
+    $("#imagenIcono").val("");
+    console.log("desplegable: seleccinar icono si");
+})
+$("#radioPrimary1").click(function () {
+    $("#iconoImg").show();
+    $("#guiaRapida").hide();
+    $("#guiasRapidas").prop("checked", false);
+    
+    console.log("desplegable: seleccinar icono no");
+})
+

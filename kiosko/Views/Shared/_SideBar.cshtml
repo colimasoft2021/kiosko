@@ -24,6 +24,13 @@
         </ul>
       </nav>
       <!-- /.sidebar-menu -->
+      <!-- Menu Estatico -->
+      <div class ="menu-static">
+          <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false" id="EstaticMenu">
+              <li class="nav-item modulo2" id="moduloF1"><a href="/Modulos/Details?id=2" class="nav-link"><p>Mensajes Iniciales</p></a></li>
+          </ul>
+      </div>
+      <!--- Menu Estatico -->
       <div class="menu-configuration">
           <a href="/Modulos/Details?id=1"><i class="nav-icon fas fa-th-large"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
            <a href="/Modulos/Index"><i class="nav-icon fas fa-cog"></i></a>
@@ -57,6 +64,19 @@
                     <label for="radioPrimary2">No</label>
                 </div>
               </div>
+              <!-- icono -->
+              <div id="iconoImg" style="display: none">
+                    <input type="file" id="imagenIcono" accept=".png" >
+                    <div id="imgPreview" class="preview-img">
+                    </div>
+              </div>
+              <!-- fin - icono -->
+              <!-- guia/favorito -->
+              <div id="guiaRapida" style="display: block">
+                  <input type="checkbox" id="guiasRapidas" name:"guiasRapidas" value="false" />
+                  <label for="guiasRapidas">Guias Rapidas</label>
+              </div>
+              <!-- fin - guia/favorito -->
             </div>
             <div class="modal-footer justify-content-between">
               <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
@@ -67,3 +87,5 @@
         </div>
         <!-- /.modal-dialog -->
       </div>
+
+

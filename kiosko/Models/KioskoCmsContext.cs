@@ -19,6 +19,7 @@ namespace kiosko.Models
 
         public virtual DbSet<Componente> Componentes { get; set; } = null!;
         public virtual DbSet<Desplazante> Desplazantes { get; set; } = null!;
+        public virtual DbSet<Error> Errors { get; set; } = null!;
         public virtual DbSet<Modulo> Modulos { get; set; } = null!;
         public virtual DbSet<Progreso> Progresos { get; set; } = null!;
         public virtual DbSet<Usuario> Usuarios { get; set; } = null!;
@@ -111,6 +112,24 @@ namespace kiosko.Models
                     .WithMany(p => p.Desplazantes)
                     .HasForeignKey(d => d.IdComponente)
                     .HasConstraintName("FK_desplazantes_componentes");
+
+                entity.Property(e => e.BackgroundColor)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("background_color");
+            });
+
+            modelBuilder.Entity<Error>(entity =>
+            {
+                entity.ToTable("errors");
+
+                entity.Property(e => e.Bloque).HasMaxLength(450);
+
+                entity.Property(e => e.Controlador).HasMaxLength(450);
+
+                entity.Property(e => e.Mensaje).HasMaxLength(450);
+
+                entity.Property(e => e.Metodo).HasMaxLength(450);
             });
 
             modelBuilder.Entity<Modulo>(entity =>
@@ -141,6 +160,14 @@ namespace kiosko.Models
                     .HasMaxLength(50)
                     .IsUnicode(false)
                     .HasColumnName("titulo");
+
+                entity.Property(e => e.Url)
+                    .IsUnicode(false)
+                    .HasColumnName("url");
+
+                entity.Property(e => e.Favorito)
+                    .HasColumnName("favorito")
+                    .HasDefaultValueSql("((0))");
             });
 
             modelBuilder.Entity<Progreso>(entity =>

@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using kiosko.Models;
 using Microsoft.Data.SqlClient;
 using Microsoft.AspNetCore.Authorization;
+using kiosko.Helpers;
 
 namespace kiosko.Controllers
 {
@@ -17,11 +18,13 @@ namespace kiosko.Controllers
     {
         private readonly KioskoCmsContext _context;
         private readonly IWebHostEnvironment _env;
+        ErrorService _errorServices;
 
-        public ComponentesController(KioskoCmsContext context, IWebHostEnvironment env)
+        public ComponentesController(KioskoCmsContext context, IWebHostEnvironment env, ErrorService errorService)
         {
             _context = context;
             _env = env;
+            _errorServices = errorService;
         }
 
         [HttpPost()]
@@ -40,6 +43,7 @@ namespace kiosko.Controllers
             }
             catch (Exception ex)
             {
+                _errorServices.SaveErrorMessage("_context.Componentes", "ComponentesController", "deleteComponent", ex.Message);
                 message = new { status = "error", message = ex.Message };
                 ret = StatusCode(StatusCodes.Status500InternalServerError, message);
             }
@@ -62,6 +66,7 @@ namespace kiosko.Controllers
             }
             catch (Exception ex)
             {
+                _errorServices.SaveErrorMessage("_context.Desplazantes", "ComponentesController", "deleteDesplazante", ex.Message);
                 message = new { status = "error", message = ex.Message };
                 ret = StatusCode(StatusCodes.Status500InternalServerError, message);
             }
@@ -129,6 +134,8 @@ namespace kiosko.Controllers
             }
             catch (Exception ex)
             {
+                _errorServices.SaveErrorMessage("_context.Add", "ComponentesController", 
+                    "saveComponentForModulo2", ex.Message);
                 message = new { status = "error", message = ex.Message };
                 ret = StatusCode(StatusCodes.Status500InternalServerError, message);
             }
@@ -175,6 +182,8 @@ namespace kiosko.Controllers
             }
             catch (Exception ex)
             {
+                _errorServices.SaveErrorMessage("_context.Update", "ComponentesController", 
+                    "updateComponentFormodulo2", ex.Message);
                 message = new { status = "error", message = ex.Message };
                 ret = StatusCode(StatusCodes.Status500InternalServerError, message);
             }
@@ -195,6 +204,7 @@ namespace kiosko.Controllers
                 desplazante.Titulo = Request.Form["Titulo"];
                 desplazante.Texto = Request.Form["Texto"];
                 desplazante.IdComponente = Int32.Parse(Request.Form["IdComponente"]);
+                desplazante.BackgroundColor = Request.Form["BackgroundColor"];
 
                 foreach (var formFile in Request.Form.Files)
                 {
@@ -213,6 +223,8 @@ namespace kiosko.Controllers
             }
             catch (Exception ex)
             {
+                _errorServices.SaveErrorMessage("_context.Add", "ComponentesController", 
+                    "saveDesplazantes", ex.Message);
                 message = new { status = "error", message = ex.Message };
                 ret = StatusCode(StatusCodes.Status500InternalServerError, message);
             }
@@ -233,6 +245,7 @@ namespace kiosko.Controllers
                 desplazante.Titulo = Request.Form["Titulo"];
                 desplazante.Texto = Request.Form["Texto"];
                 desplazante.IdComponente = Int32.Parse(Request.Form["IdComponente"]);
+                desplazante.BackgroundColor = Request.Form["BackgroundColor"];
 
                 foreach (var formFile in Request.Form.Files)
                 {
@@ -251,6 +264,8 @@ namespace kiosko.Controllers
             }
             catch (Exception ex)
             {
+                _errorServices.SaveErrorMessage("_context.Update", "ComponentesController", 
+                    "updateDesplazantes", ex.Message);
                 message = new { status = "error", message = ex.Message };
                 ret = StatusCode(StatusCodes.Status500InternalServerError, message);
             }
