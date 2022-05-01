@@ -235,6 +235,7 @@
               '<input class="titulo-input mt-4" type="text" typeInput="titulo" placeholder="Titulo">'+
               '<br/>'+
               '<input type="text" placeholder="Texto" typeInput="texto" class="mt-4">'+
+              '<input class="Color-Selector" type="color" typeInput="color" value="">'+
             '</div>'
         );
         indexImagen = indexImagen + 1;
@@ -426,7 +427,8 @@
             "titulo": "",
             "descripcion": "",
             "files": "",
-            "idComponente": pkId
+            "idComponente": pkId,
+            "backgroundColor": "",
         }];
         if(item.length > 0){
             images = item;
@@ -464,6 +466,8 @@
                       '<input class="titulo-input mt-4" type="text" typeInput="titulo" placeholder="Titulo" value="'+item.titulo+'">'+
                       '<br/>'+
                       '<input type="text" placeholder="Texto" typeInput="texto" class="mt-4" value="'+item.texto+'">'+
+                      //aqui agregar el input del color en la value recibir comoi item.backgroundColor, typeInput="color"
+                      '<input class="Color-Selector"  type="color" typeInput="color" value="'+item.backgroundColor+'">'+
                     '</div>';
             indexImagen = indexImagen + 1;
             indexCardTi = indexCardTi + 1;
@@ -951,7 +955,8 @@
         "Titulo": null,
         "Texto": null,
         "Files": [],
-        "IdComponente": null
+        "IdComponente": null,
+        "BackgroundColor": null
       }
       switch(typeElement) {
         case 'texto':
@@ -991,7 +996,7 @@
             $("#"+id).find("input").each(function() {
                 let typeInp = $(this).attr("typeInput");
                 if(typeInp == 'img'){
-                    let value = $(this).prop("files");
+                   let value = $(this).prop("files");
                     if(value[0]){
                         jsonDesplazante.Url = window.location.origin+'/files/'+value[0].name;
                         jsonDesplazante.Files = value[0];
@@ -1007,6 +1012,10 @@
                     let value = $(this).val();
                     jsonDesplazante.Texto = value;
                 }
+                if(typeInp == 'color'){
+                      let value = $(this).val();
+                      jsonDesplazante.BackgroundColor = value;
+                }
             });
             jsonDesplazante.Id = pkey;
             jsonItem.Desplazantes.push(jsonDesplazante);
@@ -1016,7 +1025,8 @@
                 "Titulo": null,
                 "Texto": null,
                 "Files": null,
-                "IdComponente": null
+                "IdComponente": null,
+                "BackgroundColor": null,
             }
           });
         break;

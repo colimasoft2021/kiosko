@@ -204,6 +204,7 @@ namespace kiosko.Controllers
                 desplazante.Titulo = Request.Form["Titulo"];
                 desplazante.Texto = Request.Form["Texto"];
                 desplazante.IdComponente = Int32.Parse(Request.Form["IdComponente"]);
+                desplazante.BackgroundColor = Request.Form["BackgroundColor"];
 
                 foreach (var formFile in Request.Form.Files)
                 {
@@ -244,6 +245,7 @@ namespace kiosko.Controllers
                 desplazante.Titulo = Request.Form["Titulo"];
                 desplazante.Texto = Request.Form["Texto"];
                 desplazante.IdComponente = Int32.Parse(Request.Form["IdComponente"]);
+                desplazante.BackgroundColor = Request.Form["BackgroundColor"];
 
                 foreach (var formFile in Request.Form.Files)
                 {

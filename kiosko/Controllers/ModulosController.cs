@@ -64,7 +64,7 @@ namespace kiosko.Controllers
             var message = new { status = "", message = "" };
             IActionResult ret = null;
             try { 
-                var modulos = _context.Modulos.Where(m => m.Id > 1).OrderBy(m => m.Orden);
+                var modulos = _context.Modulos.Where(m => m.Id > 2).OrderBy(m => m.Orden);
                 ret = StatusCode(StatusCodes.Status200OK, modulos);
             }
             catch (Exception ex)
@@ -105,7 +105,7 @@ namespace kiosko.Controllers
             }
 
             try { 
-                var modulos = _context.Modulos.OrderBy(c => c.Orden)
+                var modulos = _context.Modulos.Where(c => c.Id != 2).OrderBy(c => c.Orden)
                     .Include(m => m.Componentes)
                         .ThenInclude(m => m.Desplazantes)
                         .ToList();
@@ -125,6 +125,7 @@ namespace kiosko.Controllers
                     dataModulo.TiempoInactividad = modulo.TiempoInactividad;
                     dataModulo.Componentes = modulo.Componentes;
                     dataModulo.NumeroHijos = 0;
+                    dataModulo.Url = modulo.Url;
                     if (modulo.Padre == null)
                     {
                     
@@ -227,6 +228,7 @@ namespace kiosko.Controllers
                 modulo.IdModulo = Request.Form["IdModulo"];
                 modulo.Padre = Request.Form["Padre"];
                 modulo.Url = Request.Form["Url"];
+                modulo.Favorito = Convert.ToBoolean(Request.Form["Favorito"]);
                 if (modulo.Padre == "undefined")
                     modulo.Padre = null;
                 foreach (var formFile in Request.Form.Files)
@@ -283,6 +285,7 @@ namespace kiosko.Controllers
                     .FirstOrDefaultAsync(m => m.Id == idModulo);
                 modulo.Titulo = Request.Form["tituloModulo"];
                 modulo.TiempoInactividad = Int32.Parse(Request.Form["tiempoInactividad"]);
+                modulo.Favorito = Convert.ToBoolean(Request.Form["Favorito"]);
 
                 modulo.Url = Request.Form["Url"];
                 foreach (var formFile in Request.Form.Files)
@@ -537,7 +540,7 @@ namespace kiosko.Controllers
         public string? Padre { get; set; }
         public int? TiempoInactividad { get; set; }
         public int? NumeroHijos { get; set; }
-
+        public string? Url { get; set; }
 
         public virtual ICollection<Componente> Componentes { get; set; }
         public virtual ICollection<CustomModulo> Submodulos { get; set; }

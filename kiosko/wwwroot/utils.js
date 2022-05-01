@@ -93,7 +93,8 @@ var jsonNewModulo = {
     "IdModulo": "",
     "Padre": null,
     "Url": "",
-    "Files": ""
+    "Files": "",
+    "Favorito": ""
 }
 
 function openModalNewModulo(title, lastId, padre) {
@@ -109,7 +110,8 @@ function openModalNewModulo(title, lastId, padre) {
         "IdModulo": "",
         "Padre": null,
         "Url": "",
-        "Files": ""
+        "Files": "",
+        "Favorito": false
     }
     if (padre) {
         let arrayLastId = lastId.split("-");
@@ -131,6 +133,7 @@ function saveNewModulo() {
     let title = $("#titleNewModulo").val();
     let desplegable = $('input[name="radioDesplegable"]:checked').val();
     let value = $("#imagenIcono").prop("files");
+    let favorito = $("#guiasRapidas").prop("checked");
     if (value[0]) {
         jsonNewModulo.Url = window.location.origin + '/files/' + value[0].name;
         jsonNewModulo.Files = value[0];
@@ -138,6 +141,7 @@ function saveNewModulo() {
     parseInt(desplegable);
     jsonNewModulo.Titulo = title;
     jsonNewModulo.Desplegable = desplegable;
+    jsonNewModulo.Favorito = favorito;
     const formData = new FormData();
     formData.append("Id", jsonNewModulo.Id);
     formData.append("Titulo", jsonNewModulo.Titulo);
@@ -148,6 +152,8 @@ function saveNewModulo() {
     formData.append("Padre", jsonNewModulo.Padre);
     formData.append("Url", jsonNewModulo.Url);
     formData.append("Files", jsonNewModulo.Files);
+    formData.append("Favorito", jsonNewModulo.Favorito);
+    console.log(jsonNewModulo);
     $.ajax({
         type: "POST",
         url: "/Modulos/SaveMenuModulo",
@@ -160,7 +166,18 @@ function saveNewModulo() {
 
             let id = response.id;
             let urlModulo = window.location.origin + '/Modulos/Details?id=' + id;
-            window.location.assign(urlModulo);
+            
+            Swal.fire({
+                title: 'Bien!',
+                text: 'La información del modulo se ha agregado con exito!',
+                type: 'success',
+                showConfirmButton: false,
+                timer: 3000,
+            }).then((result) => {
+                window.location.assign(urlModulo);
+                location.reload();
+            });
+
         },
         error: function (error) {
             Swal.fire({
@@ -168,8 +185,10 @@ function saveNewModulo() {
                 text: 'Ha ocurrido un error al actualizar la información. Inténtelo de nuevo más tarde y si el problema persiste contacte con soporte!',
                 imageUrl: '/img/señalroja.png',
                 imageHeight: 212,
-                timer: 2000,
-            })
+                timer: 5000,
+            }).then((result) => {
+                location.reload();
+            });
         }
     });
     $("#modalNewModulo").modal("hide");
@@ -203,4 +222,18 @@ function addItemEstaticToMenu(item, menuOpen) {
         $("#EstaticMenu").append(menuItems);
     }
 }
+
+$("#radioPrimary2").click(function () {
+    $("#iconoImg").hide();
+    $("#guiaRapida").show();
+    $("#imagenIcono").val("");
+    console.log("desplegable: seleccinar icono si");
+})
+$("#radioPrimary1").click(function () {
+    $("#iconoImg").show();
+    $("#guiaRapida").hide();
+    $("#guiasRapidas").prop("checked", false);
+    
+    console.log("desplegable: seleccinar icono no");
+})
 

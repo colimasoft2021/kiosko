@@ -66,6 +66,16 @@
                         <label for="iconoModulo">Icono</label>
                         <input type="file" name="iconoModulo" id="iconoModulo" class="form-control">
                       </div>
+                      @*<div class="form-group">
+                        <label for="iconoModulo">Icono</label>
+                        <input type="file" name="iconoModulo" id="iconoModulo" class="form-control">
+                      </div>*@
+                      <!-- guia/favorito -->
+                      <div id="divGuiaRapida" class="form-group" style="display: block">
+                          <input type="checkbox" id="guiaRapidaa" class="ignore" name="guiaRapidaa" />
+                          <label for="guiaRapidaa">Guias Rapidas</label>
+                      </div>
+                      <!-- fin - guia/favorito -->
                     </div>
                 </div>
                 <div class="modal-footer justify-content-between">
@@ -119,7 +129,8 @@
           let tiempoInactividad = item.tiempoInactividad == null ? 0 : item.tiempoInactividad;
           let iconImagen = item.url;
           let stringUrl = "'"+item.url+"'";
-          console.log(iconImagen)
+          let favorito = item.favorito;
+          let stringPadre = "'"+item.padre+"'";
           let trTable = "";
               trTable += '<tr id="tr' + idModulo + '">';
               trTable += '<td>'+idModulo+'</td>';
@@ -128,7 +139,7 @@
               trTable += '<td>'+textDesplegable+'</td>';
               trTable += '<td>'+tiempoInactividad+' días</td>';
               trTable += '<td><img id="icon-Image" src="'+iconImagen+'"></td>';
-              trTable += '<td><p><img src="/img/iconPencil.png" alt="icon trash" onclick="openModalEditModulo('+stringTitulo+','+tiempoInactividad+','+id+','+stringUrl+')">&nbsp;&nbsp;&nbsp;&nbsp;';
+              trTable += '<td><p><img src="/img/iconPencil.png" alt="icon trash" onclick="openModalEditModulo('+stringTitulo+','+tiempoInactividad+','+id+','+stringUrl+','+favorito+','+stringPadre+')">&nbsp;&nbsp;&nbsp;&nbsp;';
               trTable += '<img src="/img/iconTrash.png" alt="icon trash" onclick="removeModulo('+id+')"></p></td>';
               trTable += '</tr>';
           if (padre !== null) {
@@ -139,12 +150,25 @@
           }
       }
 
-      function openModalEditModulo(titulo, tiempoInactividad, id, url) {
+      function openModalEditModulo(titulo, tiempoInactividad, id, url, favorito, padre) {
           $("#tituloModulo").val(titulo);
           $("#tiempoInactividad").val(tiempoInactividad);
           $("#idModulo").val(id);
           urlIcono = url;
+          if(padre == "null"){
+              $("#divGuiaRapida").hide();
+              $("#iconoModulo").show();
+          } else {
+              $("#divGuiaRapida").show();
+              $("#iconoModulo").hide();
+          }
+          if(favorito){
+            $("#guiaRapidaa").prop("checked", true);
+          } else {
+            $("#guiaRapidaa").prop("checked", false);
+          }
           $("#modalEditarModulo").modal("show");
+          console.log(titulo, padre);
       }
       $.validator.setDefaults({
         submitHandler: function () {
@@ -152,6 +176,7 @@
             let filesImagen = $("#iconoModulo").prop("files");
             let url = "";
             let files = "";
+            let favorito = $("#guiaRapidaa").prop("checked");
             if(filesImagen[0]){
               url = window.location.origin+'/files/'+filesImagen[0].name;
               files = filesImagen[0];
@@ -164,7 +189,8 @@
             formData.append("tiempoInactividad", $("#tiempoInactividad").val());
             formData.append("Url", url);
             formData.append("Files", files);
-            console.log(formData);
+            formData.append("Favorito", favorito);
+            console.log(FormData);
             $.ajax({
               type: "POST",
               url: "/Modulos/updateModulo",
@@ -191,6 +217,8 @@
                       imageUrl: '/img/señalroja.png',
                       imageHeight: 212,
                       timer: 3000,
+                  }).then((result) => {
+                      location.reload();
                   })
               }
             });
