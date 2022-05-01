@@ -393,59 +393,43 @@ namespace kiosko.Controllers
                         }
                     }
                 }
-                /*
+                
                 var comisionistas = new Comisionistas();
-                foreach (var com in usuarios)
+                foreach (var com in comisionistas.DataComisionistas)
                 {
-                    var infoComisionista = new DataComisionista();
-                    infoComisionista.EmailComisionista = "";
-                    infoComisionista.NombreComisionista = "";
-                    
-                    foreach(var emp in com.Empleados)
+                    com.NombreComisionista = "";
+                    string cuerpoMensaje = "<h2>Hola " + com.NombreComisionista + " Los siguientes usuarios no han retomado su capacitacion</h2><br/><br/>";
+                    foreach (var emp in com.Empleados)
                     {
-                        foreach(var user in alertas)
+                        cuerpoMensaje += "<div style='height: auto; border: 1px solid blue; padding: 10px 10px 10px 10px; margin-bottom: 20px;'>";
+                        cuerpoMensaje += "<h4 style='margin-bottom: 10px;'>";
+                        cuerpoMensaje += emp.Nombre;
+                        cuerpoMensaje += "</h4>";
+                        foreach (var modulo in emp.ModulosInactivos)
                         {
-                            if (emp.IdUsuario == user.IdUsuario)
-                            {
-                                infoComisionista.Empleados.Add(user);
-                                comisionistas.DataComisionistas.Add(infoComisionista);
-                            }
+                            cuerpoMensaje += "<h5>Modulo Inactivo: " + modulo.Modulo + "</h5>";
+                            cuerpoMensaje += "<ul>";
+                            cuerpoMensaje += "<li>Porcentaje de avance: " + modulo.Porcentaje + "%</li>";
+                            cuerpoMensaje += "<li>Tiempo de inactividad: " + modulo.TiempoInactividad + " días</li>";
+                            cuerpoMensaje += "</ul>";
                         }
-                        
+                        cuerpoMensaje += "</div>";
                     }
-                }
-                */
-
-                string cuerpoMensaje = "<h2>Los siguientes usuarios no han retomado su capacitacion</h2><br/><br/>";
-                foreach (var usuario in alertas.UsuariosAlertas)
-                {
-                    cuerpoMensaje += "<div style='height: auto; border: 1px solid blue; padding: 10px 10px 10px 10px; margin-bottom: 20px;'>";
-                    cuerpoMensaje += "<h4 style='margin-bottom: 10px;'>";
-                    cuerpoMensaje += usuario.Nombre;
-                    cuerpoMensaje += "</h4>";
-                    foreach (var modulo in usuario.ModulosInactivos)
+                    try
                     {
-                        cuerpoMensaje += "<h5>Modulo Inactivo: " + modulo.Modulo + "</h5>";
-                        cuerpoMensaje += "<ul>";
-                        cuerpoMensaje += "<li>Porcentaje de avance: " + modulo.Porcentaje + "%</li>";
-                        cuerpoMensaje += "<li>Tiempo de inactividad: " + modulo.TiempoInactividad + " días</li>";
-                        cuerpoMensaje += "</ul>";
+                        _mailService.SendEmailGmail("juan.rivera@colimasoft.com", "Alerta de capacitación", cuerpoMensaje);
+                        message = new { status = "ok", message = "Email enviado" };
+                        ret = StatusCode(StatusCodes.Status200OK, alertas);
                     }
-                    cuerpoMensaje += "</div>";
+                    catch (Exception ex)
+                    {
+                        _errorService.SaveErrorMessage("_mailService.SendEmailGmail", "ModulosController",
+                            "EnviarAlertas", ex.Message);
+                        message = new { status = "error", message = ex.Message };
+                        ret = StatusCode(StatusCodes.Status500InternalServerError, message);
+                    }
                 }
-                try
-                {
-                    _mailService.SendEmailGmail("juan.rivera@colimasoft.com", "Alerta de capacitación", cuerpoMensaje);
-                    message = new { status = "ok", message = "Email enviado" };
-                    ret = StatusCode(StatusCodes.Status200OK, alertas);
-                }
-                catch (Exception ex)
-                {
-                    _errorService.SaveErrorMessage("_mailService.SendEmailGmail", "ModulosController", 
-                        "EnviarAlertas", ex.Message);
-                    message = new { status = "error", message = ex.Message };
-                    ret = StatusCode(StatusCodes.Status500InternalServerError, message);
-                }
+                
             }
             catch (Exception ex)
             {

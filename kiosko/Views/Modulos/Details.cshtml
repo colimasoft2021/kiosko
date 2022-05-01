@@ -46,6 +46,7 @@
                                 <li class="option-menu is-aviso" onclick="addComponent('aviso-inicial', 0)">Aviso</li>
                                 <li class="option-menu is-general" onclick="addComponent('desplegable-texto-imagen', 0)">Desplegable texto-imagen</li>
                                 <li class="option-menu is-general" onclick="addComponent('texto-imagen', 0)">Texto Imagen</li>
+                                <li class="option-menu is-general" onclick="addComponent('imagen-titulo-desc', 0)">Imagen + titulo + descripción</li>
                             </ul>
                         </div>
                 </div>
@@ -466,7 +467,6 @@
                       '<input class="titulo-input mt-4" type="text" typeInput="titulo" placeholder="Titulo" value="'+item.titulo+'">'+
                       '<br/>'+
                       '<input type="text" placeholder="Texto" typeInput="texto" class="mt-4" value="'+item.texto+'">'+
-                      //aqui agregar el input del color en la value recibir comoi item.backgroundColor, typeInput="color"
                       '<input class="Color-Selector"  type="color" typeInput="color" value="'+item.backgroundColor+'">'+
                     '</div>';
             indexImagen = indexImagen + 1;
@@ -889,6 +889,32 @@
                 '<input class="inputTexto" type="text" placeholder="Titulo" value="'+valueInpText5+'">'+
               '</div>';
           break;
+          case 'imagen-titulo-desc':
+            let valueTitulo = (item) ? item.titulo : "";
+            let valueDescriptionImDes = (item) ? item.descripcion : "";
+            component =
+              '<div class="col-lg-12 component" id="'+idComponent+'" db-id="'+pkId+'" type-component="imagen-titulo-desc">'+
+                '<p class="tituloCmp">'+type+
+                  '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+','+stringType+')">'+
+                '<p>'+
+                '<div class="container-desplegable row">'+
+                  '<div class="container-desplegable-texto-imagen">'+
+                    '<div class="card-desplegable-imagen">'+
+                      '<div class="d-flex col-lg-12 justify-content-end align-items-center">';
+            let imageTitDes = generateCardImage(stringId, idComponent, item, pkId, stringType, 'img1');
+            component += imageTitDes;
+            component +=
+                      '</div>'+
+                    '</div>'+
+                    '<div class="card-desplegable-texto">'+
+                      '<input class="subtitle-input" type="text" placeholder="Título" typeInput="titulo" value="'+valueTitulo+'">'+        
+                    '</div>'+
+                  '</div>'+
+                  '<textarea class="textarea mt-3" name="" id="" cols="" rows="3" placeholder="Descripción">'+valueDescriptionImDes+'</textarea><br/>'+
+                '</div>'+
+              '</div>';
+              indexImagen = indexImagen + 2;
+          break;
           default:
             component = "";
         }
@@ -1285,6 +1311,28 @@
         break;
         case 'titulo':
           $("#"+idElement).find("input").each(function() {
+            let value = $(this).val();
+            jsonItem.Descripcion = value;
+          });
+        break;
+        case "imagen-titulo-desc":
+          $("#"+idElement).find("input").each(function() {
+            let typeInp = $(this).attr("typeInput");
+            if(typeInp == 'titulo'){
+                let value = $(this).val();
+                jsonItem.Titulo = value;
+            }
+            if(typeInp == 'img1'){
+                let value = $(this).prop("files");
+                if(value[0]){
+                    jsonItem.Url = window.location.origin+'/files/'+value[0].name;
+                    jsonItem.Files.push(value[0]);
+                }else{
+                    jsonItem.Url = $(this).attr("value");
+                }
+            }
+          });
+          $("#"+idElement).find("textarea").each(function() {
             let value = $(this).val();
             jsonItem.Descripcion = value;
           });
