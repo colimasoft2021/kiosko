@@ -112,6 +112,11 @@ namespace kiosko.Models
                     .WithMany(p => p.Desplazantes)
                     .HasForeignKey(d => d.IdComponente)
                     .HasConstraintName("FK_desplazantes_componentes");
+
+                entity.Property(e => e.BackgroundColor)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("background_color");
             });
 
             modelBuilder.Entity<Error>(entity =>
@@ -155,6 +160,14 @@ namespace kiosko.Models
                     .HasMaxLength(50)
                     .IsUnicode(false)
                     .HasColumnName("titulo");
+
+                entity.Property(e => e.Url)
+                    .IsUnicode(false)
+                    .HasColumnName("url");
+
+                entity.Property(e => e.Favorito)
+                    .HasColumnName("favorito")
+                    .HasDefaultValueSql("((0))");
             });
 
             modelBuilder.Entity<Progreso>(entity =>

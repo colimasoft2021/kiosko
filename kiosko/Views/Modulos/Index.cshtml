@@ -29,6 +29,7 @@
                                 <th>Padre</th>
                                 <th>Es Desplegable</th>
                                 <th>Tiempo de inactividad</th>
+                                <th>Icono</th>
                                 <th>Acciones</th>
                               </tr>
                           </thead>
@@ -49,7 +50,7 @@
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
-            <form id="formEditModulo">
+            <form id="formEditModulo" enctype="multipart/form-data">
                 <div class="modal-body">
                     <div class="card-body">
                       <input type="hidden" name="idModulo" id="idModulo" class="form-control">
@@ -61,6 +62,20 @@
                         <label for="tiempoInactividad">Tiempo máximo de inactividad (días)</label>
                         <input type="number" name="tiempoInactividad" id="tiempoInactividad" class="form-control">
                       </div>
+                      <div class="form-group">
+                        <label for="iconoModulo">Icono</label>
+                        <input type="file" name="iconoModulo" id="iconoModulo" class="form-control">
+                      </div>
+                      @*<div class="form-group">
+                        <label for="iconoModulo">Icono</label>
+                        <input type="file" name="iconoModulo" id="iconoModulo" class="form-control">
+                      </div>*@
+                      <!-- guia/favorito -->
+                      <div id="divGuiaRapida" class="form-group" style="display: block">
+                          <input type="checkbox" id="guiaRapidaa" class="ignore" name="guiaRapidaa" />
+                          <label for="guiaRapidaa">Guias Rapidas</label>
+                      </div>
+                      <!-- fin - guia/favorito -->
                     </div>
                 </div>
                 <div class="modal-footer justify-content-between">
@@ -76,6 +91,7 @@
 </div>
 @section scripts {
     <script type="text/javascript">
+      var urlIcono = "";
       $(function () {
         getModulos();
       });
@@ -111,6 +127,10 @@
           let idModulo = item.idModulo;
           let textDesplegable = item.desplegable === 0 ? 'No' : 'Si';
           let tiempoInactividad = item.tiempoInactividad == null ? 0 : item.tiempoInactividad;
+          let iconImagen = item.url;
+          let stringUrl = "'"+item.url+"'";
+          let favorito = item.favorito;
+          let stringPadre = "'"+item.padre+"'";
           let trTable = "";
               trTable += '<tr id="tr' + idModulo + '">';
               trTable += '<td>'+idModulo+'</td>';
@@ -118,7 +138,8 @@
               trTable += '<td>'+padre+'</td>';
               trTable += '<td>'+textDesplegable+'</td>';
               trTable += '<td>'+tiempoInactividad+' días</td>';
-              trTable += '<td><p><img src="/img/iconPencil.png" alt="icon trash" onclick="openModalEditModulo('+stringTitulo+','+tiempoInactividad+','+id+')">&nbsp;&nbsp;&nbsp;&nbsp;';
+              trTable += '<td><img id="icon-Image" src="'+iconImagen+'"></td>';
+              trTable += '<td><p><img src="/img/iconPencil.png" alt="icon trash" onclick="openModalEditModulo('+stringTitulo+','+tiempoInactividad+','+id+','+stringUrl+','+favorito+','+stringPadre+')">&nbsp;&nbsp;&nbsp;&nbsp;';
               trTable += '<img src="/img/iconTrash.png" alt="icon trash" onclick="removeModulo('+id+')"></p></td>';
               trTable += '</tr>';
           if (padre !== null) {
@@ -129,34 +150,65 @@
           }
       }
 
-      function openModalEditModulo(titulo, tiempoInactividad, id) {
+      function openModalEditModulo(titulo, tiempoInactividad, id, url, favorito, padre) {
           $("#tituloModulo").val(titulo);
           $("#tiempoInactividad").val(tiempoInactividad);
           $("#idModulo").val(id);
+          urlIcono = url;
+          if(padre == "null"){
+              $("#divGuiaRapida").hide();
+              $("#iconoModulo").show();
+          } else {
+              $("#divGuiaRapida").show();
+              $("#iconoModulo").hide();
+          }
+          if(favorito){
+            $("#guiaRapidaa").prop("checked", true);
+          } else {
+            $("#guiaRapidaa").prop("checked", false);
+          }
           $("#modalEditarModulo").modal("show");
+          console.log(titulo, padre);
       }
-
       $.validator.setDefaults({
         submitHandler: function () {
-            let formData = {
-              idModulo: $("#idModulo").val(),
-              tituloModulo: $("#tituloModulo").val(),
-              tiempoInactividad: $("#tiempoInactividad").val(),
-            };
+            console.log('entro al submit');
+            let filesImagen = $("#iconoModulo").prop("files");
+            let url = "";
+            let files = "";
+            let favorito = $("#guiaRapidaa").prop("checked");
+            if(filesImagen[0]){
+              url = window.location.origin+'/files/'+filesImagen[0].name;
+              files = filesImagen[0];
+            }else{
+              url = urlIcono;
+            }
+            const formData = new FormData();
+            formData.append("idModulo", $("#idModulo").val());
+            formData.append("tituloModulo", $("#tituloModulo").val());
+            formData.append("tiempoInactividad", $("#tiempoInactividad").val());
+            formData.append("Url", url);
+            formData.append("Files", files);
+            formData.append("Favorito", favorito);
+            console.log(FormData);
             $.ajax({
               type: "POST",
               url: "/Modulos/updateModulo",
               headers: { "RequestVerificationToken": "@GetAntiXsrfRequestToken()" },
               data: formData,
+              processData: false,
+              contentType: false,
               success: function (response) {
                 Swal.fire({
                     title: 'Bien!',
                     text: 'La información del modulo se ha actualizado con exito!',
                     type: 'success',
                     showConfirmButton: false,
-                    timer: 1500
+                    timer: 3000
+                  }).then((result) => {
+                      location.reload();
                   })
-                  location.reload();
+                  
               },
               error: function (error) {
                   Swal.fire({
@@ -164,7 +216,9 @@
                       text: 'Ha ocurrido un error al actualizar la información. Inténtelo de nuevo más tarde y si el problema persiste contacte con soporte!',
                       imageUrl: '/img/señalroja.png',
                       imageHeight: 212,
-                      timer: 2000,
+                      timer: 3000,
+                  }).then((result) => {
+                      location.reload();
                   })
               }
             });
@@ -178,6 +232,9 @@
           tiempoInactividad: {
             required: true,
           },
+          iconoModulo: {
+             extension: "png"
+           },
         },
         messages: {
           tituloModulo: {
@@ -186,9 +243,14 @@
           tiempoInactividad: {
             required: "Ingrese el tiempo de inactividad",
           },
+          iconoModulo: {
+            extension: "debe ser png"
+          },
         },
         errorElement: 'span',
         errorPlacement: function (error, element) {
+            console.log('error');
+            console.log(error);
           error.addClass('invalid-feedback');
           element.closest('.form-group').append(error);
         },

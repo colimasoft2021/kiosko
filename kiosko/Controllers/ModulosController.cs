@@ -20,13 +20,17 @@ namespace kiosko.Controllers
         MailService _mailService;
         AuthorizationService _authorizationService;
         ErrorService _errorService;
+        private readonly IWebHostEnvironment _env;
 
-        public ModulosController(KioskoCmsContext context, MailService mailService, AuthorizationService authorizationService, ErrorService errorService)
+        public ModulosController(KioskoCmsContext context, MailService mailService, AuthorizationService authorizationService, ErrorService errorService,
+            IWebHostEnvironment env)
         {
             _context = context;
             _mailService = mailService;
             _authorizationService = authorizationService;
             _errorService = errorService;
+            _env = env;
+
         }
 
         // GET: Modulos
@@ -60,7 +64,7 @@ namespace kiosko.Controllers
             var message = new { status = "", message = "" };
             IActionResult ret = null;
             try { 
-                var modulos = _context.Modulos.Where(m => m.Id > 1).OrderBy(m => m.Orden);
+                var modulos = _context.Modulos.Where(m => m.Id > 2).OrderBy(m => m.Orden);
                 ret = StatusCode(StatusCodes.Status200OK, modulos);
             }
             catch (Exception ex)
@@ -101,7 +105,7 @@ namespace kiosko.Controllers
             }
 
             try { 
-                var modulos = _context.Modulos.OrderBy(c => c.Orden)
+                var modulos = _context.Modulos.Where(c => c.Id != 2).OrderBy(c => c.Orden)
                     .Include(m => m.Componentes)
                         .ThenInclude(m => m.Desplazantes)
                         .ToList();
@@ -121,6 +125,7 @@ namespace kiosko.Controllers
                     dataModulo.TiempoInactividad = modulo.TiempoInactividad;
                     dataModulo.Componentes = modulo.Componentes;
                     dataModulo.NumeroHijos = 0;
+                    dataModulo.Url = modulo.Url;
                     if (modulo.Padre == null)
                     {
                     
@@ -175,13 +180,66 @@ namespace kiosko.Controllers
             return ret;
         }
 
-        [HttpPost()]
-        public IActionResult SaveMenuModulo(Modulo modulo)
+        [HttpGet]
+        public IActionResult MessagesInitialsForApp()
         {
             var message = new { status = "", message = "" };
             IActionResult ret = null;
-            try { 
+            try
+            {
+                List<AvisoInicial> avisos = new List<AvisoInicial>();
+                AvisoInicial mensajeInicial = new AvisoInicial();
+                var avisosIniciales = _context.Componentes.Where(c => c.Padre == "modulo2").OrderBy(c => c.Orden).ToList();
+                foreach (var mensaje in avisosIniciales)
+                {
+                    mensajeInicial.Id = mensaje.Id;
+                    mensajeInicial.tipoComponente = mensaje.TipoComponente;
+                    mensajeInicial.url = mensaje.Url;
+                    mensajeInicial.descripcion = mensaje.Descripcion;
+
+                    avisos.Add(mensajeInicial);
+                }
+                ret = StatusCode(StatusCodes.Status200OK, avisos);
+            }
+            catch (Exception ex)
+            {
+                _errorService.SaveErrorMessage("_context.Modulos", "ModulosController", "GetAllModulos", ex.Message);
+                message = new { status = "error", message = ex.Message };
+                ret = StatusCode(StatusCodes.Status500InternalServerError, message);
+            }
+            return ret;
+        }
+
+
+
+        [HttpPost()]
+        public IActionResult SaveMenuModulo()
+        {
+            var message = new { status = "", message = "" };
+            IActionResult ret = null;
+            try {
+                var modulo = new Modulo();
                 modulo.TiempoInactividad = 5;
+                modulo.Id = Int32.Parse(Request.Form["Id"]);
+                modulo.Titulo = Request.Form["Titulo"];
+                modulo.AccesoDirecto = Int32.Parse(Request.Form["AccesoDirecto"]);
+                modulo.Orden = Int32.Parse(Request.Form["Orden"]);
+                modulo.Desplegable = Int32.Parse(Request.Form["Desplegable"]);
+                modulo.IdModulo = Request.Form["IdModulo"];
+                modulo.Padre = Request.Form["Padre"];
+                modulo.Url = Request.Form["Url"];
+                modulo.Favorito = Convert.ToBoolean(Request.Form["Favorito"]);
+                if (modulo.Padre == "undefined")
+                    modulo.Padre = null;
+                foreach (var formFile in Request.Form.Files)
+                {
+                    var fulPath = Path.Combine(_env.ContentRootPath, "wwwroot\\files", formFile.FileName);
+                    using (FileStream fs = System.IO.File.Create(fulPath))
+                    {
+                        formFile.CopyTo(fs);
+                        fs.Flush();
+                    }
+                }
                 _context.Add(modulo);
                 _context.SaveChanges();
 
@@ -227,6 +285,18 @@ namespace kiosko.Controllers
                     .FirstOrDefaultAsync(m => m.Id == idModulo);
                 modulo.Titulo = Request.Form["tituloModulo"];
                 modulo.TiempoInactividad = Int32.Parse(Request.Form["tiempoInactividad"]);
+                modulo.Favorito = Convert.ToBoolean(Request.Form["Favorito"]);
+
+                modulo.Url = Request.Form["Url"];
+                foreach (var formFile in Request.Form.Files)
+                {
+                    var fulPath = Path.Combine(_env.ContentRootPath, "wwwroot\\files", formFile.FileName);
+                    using (FileStream fs = System.IO.File.Create(fulPath))
+                    {
+                        formFile.CopyTo(fs);
+                        fs.Flush();
+                    }
+                }
 
                 _context.Update(modulo);
                 _context.SaveChanges();
@@ -470,7 +540,7 @@ namespace kiosko.Controllers
         public string? Padre { get; set; }
         public int? TiempoInactividad { get; set; }
         public int? NumeroHijos { get; set; }
-
+        public string? Url { get; set; }
 
         public virtual ICollection<Componente> Componentes { get; set; }
         public virtual ICollection<CustomModulo> Submodulos { get; set; }
