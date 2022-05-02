@@ -13,20 +13,23 @@ using kiosko.Helpers;
 
 namespace kiosko.Controllers
 {
-    [Authorize]
+    
     public class ComponentesController : Controller
     {
         private readonly KioskoCmsContext _context;
         private readonly IWebHostEnvironment _env;
         ErrorService _errorServices;
+        AuthorizationService _authorizationService;
 
-        public ComponentesController(KioskoCmsContext context, IWebHostEnvironment env, ErrorService errorService)
+        public ComponentesController(KioskoCmsContext context, IWebHostEnvironment env, ErrorService errorService,
+            AuthorizationService authorizationService )
         {
             _context = context;
             _env = env;
             _errorServices = errorService;
+            _authorizationService = authorizationService;  
         }
-
+        [Authorize]
         [HttpPost()]
         [ValidateAntiForgeryToken]
         public IActionResult deleteComponent(int id)
@@ -50,6 +53,7 @@ namespace kiosko.Controllers
             return ret;
         }
 
+        [Authorize]
         [HttpPost()]
         [ValidateAntiForgeryToken]
         public IActionResult deleteDesplazante(int id)
@@ -78,6 +82,7 @@ namespace kiosko.Controllers
             return _context.Componentes.Any(e => e.Id == id);
         }
 
+        [Authorize]
         [HttpPost]
         public JsonResult GetAllComponentsForModulo(int? idModulo)
         {
@@ -95,6 +100,7 @@ namespace kiosko.Controllers
             return Json(componentes);
         }
 
+        [Authorize]
         [HttpPost()]
         [ValidateAntiForgeryToken]
         public IActionResult saveComponentForModulo2()
@@ -142,6 +148,7 @@ namespace kiosko.Controllers
             return ret;
         }
 
+        [Authorize]
         [HttpPost()]
         [ValidateAntiForgeryToken]
         public IActionResult updateComponentForModulo2()
@@ -190,6 +197,7 @@ namespace kiosko.Controllers
             return ret;
         }
 
+        [Authorize]
         [HttpPost()]
         [ValidateAntiForgeryToken]
         public IActionResult saveDesplazantes()
@@ -231,6 +239,7 @@ namespace kiosko.Controllers
             return ret;
         }
 
+        [Authorize]
         [HttpPost()]
         [ValidateAntiForgeryToken]
         public IActionResult updateDesplazantes()
@@ -269,6 +278,41 @@ namespace kiosko.Controllers
                 message = new { status = "error", message = ex.Message };
                 ret = StatusCode(StatusCodes.Status500InternalServerError, message);
             }
+            return ret;
+        }
+
+        public IActionResult GetAllComponentesPopUpVideo()
+        {
+            var message = new { status = "", message = "" };
+            IActionResult ret = null;
+
+            if (!Request.Headers.ContainsKey("Authorization"))
+            {
+                message = new { status = "error", message = "Unauthorized" };
+                return StatusCode(StatusCodes.Status401Unauthorized, message);
+            }
+            var paramAuthorization = Request.Headers["Authorization"].ToString();
+            var isAuthorized = _authorizationService.CheckAuthorization(paramAuthorization);
+            if (!isAuthorized)
+            {
+                _errorServices.SaveErrorMessage("_authorizationService.CheckAuthorization", "ModulosController",
+                    "GetModulosAndComponentsForApp", "Unauthorized/Sin Autorizacion");
+                message = new { status = "error", message = "Unauthorized" };
+                return StatusCode(StatusCodes.Status401Unauthorized, message);
+            }
+
+            try
+            {
+                var componentes = _context.Componentes.Where(c => c.TipoComponente == "pop-up-video").OrderBy(c => c.Id).ToList();
+                ret = StatusCode(StatusCodes.Status200OK, componentes);
+            }
+            catch (Exception ex)
+            {
+                _errorServices.SaveErrorMessage("_context.Modulos", "ComponentesController", "GetPopUpVideo", ex.Message);
+                message = new { status = "error", message = ex.Message };
+                ret = StatusCode(StatusCodes.Status500InternalServerError, message);
+            }
+
             return ret;
         }
     }

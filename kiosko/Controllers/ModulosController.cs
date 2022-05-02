@@ -210,6 +210,43 @@ namespace kiosko.Controllers
             return ret;
         }
 
+        public IActionResult GetModulosGuiasRapidas()
+        {
+            var message = new { status = "", message = "" };
+            IActionResult ret = null;
+
+            if (!Request.Headers.ContainsKey("Authorization"))
+            {
+                message = new { status = "error", message = "Unauthorized" };
+                return StatusCode(StatusCodes.Status401Unauthorized, message);
+            }
+            var paramAuthorization = Request.Headers["Authorization"].ToString();
+            var isAuthorized = _authorizationService.CheckAuthorization(paramAuthorization);
+            if (!isAuthorized)
+            {
+                _errorService.SaveErrorMessage("_authorizationService.CheckAuthorization", "ModulosController",
+                    "GetModulosAndComponentsForApp", "Unauthorized/Sin Autorizacion");
+                message = new { status = "error", message = "Unauthorized" };
+                return StatusCode(StatusCodes.Status401Unauthorized, message);
+            }
+
+            try
+            {
+                var modulos = _context.Modulos.Where(c => c.Favorito == true).OrderBy(c => c.Orden)
+                    .Include(m => m.Componentes)
+                        .ThenInclude(m => m.Desplazantes)
+                        .ToList();
+
+                ret = StatusCode(StatusCodes.Status200OK, modulos);
+            }
+            catch (Exception ex)
+            {
+                _errorService.SaveErrorMessage("_context.Modulos", "ModulosController", "GetAllModulosGuiasRapidas", ex.Message);
+                message = new { status = "error", message = ex.Message };
+                ret = StatusCode(StatusCodes.Status500InternalServerError, message);
+            }
+            return ret;
+        }
 
 
         [HttpPost()]
