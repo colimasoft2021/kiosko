@@ -101,6 +101,7 @@ function openModalNewModulo(title, lastId, padre) {
     console.log(title);
     console.log(lastId);
     console.log(padre);
+    $("#divTipo_guia").hide();
     jsonNewModulo = {
         "Id": 0,
         "Titulo": "",
@@ -111,7 +112,8 @@ function openModalNewModulo(title, lastId, padre) {
         "Padre": null,
         "Url": "",
         "Files": "",
-        "Favorito": false
+        "Favorito": false,
+        "TipoGuia": ""
     }
     if (padre) {
         let arrayLastId = lastId.split("-");
@@ -134,6 +136,8 @@ function saveNewModulo() {
     let desplegable = $('input[name="radioDesplegable"]:checked').val();
     let value = $("#imagenIcono").prop("files");
     let favorito = $("#guiasRapidas").prop("checked");
+    let tipo_guia = $("#tipo_guia").val();
+    console.log(tipo_guia);
     if (value[0]) {
         jsonNewModulo.Url = window.location.origin + '/files/' + value[0].name;
         jsonNewModulo.Files = value[0];
@@ -142,6 +146,7 @@ function saveNewModulo() {
     jsonNewModulo.Titulo = title;
     jsonNewModulo.Desplegable = desplegable;
     jsonNewModulo.Favorito = favorito;
+    jsonNewModulo.TipoGuia = tipo_guia;
     const formData = new FormData();
     formData.append("Id", jsonNewModulo.Id);
     formData.append("Titulo", jsonNewModulo.Titulo);
@@ -153,6 +158,7 @@ function saveNewModulo() {
     formData.append("Url", jsonNewModulo.Url);
     formData.append("Files", jsonNewModulo.Files);
     formData.append("Favorito", jsonNewModulo.Favorito);
+    formData.append("TipoGuia", jsonNewModulo.TipoGuia);
     console.log(jsonNewModulo);
     $.ajax({
         type: "POST",
@@ -233,7 +239,18 @@ $("#radioPrimary1").click(function () {
     $("#iconoImg").show();
     $("#guiaRapida").hide();
     $("#guiasRapidas").prop("checked", false);
-    
+    $("#divTipo_guia").hide();
+    $("#tipo_guia").val("");
     console.log("desplegable: seleccinar icono no");
 })
+$("#guiasRapidas").click(function () {
+    let favorito = $("#guiasRapidas").prop("checked");
+    console.log(favorito);
+    if (favorito == true) {
+        $("#divTipo_guia").show();
+    } else {
+        $("#divTipo_guia").hide();
+    }
+})
+
 

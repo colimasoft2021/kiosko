@@ -268,6 +268,9 @@ namespace kiosko.Controllers
                 modulo.Padre = Request.Form["Padre"];
                 modulo.Url = Request.Form["Url"];
                 modulo.Favorito = Convert.ToBoolean(Request.Form["Favorito"]);
+                modulo.TipoGuia = Request.Form["TipoGuia"];
+                if(modulo.TipoGuia == "null" || modulo.TipoGuia == null)
+                    modulo.TipoGuia = "";
                 if (modulo.Padre == "undefined")
                     modulo.Padre = null;
                 foreach (var formFile in Request.Form.Files)

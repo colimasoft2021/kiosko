@@ -21,6 +21,7 @@ namespace kiosko.Models
         public int? TiempoInactividad { get; set; }
         public string? Url { get; set; }
         public bool? Favorito { get; set; }
+        public string? TipoGuia { get; set; }
         public virtual ICollection<Componente> Componentes { get; set; }
         public virtual ICollection<Progreso> Progresos { get; set; }
     }

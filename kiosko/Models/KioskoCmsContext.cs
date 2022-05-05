@@ -168,6 +168,10 @@ namespace kiosko.Models
                 entity.Property(e => e.Favorito)
                     .HasColumnName("favorito")
                     .HasDefaultValueSql("((0))");
+
+                entity.Property(e => e.TipoGuia)
+                    .IsUnicode(false)
+                    .HasColumnName("tipo_guia");
             });
 
             modelBuilder.Entity<Progreso>(entity =>
