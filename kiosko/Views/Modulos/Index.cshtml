@@ -75,6 +75,16 @@
                           <input type="checkbox" id="guiaRapidaa" class="ignore" name="guiaRapidaa" />
                           <label for="guiaRapidaa">Guias Rapidas</label>
                       </div>
+                      <div id="divTipo_guia">
+                          <label>Eligue un tipo de guia</label>
+                          <select id ="tipo_guiaa" name="tipo_guiaa">
+                              <option value="control-interno" >Control Interno</option>
+                              <option value="ejecucion" >Ejecución</option>
+                              <option value="abastecimiento-e-inventario" >Abastecimiento e inventario</option>
+                              <option value="seguridad" >Seguridad</option>
+                              <option value="servicio" >Servicio</option>
+                          </select>
+                      </div>
                       <!-- fin - guia/favorito -->
                     </div>
                 </div>
@@ -131,6 +141,8 @@
           let stringUrl = "'"+item.url+"'";
           let favorito = item.favorito;
           let stringPadre = "'"+item.padre+"'";
+          let stringtipo = "'"+item.tipoGuia+"'";
+          console.log(titulo,stringtipo);
           let trTable = "";
               trTable += '<tr id="tr' + idModulo + '">';
               trTable += '<td>'+idModulo+'</td>';
@@ -139,7 +151,7 @@
               trTable += '<td>'+textDesplegable+'</td>';
               trTable += '<td>'+tiempoInactividad+' días</td>';
               trTable += '<td><img id="icon-Image" src="'+iconImagen+'"></td>';
-              trTable += '<td><p><img src="/img/iconPencil.png" alt="icon trash" onclick="openModalEditModulo('+stringTitulo+','+tiempoInactividad+','+id+','+stringUrl+','+favorito+','+stringPadre+')">&nbsp;&nbsp;&nbsp;&nbsp;';
+              trTable += '<td><p><img src="/img/iconPencil.png" alt="icon trash" onclick="openModalEditModulo('+stringTitulo+','+tiempoInactividad+','+id+','+stringUrl+','+favorito+','+stringPadre+','+stringtipo+')">&nbsp;&nbsp;&nbsp;&nbsp;';
               trTable += '<img src="/img/iconTrash.png" alt="icon trash" onclick="removeModulo('+id+')"></p></td>';
               trTable += '</tr>';
           if (padre !== null) {
@@ -150,7 +162,7 @@
           }
       }
 
-      function openModalEditModulo(titulo, tiempoInactividad, id, url, favorito, padre) {
+      function openModalEditModulo(titulo, tiempoInactividad, id, url, favorito, padre, tipo) {
           $("#tituloModulo").val(titulo);
           $("#tiempoInactividad").val(tiempoInactividad);
           $("#idModulo").val(id);
@@ -167,8 +179,8 @@
           } else {
             $("#guiaRapidaa").prop("checked", false);
           }
+          $("select[name='tipo_guiaa']").val(tipo);
           $("#modalEditarModulo").modal("show");
-          console.log(titulo, padre);
       }
       $.validator.setDefaults({
         submitHandler: function () {
@@ -177,6 +189,7 @@
             let url = "";
             let files = "";
             let favorito = $("#guiaRapidaa").prop("checked");
+            let tipo = $("#tipo_guiaa").val();
             if(filesImagen[0]){
               url = window.location.origin+'/files/'+filesImagen[0].name;
               files = filesImagen[0];
@@ -190,7 +203,11 @@
             formData.append("Url", url);
             formData.append("Files", files);
             formData.append("Favorito", favorito);
+            formData.append("TipoGuia", $("#tipo_guiaa option:selected").val());
             console.log(FormData);
+            console.log($("#tipo_guiaa option:selected").val());
+            console.log($("#tipo_guiaa").val());
+            
             $.ajax({
               type: "POST",
               url: "/Modulos/updateModulo",

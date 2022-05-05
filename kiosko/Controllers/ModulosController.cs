@@ -328,6 +328,7 @@ namespace kiosko.Controllers
                 modulo.Titulo = Request.Form["tituloModulo"];
                 modulo.TiempoInactividad = Int32.Parse(Request.Form["tiempoInactividad"]);
                 modulo.Favorito = Convert.ToBoolean(Request.Form["Favorito"]);
+                modulo.TipoGuia = Request.Form["TipoGuia"];
 
                 modulo.Url = Request.Form["Url"];
                 foreach (var formFile in Request.Form.Files)
