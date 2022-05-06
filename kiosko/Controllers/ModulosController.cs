@@ -266,10 +266,11 @@ namespace kiosko.Controllers
                 modulo.Desplegable = Int32.Parse(Request.Form["Desplegable"]);
                 modulo.IdModulo = Request.Form["IdModulo"];
                 modulo.Padre = Request.Form["Padre"];
-                modulo.Url = Request.Form["Url"];
+                modulo.Url = Request.Form["Url"];   
                 modulo.Favorito = Convert.ToBoolean(Request.Form["Favorito"]);
                 modulo.TipoGuia = Request.Form["TipoGuia"];
-                if(modulo.TipoGuia == "null" || modulo.TipoGuia == null)
+                modulo.UrlFondo = Request.Form["UrlFondo"];
+                if (modulo.TipoGuia == "null" || modulo.TipoGuia == null)
                     modulo.TipoGuia = "";
                 if (modulo.Padre == "undefined")
                     modulo.Padre = null;
@@ -329,8 +330,11 @@ namespace kiosko.Controllers
                 modulo.TiempoInactividad = Int32.Parse(Request.Form["tiempoInactividad"]);
                 modulo.Favorito = Convert.ToBoolean(Request.Form["Favorito"]);
                 modulo.TipoGuia = Request.Form["TipoGuia"];
-
+                modulo.UrlFondo = Request.Form["UrlFondo"];
                 modulo.Url = Request.Form["Url"];
+                if (modulo.TipoGuia == "undefined" || modulo.TipoGuia == null)
+                    modulo.TipoGuia = "";
+
                 foreach (var formFile in Request.Form.Files)
                 {
                     var fulPath = Path.Combine(_env.ContentRootPath, "wwwroot\\files", formFile.FileName);

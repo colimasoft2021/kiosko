@@ -172,6 +172,10 @@ namespace kiosko.Models
                 entity.Property(e => e.TipoGuia)
                     .IsUnicode(false)
                     .HasColumnName("tipo_guia");
+
+                entity.Property(e => e.UrlFondo)
+                    .IsUnicode(false)
+                    .HasColumnName("url_fondo");
             });
 
             modelBuilder.Entity<Progreso>(entity =>

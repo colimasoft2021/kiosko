@@ -94,7 +94,9 @@ var jsonNewModulo = {
     "Padre": null,
     "Url": "",
     "Files": "",
-    "Favorito": ""
+    "Favorito": "",
+    "TipoGuia": "",
+    "UrlFondo": ""
 }
 
 function openModalNewModulo(title, lastId, padre) {
@@ -113,7 +115,8 @@ function openModalNewModulo(title, lastId, padre) {
         "Url": "",
         "Files": "",
         "Favorito": false,
-        "TipoGuia": ""
+        "TipoGuia": "",
+        "UrlFondo": ""
     }
     if (padre) {
         let arrayLastId = lastId.split("-");
@@ -135,12 +138,17 @@ function saveNewModulo() {
     let title = $("#titleNewModulo").val();
     let desplegable = $('input[name="radioDesplegable"]:checked').val();
     let value = $("#imagenIcono").prop("files");
+    let value2 = $("#addFondoSubModulo").prop("files");
     let favorito = $("#guiasRapidas").prop("checked");
     let tipo_guia = $("#tipo_guia").val();
     console.log(tipo_guia);
     if (value[0]) {
         jsonNewModulo.Url = window.location.origin + '/files/' + value[0].name;
         jsonNewModulo.Files = value[0];
+    }
+    if (value2[0]) {
+        jsonNewModulo.UrlFondo = window.location.origin + '/files/' + value2[0].name;
+        jsonNewModulo.Files = value2[0];
     }
     parseInt(desplegable);
     jsonNewModulo.Titulo = title;
@@ -159,6 +167,7 @@ function saveNewModulo() {
     formData.append("Files", jsonNewModulo.Files);
     formData.append("Favorito", jsonNewModulo.Favorito);
     formData.append("TipoGuia", jsonNewModulo.TipoGuia);
+    formData.append("UrlFondo", jsonNewModulo.UrlFondo);
     console.log(jsonNewModulo);
     $.ajax({
         type: "POST",
@@ -250,6 +259,15 @@ $("#guiasRapidas").click(function () {
         $("#divTipo_guia").show();
     } else {
         $("#divTipo_guia").hide();
+    }
+})
+$("#guiaRapidaa").click(function () {
+    let favorito = $("#guiaRapidaa").prop("checked");
+    console.log(favorito);
+    if (favorito == true) {
+        $("#divTipo_guia2").show();
+    } else {
+        $("#divTipo_guia2").hide();
     }
 })
 

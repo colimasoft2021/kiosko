@@ -30,6 +30,7 @@
                                 <th>Es Desplegable</th>
                                 <th>Tiempo de inactividad</th>
                                 <th>Icono</th>
+                                <th>Fondo</th>
                                 <th>Acciones</th>
                               </tr>
                           </thead>
@@ -75,7 +76,7 @@
                           <input type="checkbox" id="guiaRapidaa" class="ignore" name="guiaRapidaa" />
                           <label for="guiaRapidaa">Guias Rapidas</label>
                       </div>
-                      <div id="divTipo_guia">
+                      <div id="divTipo_guia2">
                           <label>Eligue un tipo de guia</label>
                           <select id ="tipo_guiaa" name="tipo_guiaa">
                               <option value="control-interno" >Control Interno</option>
@@ -84,6 +85,10 @@
                               <option value="seguridad" >Seguridad</option>
                               <option value="servicio" >Servicio</option>
                           </select>
+                      </div>
+                      <div class="form-group" id="divSubMFondo2">
+                        <label for="editFondoSubModulo">Fondo Submodulo</label>
+                        <input type="file" name="editFondoSubModulo" id="editFondoSubModulo" class="form-control">
                       </div>
                       <!-- fin - guia/favorito -->
                     </div>
@@ -102,6 +107,7 @@
 @section scripts {
     <script type="text/javascript">
       var urlIcono = "";
+      var urlFondo = "";
       $(function () {
         getModulos();
       });
@@ -139,10 +145,13 @@
           let tiempoInactividad = item.tiempoInactividad == null ? 0 : item.tiempoInactividad;
           let iconImagen = item.url;
           let stringUrl = "'"+item.url+"'";
+          let fondoSubmodulo = item.urlFondo;
+          let stringUrlFondo = "'"+item.urlFondo+"'";
+          console.log(item.url)
           let favorito = item.favorito;
           let stringPadre = "'"+item.padre+"'";
           let stringtipo = "'"+item.tipoGuia+"'";
-          console.log(titulo,stringtipo);
+          console.log(titulo,stringtipo, item.urlFondo);
           let trTable = "";
               trTable += '<tr id="tr' + idModulo + '">';
               trTable += '<td>'+idModulo+'</td>';
@@ -151,7 +160,8 @@
               trTable += '<td>'+textDesplegable+'</td>';
               trTable += '<td>'+tiempoInactividad+' días</td>';
               trTable += '<td><img id="icon-Image" src="'+iconImagen+'"></td>';
-              trTable += '<td><p><img src="/img/iconPencil.png" alt="icon trash" onclick="openModalEditModulo('+stringTitulo+','+tiempoInactividad+','+id+','+stringUrl+','+favorito+','+stringPadre+','+stringtipo+')">&nbsp;&nbsp;&nbsp;&nbsp;';
+              trTable += '<td><img id="icon-Image" src="'+fondoSubmodulo+'"></td>';
+              trTable += '<td><p><img src="/img/iconPencil.png" alt="icon trash" onclick="openModalEditModulo('+stringTitulo+','+tiempoInactividad+','+id+','+stringUrl+','+favorito+','+stringPadre+','+stringtipo+','+stringUrlFondo+')">&nbsp;&nbsp;&nbsp;&nbsp;';
               trTable += '<img src="/img/iconTrash.png" alt="icon trash" onclick="removeModulo('+id+')"></p></td>';
               trTable += '</tr>';
           if (padre !== null) {
@@ -162,22 +172,31 @@
           }
       }
 
-      function openModalEditModulo(titulo, tiempoInactividad, id, url, favorito, padre, tipo) {
+      function openModalEditModulo(titulo, tiempoInactividad, id, url, favorito, padre, tipo, fondo) {
           $("#tituloModulo").val(titulo);
           $("#tiempoInactividad").val(tiempoInactividad);
           $("#idModulo").val(id);
           urlIcono = url;
+          urlFondo = fondo;
           if(padre == "null"){
               $("#divGuiaRapida").hide();
+              $("#divTipo_guia2").hide();
               $("#iconoModulo").show();
+              //$("#editFondoSubModulo").hide();
+              $("#divSubMFondo2").hide();
           } else {
               $("#divGuiaRapida").show();
+              
               $("#iconoModulo").hide();
+              //$("#editFondoSubModulo").show();
+              $("#divSubMFondo2").show();
           }
           if(favorito){
             $("#guiaRapidaa").prop("checked", true);
+            $("#divTipo_guia2").show();
           } else {
             $("#guiaRapidaa").prop("checked", false);
+            $("#divTipo_guia2").hide();
           }
           $("select[name='tipo_guiaa']").val(tipo);
           $("#modalEditarModulo").modal("show");
@@ -186,7 +205,9 @@
         submitHandler: function () {
             console.log('entro al submit');
             let filesImagen = $("#iconoModulo").prop("files");
+            let filesFondo = $("#editFondoSubModulo").prop("files");
             let url = "";
+            let fondo = "";
             let files = "";
             let favorito = $("#guiaRapidaa").prop("checked");
             let tipo = $("#tipo_guiaa").val();
@@ -196,6 +217,12 @@
             }else{
               url = urlIcono;
             }
+            if(filesFondo[0]){
+              fondo = window.location.origin+'/files/'+filesFondo[0].name;
+              files = filesFondo[0];
+            }else{
+              fondo = urlFondo;
+            }
             const formData = new FormData();
             formData.append("idModulo", $("#idModulo").val());
             formData.append("tituloModulo", $("#tituloModulo").val());
@@ -204,6 +231,7 @@
             formData.append("Files", files);
             formData.append("Favorito", favorito);
             formData.append("TipoGuia", $("#tipo_guiaa option:selected").val());
+            formData.append("UrlFondo", fondo);
             console.log(FormData);
             console.log($("#tipo_guiaa option:selected").val());
             console.log($("#tipo_guiaa").val());
@@ -251,7 +279,10 @@
           },
           iconoModulo: {
              extension: "png"
-           },
+          },
+          editFondoSubModulo: {
+              extension: "png"
+          },
         },
         messages: {
           tituloModulo: {
@@ -261,8 +292,11 @@
             required: "Ingrese el tiempo de inactividad",
           },
           iconoModulo: {
-            extension: "debe ser png"
+            extension: "Debe ser png"
           },
+          editFondoSubModulo: {
+               extension: "Debe de ser png"
+           },
         },
         errorElement: 'span',
         errorPlacement: function (error, element) {
