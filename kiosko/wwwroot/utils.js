@@ -96,7 +96,8 @@ var jsonNewModulo = {
     "Files": "",
     "Favorito": "",
     "TipoGuia": "",
-    "UrlFondo": ""
+    "UrlFondo": "",
+    "BackgroundColor": ""
 }
 
 function openModalNewModulo(title, lastId, padre) {
@@ -116,7 +117,8 @@ function openModalNewModulo(title, lastId, padre) {
         "Files": "",
         "Favorito": false,
         "TipoGuia": "",
-        "UrlFondo": ""
+        "UrlFondo": "",
+        "BackgroundColor": ""
     }
     if (padre) {
         let arrayLastId = lastId.split("-");
@@ -141,6 +143,10 @@ function saveNewModulo() {
     let value2 = $("#addFondoSubModulo").prop("files");
     let favorito = $("#guiasRapidas").prop("checked");
     let tipo_guia = $("#tipo_guia").val();
+    let background = $("#addBackgroundColor").val();
+    if (favorito == false) {
+        tipo_guia = ""
+    }
     console.log(tipo_guia);
     if (value[0]) {
         jsonNewModulo.Url = window.location.origin + '/files/' + value[0].name;
@@ -155,6 +161,7 @@ function saveNewModulo() {
     jsonNewModulo.Desplegable = desplegable;
     jsonNewModulo.Favorito = favorito;
     jsonNewModulo.TipoGuia = tipo_guia;
+    jsonNewModulo.BackgroundColor = background;
     const formData = new FormData();
     formData.append("Id", jsonNewModulo.Id);
     formData.append("Titulo", jsonNewModulo.Titulo);
@@ -168,6 +175,7 @@ function saveNewModulo() {
     formData.append("Favorito", jsonNewModulo.Favorito);
     formData.append("TipoGuia", jsonNewModulo.TipoGuia);
     formData.append("UrlFondo", jsonNewModulo.UrlFondo);
+    formData.append("BackgroundColor", jsonNewModulo.BackgroundColor);
     console.log(jsonNewModulo);
     $.ajax({
         type: "POST",
@@ -270,5 +278,4 @@ $("#guiaRapidaa").click(function () {
         $("#divTipo_guia2").hide();
     }
 })
-
 

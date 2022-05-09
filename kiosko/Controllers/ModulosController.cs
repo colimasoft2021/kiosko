@@ -128,6 +128,8 @@ namespace kiosko.Controllers
                     dataModulo.Componentes = modulo.Componentes;
                     dataModulo.NumeroHijos = 0;
                     dataModulo.Url = modulo.Url;
+                    dataModulo.UrlFondo = modulo.UrlFondo;
+                    dataModulo.BackgroundColor = modulo.BackgroundColor;
                     if (modulo.Padre == null)
                     {
                     
@@ -270,6 +272,7 @@ namespace kiosko.Controllers
                 modulo.Favorito = Convert.ToBoolean(Request.Form["Favorito"]);
                 modulo.TipoGuia = Request.Form["TipoGuia"];
                 modulo.UrlFondo = Request.Form["UrlFondo"];
+                modulo.BackgroundColor = Request.Form["BackgroundColor"];
                 if (modulo.TipoGuia == "null" || modulo.TipoGuia == null)
                     modulo.TipoGuia = "";
                 if (modulo.Padre == "undefined")
@@ -332,6 +335,7 @@ namespace kiosko.Controllers
                 modulo.TipoGuia = Request.Form["TipoGuia"];
                 modulo.UrlFondo = Request.Form["UrlFondo"];
                 modulo.Url = Request.Form["Url"];
+                modulo.BackgroundColor = Request.Form["BackgroundColor"];
                 if (modulo.TipoGuia == "undefined" || modulo.TipoGuia == null)
                     modulo.TipoGuia = "";
 

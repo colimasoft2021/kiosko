@@ -66,6 +66,8 @@
               </div>
               <!-- icono -->
               <div id="iconoImg" style="display: none">
+                    <label>Icono</label>
+                    <br />
                     <input type="file" id="imagenIcono" accept=".png" >
                     <div id="imgPreview" class="preview-img">
                     </div>
@@ -79,7 +81,7 @@
               <div id="divTipo_guia">
                   <label>Eligue un tipo de guia</label>
                   <select id ="tipo_guia" name="tipo_guia">
-                      <option value="control interno" selected>Control Interno</option>
+                      <option value="control interno" >Control Interno</option>
                       <option value="ejecucion" >Ejecución</option>
                       <option value="abastecimiento e inventario" >Abastecimiento e inventario</option>
                       <option value="seguridad" >Seguridad</option>
@@ -90,6 +92,18 @@
               <div id="divSubMFondo">
                   <label>Fondo Submodulo</label>
                   <input type="file" id="addFondoSubModulo" accept=".png"/>
+              </div>
+              <div id="divBackgroundColor">
+                  <label>Eligue un color de fondo</label>
+                  <select id ="addBackgroundColor" name="addBackgroundColor">
+                      <option value="#FC4C02" style="background-color:#FC4C02">#FC4C02</option>
+                      <option value="#008BCE" style="background-color:#008BCE">#008BCE</option>
+                      <option value="#DA291C" style="background-color:#DA291C">#DA291C</option>
+                      <option value="#43B02A" style="background-color:#43B02A">#43B02A</option>
+                      <option value="#D9027D" style="background-color:#D9027D">#D9027D</option>
+                      <option value="#003DA5" style="background-color:#003DA5">#003DA5</option>
+                      <option value="#FFFFFF" style="background-color:#FFFFFF">#FFFFFF</option>
+                  </select>
               </div>
             </div>
             <div class="modal-footer justify-content-between">

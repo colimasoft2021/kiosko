@@ -176,6 +176,11 @@ namespace kiosko.Models
                 entity.Property(e => e.UrlFondo)
                     .IsUnicode(false)
                     .HasColumnName("url_fondo");
+
+                entity.Property(e => e.BackgroundColor)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("background_color");
             });
 
             modelBuilder.Entity<Progreso>(entity =>
