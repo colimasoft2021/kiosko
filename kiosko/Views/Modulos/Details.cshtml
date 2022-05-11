@@ -48,6 +48,7 @@
                                 <li class="option-menu is-general" onclick="addComponent('desplegable-texto-imagen-imagen', 0)">Desplegable texto-imagen-imagen</li>
                                 <li class="option-menu is-general" onclick="addComponent('texto-imagen', 0)">Texto Imagen</li>
                                 <li class="option-menu is-general" onclick="addComponent('imagen-titulo-desc', 0)">Imagen + titulo + descripción</li>
+                                <li class="option-menu is-general" onclick="addComponent('titulo-desc', 0)">Titulo + descripción</li>
                             </ul>
                         </div>
                 </div>
@@ -954,6 +955,25 @@
               '</div>';
               indexImagen = indexImagen + 2;
           break;
+          case 'titulo-desc':
+            let valueTituloDes = (item) ? item.titulo : "";
+            let valueDescriptionDes = (item) ? item.descripcion : "";
+            component =
+              '<div class="col-lg-12 component" id="'+idComponent+'" db-id="'+pkId+'" type-component="titulo-desc">'+
+                '<p class="tituloCmp">'+type+
+                  '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+','+stringType+')">'+
+                '<p>'+
+                '<div class="container-desplegable row">'+
+                  '<div class="container-desplegable-texto-imagen">'+
+                    '<div class="card-desplegable-texto">'+
+                      '<input class="subtitle-input" type="text" placeholder="Título" typeInput="titulo" value="'+valueTituloDes+'">'+        
+                    '</div>'+
+                  '</div>'+
+                  '<textarea class="textarea mt-3" name="" id="" cols="" rows="3" placeholder="Descripción">'+valueDescriptionDes+'</textarea><br/>'+
+                '</div>'+
+              '</div>';
+              indexImagen = indexImagen + 2;
+          break;
           default:
             component = "";
         }
@@ -1409,6 +1429,19 @@
                 }else{
                     jsonItem.AgregarFondo = 0;
                 }
+            }
+          });
+          $("#"+idElement).find("textarea").each(function() {
+            let value = $(this).val();
+            jsonItem.Descripcion = value;
+          });
+        break;
+        case "titulo-desc":
+          $("#"+idElement).find("input").each(function() {
+            let typeInp = $(this).attr("typeInput");
+            if(typeInp == 'titulo'){
+                let value = $(this).val();
+                jsonItem.Titulo = value;
             }
           });
           $("#"+idElement).find("textarea").each(function() {
