@@ -108,7 +108,7 @@ namespace kiosko.Controllers
 
             try { 
                 var modulos = _context.Modulos.Where(c => c.Id != 2).OrderBy(c => c.Orden)
-                    .Include(m => m.Componentes)
+                    .Include(m => m.Componentes.OrderBy(m => m.Orden))
                         .ThenInclude(m => m.Desplazantes)
                         .ToList();
                 var dataModulos = new DataModulos();

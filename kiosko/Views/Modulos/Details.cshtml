@@ -49,6 +49,7 @@
                                 <li class="option-menu is-general" onclick="addComponent('texto-imagen', 0)">Texto Imagen</li>
                                 <li class="option-menu is-general" onclick="addComponent('imagen-titulo-desc', 0)">Imagen + titulo + descripción</li>
                                 <li class="option-menu is-general" onclick="addComponent('titulo-desc', 0)">Titulo + descripción</li>
+                                <li class="option-menu is-general" onclick="addComponent('subtitulo-desc', 0)">Subtitulo + descripción</li>
                             </ul>
                         </div>
                 </div>
@@ -529,6 +530,7 @@
         let component = "";
         let itemDesplazantes = (item) ? item.desplazantes : [];
         let typeRelated = "'cardRelatedImage'";
+        let propChecked = "";
         switch(type) {
           case 'texto':
             let valueInpText = (item) ? item.descripcion : "";
@@ -627,9 +629,12 @@
               indexCardIm = indexCardIm + 1;
           break;
           case 'desplegable-texto-imagen':
-            let valueInpCheckDes = (item) ? item.agregarfondo : "";
+            let valueInpCheckDes = (item) ? item.agregarFondo : "";
             let valueSubtitulo = (item) ? item.subtitulo : "";
             let valueDescription = (item) ? item.descripcion : "";
+            if (valueInpCheckDes == 1){
+                propChecked ="checked";
+            }
             component =
               '<div class="col-lg-12 component" id="'+idComponent+'" db-id="'+pkId+'" type-component="desplegable-texto-imagen">'+
                 '<p class="tituloCmp">'+type+
@@ -662,7 +667,7 @@
                     '</div>'+
                   '</div>'+
                   '<div class="d-flex col-lg-12 justify-content-end align-items-center">'+
-                    '<input type="checkbox" typeInput="check-des" value="'+valueInpCheckDes+'"><span>Agregar fondo</span>'+
+                    '<input type="checkbox" typeInput="check-des" '+propChecked+'><span>Agregar fondo</span>'+
                   '</div>'+
                 '</div>'+
               '</div>';
@@ -687,7 +692,11 @@
           case 'texto-imagen':
             let valueInpImg2 = (item) ? item.url : "";
             let valueInpText3 = (item) ? item.descripcion : "";
-            let valueInpAddBack = (item) ? item.agregarfondo : "";
+            let valueInpAddBackTxIm = (item) ? item.agregarFondo : 0;
+            if (valueInpAddBackTxIm == 1){
+                propChecked ="checked";
+            }
+            console.log(valueInpAddBackTxIm, "texto-imagen", "--------")
             component = 
               '<div class="col-lg-12 component" db-id="'+pkId+'" id="'+idComponent+'" type-component="texto-imagen">'+
                 '<div id="background">'+
@@ -718,7 +727,7 @@
                     '</div>'+
                   '</div>'+
                 '</div>'+
-                '<input type="checkbox" typeInput="check" class="Boton1" name="AgregarFondo" value="'+valueInpAddBack+'"><label for="AgregarFondo"> Agregar Fondo</label><br>'+
+                '<input type="checkbox" typeInput="check" class="Boton1" '+propChecked+' name="AgregarFondo" ><label for="AgregarFondo"> Agregar Fondo</label><br>'+
               '</div>';
             indexImagen = indexImagen + 1;
           break;
@@ -921,9 +930,12 @@
               indexImagen = indexImagen + 2;
           break;
           case 'desplegable-texto-imagen-imagen':
-            let valueInpCheckDesim = (item) ? item.agregarfondo : "";
+            let valueInpCheckDesim = (item) ? item.agregarFondo : 0;
             let valueSubtituloim = (item) ? item.subtitulo : "";
             let valueDescriptionim = (item) ? item.descripcion : "";
+            if (valueInpCheckDesim == 1){
+                propChecked ="checked";
+            }
             component =
               '<div class="col-lg-12 component" id="'+idComponent+'" db-id="'+pkId+'" type-component="desplegable-texto-imagen-imagen">'+
                 '<p class="tituloCmp">'+type+
@@ -949,7 +961,7 @@
                     '</div>'+
                   '</div>'+
                   '<div class="d-flex col-lg-12 justify-content-end align-items-center">'+
-                    '<input type="checkbox" typeInput="check-des" value="'+valueInpCheckDesim+'"><span>Agregar fondo</span>'+
+                    '<input type="checkbox" typeInput="check" '+propChecked+'><span>Agregar fondo</span>'+
                   '</div>'+
                 '</div>'+
               '</div>';
@@ -971,6 +983,30 @@
                   '</div>'+
                   '<textarea class="textarea mt-3" name="" id="" cols="" rows="3" placeholder="Descripción">'+valueDescriptionDes+'</textarea><br/>'+
                 '</div>'+
+              '</div>';
+              indexImagen = indexImagen + 2;
+          break;
+          case 'subtitulo-desc':
+            let valueInpSubDes = (item) ? item.subtitulo : "";
+            let valueDescriptionSubDes = (item) ? item.descripcion : "";
+            let valueInpAddBackSubDes = (item) ? item.agregarFondo : 0;
+            if (valueInpAddBackSubDes == 1){
+                propChecked ="checked";
+            }
+            component =
+              '<div class="col-lg-12 component" id="'+idComponent+'" db-id="'+pkId+'" type-component="subtitulo-desc">'+
+                '<p class="tituloCmp">'+type+
+                  '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+','+stringType+')">'+
+                '<p>'+
+                '<div class="container-desplegable row">'+
+                  '<div class="container-desplegable-texto-imagen">'+
+                    '<div class="card-desplegable-texto">'+
+                      '<input class="inputTexto" type="text" placeholder="Subtitulo" value="'+valueInpSubDes+'">'+
+                    '</div>'+
+                  '</div>'+
+                  '<textarea class="textarea mt-3" name="" id="" cols="" rows="3" placeholder="Descripción">'+valueDescriptionSubDes+'</textarea><br/>'+
+                '</div>'+
+                '<input type="checkbox" typeInput="check" class="Boton1" name="AgregarFondo" '+propChecked+'><label for="AgregarFondo"> Agregar Fondo</label><br>'+
               '</div>';
               indexImagen = indexImagen + 2;
           break;
@@ -1177,14 +1213,10 @@
                     jsonItem.UrlTres = $(this).attr("value");
                 }
             }
-            if(typeInp == 'check-des'){
-                let value = $(this).val();
-                jsonItem.AgregarFondo = value;
-                if(value == true){
-                    jsonItem.AgregarFondo = 1;
-                }else{
-                    jsonItem.AgregarFondo = 0;
-                }
+            if ($(this).is(":checked")) {
+                jsonItem.AgregarFondo = 1;
+            }else {
+                jsonItem.AgregarFondo = 0;
             }
           });
           $("#"+idElement).find("textarea").each(function() {
@@ -1270,14 +1302,10 @@
                 jsonItem.Url = $(this).attr("value");
               }
             }
-            if(typeInp == 'check'){
-                let value = $(this).val();
-                jsonItem.AgregarFondo = value;
-                if(value == true){
+            if ($(this).is(":checked")) {
                 jsonItem.AgregarFondo = 1;
-                }else{
-                    jsonItem.AgregarFondo = 1;
-                }
+            }else {
+                jsonItem.AgregarFondo = 0;
             }
           });
           $("#"+idElement).find("textarea").each(function() {
@@ -1421,14 +1449,12 @@
                     jsonItem.UrlTres = $(this).attr("value");
                 }
             }
-            if(typeInp == 'check-des'){
-                let value = $(this).val();
-                jsonItem.AgregarFondo = value;
-                if(value == true){
-                    jsonItem.AgregarFondo = 1;
-                }else{
-                    jsonItem.AgregarFondo = 0;
-                }
+            if(typeInp == 'check'){
+              if ($(this).is(":checked"))  {
+                  jsonItem.AgregarFondo = 1;
+              }else {
+                  jsonItem.AgregarFondo = 0;
+              }
             }
           });
           $("#"+idElement).find("textarea").each(function() {
@@ -1448,6 +1474,28 @@
             let value = $(this).val();
             jsonItem.Descripcion = value;
           });
+        break;
+        case "subtitulo-desc":
+          $("#"+idElement).find("input").each(function() {
+            let type = $(this).attr("type");
+            let typeInp = $(this).attr("typeInput");
+            if(type == 'text'){
+                let value = $(this).val();
+                jsonItem.Subtitulo = value;
+            }
+            if(typeInp == 'check'){
+              if ($(this).is(":checked"))  {
+                  jsonItem.AgregarFondo = 1;
+              }else {
+                  jsonItem.AgregarFondo = 0;
+              }
+            }
+          });
+          $("#"+idElement).find("textarea").each(function() {
+            let value = $(this).val();
+            jsonItem.Descripcion = value;
+          });
+
         break;
         default:
           jsonItem = "";
