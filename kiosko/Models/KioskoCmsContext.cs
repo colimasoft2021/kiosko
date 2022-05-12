@@ -86,6 +86,10 @@ namespace kiosko.Models
                     .WithMany(p => p.Componentes)
                     .HasForeignKey(d => d.IdModulo)
                     .HasConstraintName("FK_componentes_modulos");
+
+                entity.Property(e => e.TipoCategoria)
+                    .IsUnicode(false)
+                    .HasColumnName("tipo_categoria");
             });
 
             modelBuilder.Entity<Desplazante>(entity =>

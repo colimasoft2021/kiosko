@@ -123,6 +123,7 @@ namespace kiosko.Controllers
                 componente.Subtitulo = Request.Form["Subtitulo"];
                 componente.Orden = Int32.Parse(Request.Form["Orden"]);
                 componente.IdModulo = Int32.Parse(Request.Form["IdModulo"]);
+                componente.TipoCategoria = Request.Form["TipoCategoria"];
 
                 foreach (var formFile in Request.Form.Files)
                 {
@@ -171,6 +172,7 @@ namespace kiosko.Controllers
                 componente.Subtitulo = Request.Form["Subtitulo"];
                 componente.Orden = Int32.Parse(Request.Form["Orden"]);
                 componente.IdModulo = Int32.Parse(Request.Form["IdModulo"]);
+                componente.TipoCategoria = Request.Form["TipoCategoria"];
 
                 foreach (var formFile in Request.Form.Files)
                 {

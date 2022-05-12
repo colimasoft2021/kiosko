@@ -875,6 +875,11 @@
           case 'pop-up-video':
             let valueInpUpVideoText = (item) ? item.descripcion : "";
             let valueInpUpVideo = (item) ?  item.url : "";
+            let valueCatPopUpVid = (item) ?  item.tipoCategoria : "";
+            let idCatSelect = "#categoriaVideo"+idComponent;
+            var arrar=['sin-categoria','control-interno', 'ejecucion', 'abastecimiento-e-inventario', 'servicio'];
+            console.log(arrar);
+            console.log(valueCatPopUpVid, "Pop-up-Video ------")
             component =
               '<div class="col-lg-12 texto component" id="'+idComponent+'" db-id="'+pkId+'" type-component="pop-up-video">'+
                 '<p class="tituloCmp">'+type+
@@ -892,6 +897,23 @@
             component +=
                   '</div>'+
                 '</div>'+
+                    '<div>'+
+                        '<label>Elige una opción de categoria</label>'+
+                        '<select id="categoriaVideo'+idComponent+'" type="tipo_categoria" value="'+valueCatPopUpVid+'">';
+
+                            for(var i=0;i<arrar.length;i++){
+
+                                if(valueCatPopUpVid==arrar[i]){
+                                   component +=    '<option value="'+arrar[i]+'" selected>'+arrar[i]+'</option>';
+                                }else{
+                                   
+                                    component +=  '<option value="'+arrar[i]+'">'+arrar[i]+'</option>';
+                                    
+                                }
+
+                            }
+              component += '</select>'+
+                    '</div>'+
               '</div>';
           break;
           case 'titulo':
@@ -1067,6 +1089,7 @@
         "Subtitulo": null,
         "Orden": null,
         "IdModulo": null,
+        "TipoCategoria": null,
         "Files": [],
         "Desplazantes": []
       }
@@ -1381,6 +1404,11 @@
               }
             }
           });
+          $("#"+idElement).find("select").each(function() {
+            let tipoCategoria = $(this).val();
+            jsonItem.TipoCategoria = tipoCategoria;
+          });
+            
         break;
         case 'video':
           $("#"+idElement).find("input").each(function() {
@@ -1495,7 +1523,6 @@
             let value = $(this).val();
             jsonItem.Descripcion = value;
           });
-
         break;
         default:
           jsonItem = "";
