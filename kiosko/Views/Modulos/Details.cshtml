@@ -534,12 +534,17 @@
         switch(type) {
           case 'texto':
             let valueInpText = (item) ? item.descripcion : "";
+            let valueCheckText = (item) ? item.agregarFondo : 0;
+            if (valueCheckText == 1){
+                propChecked ="checked";
+            }
             component =
               '<div class="col-lg-12 component" db-id="'+pkId+'" id="'+idComponent+'" type-component="texto">'+
                 '<p class="tituloCmp">'+type+
                   '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+','+stringType+')">'+
                 '<p>'+
                 '<input class="inputTexto" type="text" value="'+valueInpText+'">'+
+                '<input type="checkbox" typeInput="check" class="Boton1" name="AgregarFondo" '+propChecked+'><label for="AgregarFondo"> Agregar Fondo</label><br>'+
               '</div>';
           break;
           case 'subtitulo':
@@ -1106,7 +1111,15 @@
         case 'texto':
           $("#"+idElement).find("input").each(function() {
             let value = $(this).val();
+            let typeInp = $(this).attr("typeInput");
             jsonItem.Descripcion = value;
+            if(typeInp == 'check'){
+              if ($(this).is(":checked"))  {
+                  jsonItem.AgregarFondo = 1;
+              }else {
+                  jsonItem.AgregarFondo = 0;
+              }
+            }
           });
         break;
         case 'subtitulo':
@@ -1408,7 +1421,6 @@
             let tipoCategoria = $(this).val();
             jsonItem.TipoCategoria = tipoCategoria;
           });
-            
         break;
         case 'video':
           $("#"+idElement).find("input").each(function() {
