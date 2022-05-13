@@ -163,7 +163,6 @@
           let stringPadre = "'"+item.padre+"'";
           let stringtipo = "'"+item.tipoGuia+"'";
           let stringColor = "'"+item.backgroundColor+"'";
-          console.log(titulo,stringtipo, item.urlFondo, item.backgroundColor);
           let trTable = "";
               trTable += '<tr id="tr' + idModulo + '">';
               trTable += '<td>'+idModulo+'</td>';
@@ -195,12 +194,14 @@
               $("#divGuiaRapida").hide();
               $("#divTipo_guia2").hide();
               $("#iconoModulo").show();
+              $("#divBackgroundColor2").show();
               //$("#editFondoSubModulo").hide();
               $("#divSubMFondo2").hide();
           } else {
               $("#divGuiaRapida").show();
               
               $("#iconoModulo").hide();
+              $("#divBackgroundColor2").hide();
               //$("#editFondoSubModulo").show();
               $("#divSubMFondo2").show();
           }

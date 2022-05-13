@@ -277,6 +277,11 @@ namespace kiosko.Controllers
                     modulo.TipoGuia = "";
                 if (modulo.Padre == "undefined")
                     modulo.Padre = null;
+                if(modulo.Padre != null && modulo.Padre != "null")
+                {
+                    var colorPadre = _context.Modulos.Where(mod => mod.IdModulo == modulo.Padre).Select(mod => mod.BackgroundColor).FirstOrDefault();
+                    modulo.BackgroundColor = colorPadre;
+                }
                 foreach (var formFile in Request.Form.Files)
                 {
                     var fulPath = Path.Combine(_env.ContentRootPath, "wwwroot\\files", formFile.FileName);
@@ -338,7 +343,11 @@ namespace kiosko.Controllers
                 modulo.BackgroundColor = Request.Form["BackgroundColor"];
                 if (modulo.TipoGuia == "undefined" || modulo.TipoGuia == null)
                     modulo.TipoGuia = "";
-
+                if (modulo.Padre != null && modulo.Padre != "null")
+                {
+                    var colorPadre = _context.Modulos.Where(mod => mod.IdModulo == modulo.Padre).Select(mod => mod.BackgroundColor).FirstOrDefault();
+                    modulo.BackgroundColor = colorPadre;
+                }
                 foreach (var formFile in Request.Form.Files)
                 {
                     var fulPath = Path.Combine(_env.ContentRootPath, "wwwroot\\files", formFile.FileName);
