@@ -382,9 +382,37 @@ namespace kiosko.Controllers
             IActionResult ret = null;
             try
             {
-                var modulo = _context.Modulos.Find(id);
-                _context.Modulos.Remove(modulo);
-                _context.SaveChanges();
+                var modulo = _context.Modulos.Where(x => x.Id == id)
+                    .Include(m => m.Progresos)
+                    .Include(m => m.Componentes)
+                        .ThenInclude(m => m.Desplazantes).FirstOrDefault();
+                if (modulo.Padre == null || modulo.Padre == "null")
+                {
+                    var modulosHijos = _context.Modulos.Where(x => x.Padre == modulo.IdModulo).ToList();
+                    foreach (var submodul in modulosHijos)
+                    {
+                        var submodulo = _context.Modulos.Where(x => x.Id == submodul.Id)
+                            .Include(m => m.Componentes.OrderBy(m => m.Orden))
+                                .ThenInclude(m => m.Desplazantes).FirstOrDefault();
+                        _context.Remove(submodulo);
+                        _context.SaveChanges();
+                    }
+                    var modPadre = _context.Modulos.Find(id);
+                    var progresos = _context.Progresos.Where(p => p.IdModulo == id).ToList();
+                    foreach (var progres in progresos)
+                    {
+                        var progreso = _context.Progresos.Find(progres.Id);
+                        _context.Progresos.Remove(progreso);
+                        _context.SaveChanges();
+                    }
+                    _context.Remove(modPadre);
+                    _context.SaveChanges();
+                }
+                else
+                {
+                    _context.Remove(modulo);
+                    _context.SaveChanges();
+                }
 
                 ret = StatusCode(StatusCodes.Status201Created, modulo);
             
