@@ -134,7 +134,12 @@ namespace kiosko.Controllers
                 if(progreso.Porcentaje <= updateProgreso.Porcentaje )
                 {
                     message = new { status = "succed", message = "Progreso no actualizado" };
-                    return StatusCode(StatusCodes.Status204NoContent, message);
+                    return StatusCode(StatusCodes.Status200OK, message);
+                }
+                if (progreso.Porcentaje > 100)
+                {
+                    message = new { status = "succed", message = "Progreso no actualizado" };
+                    return StatusCode(StatusCodes.Status200OK, message);
                 }
                 updateProgreso.Porcentaje = progreso.Porcentaje;
                 updateProgreso.FechaActualizacion = fechaHoy;

@@ -30,6 +30,7 @@
                                 <th>Es Desplegable</th>
                                 <th>Tiempo de inactividad</th>
                                 <th>Icono</th>
+                                <th>Fondo</th>
                                 <th>Acciones</th>
                               </tr>
                           </thead>
@@ -75,7 +76,33 @@
                           <input type="checkbox" id="guiaRapidaa" class="ignore" name="guiaRapidaa" />
                           <label for="guiaRapidaa">Guias Rapidas</label>
                       </div>
+                      <div id="divTipo_guia2">
+                          <label>Eligue un tipo de guia</label>
+                          <select id ="tipo_guiaa" name="tipo_guiaa">
+                              <option value="control-interno" >Control Interno</option>
+                              <option value="ejecucion" >Ejecución</option>
+                              <option value="abastecimiento-e-inventario" >Abastecimiento e inventario</option>
+                              <option value="seguridad" >Seguridad</option>
+                              <option value="servicio" >Servicio</option>
+                          </select>
+                      </div>
+                      <div class="form-group" id="divSubMFondo2">
+                        <label for="editFondoSubModulo">Fondo Submodulo</label>
+                        <input type="file" name="editFondoSubModulo" id="editFondoSubModulo" class="form-control">
+                      </div>
                       <!-- fin - guia/favorito -->
+                      <div id="divBackgroundColor2">
+                          <label>Eligue un color de fondo</label>
+                          <select id ="editBackgroundColor" name="editBackgroundColor">
+                              <option value="#FC4C02" style="background-color:#FC4C02">#FC4C02</option>
+                              <option value="#008BCE" style="background-color:#008BCE">#008BCE</option>
+                              <option value="#DA291C" style="background-color:#DA291C">#DA291C</option>
+                              <option value="#43B02A" style="background-color:#43B02A">#43B02A</option>
+                              <option value="#D9027D" style="background-color:#D9027D">#D9027D</option>
+                              <option value="#003DA5" style="background-color:#003DA5">#003DA5</option>
+                              <option value="#FFFFFF" style="background-color:#FFFFFF">#FFFFFF</option>
+                          </select>
+                      </div>
                     </div>
                 </div>
                 <div class="modal-footer justify-content-between">
@@ -92,6 +119,7 @@
 @section scripts {
     <script type="text/javascript">
       var urlIcono = "";
+      var urlFondo = "";
       $(function () {
         getModulos();
       });
@@ -129,8 +157,12 @@
           let tiempoInactividad = item.tiempoInactividad == null ? 0 : item.tiempoInactividad;
           let iconImagen = item.url;
           let stringUrl = "'"+item.url+"'";
+          let fondoSubmodulo = item.urlFondo;
+          let stringUrlFondo = "'"+item.urlFondo+"'";
           let favorito = item.favorito;
           let stringPadre = "'"+item.padre+"'";
+          let stringtipo = "'"+item.tipoGuia+"'";
+          let stringColor = "'"+item.backgroundColor+"'";
           let trTable = "";
               trTable += '<tr id="tr' + idModulo + '">';
               trTable += '<td>'+idModulo+'</td>';
@@ -139,7 +171,8 @@
               trTable += '<td>'+textDesplegable+'</td>';
               trTable += '<td>'+tiempoInactividad+' días</td>';
               trTable += '<td><img id="icon-Image" src="'+iconImagen+'"></td>';
-              trTable += '<td><p><img src="/img/iconPencil.png" alt="icon trash" onclick="openModalEditModulo('+stringTitulo+','+tiempoInactividad+','+id+','+stringUrl+','+favorito+','+stringPadre+')">&nbsp;&nbsp;&nbsp;&nbsp;';
+              trTable += '<td><img id="icon-Image" src="'+fondoSubmodulo+'"></td>';
+              trTable += '<td><p><img src="/img/iconPencil.png" alt="icon trash" onclick="openModalEditModulo('+stringTitulo+','+tiempoInactividad+','+id+','+stringUrl+','+favorito+','+stringPadre+','+stringtipo+','+stringUrlFondo+','+stringColor+')">&nbsp;&nbsp;&nbsp;&nbsp;';
               trTable += '<img src="/img/iconTrash.png" alt="icon trash" onclick="removeModulo('+id+')"></p></td>';
               trTable += '</tr>';
           if (padre !== null) {
@@ -150,38 +183,64 @@
           }
       }
 
-      function openModalEditModulo(titulo, tiempoInactividad, id, url, favorito, padre) {
+      function openModalEditModulo(titulo, tiempoInactividad, id, url, favorito, padre, tipo, fondo, color) {
           $("#tituloModulo").val(titulo);
           $("#tiempoInactividad").val(tiempoInactividad);
           $("#idModulo").val(id);
           urlIcono = url;
+          urlFondo = fondo;
+          $("#editBackgroundColor").val(color);
           if(padre == "null"){
               $("#divGuiaRapida").hide();
+              $("#divTipo_guia2").hide();
               $("#iconoModulo").show();
+              $("#divBackgroundColor2").show();
+              //$("#editFondoSubModulo").hide();
+              $("#divSubMFondo2").hide();
           } else {
               $("#divGuiaRapida").show();
+              
               $("#iconoModulo").hide();
+              $("#divBackgroundColor2").hide();
+              //$("#editFondoSubModulo").show();
+              $("#divSubMFondo2").show();
           }
           if(favorito){
             $("#guiaRapidaa").prop("checked", true);
+            $("#divTipo_guia2").show();
           } else {
             $("#guiaRapidaa").prop("checked", false);
+            $("#divTipo_guia2").hide();
           }
+          $("select[name='tipo_guiaa']").val(tipo);
           $("#modalEditarModulo").modal("show");
-          console.log(titulo, padre);
       }
       $.validator.setDefaults({
         submitHandler: function () {
             console.log('entro al submit');
             let filesImagen = $("#iconoModulo").prop("files");
+            let filesFondo = $("#editFondoSubModulo").prop("files");
             let url = "";
+            let fondo = "";
             let files = "";
             let favorito = $("#guiaRapidaa").prop("checked");
+            let tipo_guia = $("#tipo_guiaa option:selected").val();
+            let background = $("#editBackgroundColor option:selected").val();
+            if (favorito == false) {
+                tipo_guia = ""
+            }
+            let tipo = $("#tipo_guiaa").val();
             if(filesImagen[0]){
               url = window.location.origin+'/files/'+filesImagen[0].name;
               files = filesImagen[0];
             }else{
               url = urlIcono;
+            }
+            if(filesFondo[0]){
+              fondo = window.location.origin+'/files/'+filesFondo[0].name;
+              files = filesFondo[0];
+            }else{
+              fondo = urlFondo;
             }
             const formData = new FormData();
             formData.append("idModulo", $("#idModulo").val());
@@ -190,7 +249,11 @@
             formData.append("Url", url);
             formData.append("Files", files);
             formData.append("Favorito", favorito);
+            formData.append("TipoGuia", tipo_guia);
+            formData.append("UrlFondo", fondo);
+            formData.append("BackgroundColor", background);
             console.log(FormData);
+            
             $.ajax({
               type: "POST",
               url: "/Modulos/updateModulo",
@@ -234,7 +297,10 @@
           },
           iconoModulo: {
              extension: "png"
-           },
+          },
+          editFondoSubModulo: {
+              extension: "png"
+          },
         },
         messages: {
           tituloModulo: {
@@ -244,8 +310,11 @@
             required: "Ingrese el tiempo de inactividad",
           },
           iconoModulo: {
-            extension: "debe ser png"
+            extension: "Debe ser png"
           },
+          editFondoSubModulo: {
+               extension: "Debe de ser png"
+           },
         },
         errorElement: 'span',
         errorPlacement: function (error, element) {

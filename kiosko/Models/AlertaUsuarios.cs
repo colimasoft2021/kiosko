@@ -88,6 +88,7 @@
         public int Id { get; set; }
         public int IdProgreso { get; set; }
         public double? Porcentaje { get; set; }
+        public bool? finalizado { get; set; }
         public string? Titulo { get; set; }
         public int? AccesoDirecto { get; set; }
         public int? Orden { get; set; }
@@ -96,7 +97,9 @@
         public string? Padre { get; set; }
         public int? TiempoInactividad { get; set; }
         public int? NumeroHijos { get; set; }
-
+        public string? Url { get; set; }
+        public string? UrlFondo { get; set; }
+        public string? BackgroundColor { get; set; }
 
         public virtual ICollection<Componente> Componentes { get; set; }
         public virtual ICollection<CustomModulo> Submodulos { get; set; }

@@ -45,8 +45,11 @@
                                 <li class="option-menu is-general" onclick="addComponent('pop-up', 0)">Pop-up</li>
                                 <li class="option-menu is-aviso" onclick="addComponent('aviso-inicial', 0)">Aviso</li>
                                 <li class="option-menu is-general" onclick="addComponent('desplegable-texto-imagen', 0)">Desplegable texto-imagen</li>
+                                <li class="option-menu is-general" onclick="addComponent('desplegable-texto-imagen-imagen', 0)">Desplegable texto-imagen-imagen</li>
                                 <li class="option-menu is-general" onclick="addComponent('texto-imagen', 0)">Texto Imagen</li>
                                 <li class="option-menu is-general" onclick="addComponent('imagen-titulo-desc', 0)">Imagen + titulo + descripción</li>
+                                <li class="option-menu is-general" onclick="addComponent('titulo-desc', 0)">Titulo + descripción</li>
+                                <li class="option-menu is-general" onclick="addComponent('subtitulo-desc', 0)">Subtitulo + descripción</li>
                             </ul>
                         </div>
                 </div>
@@ -71,11 +74,11 @@
     }else if (idModulo == 2){
         $(".is-aviso").css("display", "block");
         $(".is-general").css("display", "none");
-        $(".is-acceso").css("display", "none");
+        //$(".is-acceso").css("display", "none");
     }else{
         $(".is-aviso").css("display", "none")
         $(".is-general").css("display", "block");
-        $(".is-acceso").css("display", "none");
+        //$(".is-acceso").css("display", "none");
     }
     
     loadComponents();
@@ -186,6 +189,9 @@
           break;
           case 'pop-up':
             classBtnClose = "button-close";
+          break;
+          case 'desplegable-texto-imagen-imagen':
+            classBtnClose = "button-close-carroucel";
           break;
           default:
             classBtnClose = "button-close-small";
@@ -524,15 +530,23 @@
         let component = "";
         let itemDesplazantes = (item) ? item.desplazantes : [];
         let typeRelated = "'cardRelatedImage'";
+        let propChecked = "";
         switch(type) {
           case 'texto':
             let valueInpText = (item) ? item.descripcion : "";
+            let valueCheckText = (item) ? item.agregarFondo : 0;
+            if (valueCheckText == 1){
+                propChecked ="checked";
+            }
             component =
               '<div class="col-lg-12 component" db-id="'+pkId+'" id="'+idComponent+'" type-component="texto">'+
-                '<p class="tituloCmp">'+type+
-                  '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+','+stringType+')">'+
-                '<p>'+
-                '<input class="inputTexto" type="text" value="'+valueInpText+'">'+
+                '<div class="col-lg-12 component" >'+
+                  '<p class="tituloCmp">'+type+
+                    '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+','+stringType+')">'+
+                  '<p>'+
+                  '<input class="inputTexto" type="text" value="'+valueInpText+'">'+
+                '</div>'+
+                '<input type="checkbox" typeInput="check" class="Boton1" name="AgregarFondo" '+propChecked+'><label for="AgregarFondo"> Agregar Fondo</label><br>'+
               '</div>';
           break;
           case 'subtitulo':
@@ -622,9 +636,12 @@
               indexCardIm = indexCardIm + 1;
           break;
           case 'desplegable-texto-imagen':
-            let valueInpCheckDes = (item) ? item.agregarfondo : "";
+            let valueInpCheckDes = (item) ? item.agregarFondo : "";
             let valueSubtitulo = (item) ? item.subtitulo : "";
             let valueDescription = (item) ? item.descripcion : "";
+            if (valueInpCheckDes == 1){
+                propChecked ="checked";
+            }
             component =
               '<div class="col-lg-12 component" id="'+idComponent+'" db-id="'+pkId+'" type-component="desplegable-texto-imagen">'+
                 '<p class="tituloCmp">'+type+
@@ -657,7 +674,7 @@
                     '</div>'+
                   '</div>'+
                   '<div class="d-flex col-lg-12 justify-content-end align-items-center">'+
-                    '<input type="checkbox" typeInput="check-des" value="'+valueInpCheckDes+'"><span>Agregar fondo</span>'+
+                    '<input type="checkbox" typeInput="check-des" '+propChecked+'><span>Agregar fondo</span>'+
                   '</div>'+
                 '</div>'+
               '</div>';
@@ -682,7 +699,11 @@
           case 'texto-imagen':
             let valueInpImg2 = (item) ? item.url : "";
             let valueInpText3 = (item) ? item.descripcion : "";
-            let valueInpAddBack = (item) ? item.agregarfondo : "";
+            let valueInpAddBackTxIm = (item) ? item.agregarFondo : 0;
+            if (valueInpAddBackTxIm == 1){
+                propChecked ="checked";
+            }
+            console.log(valueInpAddBackTxIm, "texto-imagen", "--------")
             component = 
               '<div class="col-lg-12 component" db-id="'+pkId+'" id="'+idComponent+'" type-component="texto-imagen">'+
                 '<div id="background">'+
@@ -713,7 +734,7 @@
                     '</div>'+
                   '</div>'+
                 '</div>'+
-                '<input type="checkbox" typeInput="check" class="Boton1" name="AgregarFondo" value="'+valueInpAddBack+'"><label for="AgregarFondo"> Agregar Fondo</label><br>'+
+                '<input type="checkbox" typeInput="check" class="Boton1" '+propChecked+' name="AgregarFondo" ><label for="AgregarFondo"> Agregar Fondo</label><br>'+
               '</div>';
             indexImagen = indexImagen + 1;
           break;
@@ -861,6 +882,11 @@
           case 'pop-up-video':
             let valueInpUpVideoText = (item) ? item.descripcion : "";
             let valueInpUpVideo = (item) ?  item.url : "";
+            let valueCatPopUpVid = (item) ?  item.tipoCategoria : "";
+            let idCatSelect = "#categoriaVideo"+idComponent;
+            var arrar=['sin-categoria','control-interno', 'ejecucion', 'abastecimiento-e-inventario', 'servicio'];
+            console.log(arrar);
+            console.log(valueCatPopUpVid, "Pop-up-Video ------")
             component =
               '<div class="col-lg-12 texto component" id="'+idComponent+'" db-id="'+pkId+'" type-component="pop-up-video">'+
                 '<p class="tituloCmp">'+type+
@@ -878,6 +904,23 @@
             component +=
                   '</div>'+
                 '</div>'+
+                    '<div>'+
+                        '<label>Elige una opción de categoria</label>'+
+                        '<select id="categoriaVideo'+idComponent+'" type="tipo_categoria" value="'+valueCatPopUpVid+'">';
+
+                            for(var i=0;i<arrar.length;i++){
+
+                                if(valueCatPopUpVid==arrar[i]){
+                                   component +=    '<option value="'+arrar[i]+'" selected>'+arrar[i]+'</option>';
+                                }else{
+                                   
+                                    component +=  '<option value="'+arrar[i]+'">'+arrar[i]+'</option>';
+                                    
+                                }
+
+                            }
+              component += '</select>'+
+                    '</div>'+
               '</div>';
           break;
           case 'titulo':
@@ -912,6 +955,87 @@
                   '</div>'+
                   '<textarea class="textarea mt-3" name="" id="" cols="" rows="3" placeholder="Descripción">'+valueDescriptionImDes+'</textarea><br/>'+
                 '</div>'+
+              '</div>';
+              indexImagen = indexImagen + 2;
+          break;
+          case 'desplegable-texto-imagen-imagen':
+            let valueInpCheckDesim = (item) ? item.agregarFondo : 0;
+            let valueSubtituloim = (item) ? item.subtitulo : "";
+            let valueDescriptionim = (item) ? item.descripcion : "";
+            if (valueInpCheckDesim == 1){
+                propChecked ="checked";
+            }
+            component =
+              '<div class="col-lg-12 component" id="'+idComponent+'" db-id="'+pkId+'" type-component="desplegable-texto-imagen-imagen">'+
+                '<p class="tituloCmp">'+type+
+                  '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+','+stringType+')">'+
+                '<p>'+
+                '<div class="container-desplegable row">'+
+                  '<div class="container-desplegable-texto-imagen">'+
+                    '<div class="card-desplegable-texto">'+
+                      '<input class="subtitle-input" type="text" placeholder="Subtitulo" typeInput="subtitulo" value="'+valueSubtituloim+'">'+        
+                    '</div>'+
+                  '</div>'+
+                  '<textarea class="textarea mt-3" name="" id="" cols="" rows="3" placeholder="Descripcion">'+valueDescriptionim+'</textarea><br/>'+
+                  '<div class="container-desplegable-imagenes mt-3">'+
+                    '<div class="card-imagen-carroucel">';
+            let imageDes2im = generateCardImage(stringId, idComponent, item, pkId, stringType, 'img2');
+            component += imageDes2im;
+            component +=
+                    '</div>'+
+                    '<div class="card-imagen-carroucel">';
+            let imageDes3im = generateCardImage(stringId, idComponent, item, pkId, stringType, 'img3');
+            component += imageDes3im;
+            component +=
+                    '</div>'+
+                  '</div>'+
+                  '<div class="d-flex col-lg-12 justify-content-end align-items-center">'+
+                    '<input type="checkbox" typeInput="check" '+propChecked+'><span>Agregar fondo</span>'+
+                  '</div>'+
+                '</div>'+
+              '</div>';
+              indexImagen = indexImagen + 2;
+          break;
+          case 'titulo-desc':
+            let valueTituloDes = (item) ? item.titulo : "";
+            let valueDescriptionDes = (item) ? item.descripcion : "";
+            component =
+              '<div class="col-lg-12 component" id="'+idComponent+'" db-id="'+pkId+'" type-component="titulo-desc">'+
+                '<p class="tituloCmp">'+type+
+                  '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+','+stringType+')">'+
+                '<p>'+
+                '<div class="container-desplegable row">'+
+                  '<div class="container-desplegable-texto-imagen">'+
+                    '<div class="card-desplegable-texto">'+
+                      '<input class="subtitle-input" type="text" placeholder="Título" typeInput="titulo" value="'+valueTituloDes+'">'+        
+                    '</div>'+
+                  '</div>'+
+                  '<textarea class="textarea mt-3" name="" id="" cols="" rows="3" placeholder="Descripción">'+valueDescriptionDes+'</textarea><br/>'+
+                '</div>'+
+              '</div>';
+              indexImagen = indexImagen + 2;
+          break;
+          case 'subtitulo-desc':
+            let valueInpSubDes = (item) ? item.subtitulo : "";
+            let valueDescriptionSubDes = (item) ? item.descripcion : "";
+            let valueInpAddBackSubDes = (item) ? item.agregarFondo : 0;
+            if (valueInpAddBackSubDes == 1){
+                propChecked ="checked";
+            }
+            component =
+              '<div class="col-lg-12 component" id="'+idComponent+'" db-id="'+pkId+'" type-component="subtitulo-desc">'+
+                '<p class="tituloCmp">'+type+
+                  '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+','+stringType+')">'+
+                '<p>'+
+                '<div class="container-desplegable row">'+
+                  '<div class="container-desplegable-texto-imagen">'+
+                    '<div class="card-desplegable-texto">'+
+                      '<input class="inputTexto" type="text" placeholder="Subtitulo" value="'+valueInpSubDes+'">'+
+                    '</div>'+
+                  '</div>'+
+                  '<textarea class="textarea mt-3" name="" id="" cols="" rows="3" placeholder="Descripción">'+valueDescriptionSubDes+'</textarea><br/>'+
+                '</div>'+
+                '<input type="checkbox" typeInput="check" class="Boton1" name="AgregarFondo" '+propChecked+'><label for="AgregarFondo"> Agregar Fondo</label><br>'+
               '</div>';
               indexImagen = indexImagen + 2;
           break;
@@ -972,6 +1096,7 @@
         "Subtitulo": null,
         "Orden": null,
         "IdModulo": null,
+        "TipoCategoria": null,
         "Files": [],
         "Desplazantes": []
       }
@@ -987,8 +1112,19 @@
       switch(typeElement) {
         case 'texto':
           $("#"+idElement).find("input").each(function() {
-            let value = $(this).val();
-            jsonItem.Descripcion = value;
+            let type = $(this).attr("type");
+            let typeInp = $(this).attr("typeInput");
+            if(type == 'text'){
+                let value = $(this).val();
+                jsonItem.Descripcion = value;
+            }
+            if(typeInp == 'check'){
+              if ($(this).is(":checked"))  {
+                  jsonItem.AgregarFondo = 1;
+              }else {
+                  jsonItem.AgregarFondo = 0;
+              }
+            }
           });
         break;
         case 'subtitulo':
@@ -1118,14 +1254,10 @@
                     jsonItem.UrlTres = $(this).attr("value");
                 }
             }
-            if(typeInp == 'check-des'){
-                let value = $(this).val();
-                jsonItem.AgregarFondo = value;
-                if(value == true){
-                    jsonItem.AgregarFondo = 1;
-                }else{
-                    jsonItem.AgregarFondo = 0;
-                }
+            if ($(this).is(":checked")) {
+                jsonItem.AgregarFondo = 1;
+            }else {
+                jsonItem.AgregarFondo = 0;
             }
           });
           $("#"+idElement).find("textarea").each(function() {
@@ -1211,14 +1343,10 @@
                 jsonItem.Url = $(this).attr("value");
               }
             }
-            if(typeInp == 'check'){
-                let value = $(this).val();
-                jsonItem.AgregarFondo = value;
-                if(value == true){
+            if ($(this).is(":checked")) {
                 jsonItem.AgregarFondo = 1;
-                }else{
-                    jsonItem.AgregarFondo = 1;
-                }
+            }else {
+                jsonItem.AgregarFondo = 0;
             }
           });
           $("#"+idElement).find("textarea").each(function() {
@@ -1294,6 +1422,10 @@
               }
             }
           });
+          $("#"+idElement).find("select").each(function() {
+            let tipoCategoria = $(this).val();
+            jsonItem.TipoCategoria = tipoCategoria;
+          });
         break;
         case 'video':
           $("#"+idElement).find("input").each(function() {
@@ -1330,6 +1462,78 @@
                 }else{
                     jsonItem.Url = $(this).attr("value");
                 }
+            }
+          });
+          $("#"+idElement).find("textarea").each(function() {
+            let value = $(this).val();
+            jsonItem.Descripcion = value;
+          });
+        break;
+        case "desplegable-texto-imagen-imagen":
+          $("#"+idElement).find("input").each(function() {
+            let typeInp = $(this).attr("typeInput");
+            if(typeInp == 'subtitulo'){
+                let value = $(this).val();
+                jsonItem.Subtitulo = value;
+            }
+            if(typeInp == 'img2'){
+                let value = $(this).prop("files");
+                if(value[0]){
+                    jsonItem.UrlDos = window.location.origin+'/files/'+value[0].name;
+                    jsonItem.Files.push(value[0]);
+                }else{
+                    jsonItem.UrlDos = $(this).attr("value");
+                }
+            }
+            if(typeInp == 'img3'){
+                let value = $(this).prop("files");
+                if(value[0]){
+                    jsonItem.UrlTres = window.location.origin+'/files/'+value[0].name;
+                    jsonItem.Files.push(value[0]);
+                }else{
+                    jsonItem.UrlTres = $(this).attr("value");
+                }
+            }
+            if(typeInp == 'check'){
+              if ($(this).is(":checked"))  {
+                  jsonItem.AgregarFondo = 1;
+              }else {
+                  jsonItem.AgregarFondo = 0;
+              }
+            }
+          });
+          $("#"+idElement).find("textarea").each(function() {
+            let value = $(this).val();
+            jsonItem.Descripcion = value;
+          });
+        break;
+        case "titulo-desc":
+          $("#"+idElement).find("input").each(function() {
+            let typeInp = $(this).attr("typeInput");
+            if(typeInp == 'titulo'){
+                let value = $(this).val();
+                jsonItem.Titulo = value;
+            }
+          });
+          $("#"+idElement).find("textarea").each(function() {
+            let value = $(this).val();
+            jsonItem.Descripcion = value;
+          });
+        break;
+        case "subtitulo-desc":
+          $("#"+idElement).find("input").each(function() {
+            let type = $(this).attr("type");
+            let typeInp = $(this).attr("typeInput");
+            if(type == 'text'){
+                let value = $(this).val();
+                jsonItem.Subtitulo = value;
+            }
+            if(typeInp == 'check'){
+              if ($(this).is(":checked"))  {
+                  jsonItem.AgregarFondo = 1;
+              }else {
+                  jsonItem.AgregarFondo = 0;
+              }
             }
           });
           $("#"+idElement).find("textarea").each(function() {

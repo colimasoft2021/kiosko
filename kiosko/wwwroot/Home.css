@@ -160,7 +160,7 @@ body {
 
 .logo-kiosko .kiosko {
     width: 200px;
-    height: 48.05px;
+    height: 35px;
 }
 
 .icono-kioko-containaer > img {
@@ -912,4 +912,8 @@ border-radius: 12px 12px 0px 0px;
 #icon-Image {
     height: 50px;
     width: 50px;
+}
+
+.center {
+    margin-top: -8px;
 }
