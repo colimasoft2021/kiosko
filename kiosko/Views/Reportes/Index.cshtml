@@ -1,0 +1,314 @@
+﻿@{
+    ViewData["Title"] = "Reportes";
+}
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+@functions 
+{
+    public string GetAntiXsrfRequestToken()
+    {
+        return Xsrf.GetAndStoreTokens(Context).RequestToken;
+    }
+}
+
+<div class="content-wrapper">
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12 mt-3">
+                    <label>Selecciona una opcion:</label>
+                    <div class="card">
+                        <select id="filtroComisionista">
+                            <option value="00" selected >Todos</option>                        
+                        </select>
+                        <select id="filtroTiendas"></select>
+                        <select id="filtroEmpleados"></select>
+                    </div>
+                </div>
+            </div>
+            <button class="button-class mb-4" onclick="filtrar()">Filtrar</button>
+        </div>
+    </section>
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12 mt-3">
+                    <div class="card">
+                        <table id="tablaModulos" class="table table-bordered table-hover">
+                          <thead>
+                              <tr>
+                                <th>Usuario</th>
+                                <th>Modulo</th>
+                                <th>Progreso</th>
+                              </tr>
+                          </thead>
+                          <tbody id="tBodyProgresos">
+                          </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+@section scripts {
+    <script type="text/javascript">
+      
+        var globalEmpleado;
+        //var selectEmp = $("#filtroEmpleados").val()
+        var selectEmp;
+
+        /*function recorrerdatos(data){
+            console.log("¿?");
+            $.each(data, function( index, value ) {
+                console.log("Datos for",value)
+                $('#filtroComisionista').prepend("<option value='"+value.id+"' >"+value.nombre+"</option>");
+            });
+        }*/
+        $(function () {
+            console.log("inicio");
+            getData();
+        });
+        function filtrar() {
+            console.log("¿1?", this.globalEmpleado);
+            console.log("¿2?", globalEmpleado);
+            $.ajax({
+          type: "POST",
+          url: "/Componentes/saveComponentForModulo2",
+          headers: { "RequestVerificationToken": "@GetAntiXsrfRequestToken()" },
+          data: globalEmpleado,
+          processData : false,
+          contentType : false,
+          success: function (response) {
+            console.log('saved');
+            console.log(response);
+            item.Desplazantes.map(function(item){
+                saveDesplazante(item, response.id);
+            })
+            
+          }
+        });
+        }
+
+        function getData() {
+            var filtros;
+            $.ajax({
+                type: "GET",
+                url: "/Reportes/getFilter",
+                dataType: "json",
+                success: function (response) {
+                    console.log(response);
+                    selectEmp=response;
+                    SelectFiltro(selectEmp)
+                }
+            })
+        }
+    
+       function SelectFiltro(data) {
+           console.log("SelectFiltro");
+           var tiendasComisionista = [];
+           var empleadosComisionista = [];
+		   /*var filtros = {
+               "comisionistas": [
+                   {
+                       "id": "C11209    ",
+                       "nombre": "JUANA ORTIZ RAMIREZ",
+                       "tiendas": [
+                           {
+                               "id": "1202",
+                               "nombre": "12002 GAS ARMERIA",
+                               "empleados": [
+                                   {
+                                       "id": 57894,
+                                       "nombre": "FLOR ALIDEN BARAJAS VAZQUEZ"
+                                   },
+                                   {
+                                       "id": 186674,
+                                       "nombre": "EFRAIN SANTA CRUZ RAMIREZ"
+                                   },
+                                   {
+                                       "id": 284903,
+                                       "nombre": "OSCAR RODRIGUEZ VASQUEZ"
+                                   },
+                                   {
+                                       "id": 338466,
+                                       "nombre": "Miguel Angel Padilla Avalos"
+                                   },
+                                   {
+                                       "id": 348533,
+                                       "nombre": "Marlon Lopez Navarro"
+                                   }
+                               ]
+                           }
+                       ]
+                   },
+                   {
+                       "id": "C10469    ",
+                       "nombre": "NERIDA MAGALY TORRES ESPINOZA",
+                       "tiendas": [
+                           {
+                               "id": "1203",
+                               "nombre": "12003 POLIDEPORTIVO",
+                               "empleados": [
+                                   {
+                                       "id": 183756,
+                                       "nombre": "KARINA GUADALUPE AVALOS ZAPATA"
+                                   },
+                                   {
+                                       "id": 184505,
+                                       "nombre": "KENIA ARIANA HERNANDEZ ESPINOZA"
+                                   },
+                                   {
+                                       "id": 210697,
+                                       "nombre": "ALMA ENEIDA OLIVEROS MEDINA"
+                                   },
+                                   {
+                                       "id": 283308,
+                                       "nombre": "JOSELINE FLORES DIAZ"
+                                   },
+                                   {
+                                       "id": 283338,
+                                       "nombre": "YADIRA GUILLEN MERCADO"
+                                   },
+                                   {
+                                       "id": 327383,
+                                       "nombre": "Miguel Eduardo Garcia Gonzalez"
+                                   }
+                               ]
+                           }
+                       ]
+                   },
+                   {
+                       "id": "C11449    ",
+                       "nombre": "KAREN FABIOLA VARGAS GRACIANO",
+                       "tiendas": [
+                           {
+                               "id": "1204",
+                               "nombre": "12004 IMSS TECOMAN",
+                               "empleados": [
+                                   {
+                                       "id": 327852,
+                                       "nombre": "Yuridia Elizabeth Anaya Gutierrez"
+                                   },
+                                   {
+                                       "id": 328380,
+                                       "nombre": "Rosa Paulina Carreño Enciso"
+                                   },
+                                   {
+                                       "id": 162930,
+                                       "nombre": "DENISSE MONTSERRAT MANZO MENA"
+                                   },
+                                   {
+                                       "id": 315693,
+                                       "nombre": "DIANA ELIZABETH VARGAS GRACIANO"
+                                   },
+                                   {
+                                       "id": 315759,
+                                       "nombre": "FRANCISCO JAVIER GUZMAN RAMIREZ"
+                                   },
+                                   {
+                                       "id": 326576,
+                                       "nombre": "Wendy Marisol Vargas Graciano"
+                                   }
+                               ]
+                           }
+                       ]
+                   },
+                   {
+                       "id": "C10967    ",
+                       "nombre": "EIDRA RUIZ FLORES",
+                       "tiendas": [
+                           {
+                               "id": "1205",
+                               "nombre": "12005 PEDRO TORRES",
+                               "empleados": [
+                                   {
+                                       "id": 284848,
+                                       "nombre": "HECTORAARON AARON MENDOZA MARTINEZ"
+                                   },
+                                   {
+                                       "id": 119721,
+                                       "nombre": "MARLENE DEL ROSARIO RUIZ FLORES"
+                                   },
+                                   {
+                                       "id": 120542,
+                                       "nombre": "EMMA EDUWIGES MENDOZA RUIZ"
+                                   },
+                                   {
+                                       "id": 120587,
+                                       "nombre": "EIDRA RUIZ FLORES"
+                                   },
+                                   {
+                                       "id": 207733,
+                                       "nombre": "ADRIANA RUIZ FLORES"
+                                   },
+                                   {
+                                       "id": 207734,
+                                       "nombre": "MAURICIO ARIEL MERCADO MERCADO"
+                                   }
+                               ]
+                           }
+                       ]
+                   },
+               ]
+           }*/
+           let filtros = data;
+           console.log(filtros.comisionistas);
+           var comis = filtros.comisionistas;
+           comis.forEach(com => {
+    	    $("#filtroComisionista").append(
+                    '<option value="'+com.id+'">'+com.nombre+'</option>'
+                )
+            })
+           $('#filtroComisionista').on('change', function(){
+               console.log(this.value);
+               $("#filtroTiendas").empty();
+               $("#filtroEmpleados").empty();
+               $("#filtroTiendas").append(
+                   '<option value="00">Todos</option>'
+               );
+               $("#filtroEmpleados").append(
+                   '<option value="00">Todos</option>'
+               );
+               comis.forEach(com =>{
+                   if(com.id == this.value){
+                       tiendasComisionista = com.tiendas;
+                       com.tiendas.forEach(tienda => {
+                           $("#filtroTiendas").append(
+                               '<option value="'+tienda.id+'">'+tienda.nombre+'</option>'
+                           )
+                           console.log(com.tiendas);
+                           tienda.empleados.forEach(emp =>{
+                               $('#filtroEmpleados').append(
+                                   '<option value="'+emp.id+'">'+emp.nombre+'</option>'
+                               )
+                           })
+                           console.log(tienda.empleados);
+                           @* selectEmp.push(tienda); *@
+                           globalEmpleado = tienda.empleados;
+                       })
+                   }
+               })
+           });
+           $("#filtroTiendas").on('change',function(){
+               if(this.value != "00"){
+                   tiendasComisionista.forEach(tienda => {
+                       $("#filtroEmpleados").empty();
+                       $("#filtroEmpleados").append(
+                           '<option value="00">Todos</option>'
+                       )
+                       if(this.value == tienda.id){
+                           tienda.empleados.forEach(emp =>{
+                               $("#filtroEmpleados").append(
+                                   '<option value="'+emp.id+'">'+emp.nombre+'</option>'
+                               )
+                           })
+                       }
+                   });
+               }
+           })
+        }
+
+    </script>
+}
+
