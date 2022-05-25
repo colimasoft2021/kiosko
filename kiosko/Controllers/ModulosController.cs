@@ -560,6 +560,8 @@ namespace kiosko.Controllers
 
             return ret;
         }
+        
+        [HttpPost]
         public IActionResult SendAlertasLocales([FromBody] Usuario usuario)
         {
             var message = new { status = "", message = "" };
@@ -583,7 +585,7 @@ namespace kiosko.Controllers
             }
             try
             {
-                var usuarios = _context.Usuarios.Where(u => u.Id == usuario.Id)
+                var usuarios = _context.Usuarios.Where(u => u.IdUsuario == usuario.Id)
                 .Include(u => u.Progresos)
                 .ThenInclude(p => p.IdModuloNavigation).AsNoTracking().FirstOrDefault();
 
