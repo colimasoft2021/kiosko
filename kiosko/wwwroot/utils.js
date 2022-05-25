@@ -73,7 +73,7 @@ function addButtonsToSubMenu() {
     $("#sortableMenu").find("ul").each(function () {
         let idElement = $(this).attr('id');
         let submodulo = $(this).attr('title');
-        let title = "Agregar nuevo Submodulo a " + submodulo;
+        let title = "Agregar nuevo Submódulo a " + submodulo;
         title = "'" + title + "'";
         let lastId = "modulo" + lastIdModulo;
         lastId = "'" + lastId + "'";
