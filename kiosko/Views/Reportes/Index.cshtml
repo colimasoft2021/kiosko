@@ -70,24 +70,20 @@
             getData();
         });
         function filtrar() {
-            console.log("¿1?", this.globalEmpleado);
-            console.log("¿2?", globalEmpleado);
+            console.log("Datos",globalEmpleado);
             $.ajax({
-          type: "POST",
-          url: "/Componentes/saveComponentForModulo2",
-          headers: { "RequestVerificationToken": "@GetAntiXsrfRequestToken()" },
-          data: globalEmpleado,
-          processData : false,
-          contentType : false,
-          success: function (response) {
-            console.log('saved');
-            console.log(response);
-            item.Desplazantes.map(function(item){
-                saveDesplazante(item, response.id);
-            })
+              type: "POST",
+              url: "/Reportes/getFilterData",
+              headers: { "RequestVerificationToken": "@GetAntiXsrfRequestToken()" },
+              data: globalEmpleado,
+              processData : false,
+              contentType : false,
+              success: function (response) {
+                console.log('Post done');
+                console.log(response);
             
-          }
-        });
+              }
+            });
         }
 
         function getData() {

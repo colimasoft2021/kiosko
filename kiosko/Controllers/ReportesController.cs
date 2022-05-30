@@ -88,7 +88,14 @@ namespace kiosko.Controllers
         {
             try
             {
-                var ids = Request.Form["id"];
+                //List<Empleado> empleadosId = new List<Empleado>();
+                //Empleado empleadoId = new Empleado();
+                //var idEmpleado = Request.Form["id"].ToList();
+                //foreach(var idEmp in idEmpleado)
+                //{
+                //    var ids = _context.Usuarios.Where(u => u.IdUsuario == Int32.Parse(idEmp)).ToList();
+                    
+                //}
                 //var progresos = _context.Usuarios.Where(u => ids.Contains(u.IdUsuario)).tolist();
                 return Ok();
             }
