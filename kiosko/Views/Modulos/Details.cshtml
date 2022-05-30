@@ -71,7 +71,8 @@
     var DropzoneVideo;
     if(idModulo == 1){
         $(".is-general").css("display", "none");
-        $(".is-aviso").css("display", "none")
+        $(".is-aviso").css("display", "none");
+        $(".is-acceso").css("display", "none");
     }else if (idModulo == 2){
         $(".is-aviso").css("display", "block");
         $(".is-general").css("display", "none");
@@ -79,7 +80,7 @@
     }else{
         $(".is-aviso").css("display", "none")
         $(".is-general").css("display", "block");
-        //$(".is-acceso").css("display", "none");
+        $(".is-acceso").css("display", "none");
     }
     
     loadComponents();
