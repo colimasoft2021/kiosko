@@ -586,7 +586,7 @@ namespace kiosko.Controllers
             try
             {
                 var usuarios = _context.Usuarios.Where(u => u.IdUsuario == usuario.Id)
-                .Include(u => u.Progresos)
+                .Include(u => u.Progresos.Where(p => p.Porcentaje != 100).Where(p => p.Porcentaje != null))
                 .ThenInclude(p => p.IdModuloNavigation).AsNoTracking().FirstOrDefault();
 
                 var alertas = new DataUsuario();
