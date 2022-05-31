@@ -1,0 +1,60 @@
+﻿@model SLE_System.Models.RegisterViewModel
+@{
+    ViewData["Title"] = "RegisterAdmin";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="content-wrapper">
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-6 col-lg-6 offset-lg-3 offset-md-3 mt-5">
+                    <div class="login-box">
+                      <div class="card card-outline card-primary">
+                        <div class="card-header text-center">
+                          <a href="#" class="h1">Kiosko</a>
+                        </div>
+                        <div class="card-body">
+                          <p class="login-box-msg">Registrar admin</p>
+
+                          <form method="post">
+                            <div class="input-group mb-3">
+                              <input asp-for="Usuario" class="form-control" placeholder="Usuario" />
+                              <span asp-validation-for="Usuario" class="text-danger"></span>
+                              <div class="input-group-append">
+                                <div class="input-group-text">
+                                  <span class="fas fa-envelope"></span>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="input-group mb-3">
+                              <input asp-for="Role" class="form-control" placeholder="Rol" />
+                              <span asp-validation-for="Role" class="text-danger"></span>
+                              <div class="input-group-append">
+                                <div class="input-group-text">
+                                  <span class="fas fa-envelope"></span>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="input-group mb-3">
+                              <input asp-for="Clave" class="form-control" placeholder="Clave"/>
+                              <span asp-validation-for="Clave" class="text-danger"></span>
+                              <div class="input-group-append">
+                                <div class="input-group-text">
+                                  <span class="fas fa-lock"></span>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="row d-flex justify-content-center">
+                              <div class="col-4">
+                                <button type="submit" class="btn btn-primary btn-block">Registrarme</button>
+                              </div>
+                            </div>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
