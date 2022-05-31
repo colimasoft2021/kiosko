@@ -15,17 +15,44 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-lg-12 mt-3">
-                    <label>Selecciona una opcion:</label>
-                    <div class="card">
-                        <select id="filtroComisionista">
-                            <option value="00" selected >Todos</option>                        
-                        </select>
-                        <select id="filtroTiendas"></select>
-                        <select id="filtroEmpleados"></select>
+                    <div class="card card-warning">
+                        <div class="card-header">
+                            <h3 class="card-title">Reportes</h3>
+                        </div>
+                        <div class="card-body">
+                                <div class="row">
+                                    <div class="col-sm-6 col-md-4">
+                                        <div class="form-group">
+                                            <label>Comisionistas</label>
+                                            <select class="form-control" id="filtroComisionista">
+                                                <option value="00" selected >Todos</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 col-md-4">
+                                        <div class="form-group">
+                                            <label>Tiendas</label>
+                                            <select class="form-control" id="filtroTiendas">
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 col-md-4">
+                                        <div class="form-group">
+                                            <label>Empleados</label>
+                                            <select class="form-control" id="filtroEmpleados">
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4 col-md-2">
+                                        <div class="form-group">
+                                            <button type="button" class="btn btn-block btn-primary mb-4" onclick="filtrar()">Filtrar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                        </div>
                     </div>
                 </div>
             </div>
-            <button class="button-class mb-4" onclick="filtrar()">Filtrar</button>
         </div>
     </section>
     <section class="content">
@@ -33,7 +60,7 @@
             <div class="row">
                 <div class="col-lg-12 mt-3">
                     <div class="card">
-                        <table id="tablaModulos" class="table table-bordered table-hover">
+                        <table id="tablaModulosProgresos" class="table table-bordered table-hover">
                           <thead>
                               <tr>
                                 <th>Usuario</th>
@@ -70,18 +97,33 @@
             getData();
         });
         function filtrar() {
-            console.log("Datos",globalEmpleado);
+            let idEmpleado = $("#filtroEmpleados option:selected").val();
+            let arrayEmpleados = [];
+            if (idEmpleado == "00") {
+                globalEmpleado.forEach((item) => {
+                    arrayEmpleados.push(item.id);
+                });
+            } else {
+                arrayEmpleados.push(idEmpleado);
+            }
+            
+            console.log("Filtrar por empleado", idEmpleado);
+            console.log("todos empleados ", arrayEmpleados);
+
+            const formData = new FormData();
+            formData.append("IdEmpleado", idEmpleado);
+            formData.append("Empleados", arrayEmpleados);
             $.ajax({
               type: "POST",
               url: "/Reportes/getFilterData",
               headers: { "RequestVerificationToken": "@GetAntiXsrfRequestToken()" },
-              data: globalEmpleado,
+              data: formData,
               processData : false,
               contentType : false,
               success: function (response) {
                 console.log('Post done');
                 console.log(response);
-            
+                populateTable(response.usuarios);
               }
             });
         }
@@ -303,6 +345,39 @@
                    });
                }
            })
+        }
+
+        function populateTable(items) {
+            $("#tBodyProgresos").empty();
+            console.log(items);
+            items.forEach((item) => {
+                $("#tBodyProgresos").append(
+                    '<tr>'+
+                        '<td colspan="3">'+item.nombreUsuario+'</td>'+
+                    '</tr>'
+                );
+                item.progresos.forEach((progreso) => {
+                    $("#tBodyProgresos").append(
+                        '<tr>'+
+                            '<td></td>'+
+                            '<td>'+progreso.idModuloNavigation.titulo+'</td>'+
+                            '<td>'+progreso.porcentaje+' %</td>'+
+                        '</tr>'
+                    );
+                })
+            });
+
+            $('#tablaModulosProgresos').Destroy();
+
+            $('#tablaModulosProgresos').DataTable({
+                  "paging": true,
+                  "lengthChange": false,
+                  "searching": false,
+                  "ordering": true,
+                  "info": true,
+                  "autoWidth": false,
+                  "responsive": true,
+                });
         }
 
     </script>
