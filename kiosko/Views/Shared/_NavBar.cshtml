@@ -3,11 +3,12 @@
 @inject SignInManager<IdentityUser> signInManager
 @inject UserManager<IdentityUser> userManager
 
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css">
+@*<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css">*@
+@*<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.3/font/bootstrap-icons.css">*@
 
 <nav class="main-header navegacion">
     <!-- Left navbar links -->
-        <a  class="icon" data-widget="pushmenu" href="#" role="button" onclick="iconRotate()"><i id="iconbutton" class="fas icon-inside" style="color: #1f2d3d;"></i></a>
+        <a  class="icon" data-widget="pushmenu" href="#" role="button" onclick=""><i id="iconbutton" class="fas icon-inside" style="color: #1f2d3d;"></i></a>
      
         <div class="profile-container center">
                     @if (signInManager.IsSignedIn(User))
@@ -21,15 +22,18 @@
                 <img src="~/img/usuario.png" />
                 </button>
             
-            <div class="menu-item-container">
-                   <ul id="menu-perfil" style="display: none">
-                     <li>
-                        <a class="ancla-contain" asp-controller="Account" asp-action="Logout">Cerrar Sesion</a>
-                     </li>
-                     <li>
-                         <a href="/Account/Register">Crear Usuario</a>
-                     </li>
-                   </ul>
+            <div class="menu-item-container0" id="menu-perfil"  style="display: none" >
+                <div class="menu-item-container" >
+                    <div class="option">
+                        <a class="bi bi-person-plus item-m" href="/Account/RegisterAdmin"><label>Crear Usuario</label></a>     <br />
+                    </div>
+                    <div class="linea-div">
+                        <hr />
+                    </div>
+                    <div class="option">
+                        <a class="bi bi-box-arrow-right item-m" asp-controller="Account" asp-action="Logout"><label>Cerrar Sesión</label></a>
+                    </div>
+                </div>
             </div>
         </div>
   </nav>
