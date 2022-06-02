@@ -32,8 +32,9 @@
       </div>
       <!--- Menu Estatico -->
       <div class="menu-configuration">
-          <a href="/Modulos/Details?id=1"><i class="nav-icon fas fa-th-large"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-           <a href="/Modulos/Index"><i class="nav-icon fas fa-cog"></i></a>
+          @* <a href="/Modulos/Details?id=1"><i class="nav-icon fas fa-th-large"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *@
+           <a href="/Modulos/Index"><i class="nav-icon fas fa-cog"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+           <a href="/Reportes/Index"><i class="bi bi-card-list"></i></a>
       </div>
     </div>
     <!-- /.sidebar -->
@@ -65,21 +66,21 @@
                 </div>
               </div>
               <!-- icono -->
-              <div id="iconoImg" style="display: none">
+              @*<div id="iconoImg" style="display: none">
                     <label>Icono</label>
                     <br />
                     <input type="file" id="imagenIcono" accept=".png" >
                     <div id="imgPreview" class="preview-img">
                     </div>
-              </div>
+              </div> *@
               <!-- fin - icono -->
               <!-- guia/favorito -->
               <div id="guiaRapida" style="display: block">
                   <input type="checkbox" id="guiasRapidas" name:"guiasRapidas" value="false" />
-                  <label for="guiasRapidas">Guias Rapidas</label>
+                  <label for="guiasRapidas">Guías Rápidas</label>
               </div>
               <div id="divTipo_guia">
-                  <label>Eligue un tipo de guia</label>
+                  <label>Elige un tipo de guía</label>
                   <select id ="tipo_guia" name="tipo_guia">
                       <option value="control interno" >Control Interno</option>
                       <option value="ejecucion" >Ejecución</option>
@@ -90,11 +91,11 @@
               </div>
               <!-- fin - guia/favorito -->
               <div id="divSubMFondo">
-                  <label>Fondo Submodulo</label>
-                  <input type="file" id="addFondoSubModulo" accept=".png"/>
+                  <label>Fondo Submódulo</label>
+                  <input type="file" customValue="" id="addFondoSubModulo" accept=".png"/>
               </div>
               <div id="divBackgroundColor">
-                  <label>Eligue un color de fondo</label>
+                  <label>Elige un color de fondo</label>
                   <select id ="addBackgroundColor" name="addBackgroundColor">
                       <option value="#FC4C02" style="background-color:#FC4C02">#FC4C02</option>
                       <option value="#008BCE" style="background-color:#008BCE">#008BCE</option>

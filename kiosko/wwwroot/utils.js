@@ -73,7 +73,7 @@ function addButtonsToSubMenu() {
     $("#sortableMenu").find("ul").each(function () {
         let idElement = $(this).attr('id');
         let submodulo = $(this).attr('title');
-        let title = "Agregar nuevo Submodulo a " + submodulo;
+        let title = "Agregar nuevo Submódulo a " + submodulo;
         title = "'" + title + "'";
         let lastId = "modulo" + lastIdModulo;
         lastId = "'" + lastId + "'";
@@ -137,9 +137,10 @@ function openModalNewModulo(title, lastId, padre) {
 }
 
 function saveNewModulo() {
+    
     let title = $("#titleNewModulo").val();
     let desplegable = $('input[name="radioDesplegable"]:checked').val();
-    let value = $("#imagenIcono").prop("files");
+    //let value = $("#imagenIcono").prop("files");
     let value2 = $("#addFondoSubModulo").prop("files");
     let favorito = $("#guiasRapidas").prop("checked");
     let tipo_guia = $("#tipo_guia").val();
@@ -148,20 +149,25 @@ function saveNewModulo() {
         tipo_guia = ""
     }
     console.log(tipo_guia);
-    if (value[0]) {
-        jsonNewModulo.Url = window.location.origin + '/files/' + value[0].name;
-        jsonNewModulo.Files = value[0];
-    }
+    //if (value[0]) {
+    //    jsonNewModulo.Url = window.location.origin + '/files/' + value[0].name;
+    //    jsonNewModulo.Files = value[0];
+    //}
     if (value2[0]) {
-        jsonNewModulo.UrlFondo = window.location.origin + '/files/' + value2[0].name;
-        jsonNewModulo.Files = value2[0];
+        /*jsonNewModulo.UrlFondo = window.location.origin + '/files/' + value2[0].name;*/
+        var valDim = $("#addFondoSubModulo").attr("customValue");
+        if (valDim != "") {
+            jsonNewModulo.Files = value2[0];
+        }
     }
+
     parseInt(desplegable);
     jsonNewModulo.Titulo = title;
     jsonNewModulo.Desplegable = desplegable;
     jsonNewModulo.Favorito = favorito;
     jsonNewModulo.TipoGuia = tipo_guia;
     jsonNewModulo.BackgroundColor = background;
+    jsonNewModulo.UrlFondo = $("#addFondoSubModulo").attr("customValue");
     const formData = new FormData();
     formData.append("Id", jsonNewModulo.Id);
     formData.append("Titulo", jsonNewModulo.Titulo);
@@ -177,6 +183,7 @@ function saveNewModulo() {
     formData.append("UrlFondo", jsonNewModulo.UrlFondo);
     formData.append("BackgroundColor", jsonNewModulo.BackgroundColor);
     console.log(jsonNewModulo);
+    
     $.ajax({
         type: "POST",
         url: "/Modulos/SaveMenuModulo",
@@ -193,6 +200,7 @@ function saveNewModulo() {
             Swal.fire({
                 title: 'Bien!',
                 text: 'La información del modulo se ha agregado con exito!',
+                imageUrl: '/img/señalverde.png',
                 type: 'success',
                 showConfirmButton: false,
                 timer: 3000,
@@ -216,6 +224,41 @@ function saveNewModulo() {
     });
     $("#modalNewModulo").modal("hide");
 }
+
+$('#addFondoSubModulo').ready(function () {
+    //$('#addFondoSubModulo').on('input', function () {
+    $('#addFondoSubModulo').on('change', function () {
+        console.log("On Change")
+        let value2 = $("#addFondoSubModulo").prop("files");
+        var urlImage = window.location.origin + '/files/' + value2[0].name;
+        var image = new Image();
+        image.src = urlImage;
+        image.onload = function () {
+            var width = this.width;
+            console.log("width", width);
+            if (width > 800) {
+                Swal.fire({
+                    title: 'Advertencia!',
+                    text: 'La imagen excede los 800 pixeles de ancho, por favor seleccioné otra imagen que cumpla con las dimensiones!',
+                    imageUrl: '/img/señalroja.png',
+                    imageHeight: 212,
+                    timer: 5000,
+                })
+                //$("#addFondoSubModulo").empty();
+                //$("#divSubMFondo").empty();
+                //$("#divSubMFondo").append(
+                //    '<label>Fondo Submódulo</label>'
+                //);
+                //$("#divSubMFondo").append(
+                //    '<input type="file" customValue="" validDimentions="0" id="addFondoSubModulo" accept=".png"/>'
+                //);
+                $("#addFondoSubModulo").attr("customValue", '');
+            } else {
+                $("#addFondoSubModulo").attr("customValue", urlImage);
+            }
+        }
+    });
+});
 
 function addItemEstaticToMenu(item, menuOpen) {
     let desplegable = item.desplegable;

@@ -21,6 +21,6 @@ namespace SLE_System.Models
 
         [Required]
         [Display(Name = "Rol")]
-        public string Role { get; set; }
+        public string Role { get; set; } = "Admin";
     }
 }

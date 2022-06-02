@@ -1,0 +1,116 @@
+﻿@model SLE_System.Models.RegisterViewModel
+@{
+    ViewData["Title"] = "RegisterAdmin";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <link rel="stylesheet" href="~/Assets/plugins/fontawesome-free/css/all.min.css">
+  <link rel="stylesheet" href="~/Assets/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+  <link rel="stylesheet" href="~/Assets/dist/css/adminlte.min.css">
+  <link rel="stylesheet" href="~/Home.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+</head>
+<body>
+<div class="content-wrapper">
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-6 col-lg-6 offset-lg-3 offset-md-3 mt-5">
+                    <div class="login-box">
+                        <div class="card card-primary ">
+                            <img class="top-container-admin" src="~/img/Group 34.png" />
+                            <div class="card-body">
+                                <h3><b class="titulo-reg">Crear nuevo usuario</b></h3>
+                                <br />
+                                <form method="post">
+                                    <label>Correo</label><br />
+                                    <div class="input-group mb-3">
+                                        <input asp-for="Usuario" class="form-control input-user"  placeholder="" id="user" />
+                                        <span asp-validation-for="Usuario" class="text-danger"></span>
+                                    </div>
+                                    <label>Contraseña</label><br />
+                                    <div class="input-group mb-3">
+                                        <input asp-for="Clave" class="form-control input-password" placeholder="&#xf023" id="pass" />
+                                        <span asp-validation-for="Clave" class="text-danger"></span>
+                                    </div>
+                                    <div class="row d-flex justify-content-center">
+                                        <div class="col-6">
+                                            <button type="submit" class="btn btn-primary btn-block">Crear usuario</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<script src="~/Assets/plugins/jquery/jquery.min.js"></script>
+<script src="~/Assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="~/Assets/dist/js/adminlte.min.js"></script>
+
+</body>
+</html>
+
+@section scripts {
+    <script>
+        console.log("Inicio");
+        $(document).ready(function(){
+            $("#user").val("");
+            $("#pass").val("");
+        });
+        
+    </script>
+    @if (ViewBag.Message != null) 
+    { 
+        @if (ViewBag.Message == "0")
+        {
+           <script type="text/javascript"> 
+               window.onload = function () { 
+                   Swal.fire({
+                       title: 'Error!',
+                       text: 'A ocurrido un error al registrar el usuario, inténtelo más tarde',
+                       imageUrl: '/img/señalroja.png',
+                       type: 'success',
+                       showConfirmButton: false,
+                       timer: 3000,
+                   })
+                   $(document).ready(function(){
+                       $("#user").val('');
+                       $("#pass").val('');
+                   });
+               }; 
+           </script>  
+        } 
+        @if (ViewBag.Message == "1"){
+            <script type="text/javascript"> 
+                window.onload = function () { 
+                    console.log("@ViewBag.Message"); 
+                    alert("@ViewBag.Message"); 
+                    Swal.fire({
+                        title: 'Bien!',
+                        text: 'Usuario creado correctamente',
+                        imageUrl: '/img/señalverde.png',
+                        type: 'success',
+                        showConfirmButton: false,
+                        timer: 3000,
+                    })
+                   @*.then((result) => {*@
+                    @*window.location.href="/Account/Login";*@
+                    @*location.reload();*@
+                };  
+            </script>  
+        } 
+    }
+}

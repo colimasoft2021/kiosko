@@ -35,6 +35,45 @@ namespace kiosko.Controllers
             return View();
         }
 
+        public IActionResult RegisterAdmin()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RegisterAdmin(RegisterViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = new IdentityUser
+                {
+                    UserName = model.Usuario,
+                    Email = model.Usuario,
+                };
+
+                var result = await _userManager.CreateAsync(user, model.Clave);
+                await _userManager.AddToRoleAsync(user, model.Role);
+
+                if (result.Succeeded)
+                {
+                    //await _signInManager.SignInAsync(user, isPersistent: false);
+
+                    //return RedirectToAction("index", "Modulos");
+                    ViewBag.Message = "1";
+                }
+
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError("", error.Description);
+                    ViewBag.Message = "0";
+                }
+
+                ModelState.AddModelError(string.Empty, "Error: Usuario y/o contraseña incorrectos.");
+
+            }
+            return View();
+        }
+
         [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {

@@ -107,7 +107,7 @@ namespace kiosko.Controllers
             }
 
             try { 
-                var modulos = _context.Modulos.Where(c => c.Id != 2).OrderBy(c => c.Orden)
+                var modulos = _context.Modulos.Where(c => c.Id > 2).OrderBy(c => c.Orden)
                     .Include(m => m.Componentes.OrderBy(m => m.Orden))
                         .ThenInclude(m => m.Desplazantes)
                         .ToList();
@@ -427,7 +427,7 @@ namespace kiosko.Controllers
             return ret;
         }
 
-        public IActionResult SendAlertas()
+        public IActionResult SendAlertasEmailComisionistas()
         {
             var message = new { status = "", message = "" };
             IActionResult ret = null;
@@ -560,7 +560,91 @@ namespace kiosko.Controllers
 
             return ret;
         }
+        
+        [HttpPost]
+        public IActionResult SendAlertasLocales([FromBody] Usuario usuario)
+        {
+            var message = new { status = "", message = "" };
+            IActionResult ret = null;
 
+            if (!Request.Headers.ContainsKey("Authorization"))
+            {
+                _errorService.SaveErrorMessage("!Request.Headers.ContainsKey", "ModulosController",
+                    "SendAlertas", "Faltan Headers Auth - Unauthorized/Sin Autorizacion");
+                message = new { status = "error", message = "Unauthorized" };
+                return StatusCode(StatusCodes.Status401Unauthorized, message);
+            }
+            var paramAuthorization = Request.Headers["Authorization"].ToString();
+            var isAuthorized = _authorizationService.CheckAuthorization(paramAuthorization);
+            if (!isAuthorized)
+            {
+                _errorService.SaveErrorMessage("_authorizationService.CheckAuthorization", "ModulosController",
+                    "SendAlertas", "Credenciales Incorrectas - Unauthorized/Sin Autorizacion");
+                message = new { status = "error", message = "Unauthorized" };
+                return StatusCode(StatusCodes.Status401Unauthorized, message);
+            }
+            try
+            {
+                var usuarios = _context.Usuarios.Where(u => u.IdUsuario == usuario.Id)
+                .Include(u => u.Progresos.Where(p => p.Porcentaje != 100).Where(p => p.Porcentaje != null))
+                .ThenInclude(p => p.IdModuloNavigation).AsNoTracking().FirstOrDefault();
+
+                var alertas = new DataUsuario();
+
+                var infoUsuario = new UsuarioAlerta();
+                infoUsuario.Nombre = usuarios.NombreUsuario;
+                infoUsuario.IdUsuarioKiosko = usuarios.IdUsuario;
+                foreach (var p in usuarios.Progresos.ToList())
+                {
+                    var inactividadModulo = p.IdModuloNavigation.TiempoInactividad;
+                    DateTime fechaHoy = DateTime.Now;
+                    var fechaActualizacion = p.FechaActualizacion;
+                    TimeSpan diferenciaDias = fechaHoy.Subtract((DateTime)fechaActualizacion);
+                    var inactividad = diferenciaDias.Days;
+                    if (inactividad > inactividadModulo)
+                    {
+                        var infoModulo = new ModuloInactivo();
+                        infoModulo.Modulo = p.IdModuloNavigation.Titulo;
+                        infoModulo.Porcentaje = p.Porcentaje;
+                        infoModulo.TiempoInactividad = inactividad;
+                        infoUsuario.ModulosInactivos.Add(infoModulo);
+                        alertas.UsuariosAlertas.Add(infoUsuario);
+                    }
+                }
+
+                string cuerpoMensaje = "";
+                cuerpoMensaje += "Hola " + usuarios.NombreUsuario + " continúa con capacitación<br/>";
+                foreach (var modulo in infoUsuario.ModulosInactivos)
+                {
+                    cuerpoMensaje += "<b>Modulo Inactivo: " + modulo.Modulo + "</b><br/>";
+                    cuerpoMensaje += "Porcentaje de avance: " + modulo.Porcentaje + "%<br/>";
+                    cuerpoMensaje += "Tiempo de inactividad: " + modulo.TiempoInactividad + " días<br/>";
+                }
+                try
+                {
+                    ret = StatusCode(StatusCodes.Status200OK, cuerpoMensaje);
+                }
+                catch (Exception ex)
+                {
+                    _errorService.SaveErrorMessage("_mailService.SendEmailGmail", "ModulosController",
+                        "SendAlertas", ex.Message);
+                    message = new { status = "error", message = ex.Message };
+                    ret = StatusCode(StatusCodes.Status500InternalServerError, message);
+                    throw ex;
+                }
+                cuerpoMensaje = "";
+                ret = StatusCode(StatusCodes.Status200OK, alertas);
+            }
+            catch (Exception ex)
+            {
+                _errorService.SaveErrorMessage("_context.Usuarios - alertas = new DataUsuario()",
+                    "ModulosController", "SendAlertas", ex.Message);
+                message = new { status = "error", message = ex.Message };
+                ret = StatusCode(StatusCodes.Status500InternalServerError, message);
+            }
+
+            return ret;
+        }
         private bool UsuarioExists(int IdUsuario)
         {
             return _context.Usuarios.Any(e => e.Id == IdUsuario);

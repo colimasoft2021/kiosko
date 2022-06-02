@@ -39,7 +39,7 @@
                                 <li class="option-menu is-acceso" onclick="addComponent('enlace', 0)">Enlace</li>
                                 <li class="option-menu is-general" onclick="addComponent('banner-informativo', 0)">Banner Informativo</li>
                                 <li class="option-menu is-general" onclick="addComponent('pop-up-video', 0)">Pop-Up Video</li>
-                                <li class="option-menu is-general" onclick="addComponent('video-guia', 0)">video-guia</li>
+                                <li class="option-menu is-general" onclick="addComponent('video-guía', 0)">video-guía</li>
                                 <li class="option-menu is-general" onclick="addComponent('acceso-cursos', 0)">Acceso-cursos</li>
                                 <li class="option-menu is-general" onclick="addComponent('carrucel', 0)">Carrucel</li>
                                 <li class="option-menu is-general" onclick="addComponent('pop-up', 0)">Pop-up</li>
@@ -47,9 +47,9 @@
                                 <li class="option-menu is-general" onclick="addComponent('desplegable-texto-imagen', 0)">Desplegable texto-imagen</li>
                                 <li class="option-menu is-general" onclick="addComponent('desplegable-texto-imagen-imagen', 0)">Desplegable texto-imagen-imagen</li>
                                 <li class="option-menu is-general" onclick="addComponent('texto-imagen', 0)">Texto Imagen</li>
-                                <li class="option-menu is-general" onclick="addComponent('imagen-titulo-desc', 0)">Imagen + titulo + descripción</li>
-                                <li class="option-menu is-general" onclick="addComponent('titulo-desc', 0)">Titulo + descripción</li>
-                                <li class="option-menu is-general" onclick="addComponent('subtitulo-desc', 0)">Subtitulo + descripción</li>
+                                <li class="option-menu is-general" onclick="addComponent('imagen-titulo-descripción', 0)">Imagen + titulo + descripción</li>
+                                <li class="option-menu is-general" onclick="addComponent('titulo-descripción', 0)">Titulo + descripción</li>
+                                <li class="option-menu is-general" onclick="addComponent('subtitulo-descripción', 0)">Subtitulo + descripción</li>
                             </ul>
                         </div>
                 </div>
@@ -59,6 +59,7 @@
 </div>
 @section scripts {
 <script type="text/javascript">
+    var valiDimetions;
     $(function () {
        $("#containerComponents").sortable();
     });
@@ -70,15 +71,16 @@
     var DropzoneVideo;
     if(idModulo == 1){
         $(".is-general").css("display", "none");
-        $(".is-aviso").css("display", "none")
+        $(".is-aviso").css("display", "none");
+        $(".is-acceso").css("display", "none");
     }else if (idModulo == 2){
         $(".is-aviso").css("display", "block");
         $(".is-general").css("display", "none");
-        //$(".is-acceso").css("display", "none");
+        $(".is-acceso").css("display", "none");
     }else{
         $(".is-aviso").css("display", "none")
         $(".is-general").css("display", "block");
-        //$(".is-acceso").css("display", "none");
+        $(".is-acceso").css("display", "none");
     }
     
     loadComponents();
@@ -164,6 +166,7 @@
         }
       })
     }
+    var _URL = window.URL || window.webkitURL;
     function generatePreview(stringId,indexImagen,type) {
       let idImg = "imagen"+stringId+"-"+indexImagen;
       let stringIdImg = "'card-img-"+stringId+"-"+indexImagen+"'";
@@ -172,6 +175,7 @@
       let idPreview = "imgPreview"+stringId+"-"+indexImagen;
       let imgFile = $("#"+idImg).prop("files");
       imgFile = imgFile[0];
+      console.log(imgFile);
       let reader = new FileReader();
       reader.readAsDataURL(imgFile);
       $("#"+idImglabel).css("display","none");
@@ -197,19 +201,100 @@
             classBtnClose = "button-close-small";
       }
       reader.onload = function() {
-        let preview = $("#"+idPreview);
-        $("#"+idPreview).empty();
-        stringId = "'"+stringId+"'";
-        console.log(type);
-        if(type != "carrucel"){
-            console.log('entro if');
-            $("#"+idPreview).append('<button id="imagenclose'+stringId+'-'+indexImagen+'"  class="'+classBtnClose+'"  onclick="deletePreview('+stringId+','+indexImagen+')">x</button>');
-        }
-        imagen = document.createElement('img');
-        imagen.src = reader.result;
-        preview.innerHTML = "";
-        preview.append(imagen);
+          var image = new Image();
+          image.src = reader.result;
+          
+          image.onload = function () {
+            var height = this.height;
+            console.log("height", height)
+            var width = this.width;
+            console.log("width", width)
+            valiDimetions = ValidateDimention(type,width, height) ;
+            if (valiDimetions.success == true){
+                let preview = $("#"+idPreview);
+                $("#"+idPreview).empty();
+                stringId = "'"+stringId+"'";
+                console.log(type);
+                if(type != "carrucel"){
+                    console.log('entro if');
+                    $("#"+idPreview).append('<button id="imagenclose'+stringId+'-'+indexImagen+'"  class="'+classBtnClose+'"  onclick="deletePreview('+stringId+','+indexImagen+')">x</button>');
+                }
+                let imagen = document.createElement('img');
+                imagen.src = reader.result;
+                preview.innerHTML = "";
+                preview.append(imagen);
+                console.log("Entro true");
+            }
+            if (valiDimetions.success == false){
+              Swal.fire({
+                  title: 'Error',
+                  text: valiDimetions.msg,
+                  imageUrl: '/img/señalroja.png',
+                  imageHeight: 212,
+                  showConfirmButton: false,
+                  timer: 3000
+              })
+              deletePreview(stringId,indexImagen);
+              console.log("Entro false");
+              return true
+            }
+          };
+          console.log(valiDimetions);
       }
+    }
+    function ValidateDimention(type, width, height){
+        switch(type) {
+          case 'imagen':
+            if(width > 705 || height > 900){
+                return {success:false, msg:"El ancho máximo de la imagen no debe ser mayor a 700 pixeles y de alto 900 pixeles "};
+            } 
+          break;
+          case 'desplazante-texto-imagen':
+            if(width > 90){
+                return {success:false, msg:"El ancho máximo de la imagen no debe ser mayor a 90 pixeles"};
+            }
+          break;
+          case 'carrucel':
+            if(width > 600){
+                return {success:false, msg:"El ancho máximo de la imagen no debe ser mayor a 600 pixeles"};
+            }
+          break;
+          case 'desplegable-texto-imagen':
+            if(width > 200){
+                return {success:false, msg:"El ancho máximo de la imagen no debe ser mayor a 200 pixeles"};
+            }
+          break;
+          case 'pop-up':
+            if(width > 500){
+                return {success:false, msg:"El ancho máximo de la imagen no debe ser mayor a 500 pixeles"};
+            }
+          break;
+          case 'aviso-inicial':
+            if(width > 500){
+                return {success:false, msg:"El ancho máximo de la imagen no debe ser mayor a 500 pixeles"};
+            }
+          break;
+          case 'desplegable-texto-imagen-imagen':
+            if(width > 200){
+                return {success:false, msg:"El ancho máximo de la imagen no debe ser mayor a 200 pixeles"};
+            }
+          break;
+          default:
+            return {success:true, msg:""};
+        }
+        return { success:true, msg:" " };
+    }
+    function ValidateImgAviso(type, url) {
+        switch(type) {
+          case 'aviso-inicial':
+            if(url == "" || url == null){
+                return {success:false };
+            } 
+          break;
+          default:
+            return {success:true };
+        }
+        return { success:true };
     }
     function deletePreview(stringId,indexImagen){
       let idImg = "imagen"+stringId+"-"+indexImagen;
@@ -218,6 +303,8 @@
       let idImgclose = "imagenclose"+stringId+"-"+indexImagen;
       $("#"+idImglabel).css("display","block")
       $("#"+idPreview).empty();
+      $("#"+idImg).attr("customValue","");
+      console.log (idImg);
       $("#"+idImgclose).css("display","none")
     }
     function AddTextoImagen(stringId, type){
@@ -236,7 +323,7 @@
                   '<label for="'+idImg+'" id="'+idImgLabel+'" class="btn-img">'+
                     '<img src="/img/icono-imagen-chico.png" class="label-imagen-1"/>'+
                   '</label>'+
-                  '<input type="file" id="'+idImg+'" onchange="generatePreview('+newStringId+','+indexImagen+','+stringType+')" typeInput="img" class="input-img">'+
+                  '<input type="file" id="'+idImg+'" onchange="generatePreview('+newStringId+','+indexImagen+','+stringType+')" typeInput="img" class="input-img" customValue="'+item.url+'">'+
                   '<div id="'+idPreview+'" class="preview-img-small"></div>'+
               '</div>'+
               '<input class="titulo-input mt-4" type="text" typeInput="titulo" placeholder="Titulo">'+
@@ -351,7 +438,7 @@
                 '<label for="imagen'+idComponent+'-'+indexImagen+'" id="imagenlabel'+idComponent+'-'+indexImagen+'" '+styleLabel+' class="btn-img">'+
                   '<img src="/img/icono-imagen-chico.png" class="label-imagen-1"/>'+
                 '</label>'+
-                '<input type="file" id="imagen'+idComponent+'-'+indexImagen+'" onchange="generatePreview('+stringId+','+indexImagen+','+stringType+')" typeInput="img" class="input-img" value="'+item.url+'">';
+                '<input type="file" id="imagen'+idComponent+'-'+indexImagen+'" onchange="generatePreview('+stringId+','+indexImagen+','+stringType+')" typeInput="img" class="input-img" customValue="'+item.url+'">';
             component += preview;
             component +=
             '</div>';
@@ -420,7 +507,7 @@
             '<label for="imagen'+idComponent+'-'+indexImagen+'" id="imagenlabel'+idComponent+'-'+indexImagen+'" '+styleLabel+' class="btn-img">'+
                 '<img src="/img/icono-imagen-chico.png" class="image-icon"/>'+
             '</label>'+
-            '<input type="file" id="imagen'+idComponent+'-'+indexImagen+'" onchange="generatePreview('+stringId+','+indexImagen+','+stringType+')" class="input-img" typeInput="'+attrTypeInput+'" value="'+urlImage+'">';
+            '<input type="file" id="imagen'+idComponent+'-'+indexImagen+'" onchange="generatePreview('+stringId+','+indexImagen+','+stringType+')" class="input-img" typeInput="'+attrTypeInput+'" customValue="'+urlImage+'">';
         /*'</div>';*/
         component += preview;
         indexImagen = indexImagen + 1;
@@ -466,7 +553,7 @@
                           '<label for="imagen'+idComponent+'-'+indexImagen+'" id="imagenlabel'+idComponent+'-'+indexImagen+'" '+styleLabel+' class="btn-img">'+
                             '<img src="/img/icono-imagen-chico.png" class="label-imagen-1"/>'+
                           '</label>'+
-                          '<input type="file" id="imagen'+idComponent+'-'+indexImagen+'" onchange="generatePreview('+stringId+','+indexImagen+','+stringType+')" typeInput="img" class="input-img" value="'+item.url+'">';
+                          '<input type="file" id="imagen'+idComponent+'-'+indexImagen+'" onchange="generatePreview('+stringId+','+indexImagen+','+stringType+')" typeInput="img" class="input-img" customValue="'+item.url+'">';
             component += preview;
             component +=
                       '</div>'+
@@ -540,12 +627,10 @@
             }
             component =
               '<div class="col-lg-12 component" db-id="'+pkId+'" id="'+idComponent+'" type-component="texto">'+
-                '<div class="col-lg-12 component" >'+
                   '<p class="tituloCmp">'+type+
                     '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+','+stringType+')">'+
                   '<p>'+
                   '<input class="inputTexto" type="text" value="'+valueInpText+'">'+
-                '</div>'+
                 '<input type="checkbox" typeInput="check" class="Boton1" name="AgregarFondo" '+propChecked+'><label for="AgregarFondo"> Agregar Fondo</label><br>'+
               '</div>';
           break;
@@ -848,12 +933,12 @@
               '</div>';
             indexImagen = indexImagen + 1;
           break;
-          case 'video-guia':
+          case 'video-guía':
             let valueInpVideoGuia = (item) ? item.url : "";
             let valueInpTextGuia = (item) ?  item.descripcion : "";
             let valueInpColorGuia = (item) ? item.backgroundColor : "";
             component =
-              '<div class="col-lg-12  texto component CompEnlace " id="'+idComponent+'" db-id="'+pkId+'" type-component="video-guia">'+
+              '<div class="col-lg-12  texto component CompEnlace " id="'+idComponent+'" db-id="'+pkId+'" type-component="video-guía">'+
                 '<p class="tituloCmp">'+type+
                   '<img src="/img/iconTrash.png"  alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+','+stringType+')">'+
                 '<p>'+
@@ -868,7 +953,7 @@
             component +=
                   '</div>'+
                   '<div class="descripcion-guia-video">'+
-                    '<input type="text" class="descripcion-guia-video-input" placeholder="Descripcion" typeInput="text-guia" value="'+valueInpTextGuia+'">'+
+                    '<input type="text" class="descripcion-guia-video-input" placeholder="Descripción" typeInput="text-guia" value="'+valueInpTextGuia+'">'+
                   '</div>'+ 
                   '<div>'+
                     '<label>Elige color para asignarle </label>'+
@@ -884,7 +969,14 @@
             let valueInpUpVideo = (item) ?  item.url : "";
             let valueCatPopUpVid = (item) ?  item.tipoCategoria : "";
             let idCatSelect = "#categoriaVideo"+idComponent;
-            var arrar=['sin-categoria','control-interno', 'ejecucion', 'abastecimiento-e-inventario', 'servicio'];
+            //var arrar=['sin-categoria','control-interno', 'ejecucion', 'abastecimiento-e-inventario', 'servicio'];
+            var arrar=[
+                {"value":"sin-categoria", "text":"Sin categoria"},
+                {"value":"control-interno", "text":"Control interno" }, 
+                {"value":"ejecucion", "text":"Ejecución"}, 
+                {"value":"abastecimiento-e-inventario", "text":"Abastecimiento e inventario"}, 
+                {"value":"servicio", "text":"Servicio"}
+            ];
             console.log(arrar);
             console.log(valueCatPopUpVid, "Pop-up-Video ------")
             component =
@@ -910,11 +1002,11 @@
 
                             for(var i=0;i<arrar.length;i++){
 
-                                if(valueCatPopUpVid==arrar[i]){
-                                   component +=    '<option value="'+arrar[i]+'" selected>'+arrar[i]+'</option>';
+                                if(valueCatPopUpVid==arrar[i].value){
+                                   component +=    '<option value="'+arrar[i].value+'" selected>'+arrar[i].text+'</option>';
                                 }else{
                                    
-                                    component +=  '<option value="'+arrar[i]+'">'+arrar[i]+'</option>';
+                                    component +=  '<option value="'+arrar[i].value+'">'+arrar[i].text+'</option>';
                                     
                                 }
 
@@ -932,11 +1024,11 @@
                 '<input class="inputTexto" type="text" placeholder="Titulo" value="'+valueInpText5+'">'+
               '</div>';
           break;
-          case 'imagen-titulo-desc':
+          case 'imagen-titulo-descripción':
             let valueTitulo = (item) ? item.titulo : "";
             let valueDescriptionImDes = (item) ? item.descripcion : "";
             component =
-              '<div class="col-lg-12 component" id="'+idComponent+'" db-id="'+pkId+'" type-component="imagen-titulo-desc">'+
+              '<div class="col-lg-12 component" id="'+idComponent+'" db-id="'+pkId+'" type-component="imagen-titulo-descripción">'+
                 '<p class="tituloCmp">'+type+
                   '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+','+stringType+')">'+
                 '<p>'+
@@ -976,7 +1068,7 @@
                       '<input class="subtitle-input" type="text" placeholder="Subtitulo" typeInput="subtitulo" value="'+valueSubtituloim+'">'+        
                     '</div>'+
                   '</div>'+
-                  '<textarea class="textarea mt-3" name="" id="" cols="" rows="3" placeholder="Descripcion">'+valueDescriptionim+'</textarea><br/>'+
+                  '<textarea class="textarea mt-3" name="" id="" cols="" rows="3" placeholder="Descripción">'+valueDescriptionim+'</textarea><br/>'+
                   '<div class="container-desplegable-imagenes mt-3">'+
                     '<div class="card-imagen-carroucel">';
             let imageDes2im = generateCardImage(stringId, idComponent, item, pkId, stringType, 'img2');
@@ -996,11 +1088,11 @@
               '</div>';
               indexImagen = indexImagen + 2;
           break;
-          case 'titulo-desc':
+          case 'titulo-descripción':
             let valueTituloDes = (item) ? item.titulo : "";
             let valueDescriptionDes = (item) ? item.descripcion : "";
             component =
-              '<div class="col-lg-12 component" id="'+idComponent+'" db-id="'+pkId+'" type-component="titulo-desc">'+
+              '<div class="col-lg-12 component" id="'+idComponent+'" db-id="'+pkId+'" type-component="titulo-descripción">'+
                 '<p class="tituloCmp">'+type+
                   '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+','+stringType+')">'+
                 '<p>'+
@@ -1015,7 +1107,7 @@
               '</div>';
               indexImagen = indexImagen + 2;
           break;
-          case 'subtitulo-desc':
+          case 'subtitulo-descripción':
             let valueInpSubDes = (item) ? item.subtitulo : "";
             let valueDescriptionSubDes = (item) ? item.descripcion : "";
             let valueInpAddBackSubDes = (item) ? item.agregarFondo : 0;
@@ -1023,7 +1115,7 @@
                 propChecked ="checked";
             }
             component =
-              '<div class="col-lg-12 component" id="'+idComponent+'" db-id="'+pkId+'" type-component="subtitulo-desc">'+
+              '<div class="col-lg-12 component" id="'+idComponent+'" db-id="'+pkId+'" type-component="subtitulo-descripción">'+
                 '<p class="tituloCmp">'+type+
                   '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+','+stringType+')">'+
                 '<p>'+
@@ -1044,9 +1136,11 @@
         }
         return {component: component, idComponent: idComponent, indexImagen: indexImagen};
     }
+    var txt;
     function saveChanges() {
       let toInsert = [];
       let toUpdate = [];
+      let errores = 0;
       $(".component").each(function(index){
         let currentComponent = $(this);
         let idElement = currentComponent.attr('id');
@@ -1059,20 +1153,43 @@
         item.TipoComponente = typeElement;
         item.Orden = index+1;
         item.IdModulo = idModulo;
+        let imgVal;
         if(idComponent != 0) {
-          toUpdate.push(item);
+            imgVal = ValidateImgAviso(item.TipoComponente, item.Url);
+            console.log("U",imgVal.success, imgVal.msg);
+            if(imgVal.success == true){
+                toUpdate.push(item);
+            }
+            if(imgVal.success == false){
+                txt = imgVal.msg;
+                errores ++;
+            }
         }else{
-          toInsert.push(item);
+            imgVal = ValidateImgAviso(item.TipoComponente, item.Url);
+            console.log("I",imgVal.success, imgVal.msg);
+            if(imgVal.success == true){
+                toInsert.push(item);
+            }
+            if(imgVal.success == false){
+                txt = imgVal.msg
+                errores ++;
+            }
+          //toInsert.push(item);
         }
       });
+      let msgAlert = "Los componentes se han actualizado con exito!";
+      if (errores > 0){
+          msgAlert = "Algunos de los componentes no se han podido guardar por falta de información";
+      }
       console.log(toInsert);
       console.log(toUpdate);
       
+      console.log("msg prev",txt);
       saveComponents(toInsert);
       updateComponents(toUpdate);
       Swal.fire({
             title: 'Bien!',
-            text: 'Los componentes se han actualizado con exito!',
+            text: msgAlert,
             imageUrl: '/img/señalverde.png',
             imageHeight: 212,
             showConfirmButton: false,
@@ -1142,7 +1259,7 @@
                     jsonItem.Url = window.location.origin+'/files/'+value[0].name;
                     jsonItem.Files = value[0];
                 }else{
-                    jsonItem.Url = $(this).attr("value");
+                    jsonItem.Url = $(this).attr('customValue');
                 }
             }
             if(typeInp == 'pie-foto'){
@@ -1163,7 +1280,7 @@
                         jsonDesplazante.Url = window.location.origin+'/files/'+value[0].name;
                         jsonDesplazante.Files = value[0];
                     }else{
-                        jsonDesplazante.Url = $(this).attr("value");
+                        jsonDesplazante.Url = $(this).attr('customValue');
                     }
                 }
                 if(typeInp == 'titulo'){
@@ -1204,7 +1321,7 @@
                         jsonDesplazante.Url = window.location.origin+'/files/'+value[0].name;
                         jsonDesplazante.Files = value[0];
                     }else{
-                        jsonDesplazante.Url = $(this).attr("value");
+                        jsonDesplazante.Url = $(this).attr('customValue');
                     }
                 }
             });
@@ -1233,7 +1350,7 @@
                     jsonItem.Url = window.location.origin+'/files/'+value[0].name;
                     jsonItem.Files.push(value[0]);
                 }else{
-                    jsonItem.Url = $(this).attr("value");
+                    jsonItem.Url = $(this).attr('customValue');
                 }
             }
             if(typeInp == 'img2'){
@@ -1242,7 +1359,7 @@
                     jsonItem.UrlDos = window.location.origin+'/files/'+value[0].name;
                     jsonItem.Files.push(value[0]);
                 }else{
-                    jsonItem.UrlDos = $(this).attr("value");
+                    jsonItem.UrlDos = $(this).attr('customValue');
                 }
             }
             if(typeInp == 'img3'){
@@ -1251,7 +1368,7 @@
                     jsonItem.UrlTres = window.location.origin+'/files/'+value[0].name;
                     jsonItem.Files.push(value[0]);
                 }else{
-                    jsonItem.UrlTres = $(this).attr("value");
+                    jsonItem.UrlTres = $(this).attr('customValue');
                 }
             }
             if ($(this).is(":checked")) {
@@ -1308,7 +1425,7 @@
                 jsonItem.Url = window.location.origin+'/files/'+value[0].name;
                 jsonItem.Files = value[0];
               }else{
-                jsonItem.Url = $(this).attr("value");
+                jsonItem.Url = $(this).attr('customValue');
               }
             }
           });
@@ -1326,7 +1443,7 @@
                 jsonItem.Url = window.location.origin+'/files/'+value[0].name;
                 jsonItem.Files = value[0];
               }else{
-                jsonItem.Url = $(this).attr("value");
+                jsonItem.Url = $(this).attr('customValue');
               }
             }
           });
@@ -1340,7 +1457,7 @@
                 jsonItem.Url = window.location.origin+'/files/'+value[0].name;
                 jsonItem.Files = value[0];
               }else{
-                jsonItem.Url = $(this).attr("value");
+                jsonItem.Url = $(this).attr('customValue');
               }
             }
             if ($(this).is(":checked")) {
@@ -1383,7 +1500,7 @@
             }
           });
         break;
-        case 'video-guia':
+        case 'video-guía':
           $("#"+idElement).find("input").each(function() {
             let typeInp = $(this).attr("typeInput");
             if(typeInp == 'video'){
@@ -1447,7 +1564,7 @@
             jsonItem.Descripcion = value;
           });
         break;
-        case "imagen-titulo-desc":
+        case "imagen-titulo-descripción":
           $("#"+idElement).find("input").each(function() {
             let typeInp = $(this).attr("typeInput");
             if(typeInp == 'titulo'){
@@ -1482,7 +1599,7 @@
                     jsonItem.UrlDos = window.location.origin+'/files/'+value[0].name;
                     jsonItem.Files.push(value[0]);
                 }else{
-                    jsonItem.UrlDos = $(this).attr("value");
+                    jsonItem.UrlDos = $(this).attr('customValue');
                 }
             }
             if(typeInp == 'img3'){
@@ -1491,7 +1608,7 @@
                     jsonItem.UrlTres = window.location.origin+'/files/'+value[0].name;
                     jsonItem.Files.push(value[0]);
                 }else{
-                    jsonItem.UrlTres = $(this).attr("value");
+                    jsonItem.UrlTres = $(this).attr('customValue');
                 }
             }
             if(typeInp == 'check'){
@@ -1507,7 +1624,7 @@
             jsonItem.Descripcion = value;
           });
         break;
-        case "titulo-desc":
+        case "titulo-descripción":
           $("#"+idElement).find("input").each(function() {
             let typeInp = $(this).attr("typeInput");
             if(typeInp == 'titulo'){
@@ -1520,7 +1637,7 @@
             jsonItem.Descripcion = value;
           });
         break;
-        case "subtitulo-desc":
+        case "subtitulo-descripción":
           $("#"+idElement).find("input").each(function() {
             let type = $(this).attr("type");
             let typeInp = $(this).attr("typeInput");

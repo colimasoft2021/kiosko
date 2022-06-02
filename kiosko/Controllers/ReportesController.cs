@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using Microsoft.EntityFrameworkCore;
 using System.Net;
 using System.Text;
 
@@ -86,16 +87,47 @@ namespace kiosko.Controllers
         [HttpPost]
         public IActionResult getFilterData()
         {
+            var message = new { status = "", message = "" };
+            IActionResult ret = null;
             try
             {
-                var ids = Request.Form["id"];
-                //var progresos = _context.Usuarios.Where(u => ids.Contains(u.IdUsuario)).tolist();
-                return Ok();
+                var idEmpleado = Request.Form["IdEmpleado"];
+                var empleados = Request.Form["Empleados"];
+                var arrayEmpleados = empleados.ToString();
+                Console.WriteLine(arrayEmpleados);
+                var empleadosInt = arrayEmpleados.Split(',');
+                Console.WriteLine(empleadosInt);
+                var results = new Usuarios();
+
+                foreach (var emp in empleadosInt)
+                {
+                    Console.WriteLine(emp);
+                    var dataUser = new Usuario();
+                    var progreso = _context.Usuarios.Where(u => u.IdUsuario == Int32.Parse(emp))
+                    .Include(p => p.Progresos)
+                    .ThenInclude(m => m.IdModuloNavigation).AsNoTracking().FirstOrDefault();
+                    if (progreso != null)
+                    {
+                        dataUser.Progresos = progreso.Progresos;
+                        dataUser.Id = progreso.Id;
+                        dataUser.IdUsuario = progreso.IdUsuario;
+                        dataUser.NombreUsuario = progreso.NombreUsuario;
+                        dataUser.Clave = progreso.Clave;
+                        dataUser.Rol = progreso.Rol;
+                        dataUser.Email = progreso.Email;
+                        results.usuarios.Add(progreso);
+                        Console.WriteLine(progreso);
+                    }
+                    
+                }
+                ret = StatusCode(StatusCodes.Status200OK, results);
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                message = new { status = "error", message = ex.Message };
+                ret = StatusCode(StatusCodes.Status500InternalServerError, message);
             }
+            return ret;
         }
 
         // POST: ReportesController/Create
@@ -265,5 +297,14 @@ namespace kiosko.Controllers
     {
         public int Id { get; set; }
         public string Nombre { get; set; }
+    }
+
+    public class Usuarios
+    {
+        public Usuarios()
+        {
+            usuarios = new HashSet<Usuario>();
+        }
+        public virtual ICollection<Usuario> usuarios { get; set; }
     }
 }

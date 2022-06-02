@@ -29,7 +29,7 @@
                                 <th>Padre</th>
                                 <th>Es Desplegable</th>
                                 <th>Tiempo de inactividad</th>
-                                <th>Icono</th>
+                                @* <th>Icono</th> *@
                                 <th>Fondo</th>
                                 <th>Acciones</th>
                               </tr>
@@ -63,10 +63,10 @@
                         <label for="tiempoInactividad">Tiempo máximo de inactividad (días)</label>
                         <input type="number" name="tiempoInactividad" id="tiempoInactividad" class="form-control">
                       </div>
-                      <div class="form-group">
+                      @*<div class="form-group">
                         <label for="iconoModulo">Icono</label>
                         <input type="file" name="iconoModulo" id="iconoModulo" class="form-control">
-                      </div>
+                      </div>*@
                       @*<div class="form-group">
                         <label for="iconoModulo">Icono</label>
                         <input type="file" name="iconoModulo" id="iconoModulo" class="form-control">
@@ -74,10 +74,10 @@
                       <!-- guia/favorito -->
                       <div id="divGuiaRapida" class="form-group" style="display: block">
                           <input type="checkbox" id="guiaRapidaa" class="ignore" name="guiaRapidaa" />
-                          <label for="guiaRapidaa">Guias Rapidas</label>
+                          <label for="guiaRapidaa">Guías Rápidas</label>
                       </div>
                       <div id="divTipo_guia2">
-                          <label>Eligue un tipo de guia</label>
+                          <label>Eligue un tipo de guía</label>
                           <select id ="tipo_guiaa" name="tipo_guiaa">
                               <option value="control-interno" >Control Interno</option>
                               <option value="ejecucion" >Ejecución</option>
@@ -87,12 +87,12 @@
                           </select>
                       </div>
                       <div class="form-group" id="divSubMFondo2">
-                        <label for="editFondoSubModulo">Fondo Submodulo</label>
-                        <input type="file" name="editFondoSubModulo" id="editFondoSubModulo" class="form-control">
+                        <label for="editFondoSubModulo">Fondo Submódulo</label>
+                        <input type="file" customValue="" name="editFondoSubModulo" id="editFondoSubModulo" class="form-control">
                       </div>
                       <!-- fin - guia/favorito -->
                       <div id="divBackgroundColor2">
-                          <label>Eligue un color de fondo</label>
+                          <label>Elige un color de fondo</label>
                           <select id ="editBackgroundColor" name="editBackgroundColor">
                               <option value="#FC4C02" style="background-color:#FC4C02">#FC4C02</option>
                               <option value="#008BCE" style="background-color:#008BCE">#008BCE</option>
@@ -170,7 +170,7 @@
               trTable += '<td>'+padre+'</td>';
               trTable += '<td>'+textDesplegable+'</td>';
               trTable += '<td>'+tiempoInactividad+' días</td>';
-              trTable += '<td><img id="icon-Image" src="'+iconImagen+'"></td>';
+              //trTable += '<td><img id="icon-Image" src="'+iconImagen+'"></td>';
               trTable += '<td><img id="icon-Image" src="'+fondoSubmodulo+'"></td>';
               trTable += '<td><p><img src="/img/iconPencil.png" alt="icon trash" onclick="openModalEditModulo('+stringTitulo+','+tiempoInactividad+','+id+','+stringUrl+','+favorito+','+stringPadre+','+stringtipo+','+stringUrlFondo+','+stringColor+')">&nbsp;&nbsp;&nbsp;&nbsp;';
               trTable += '<img src="/img/iconTrash.png" alt="icon trash" onclick="removeModulo('+id+')"></p></td>';
@@ -230,15 +230,17 @@
                 tipo_guia = ""
             }
             let tipo = $("#tipo_guiaa").val();
-            if(filesImagen[0]){
+            /*if(filesImagen[0]){
               url = window.location.origin+'/files/'+filesImagen[0].name;
               files = filesImagen[0];
             }else{
               url = urlIcono;
-            }
+            }*/
             if(filesFondo[0]){
-              fondo = window.location.origin+'/files/'+filesFondo[0].name;
-              files = filesFondo[0];
+              fondo = $("#editFondoSubModulo").attr("customValue");
+              if (fondo != ""){
+                  files = filesFondo[0];
+              }
             }else{
               fondo = urlFondo;
             }
@@ -329,6 +331,32 @@
         unhighlight: function (element, errorClass, validClass) {
           $(element).removeClass('is-invalid');
         }
+      });
+      $('#editFondoSubModulo').ready(function () {
+          //$('#addFondoSubModulo').on('input', function () {
+          $('#editFondoSubModulo').on('change', function () {
+              console.log("On Change");
+              let customVal = $("#editFondoSubModulo").prop("files");
+              var urlImage = window.location.origin + '/files/' + customVal[0].name;
+              var image = new Image();
+              image.src = urlImage;
+              image.onload = function () {
+                var width = this.width;
+                console.log("width", width);
+                if (width > 800) {
+                    Swal.fire({
+                        title: 'Advertencia!',
+                        text: 'La imagen excede los 800 pixeles de ancho, por favor seleccioné otra imagen que cumpla con las dimensiones!',
+                        imageUrl: '/img/señalroja.png',
+                        imageHeight: 212,
+                        timer: 5000,
+                    })
+                    $("#editFondoSubModulo").attr("customValue", '');
+                } else {
+                    $("#editFondoSubModulo").attr("customValue", urlImage);
+                }
+              }
+          });
       });
 
    function removeModulo(idModulo) {
