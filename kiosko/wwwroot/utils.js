@@ -24,7 +24,7 @@ function getAllModulos() {
             });
             addButtonToMenu();
             addButtonsToSubMenu();
-            $(".modulo" + idCurremtModulo).children("a").addClass("active");
+            $(".modulo" + idCurremtModulo).children("a").addClass("submenu");
         }
     });
 }
@@ -46,6 +46,12 @@ function addItemToMenu(item, menuOpen) {
         menuItems += '<ul class="nav nav-treeview" id="' + idModulo + '" title="' + titulo + '">';
         menuItems += '</ul>';
         menuItems += '</li>';
+    } else if (desplegable != 1 && padre !== null) {
+        menuItems += '<li class="nav-item modulo' + item.id + '" id="' + idModulo + '">';
+        menuItems += '<a href="/Modulos/Details?id=' + item.id + '" class="nav-link">';
+        menuItems += '<p style="margin-left:20px">' + titulo + '</p>';
+        menuItems += '</a>';
+        menuItems += '</li>';
     } else {
         menuItems += '<li class="nav-item modulo' + item.id + '" id="' + idModulo + '">';
         menuItems += '<a href="/Modulos/Details?id=' + item.id + '" class="nav-link">';
@@ -65,7 +71,7 @@ function addButtonToMenu() {
     let lastId = "modulo" + lastIdModulo;
     lastId = "'" + lastId + "'";
     $("#sortableMenu").append(
-        '<button type="button " onclick="openModalNewModulo(' + title + ', ' + lastId + ')">Agregar modulo</button>'
+        '<button type="button " class="btn btn-block btn-primary mb-4" onclick="openModalNewModulo(' + title + ', ' + lastId + ')">Agregar modulo</button>'
     );
 }
 
@@ -79,7 +85,7 @@ function addButtonsToSubMenu() {
         lastId = "'" + lastId + "'";
         let padre = "'" + idElement + "'";
         $("#" + idElement).append(
-            '<button type="button " onclick="openModalNewModulo(' + title + ', ' + lastId + ', ' + padre + ')">Agregar submódulo</button>'
+            '<button type="button " class=" btn btnSubMenu" onclick="openModalNewModulo(' + title + ', ' + lastId + ', ' + padre + ')">Agregar submódulo</button>'
         );
     });
 }
