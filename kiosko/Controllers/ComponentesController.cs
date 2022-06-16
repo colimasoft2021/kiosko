@@ -13,7 +13,7 @@ using kiosko.Helpers;
 
 namespace kiosko.Controllers
 {
-    
+
     public class ComponentesController : Controller
     {
         private readonly KioskoCmsContext _context;
@@ -22,12 +22,12 @@ namespace kiosko.Controllers
         AuthorizationService _authorizationService;
 
         public ComponentesController(KioskoCmsContext context, IWebHostEnvironment env, ErrorService errorService,
-            AuthorizationService authorizationService )
+            AuthorizationService authorizationService)
         {
             _context = context;
             _env = env;
             _errorServices = errorService;
-            _authorizationService = authorizationService;  
+            _authorizationService = authorizationService;
         }
         [Authorize]
         [HttpPost()]
@@ -103,41 +103,60 @@ namespace kiosko.Controllers
         [Authorize]
         [HttpPost()]
         [ValidateAntiForgeryToken]
-        public IActionResult saveComponentForModulo2()
+        public IActionResult saveComponentForModulo2([FromBody] List<Componente> model)
         {
             IActionResult ret = null;
             var message = new { status = "", message = "" };
             try
             {
-                var componente = new Componente();
-                componente.Id = Int32.Parse(Request.Form["Id"]);
-                componente.Padre = Request.Form["Padre"];
-                componente.TipoComponente = Request.Form["TipoComponente"];
-                componente.Url = Request.Form["Url"];
-                componente.UrlDos = Request.Form["UrlDos"];
-                componente.UrlTres = Request.Form["UrlTres"];
-                componente.Descripcion = Request.Form["Descripcion"];
-                componente.BackgroundColor = Request.Form["BackgroundColor"];
-                componente.AgregarFondo = Int32.Parse(Request.Form["AgregarFondo"]);
-                componente.Titulo = Request.Form["Titulo"];
-                componente.Subtitulo = Request.Form["Subtitulo"];
-                componente.Orden = Int32.Parse(Request.Form["Orden"]);
-                componente.IdModulo = Int32.Parse(Request.Form["IdModulo"]);
-                componente.TipoCategoria = Request.Form["TipoCategoria"];
-
-                foreach (var formFile in Request.Form.Files)
+                var component = new Componente();
+                foreach (var componente in model)
                 {
-                    var fulPath = Path.Combine(_env.ContentRootPath, "wwwroot\\files", formFile.FileName);
-                    using (FileStream fs = System.IO.File.Create(fulPath))
-                    {
-                        formFile.CopyTo(fs);
-                        fs.Flush();
-                    }
-                }
 
-                _context.Add(componente);
-                _context.SaveChanges();
-                ret = StatusCode(StatusCodes.Status201Created, componente);
+                    /*componente.Id = Int32.Parse(Request.Form["Id"]);
+                    componente.Padre = Request.Form["Padre"];
+                    componente.TipoComponente = Request.Form["TipoComponente"];
+                    componente.Url = Request.Form["Url"];
+                    componente.UrlDos = Request.Form["UrlDos"];
+                    componente.UrlTres = Request.Form["UrlTres"];
+                    componente.Descripcion = Request.Form["Descripcion"];
+                    componente.BackgroundColor = Request.Form["BackgroundColor"];
+                    componente.AgregarFondo = Int32.Parse(Request.Form["AgregarFondo"]);
+                    componente.Titulo = Request.Form["Titulo"];
+                    componente.Subtitulo = Request.Form["Subtitulo"];
+                    componente.Orden = Int32.Parse(Request.Form["Orden"]);
+                    componente.IdModulo = Int32.Parse(Request.Form["IdModulo"]);
+                    componente.TipoCategoria = Request.Form["TipoCategoria"]; */
+
+                    component.Id = componente.Id;
+                    component.Padre = componente.Padre;
+                    component.TipoComponente = componente.TipoComponente;
+                    component.Url = componente.Url;
+                    component.UrlDos = componente.UrlDos;
+                    component.UrlTres = componente.UrlTres;
+                    component.Descripcion = componente.Descripcion;
+                    component.BackgroundColor = componente.BackgroundColor;
+                    component.AgregarFondo = componente.AgregarFondo;
+                    component.Titulo = componente.Titulo;
+                    component.Subtitulo = componente.Subtitulo;
+                    component.Orden = componente.Orden;
+                    component.IdModulo = componente.IdModulo;
+                    component.TipoCategoria = componente.TipoCategoria;
+
+                    foreach (var formFile in Request.Form.Files)
+                    {
+                        var fulPath = Path.Combine(_env.ContentRootPath, "wwwroot\\files", formFile.FileName);
+                        using (FileStream fs = System.IO.File.Create(fulPath))
+                        {
+                            formFile.CopyTo(fs);
+                            fs.Flush();
+                        }
+                    }
+
+                    _context.Add(componente);
+                    _context.SaveChanges();
+                }
+                ret = StatusCode(StatusCodes.Status201Created, component);
             }
             catch (Exception ex)
             {
@@ -152,42 +171,62 @@ namespace kiosko.Controllers
         [Authorize]
         [HttpPost()]
         [ValidateAntiForgeryToken]
-        public IActionResult updateComponentForModulo2()
+        public IActionResult updateComponentForModulo2([FromBody] List<Componente> model)
         {
             IActionResult ret = null;
             var message = new { status = "", message = "" };
             try
             {
-                var componente = new Componente();
-                componente.Id = Int32.Parse(Request.Form["Id"]);
-                componente.Padre = Request.Form["Padre"];
-                componente.TipoComponente = Request.Form["TipoComponente"];
-                componente.Url = Request.Form["Url"];
-                componente.UrlDos = Request.Form["UrlDos"];
-                componente.UrlTres = Request.Form["UrlTres"];
-                componente.Descripcion = Request.Form["Descripcion"];
-                componente.BackgroundColor = Request.Form["BackgroundColor"];
-                componente.AgregarFondo = Int32.Parse(Request.Form["AgregarFondo"]);
-                componente.Titulo = Request.Form["Titulo"];
-                componente.Subtitulo = Request.Form["Subtitulo"];
-                componente.Orden = Int32.Parse(Request.Form["Orden"]);
-                componente.IdModulo = Int32.Parse(Request.Form["IdModulo"]);
-                componente.TipoCategoria = Request.Form["TipoCategoria"];
-
-                foreach (var formFile in Request.Form.Files)
+                var component = new Componente();
+                foreach (var componente in model)
                 {
-                    var fulPath = Path.Combine(_env.ContentRootPath, "wwwroot\\files", formFile.FileName);
-                    using (FileStream fs = System.IO.File.Create(fulPath))
+                    /*component.Id = Int32.Parse(Request.Form["Id"]);
+                    component.Padre = Request.Form["Padre"];
+                    component.TipoComponente = Request.Form["TipoComponente"];
+                    component.Url = Request.Form["Url"];
+                    component.UrlDos = Request.Form["UrlDos"];
+                    component.UrlTres = Request.Form["UrlTres"];
+                    component.Descripcion = Request.Form["Descripcion"];
+                    component.BackgroundColor = Request.Form["BackgroundColor"];
+                    component.AgregarFondo = Int32.Parse(Request.Form["AgregarFondo"]);
+                    component.Titulo = Request.Form["Titulo"];
+                    component.Subtitulo = Request.Form["Subtitulo"];
+                    component.Orden = Int32.Parse(Request.Form["Orden"]);
+                    component.IdModulo = Int32.Parse(Request.Form["IdModulo"]);
+                    component.TipoCategoria = Request.Form["TipoCategoria"]; */
+
+                    component.Id = componente.Id;
+                    component.Padre = componente.Padre;
+                    component.TipoComponente = componente.TipoComponente;
+                    component.Url = componente.Url;
+                    component.UrlDos = componente.UrlDos;
+                    component.UrlTres = componente.UrlTres;
+                    component.Descripcion = componente.Descripcion;
+                    component.BackgroundColor = componente.BackgroundColor;
+                    component.AgregarFondo = component.AgregarFondo;
+                    component.Titulo = componente.Titulo;
+                    component.Subtitulo = componente.Subtitulo;
+                    component.Orden = componente.Orden;
+                    component.IdModulo = componente.IdModulo;
+                    component.TipoCategoria = componente.TipoCategoria;
+
+                    //foreach (var formFile in Request.Form.Files)
+                    foreach (var formFile in Request.Form.Files)
                     {
-                        formFile.CopyTo(fs);
-                        fs.Flush();
+                        var fulPath = Path.Combine(_env.ContentRootPath, "wwwroot\\files", formFile.FileName);
+                        using (FileStream fs = System.IO.File.Create(fulPath))
+                        {
+                            formFile.CopyTo(fs);
+                            fs.Flush();
+                        }
                     }
+
+                    _context.Update(componente);
+                    _context.SaveChanges();
                 }
+                
 
-                _context.Update(componente);
-                _context.SaveChanges();
-
-                ret = StatusCode(StatusCodes.Status200OK, componente);
+                ret = StatusCode(StatusCodes.Status200OK, component);
             }
             catch (Exception ex)
             {

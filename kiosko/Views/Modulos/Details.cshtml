@@ -1146,7 +1146,7 @@
         let idElement = currentComponent.attr('id');
         let idComponent = currentComponent.attr('db-id');
         let typeElement = currentComponent.attr('type-component');
-        console.log(idElement+'-'+idComponent+'-'+typeElement);
+        //console.log(idElement+'-'+idComponent+'-'+typeElement);
         let item = formJsonComponent(idElement, typeElement, idComponent);
         item.Id = idComponent;
         item.Padre = padre;
@@ -1156,7 +1156,7 @@
         let imgVal;
         if(idComponent != 0) {
             imgVal = ValidateImgAviso(item.TipoComponente, item.Url);
-            console.log("U",imgVal.success, imgVal.msg);
+            //console.log("U",imgVal.success, imgVal.msg);
             if(imgVal.success == true){
                 toUpdate.push(item);
             }
@@ -1166,7 +1166,7 @@
             }
         }else{
             imgVal = ValidateImgAviso(item.TipoComponente, item.Url);
-            console.log("I",imgVal.success, imgVal.msg);
+            //console.log("I",imgVal.success, imgVal.msg);
             if(imgVal.success == true){
                 toInsert.push(item);
             }
@@ -1185,8 +1185,14 @@
       console.log(toUpdate);
       
       console.log("msg prev",txt);
-      saveComponents(toInsert);
-      updateComponents(toUpdate);
+      let finishedSaved = saveComponents(toInsert);
+      console.log(finishedSaved,"finishedSaved");
+      //let finishedUpdated = updateComponents(toUpdate);
+      //console.log(finishedUpdated, "finishedUpdated");
+      if(finishedSaved ) {
+        loadComponents();
+        console.log("LoadComponents")
+      }
       Swal.fire({
             title: 'Bien!',
             text: msgAlert,
@@ -1664,6 +1670,36 @@
       return jsonItem;
     }
     function saveComponents(components) {
+        const formData = new FormData();
+        formData.append("data", components);
+        //$.ajax({
+        //  type: "POST",
+        //  url: "/Componentes/saveComponentForModulo2",
+        //  headers: { "RequestVerificationToken": "@GetAntiXsrfRequestToken()" },
+        //  data: formData,
+        //  processData : false,
+        //  contentType : false,
+        //  success: function (response) {
+        //    //console.log('saved');
+        //    //console.log(response);
+        //    item.Desplazantes.map(function(item){
+        //        saveDesplazante(item, response.id);
+        //    })
+        //  }
+        //});
+        $.ajax({
+          type: "POST",
+          url: "/Componentes/saveComponentForModulo2",
+          headers: { "RequestVerificationToken": "@GetAntiXsrfRequestToken()" },
+          data: JSON.stringify({components, formData}),
+          contentType: "application/json; charset=utf-8",            // tipo de contenido
+          dataType: "json",  
+          success: function (response) {
+            console.log(response);
+          }
+        });
+        /*let totalToSave = components.length;
+        let saved = 0;
       components.map(function(item){
         const formData = new FormData();
         for ( var key in item ) {
@@ -1677,43 +1713,79 @@
           processData : false,
           contentType : false,
           success: function (response) {
-            console.log('saved');
-            console.log(response);
+            //console.log('saved');
+            //console.log(response);
             item.Desplazantes.map(function(item){
                 saveDesplazante(item, response.id);
             })
-            
+            saved += 1;
           }
         });
       })
+      if(saved == totalToSave) {
+          return true;
+      }else{
+          return false;
+      }*/
     }
     function updateComponents(components) {
-      components.map(function(item){
         const formData = new FormData();
-        for ( var key in item ) {
-            formData.append(key, item[key]);
-        }
         $.ajax({
           type: "POST",
           url: "/Componentes/updateComponentForModulo2",
           headers: { "RequestVerificationToken": "@GetAntiXsrfRequestToken()" },
-          data: formData,
-          processData : false,
-          contentType : false,
+          data: JSON.stringify({components, formData}),
+          contentType: "application/json; charset=utf-8",            // tipo de contenido
+          dataType: "json",  
+          //contentType : json,
           success: function (response) {
-            console.log('updated');
+            //console.log('updated');
             console.log(response);
-            item.Desplazantes.map(function(item){
-                let isDb = item.Id === "0";
-                if(isDb){
-                    saveDesplazante(item, response.id);
-                }else{
-                    updateDesplazante(item, response.id);
-                }
-            })
+            //item.Desplazantes.map(function(item){
+            //    let isDb = item.Id === "0";
+            //    if(isDb){
+            //        saveDesplazante(item, response.id);
+            //    }else{
+            //        updateDesplazante(item, response.id);
+            //    }
+            //})
+            //updated +=1;
           }
         });
-      })
+      //  let totalUpdate = components.length;
+      //  let updated = 0;
+      //components.map(function(item){
+      //  const formData = new FormData();
+      //  for ( var key in item ) {
+      //      formData.append(key, item[key]);
+      //  }
+      //  $.ajax({
+      //    type: "POST",
+      //    url: "/Componentes/updateComponentForModulo2",
+      //    headers: { "RequestVerificationToken": "@GetAntiXsrfRequestToken()" },
+      //    data: formData,
+      //    processData : false,
+      //    contentType : false,
+      //    success: function (response) {
+      //      console.log('updated');
+      //      console.log(response);
+      //      item.Desplazantes.map(function(item){
+      //          let isDb = item.Id === "0";
+      //          if(isDb){
+      //              saveDesplazante(item, response.id);
+      //          }else{
+      //              updateDesplazante(item, response.id);
+      //          }
+      //      })
+      //      updated +=1;
+      //    }
+      //  });
+      //})
+      //if(updated == totalUpdate) {
+      //    return true;
+      //}else{
+      //    return false;
+      //}
     }
     function saveDesplazante(item, id) {
         console.log('guardar desplazantes');
