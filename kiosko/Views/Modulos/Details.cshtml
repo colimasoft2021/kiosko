@@ -15,6 +15,7 @@
     <section class="content">
         <div class="container-fluid">
             <h2 class="textcolor" >@Html.DisplayFor(model => model.Titulo)</h2>
+            <label id="myLabel" style="color: white; display: none"></label>
             <div class="row">
                 <div class="col-lg-8">
                     <input type="hidden" value="@Html.DisplayFor(model => model.Id)" id="idModulo" />
@@ -62,7 +63,10 @@
     var valiDimetions;
     $(function () {
        $("#containerComponents").sortable();
+       
+       
     });
+    let msgAlert = "";
     var idModulo = $("#idModulo").val();
     var padre = "modulo"+idModulo;
     var indexImagen = 1;
@@ -1177,24 +1181,26 @@
           //toInsert.push(item);
         }
       });
-      let msgAlert = "Los componentes se han actualizado con exito!";
+      msgAlert = "Los componentes se han actualizado con exito!";
       if (errores > 0){
           msgAlert = "Algunos de los componentes no se han podido guardar por falta de información";
       }
       console.log(toInsert);
       console.log(toUpdate);
-      
-      console.log("msg prev",txt);
+
+      Swal.fire({
+          title: 'Uploading...',
+          html: 'Please wait...',
+          allowEscapeKey: false,
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading()
+          }
+        });
+
       saveComponents(toInsert);
       updateComponents(toUpdate);
-      Swal.fire({
-            title: 'Bien!',
-            text: msgAlert,
-            imageUrl: '/img/señalverde.png',
-            imageHeight: 212,
-            showConfirmButton: false,
-            timer: 1500
-      })
+      
     }
     
     function formJsonComponent(idElement, typeElement, idComponent) {
@@ -1664,12 +1670,13 @@
       return jsonItem;
     }
     function saveComponents(components) {
+        var promises = [];
       components.map(function(item){
         const formData = new FormData();
         for ( var key in item ) {
             formData.append(key, item[key]);
         }
-        $.ajax({
+        var request = $.ajax({
           type: "POST",
           url: "/Componentes/saveComponentForModulo2",
           headers: { "RequestVerificationToken": "@GetAntiXsrfRequestToken()" },
@@ -1682,18 +1689,23 @@
             item.Desplazantes.map(function(item){
                 saveDesplazante(item, response.id);
             })
-            
           }
         });
+        promises.push(request);
+      })
+      $.when.apply(null, promises).done(function(){
+        //alert('All done save');
+        appendFalse();
       })
     }
     function updateComponents(components) {
+        var promises = [];
       components.map(function(item){
         const formData = new FormData();
         for ( var key in item ) {
             formData.append(key, item[key]);
         }
-        $.ajax({
+        var request = $.ajax({
           type: "POST",
           url: "/Componentes/updateComponentForModulo2",
           headers: { "RequestVerificationToken": "@GetAntiXsrfRequestToken()" },
@@ -1713,7 +1725,34 @@
             })
           }
         });
+        promises.push(request);
       })
+      $.when.apply(null, promises).done(function(){
+        //alert('All done update');
+        appendFalse();
+      })
+    }
+    function appendFalse(){
+        $(document).ready(function(){
+            $("#myLabel").append("1"); 
+            detectChange()
+        });
+    }
+    function detectChange(){
+        let texto = $("#myLabel").text();
+        if(texto == 11 || texto == "11"){
+            //alert("1");
+            Swal.fire({
+                title: 'Bien!',
+                text: msgAlert,
+                imageUrl: '/img/señalverde.png',
+                imageHeight: 212,
+                showConfirmButton: false,
+                timer: 3000
+            }).then((result) => {
+                location.reload();
+            });
+        }
     }
     function saveDesplazante(item, id) {
         console.log('guardar desplazantes');

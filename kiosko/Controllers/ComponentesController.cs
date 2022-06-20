@@ -103,6 +103,7 @@ namespace kiosko.Controllers
         [Authorize]
         [HttpPost()]
         [ValidateAntiForgeryToken]
+        [RequestSizeLimit(150_000_000)]
         public IActionResult saveComponentForModulo2()
         {
             IActionResult ret = null;
@@ -152,6 +153,7 @@ namespace kiosko.Controllers
         [Authorize]
         [HttpPost()]
         [ValidateAntiForgeryToken]
+        [RequestSizeLimit(150_000_000)]
         public IActionResult updateComponentForModulo2()
         {
             IActionResult ret = null;
