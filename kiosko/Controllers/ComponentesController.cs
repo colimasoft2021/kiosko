@@ -13,7 +13,7 @@ using kiosko.Helpers;
 
 namespace kiosko.Controllers
 {
-    
+
     public class ComponentesController : Controller
     {
         private readonly KioskoCmsContext _context;
@@ -22,12 +22,12 @@ namespace kiosko.Controllers
         AuthorizationService _authorizationService;
 
         public ComponentesController(KioskoCmsContext context, IWebHostEnvironment env, ErrorService errorService,
-            AuthorizationService authorizationService )
+            AuthorizationService authorizationService)
         {
             _context = context;
             _env = env;
             _errorServices = errorService;
-            _authorizationService = authorizationService;  
+            _authorizationService = authorizationService;
         }
         [Authorize]
         [HttpPost()]
@@ -111,6 +111,7 @@ namespace kiosko.Controllers
             try
             {
                 var componente = new Componente();
+
                 componente.Id = Int32.Parse(Request.Form["Id"]);
                 componente.Padre = Request.Form["Padre"];
                 componente.TipoComponente = Request.Form["TipoComponente"];
@@ -124,7 +125,7 @@ namespace kiosko.Controllers
                 componente.Subtitulo = Request.Form["Subtitulo"];
                 componente.Orden = Int32.Parse(Request.Form["Orden"]);
                 componente.IdModulo = Int32.Parse(Request.Form["IdModulo"]);
-                componente.TipoCategoria = Request.Form["TipoCategoria"];
+                componente.TipoCategoria = Request.Form["TipoCategoria"]; 
 
                 foreach (var formFile in Request.Form.Files)
                 {
@@ -161,6 +162,7 @@ namespace kiosko.Controllers
             try
             {
                 var componente = new Componente();
+                
                 componente.Id = Int32.Parse(Request.Form["Id"]);
                 componente.Padre = Request.Form["Padre"];
                 componente.TipoComponente = Request.Form["TipoComponente"];
@@ -174,8 +176,9 @@ namespace kiosko.Controllers
                 componente.Subtitulo = Request.Form["Subtitulo"];
                 componente.Orden = Int32.Parse(Request.Form["Orden"]);
                 componente.IdModulo = Int32.Parse(Request.Form["IdModulo"]);
-                componente.TipoCategoria = Request.Form["TipoCategoria"];
+                componente.TipoCategoria = Request.Form["TipoCategoria"]; 
 
+                    
                 foreach (var formFile in Request.Form.Files)
                 {
                     var fulPath = Path.Combine(_env.ContentRootPath, "wwwroot\\files", formFile.FileName);

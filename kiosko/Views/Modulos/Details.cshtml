@@ -15,7 +15,7 @@
     <section class="content">
         <div class="container-fluid">
             <h2 class="textcolor" >@Html.DisplayFor(model => model.Titulo)</h2>
-            <label id="myLabel" style="color: white; display: none"></label>
+            <label id="myLabel" style="color: white;"></label>
             <div class="row">
                 <div class="col-lg-8">
                     <input type="hidden" value="@Html.DisplayFor(model => model.Id)" id="idModulo" />
@@ -1150,7 +1150,7 @@
         let idElement = currentComponent.attr('id');
         let idComponent = currentComponent.attr('db-id');
         let typeElement = currentComponent.attr('type-component');
-        console.log(idElement+'-'+idComponent+'-'+typeElement);
+        //console.log(idElement+'-'+idComponent+'-'+typeElement);
         let item = formJsonComponent(idElement, typeElement, idComponent);
         item.Id = idComponent;
         item.Padre = padre;
@@ -1160,7 +1160,7 @@
         let imgVal;
         if(idComponent != 0) {
             imgVal = ValidateImgAviso(item.TipoComponente, item.Url);
-            console.log("U",imgVal.success, imgVal.msg);
+            //console.log("U",imgVal.success, imgVal.msg);
             if(imgVal.success == true){
                 toUpdate.push(item);
             }
@@ -1170,7 +1170,7 @@
             }
         }else{
             imgVal = ValidateImgAviso(item.TipoComponente, item.Url);
-            console.log("I",imgVal.success, imgVal.msg);
+            //console.log("I",imgVal.success, imgVal.msg);
             if(imgVal.success == true){
                 toInsert.push(item);
             }
@@ -1684,8 +1684,8 @@
           processData : false,
           contentType : false,
           success: function (response) {
-            console.log('saved');
-            console.log(response);
+            //console.log('saved');
+            //console.log(response);
             item.Desplazantes.map(function(item){
                 saveDesplazante(item, response.id);
             })
@@ -1694,8 +1694,7 @@
         promises.push(request);
       })
       $.when.apply(null, promises).done(function(){
-        //alert('All done save');
-        appendFalse();
+        appendData();
       })
     }
     function updateComponents(components) {
@@ -1713,8 +1712,8 @@
           processData : false,
           contentType : false,
           success: function (response) {
-            console.log('updated');
-            console.log(response);
+            //console.log('updated');
+            //console.log(response);
             item.Desplazantes.map(function(item){
                 let isDb = item.Id === "0";
                 if(isDb){
@@ -1728,30 +1727,26 @@
         promises.push(request);
       })
       $.when.apply(null, promises).done(function(){
-        //alert('All done update');
-        appendFalse();
+        appendData();
       })
     }
-    function appendFalse(){
-        $(document).ready(function(){
-            $("#myLabel").append("1"); 
-            detectChange()
-        });
+    function appendData(){
+        $("#myLabel").append("1");
+        validAppend();
     }
-    function detectChange(){
+    function validAppend(){
         let texto = $("#myLabel").text();
         if(texto == 11 || texto == "11"){
-            //alert("1");
             Swal.fire({
                 title: 'Bien!',
                 text: msgAlert,
                 imageUrl: '/img/señalverde.png',
                 imageHeight: 212,
                 showConfirmButton: false,
-                timer: 3000
+                timer: 1500
             }).then((result) => {
                 location.reload();
-            });
+            })
         }
     }
     function saveDesplazante(item, id) {
