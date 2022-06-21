@@ -11,17 +11,18 @@
         <a  class="icon" data-widget="pushmenu" href="#" role="button" onclick=""><i id="iconbutton" class="fas icon-inside" style="color: #1f2d3d;"></i></a>
      
         <div class="profile-container center">
+            <div class="containernav">
                     @if (signInManager.IsSignedIn(User))
                     {
-                        
                              <span class="message">Hello @userManager.GetUserName(User)</span>
-                        
                     }
-        
+            
                 <button class="profile-button" onclick="showOption()">
                 <img src="~/img/usuario.png" />
                 </button>
-            
+                <span id="classMenu" class="fas fa-angle-left right space"/>
+            </div>
+
             <div class="menu-item-container0" id="menu-perfil"  style="display: none" >
                 <div class="menu-item-container" >
                     <div class="option">
@@ -42,15 +43,27 @@
   <script type="text/javascript">
 
     var isShowing = "block";
+    var active = "00";
     function showOption() {
       console.log('entro');
         $("#menu-perfil").css("display", isShowing);
         if(isShowing == "block"){
+          active = "00";
           isShowing = "none";
         }else{
       	  isShowing = "block";
-          }
+          active = "11";
+        }
+      if (active === "11"){
+          $("#classMenu").removeClass("active2");
+          console.log(active,"desactivo?");
+      }
+      if (active === "00"){
+          $("#classMenu").addClass("active2");
+          console.log(active,"activo?");
+      }
     }
+    
 
     var show = "none";
     var icon = "block";
