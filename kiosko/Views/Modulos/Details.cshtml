@@ -180,6 +180,7 @@
       let imgFile = $("#"+idImg).prop("files");
       imgFile = imgFile[0];
       console.log(imgFile);
+      let urlGenerated = window.location.origin+'/files/'+imgFile.name;
       let reader = new FileReader();
       reader.readAsDataURL(imgFile);
       $("#"+idImglabel).css("display","none");
@@ -207,7 +208,6 @@
       reader.onload = function() {
           var image = new Image();
           image.src = reader.result;
-          
           image.onload = function () {
             var height = this.height;
             console.log("height", height)
@@ -228,8 +228,10 @@
                 preview.innerHTML = "";
                 preview.append(imagen);
                 console.log("Entro true");
+                $("#"+idImg).attr("customValue",urlGenerated);
             }
             if (valiDimetions.success == false){
+                $("#"+idImg).attr("customValue","");
               Swal.fire({
                   title: 'Error',
                   text: valiDimetions.msg,
@@ -307,6 +309,7 @@
       let idImgclose = "imagenclose"+stringId+"-"+indexImagen;
       $("#"+idImglabel).css("display","block")
       $("#"+idPreview).empty();
+      $("#"+idImg).val('');
       $("#"+idImg).attr("customValue","");
       console.log (idImg);
       $("#"+idImgclose).css("display","none")
@@ -327,7 +330,7 @@
                   '<label for="'+idImg+'" id="'+idImgLabel+'" class="btn-img">'+
                     '<img src="/img/icono-imagen-chico.png" class="label-imagen-1"/>'+
                   '</label>'+
-                  '<input type="file" id="'+idImg+'" onchange="generatePreview('+newStringId+','+indexImagen+','+stringType+')" typeInput="img" class="input-img" customValue="'+item.url+'">'+
+                  '<input type="file" id="'+idImg+'" onchange="generatePreview('+newStringId+','+indexImagen+','+stringType+')" typeInput="img" class="input-img" customValue="" >'+
                   '<div id="'+idPreview+'" class="preview-img-small"></div>'+
               '</div>'+
               '<input class="titulo-input mt-4" type="text" typeInput="titulo" placeholder="Titulo">'+
@@ -494,7 +497,7 @@
                 urlImage = item.url;
             }else if(typeInput && typeInput == "img-access"){
                 urlImage = item.url;
-            }else{
+            }else {
                 urlImage = item.url;
             }
             preview = 
