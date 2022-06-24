@@ -25,16 +25,17 @@
       </nav>
       <!-- /.sidebar-menu -->
       <!-- Menu Estatico -->
-      <div class ="menu-static">
+      @*<div class ="menu-static">
           <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false" id="EstaticMenu">
               <li class="nav-item modulo2" id="moduloF1"><a href="/Modulos/Details?id=2" class="nav-link"><p>Mensajes Iniciales</p></a></li>
           </ul>
-      </div>
+      </div>*@
       <!--- Menu Estatico -->
       <div class="menu-configuration">
           @* <a href="/Modulos/Details?id=1"><i class="nav-icon fas fa-th-large"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *@
-           <a href="/Modulos/Index"><i class="nav-icon fas fa-cog"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-           <a href="/Reportes/Index"><i class="bi bi-card-list"></i></a>
+           <a href="/Modulos/Index"><i title="Configuración" class="bi bi-gear-fill sliedeIcon" ></i></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+           <a href="/Reportes/Index"><i title="Reportes" class="bi bi-card-list sliedeIcon"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+           <a href="/Modulos/Details?id=2"><i title="Mensajes Inicales" class="bi bi-envelope-fill sliedeIcon"></i></a>
       </div>
     </div>
     <!-- /.sidebar -->

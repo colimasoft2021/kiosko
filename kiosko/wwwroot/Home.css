@@ -59,12 +59,11 @@ body {
 }
 
 .button-class {
-    background-color: #FF805B;
-    border-color: #FF805B; 
+    background-color: #e17759;
+    border-color: #FF805B;
     width: 60%;
     height: 60px;
     border-radius: 8px;
-    
     color: white;
     font-size: 20px;
 }
@@ -79,9 +78,10 @@ body {
     width: 80px;
     height: 80px;
     border-radius: 100px;
-    color:white;
+    color: white;
     font-size: 50px;
-    background-color: #19AA80;
+    background-color: #6bebb9e3;
+    border: none;
 }
 
 .menu-container {
@@ -917,11 +917,21 @@ ul, li, a, .nav-link:active {
 }*/
 
 .btnSubMenu {
-    background-color: darkblue;
-    color: white;
-    margin-left: 25px;
+    background-color: #00008b30;
+    color: white !important;
+    margin-left: 50px;
     margin-bottom: 15px;
     margin-top: 15px;
+    border: 2px solid darkblue;
+}
+
+.btnModulo {
+    background-color: #2f2fef96;
+    color: white !important;
+    margin-left: 1px;
+    margin-bottom: 15px;
+    margin-top: 15px;
+    border: 2px solid #0069d9;
 }
 
 .textcolor {
@@ -1001,11 +1011,12 @@ ul, li, a, .nav-link:active {
 .menu-configuration {
     display: flex;
     float: left;
-    margin-top: 70px;
-    margin-bottom: 10%;
+    margin-top: 200px;
+    margin-bottom: 25%;
     width: 100%;
     align-items: flex-end;
     justify-content: center;
+    height:auto;
 }
 .menu-static {
     display: flex;
@@ -1028,4 +1039,8 @@ ul, li, a, .nav-link:active {
 
 .center {
     margin-top: -8px;
+}
+
+.sliedeIcon {
+    font-size: 22.5px;
 }

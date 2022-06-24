@@ -71,7 +71,7 @@ function addButtonToMenu() {
     let lastId = "modulo" + lastIdModulo;
     lastId = "'" + lastId + "'";
     $("#sortableMenu").append(
-        '<button type="button " class="btn btn-block btn-primary mb-4" onclick="openModalNewModulo(' + title + ', ' + lastId + ')">Agregar modulo</button>'
+        '<button type="button " class="btn btn-block btnModulo mb-4" onclick="openModalNewModulo(' + title + ', ' + lastId + ')">+ Módulo</button>'
     );
 }
 
@@ -85,7 +85,7 @@ function addButtonsToSubMenu() {
         lastId = "'" + lastId + "'";
         let padre = "'" + idElement + "'";
         $("#" + idElement).append(
-            '<button type="button " class=" btn btnSubMenu" onclick="openModalNewModulo(' + title + ', ' + lastId + ', ' + padre + ')">Agregar submódulo</button>'
+            '<button type="button " class=" btn btnSubMenu" onclick="openModalNewModulo(' + title + ', ' + lastId + ', ' + padre + ')">+ Submódulo</button>'
         );
     });
 }
