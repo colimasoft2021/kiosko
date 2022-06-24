@@ -1042,5 +1042,12 @@ ul, li, a, .nav-link:active {
 }
 
 .sliedeIcon {
-    font-size: 22.5px;
+    font-size: 25px;
+    color: white;
+    /*width: 24px;
+    height: auto;*/
+}
+
+.imgIcon{
+    margin-bottom: 3px;
 }
