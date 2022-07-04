@@ -36,11 +36,11 @@
                                 <li class="option-menu is-general" onclick="addComponent('subtitulo', 0)">Subtitulo</li>
                                 <li class="option-menu is-general" onclick="addComponent('imagen', 0)">Imagen</li>
                                 <li class="option-menu is-general" onclick="addComponent('desplazante-texto-imagen', 0)">Desplazante Texto-Imagen</li>
-                                <li class="option-menu is-general" onclick="addComponent('video', 0)">Video</li>
+                                <li class="option-menu " style="display: none;" onclick="addComponent('video', 0)">Video</li>
                                 <li class="option-menu is-acceso" onclick="addComponent('enlace', 0)">Enlace</li>
                                 <li class="option-menu is-general" onclick="addComponent('banner-informativo', 0)">Banner Informativo</li>
                                 <li class="option-menu is-general" onclick="addComponent('pop-up-video', 0)">Pop-Up Video</li>
-                                <li class="option-menu is-general" onclick="addComponent('video-guía', 0)">video-guía</li>
+                                <li class="option-menu " style="display: none;" onclick="addComponent('video-guía', 0)">video-guía</li>
                                 <li class="option-menu is-general" onclick="addComponent('acceso-cursos', 0)">Acceso-cursos</li>
                                 <li class="option-menu is-general" onclick="addComponent('carrucel', 0)">Carrucel</li>
                                 <li class="option-menu is-general" onclick="addComponent('pop-up', 0)">Pop-up</li>
@@ -324,7 +324,7 @@
         let stringIdCardTi = "'card-ti-"+stringId+"-"+indexCardTi+"'";
         $("#text"+stringId).append(
             '<div class="card-texto-imagen" id="'+idCardTi+'" db-id="0">'+
-              '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringIdCardTi+','+stringType+')">'+
+              '<img src="/img/iconTrash2.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringIdCardTi+','+stringType+')">'+
               '<div class="card-imagen">'+
                   '<p>Imagen</p>'+
                   '<label for="'+idImg+'" id="'+idImgLabel+'" class="btn-img">'+
@@ -554,7 +554,7 @@
             }
             component +=
             '<div class="card-texto-imagen" id="card-ti-'+idComponent+'-'+indexCardTi+'" db-id="'+item.id+'">'+
-                      '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+idImg+','+typeRelated+')">'+
+                      '<img src="/img/iconTrash2.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+idImg+','+typeRelated+')">'+
                       '<div class="card-imagen">'+
                           '<p>Imagen</p>'+
                           '<label for="imagen'+idComponent+'-'+indexImagen+'" id="imagenlabel'+idComponent+'-'+indexImagen+'" '+styleLabel+' class="btn-img">'+
@@ -566,8 +566,10 @@
                       '</div>'+
                       '<input class="titulo-input mt-4" type="text" typeInput="titulo" placeholder="Titulo" value="'+item.titulo+'">'+
                       '<br/>'+
-                      '<input type="text" placeholder="Texto" typeInput="texto" class="mt-4" value="'+item.texto+'">'+
-                      '<input class="Color-Selector"  type="color" typeInput="color" value="'+item.backgroundColor+'">'+
+                      '<div class="divStyle">'+
+                          '<input type="text" placeholder="Texto" typeInput="texto" class="mt-4" value="'+item.texto+'">'+
+                          '<input class="Color-Selector"  type="color" typeInput="color" value="'+item.backgroundColor+'">'+
+                      '</div>'+
                     '</div>';
             indexImagen = indexImagen + 1;
             indexCardTi = indexCardTi + 1;
@@ -635,7 +637,7 @@
             component =
               '<div class="col-lg-12 component" db-id="'+pkId+'" id="'+idComponent+'" type-component="texto">'+
                   '<p class="tituloCmp">'+type+
-                    '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+','+stringType+')">'+
+                    '<img src="/img/iconTrash2.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+','+stringType+')">'+
                   '<p>'+
                   '<input class="inputTexto" type="text" value="'+valueInpText+'">'+
                 '<input type="checkbox" typeInput="check" class="Boton1" name="AgregarFondo" '+propChecked+'><label for="AgregarFondo"> Agregar Fondo</label><br>'+
@@ -646,7 +648,7 @@
             component =
               '<div class="col-lg-12 texto component" db-id="'+pkId+'" id="'+idComponent+'" type-component="subtitulo">'+
                 '<p class="tituloCmp">'+type+
-                  '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+','+stringType+')">'+
+                  '<img src="/img/iconTrash2.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+','+stringType+')">'+
                 '<p>'+
                 '<input class="inputTexto" type="text" value="'+valueInpSub+'">'+
               '</div>';
@@ -657,7 +659,7 @@
             component =
               '<div class="col-lg-12 component" db-id="'+pkId+'" id="'+idComponent+'" type-component="imagen">'+
                 '<p class="tituloCmp">'+type+
-                  '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+','+stringType+')">'+
+                  '<img src="/img/iconTrash2.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+','+stringType+')">'+
                 '</p>'+
                 '<div class="container-texto-imagen">'+
                     '<div class="container-imagen">';
@@ -676,7 +678,7 @@
             component =
               '<div class="col-lg-12 component" db-id="'+pkId+'" id="'+idComponent+'" type-component="desplazante-texto-imagen">'+
                 '<p class="tituloCmp">'+type+
-                  '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+','+stringType+')">'+
+                  '<img src="/img/iconTrash2.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+','+stringType+')">'+
                 '<p>'+
                 '<div class="row container-dezplazante-texto-imagen">'+
                   '<div class="desplazante-texto-imagen" id="text'+idComponent+'">';
@@ -697,7 +699,7 @@
             component =
               '<div class="col-lg-12 component" db-id="'+pkId+'" id="'+idComponent+'" type-component="video">'+
                 '<p class="tituloCmp">'+type+
-                  '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+','+stringType+')">'+
+                  '<img src="/img/iconTrash2.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+','+stringType+')">'+
                 '<p>'+
                 '<div class="container-imagen">';
             let video = generateCardVideo(stringId, idComponent, item, pkId, stringType);
@@ -710,7 +712,7 @@
             component =
               '<div class="col-lg-12 component" db-id="'+pkId+'" id="'+idComponent+'" type-component="carrucel">'+
                 '<p class="tituloCmp">'+type+
-                  '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+','+stringType+')">'+
+                  '<img src="/img/iconTrash2.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+','+stringType+')">'+
                 '<p>'+
                 '<div class="row container-carroucel">'+
                   '<div class="carroucel" id="containerCarroucel'+idComponent+'">';
@@ -737,7 +739,7 @@
             component =
               '<div class="col-lg-12 component" id="'+idComponent+'" db-id="'+pkId+'" type-component="desplegable-texto-imagen">'+
                 '<p class="tituloCmp">'+type+
-                  '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+','+stringType+')">'+
+                  '<img src="/img/iconTrash2.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+','+stringType+')">'+
                 '<p>'+
                 '<div class="container-desplegable row">'+
                   '<div class="container-desplegable-texto-imagen">'+
@@ -779,7 +781,7 @@
               '<div class="col-lg-12 component" db-id="'+pkId+'" id="'+idComponent+'" type-component="banner-informativo">'+
                 '<div id="backgroundBanner">'+
                   '<p class="tituloCmp">'+type+
-                    '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+','+stringType+')">'+
+                    '<img src="/img/iconTrash2.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+','+stringType+')">'+
                   '<p>'+
                   '<input class="inputTexto" type="text" placeholder="Texto" typeInput="text2" value="'+valueInpText2+'">'+
                   '<p class="selColor">Elige un color para asignarle.</p>'+
@@ -800,7 +802,7 @@
               '<div class="col-lg-12 component" db-id="'+pkId+'" id="'+idComponent+'" type-component="texto-imagen">'+
                 '<div id="background">'+
                   '<p class="tituloCmp">'+type+
-                    '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+','+stringType+')">'+
+                    '<img src="/img/iconTrash2.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+','+stringType+')">'+
                   '<p>'+
                   '<div>'+
                     '<div class="junto1">'+
@@ -837,7 +839,7 @@
             component =
               '<div class="col-lg-12 texto component CompoEnlace" id="'+idComponent+'" db-id="'+pkId+'" type-component="enlace">'+
                 '<p class="tituloCmp">'+type+
-                  '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+','+stringType+')">'+
+                  '<img src="/img/iconTrash2.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+','+stringType+')">'+
                 '<p>'+
                 '<div class="margenContainer">'+
                   '<input class="inputTitulo" type="text" placeholder="Titulo"  typeInput="titulo" value="'+valueInpTit+'"/>'+
@@ -857,7 +859,7 @@
             component =
               '<div class="col-lg-12 texto component" id="'+idComponent+'" db-id="'+pkId+'" type-component="pop-up">'+
                 '<p class="tituloCmp">'+type+
-                  '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+','+stringType+')">'+
+                  '<img src="/img/iconTrash2.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+','+stringType+')">'+
                 '<p>'+
                 '<input class="inputTexto" type="text" placeholder="Texto..." typeInput="up-text" value="'+valueInpUpText+'">'+ 
                 '<div class="container-imagen">';
@@ -881,7 +883,7 @@
             component =
               '<div class="col-lg-12 texto component" id="'+idComponent+'" db-id="'+pkId+'" type-component="aviso-inicial">'+
                 '<p class="tituloCmp">'+type+
-                  '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+','+stringType+')">'+
+                  '<img src="/img/iconTrash2.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+','+stringType+')">'+
                 '<p>'+
                 '<input class="inputTexto" type="text" placeholder="Texto..." typeInput="up-text" value="'+valueInpUpTextMsg+'">'+ 
                 '<div class="container-imagen">';
@@ -900,7 +902,7 @@
               '<div class="col-lg-12 texto component" id="'+idComponent+'" db-id="'+pkId+'" type-component="acceso-cursos">'+
                 '<div id="background">'+
                   '<p class="tituloCmp">'+type+
-                    '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+','+stringType+')">'+
+                    '<img src="/img/iconTrash2.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+','+stringType+')">'+
                   '<p>'+
 
                   '<div class="container-desplegable-texto-imagen">'+
@@ -947,7 +949,7 @@
             component =
               '<div class="col-lg-12  texto component CompEnlace " id="'+idComponent+'" db-id="'+pkId+'" type-component="video-guía">'+
                 '<p class="tituloCmp">'+type+
-                  '<img src="/img/iconTrash.png"  alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+','+stringType+')">'+
+                  '<img src="/img/iconTrash2.png"  alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+','+stringType+')">'+
                 '<p>'+
                 '<div>'+
                   '<div class="video-guia-padre-input">';
@@ -989,7 +991,7 @@
             component =
               '<div class="col-lg-12 texto component" id="'+idComponent+'" db-id="'+pkId+'" type-component="pop-up-video">'+
                 '<p class="tituloCmp">'+type+
-                  '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+','+stringType+')">'+
+                  '<img src="/img/iconTrash2.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+','+stringType+')">'+
                 '<p>'+
                 '<input class="inputTexto" type="text" placeholder="Texto..." typeInput="upvideo-text" value="'+valueInpUpVideoText+'">'+ 
                 '<div class="container-pop">'+
@@ -1026,7 +1028,7 @@
             let valueInpText5 = (item) ? item.descripcion : "";
             component =
               '<div class="col-lg-6 component" db-id="'+pkId+'" id="'+idComponent+'" type-component="titulo">'+
-                  '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+','+stringType+')">'+
+                  '<img src="/img/iconTrash2.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+','+stringType+')">'+
                 '<p>'+
                 '<input class="inputTexto" type="text" placeholder="Titulo" value="'+valueInpText5+'">'+
               '</div>';
@@ -1037,7 +1039,7 @@
             component =
               '<div class="col-lg-12 component" id="'+idComponent+'" db-id="'+pkId+'" type-component="imagen-titulo-descripción">'+
                 '<p class="tituloCmp">'+type+
-                  '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+','+stringType+')">'+
+                  '<img src="/img/iconTrash2.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+','+stringType+')">'+
                 '<p>'+
                 '<div class="container-desplegable row">'+
                   '<div class="container-desplegable-texto-imagen">'+
@@ -1067,7 +1069,7 @@
             component =
               '<div class="col-lg-12 component" id="'+idComponent+'" db-id="'+pkId+'" type-component="desplegable-texto-imagen-imagen">'+
                 '<p class="tituloCmp">'+type+
-                  '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+','+stringType+')">'+
+                  '<img src="/img/iconTrash2.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+','+stringType+')">'+
                 '<p>'+
                 '<div class="container-desplegable row">'+
                   '<div class="container-desplegable-texto-imagen">'+
@@ -1101,7 +1103,7 @@
             component =
               '<div class="col-lg-12 component" id="'+idComponent+'" db-id="'+pkId+'" type-component="titulo-descripción">'+
                 '<p class="tituloCmp">'+type+
-                  '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+','+stringType+')">'+
+                  '<img src="/img/iconTrash2.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+','+stringType+')">'+
                 '<p>'+
                 '<div class="container-desplegable row">'+
                   '<div class="container-desplegable-texto-imagen">'+
@@ -1124,7 +1126,7 @@
             component =
               '<div class="col-lg-12 component" id="'+idComponent+'" db-id="'+pkId+'" type-component="subtitulo-descripción">'+
                 '<p class="tituloCmp">'+type+
-                  '<img src="/img/iconTrash.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+','+stringType+')">'+
+                  '<img src="/img/iconTrash2.png" alt="icon trash" class="icon-trash" onclick="removeComponent('+stringId+','+stringType+')">'+
                 '<p>'+
                 '<div class="container-desplegable row">'+
                   '<div class="container-desplegable-texto-imagen">'+

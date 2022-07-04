@@ -144,6 +144,10 @@ body {
 .icon-trash {
     margin-top: 5px;
     float: right;
+    background: red;
+    padding: 5px;
+    border: 1px solid snow;
+    border-radius: 5px;
 }
 
 .navegacion {
@@ -655,12 +659,12 @@ body {
 .btn-add-more {
     width: 50px;
     height: 50px;
-    background: #FFFFFF;
-    box-shadow: 1px 3px 13px 1px #454545;
+    background: #01d6688a;
     border-radius: 5px;
     font-size: 30px;
     font-weight: 600;
-    color: rgba(56, 56, 56, 0.73);
+    color: white;
+    border-color: snow;
 }
 
 .card-imagen-carroucel {
@@ -1050,4 +1054,11 @@ ul, li, a, .nav-link:active {
 
 .imgIcon{
     margin-bottom: 3px;
+}
+
+.divStyle {
+    display: flex;
+    height: auto;
+    justify-content: space-around;
+    align-items: flex-end;
 }

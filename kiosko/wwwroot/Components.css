@@ -51,9 +51,10 @@
     border-radius: 5px;
     width: 60px;
     height: 40px;
-    left: 85px;
+    /*left: 85px;
     top: 174px;
-    margin: 2px;
+    margin: 2px;*/
+    margin-bottom: -5px;
 }
 
 .inputTitulo {
