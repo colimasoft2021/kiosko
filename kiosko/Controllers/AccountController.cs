@@ -169,7 +169,7 @@ namespace kiosko.Controllers
                 var token = await _userManager.GeneratePasswordResetTokenAsync(user);
                 byte[] tokenGeneratedBytes = Encoding.UTF8.GetBytes(token);
                 var tokenEncoded = WebEncoders.Base64UrlEncode(tokenGeneratedBytes);
-                var link = "https://localhost:7045/Account/ResetPassword?";
+                var link = "https://kiosko-test.col-dev.net/Account/ResetPassword?";
                 var buillink = link + "&Id=" + user.Id + "&token=" + tokenEncoded;
                 var cuerpoMensaje = "<h3>Recuperación de contraseña</h1>";
                 cuerpoMensaje += "<p>Da click en el siguiente enlace para cambiar tu contraseña</p>";
